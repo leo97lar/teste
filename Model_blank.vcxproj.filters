@@ -53,6 +53,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="aevSPLap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -74,7 +77,16 @@
     <ClCompile Include="Edade.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="eml_rand.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eml_rand_mcg16807_stateful.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="eml_rand_mt19937ar_stateful.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eml_rand_shr3cong_stateful.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="favalia.c">
@@ -87,9 +99,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="getTime.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main_UCI_func.c">
@@ -169,6 +178,15 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="eml_rand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eml_rand_mcg16807_stateful.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eml_rand_shr3cong_stateful.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="aevSPLap.h">
       <Filter>Source Files</Filter>
     </ClInclude>
