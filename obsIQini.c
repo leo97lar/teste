@@ -36,7 +36,6 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
   int g;
   emxArray_real_T *List;
   int ii;
-  double b;
   emxArray_real_T *r6;
   int nx;
   int loop_ub;
@@ -84,7 +83,7 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
   i15 = ProbXEst->size[0];
   emxInit_real_T(&b_ProbXEst, 1);
   for (g = 0; g < i15; g++) {
-    /* 'obsIQini:8' Lim(g) = numGen*sum(ProbXEst(1:g))/100; */
+    /* 'obsIQini:8' Lim(g) = numGen*sum(ProbXEst(1:g),1)/100; */
     ii = b_ProbXEst->size[0];
     b_ProbXEst->size[0] = g + 1;
     emxEnsureCapacity_real_T(b_ProbXEst, ii);
@@ -92,9 +91,8 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
       b_ProbXEst->data[ii] = ProbXEst->data[ii];
     }
 
-    b = b_sum(b_ProbXEst);
-    Lim->data[g] = (int)rt_roundd((double)(int)rt_roundd((double)numGen * b) /
-      100.0);
+    Lim->data[g] = (int)rt_roundd((double)(int)rt_roundd((double)numGen * b_sum
+      (b_ProbXEst)) / 100.0);
   }
 
   emxInit_real_T(&List, 2);
@@ -198,7 +196,7 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
       for (i = 0; i < numGen; i++) {
         /* 'obsIQini:25' if i<=Lim(1) */
         if (i + 1 <= Lim->data[0]) {
-          /* 'obsIQini:26' Pmax=sum(Qtem(i,1:Lim(1))); */
+          /* 'obsIQini:26' Pmax=sum(Qtem(i,1:Lim(1)),2); */
           if (1 > Lim->data[0]) {
             nx = 0;
           } else {
@@ -297,7 +295,7 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
           }
         } else if ((i + 1 > Lim->data[0]) && (i + 1 <= Lim->data[1])) {
           /* 'obsIQini:30' elseif i>Lim(1) && i<=Lim(2) */
-          /* 'obsIQini:31' Pmax=sum(Qtem(i,1:Lim(2))); */
+          /* 'obsIQini:31' Pmax=sum(Qtem(i,1:Lim(2)),2); */
           if (1 > Lim->data[1]) {
             nx = 0;
           } else {
@@ -401,7 +399,7 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
           }
         } else if ((i + 1 > Lim->data[1]) && (i + 1 <= Lim->data[2])) {
           /* 'obsIQini:36' elseif i>Lim(2) && i<=Lim(3) */
-          /* 'obsIQini:37' Pmax=sum(Qtem(i,1:Lim(3))); */
+          /* 'obsIQini:37' Pmax=sum(Qtem(i,1:Lim(3)),2); */
           if (1 > Lim->data[2]) {
             nx = 0;
           } else {
@@ -505,7 +503,7 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
           }
         } else if ((i + 1 > Lim->data[2]) && (i + 1 <= Lim->data[3])) {
           /* 'obsIQini:42' elseif i>Lim(3) && i<=Lim(4) */
-          /* 'obsIQini:43' Pmax=sum(Qtem(i,1:Lim(4))); */
+          /* 'obsIQini:43' Pmax=sum(Qtem(i,1:Lim(4)),2); */
           if (1 > Lim->data[3]) {
             nx = 0;
           } else {
@@ -721,7 +719,7 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
         j = 0;
         exitg1 = false;
         while ((!exitg1) && (j <= Qtem2->size[1] - 1)) {
-          /* 'obsIQini:61' if sum(Qtem2(1:j))<=r && sum(Qtem2(1:j+1))>r */
+          /* 'obsIQini:61' if sum(Qtem2(1:j),2)<=r && sum(Qtem2(1:j+1),2)>r */
           nx = j + 1;
           i15 = b_Qtem->size[0] * b_Qtem->size[1];
           b_Qtem->size[0] = 1;
@@ -802,7 +800,7 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
             }
 
             if (sum(b_Qtem) > r) {
-              /* 'obsIQini:66' elseif sum(Qtem2(1:j))>r */
+              /* 'obsIQini:66' elseif sum(Qtem2(1:j),2)>r */
               /* 'obsIQini:67' Obs(i,idx(j))=1; */
               Obs->data[i + Obs->size[0] * ((int)idx->data[j] - 1)] = 1;
 

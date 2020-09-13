@@ -108,7 +108,7 @@ void Edade(double b_Edade[2000])
     j = 0;
     exitg1 = false;
     while ((!exitg1) && (j < 71)) {
-      /* 'Edade:24' if sum(ProbXEdade(1:j))<=r && sum(ProbXEdade(1:j+1))>r */
+      /* 'Edade:24' if sum(ProbXEdade(1:j),2)<=r && sum(ProbXEdade(1:j+1),2)>r */
       k = j + 1;
       i4 = r1->size[0] * r1->size[1];
       r1->size[0] = 1;

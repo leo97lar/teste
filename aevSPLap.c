@@ -18,8 +18,8 @@
 #include "obsIQ.h"
 #include "randperm.h"
 #include "cc.h"
-#include "std.h"
 #include "mean.h"
+#include "std.h"
 #include "sort1.h"
 #include "sch.h"
 #include "toc.h"
@@ -91,11 +91,11 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   int b_loop_ub;
   int i13;
   double d0;
-  double varargin_4;
   double varargin_5;
   double d1;
   double d2;
   double d3;
+  double d4;
   int i;
   emxInit_real_T(&IQ, 2);
 
@@ -372,13 +372,13 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
 
       sch(NumTOp, iidx, NumRec, b_PCPrO, b_PME, b_PMA, b_PMAn, b_PS, b_PCPO,
           b_PCR, Dia, Data, b_TimeUsoRec, DispMExD, b_EP, k0, k1, k2, k3, &d0,
-          &varargin_4, &varargin_5, &d1, &d2, &d3);
+          &varargin_5, &d1, &d2, &d3, &d4);
       fitness->data[j] = d0;
-      fitness->data[j + fitness->size[0]] = varargin_4;
-      fitness->data[j + (fitness->size[0] << 1)] = varargin_5;
-      fitness->data[j + fitness->size[0] * 3] = d1;
-      fitness->data[j + (fitness->size[0] << 2)] = d2;
-      fitness->data[j + fitness->size[0] * 5] = d3;
+      fitness->data[j + fitness->size[0]] = varargin_5;
+      fitness->data[j + (fitness->size[0] << 1)] = d1;
+      fitness->data[j + fitness->size[0] * 3] = d2;
+      fitness->data[j + (fitness->size[0] << 2)] = d3;
+      fitness->data[j + fitness->size[0] * 5] = d4;
     }
 
     /*     save(strcat('fitness_', int2str(g),'.mat'),'fitness'); */
@@ -791,7 +791,7 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
     }
 
     /*  SALVA A GERAÇÃO, FITNESS do Melhor ind., a MÉDIA DO FITNESS e a STD DO FITNESS  */
-    /* 'aevSPLap:93' trace(g,:) = [g,bestFitness(1,1),mean(bestFitness(:,1)),std(bestFitness(:,1)),bestFitness(1,2),bestFitness(1,3),bestFitness(1,4),bestFitness(1,5),bestFitness(1,6)]; */
+    /* 'aevSPLap:93' trace(g,:) = [g,bestFitness(1,1),mean(bestFitness(:,1),1),std(bestFitness(:,1),1),bestFitness(1,2),bestFitness(1,3),bestFitness(1,4),bestFitness(1,5),bestFitness(1,6)]; */
     loop_ub = fitness->size[0];
     i11 = x->size[0];
     x->size[0] = loop_ub;
@@ -808,12 +808,12 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
       b_fitness->data[i11] = fitness->data[i11];
     }
 
-    varargin_4 = mean(x);
-    varargin_5 = b_std(b_fitness);
+    varargin_5 = mean(x);
+    d1 = b_std(b_fitness);
     trace->data[g] = 1 + g;
     trace->data[g + trace->size[0]] = (int)rt_roundd(fitness->data[0]);
-    trace->data[g + (trace->size[0] << 1)] = (int)rt_roundd(varargin_4);
-    trace->data[g + trace->size[0] * 3] = (int)rt_roundd(varargin_5);
+    trace->data[g + (trace->size[0] << 1)] = (int)rt_roundd(varargin_5);
+    trace->data[g + trace->size[0] * 3] = (int)rt_roundd(d1);
     trace->data[g + (trace->size[0] << 2)] = (int)rt_roundd(fitness->
       data[fitness->size[0]]);
     trace->data[g + trace->size[0] * 5] = (int)rt_roundd(fitness->data
@@ -827,16 +827,7 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
 
     /*  IMPRIME STATUS DA EVOLUÇÃO */
     /* 'aevSPLap:97' fprintf('Ger: %d - \t Ini: %10.5f - \t Best: %10.5f - \t Mean: %10.5f - \t STD: %10.5f - \t Tt: %10.5f - \t NOFP: %10.5f - \t TmOFP: %10.5f - \t NOE2: %10.5f - \t NOE3: %10.5f \n',... */
-    /* 'aevSPLap:98'                g,         fitnessB(1,1),      bestFitness(1,1),mean(bestFitness(:,1)),std(bestFitness(:,1)),bestFitness(1,2),bestFitness(1,3),bestFitness(1,4),bestFitness(1,5),bestFitness(1,6)); */
-    loop_ub = fitness->size[0];
-    i11 = x->size[0];
-    x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i11);
-    for (i11 = 0; i11 < loop_ub; i11++) {
-      x->data[i11] = fitness->data[i11];
-    }
-
-    varargin_4 = mean(x);
+    /* 'aevSPLap:98'                g,         fitnessB(1,1),      bestFitness(1,1),mean(bestFitness(:,1),1),std(bestFitness(:,1),1),bestFitness(1,2),bestFitness(1,3),bestFitness(1,4),bestFitness(1,5),bestFitness(1,6)); */
     loop_ub = fitness->size[0];
     i11 = x->size[0];
     x->size[0] = loop_ub;
@@ -846,12 +837,20 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
     }
 
     varargin_5 = b_std(x);
+    loop_ub = fitness->size[0];
+    i11 = x->size[0];
+    x->size[0] = loop_ub;
+    emxEnsureCapacity_real_T(x, i11);
+    for (i11 = 0; i11 < loop_ub; i11++) {
+      x->data[i11] = fitness->data[i11];
+    }
+
     printf("Ger: %d - \t Ini: %10.5f - \t Best: %10.5f - \t Mean: %10.5f - \t STD: %10.5f - \t Tt: %10.5f - \t NOFP: %10.5f - \t TmOFP: %10.5f - \t "
            "NOE2: %10.5f - \t NOE3: %10.5f \n", 1 + g, fitnessB[0],
-           fitness->data[0], varargin_4, varargin_5, fitness->data[fitness->
-           size[0]], fitness->data[fitness->size[0] << 1], fitness->data
-           [fitness->size[0] * 3], fitness->data[fitness->size[0] << 2],
-           fitness->data[fitness->size[0] * 5]);
+           fitness->data[0], mean(x), varargin_5, fitness->data[fitness->size[0]],
+           fitness->data[fitness->size[0] << 1], fitness->data[fitness->size[0] *
+           3], fitness->data[fitness->size[0] << 2], fitness->data[fitness->
+           size[0] * 5]);
     fflush(stdout);
 
     /*  REPOSICIONA PULSOS DE ACORDO COM MELHORES INDIVÍDUOS */

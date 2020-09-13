@@ -775,7 +775,7 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   toc();
 
   /*     %% Reorganizando la lista de espera */
-  /* 'main_UCI_func:81' NAWD = ((max(CP(:,2))-CP(:,2))+1).*(360./EP); */
+  /* 'main_UCI_func:81' NAWD = ((max(CP(:,2),[],1)-CP(:,2))+1).*(360./EP); */
   i8 = CP->size[0];
   end = iidx->size[0];
   iidx->size[0] = i8;

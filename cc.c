@@ -30,8 +30,8 @@
 void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
         emxArray_int32_T *newIC)
 {
-  int i33;
-  int i34;
+  int i31;
+  int i32;
   boolean_T flag;
   int j;
   emxArray_int32_T *escolhido_1;
@@ -58,13 +58,13 @@ void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
   int partialTrueCount;
 
   /* 'cc:4' newIC = zeros(NumTOp,numIC, 'int32'); */
-  i33 = newIC->size[0] * newIC->size[1];
+  i31 = newIC->size[0] * newIC->size[1];
   newIC->size[0] = NumTOp;
   newIC->size[1] = numIC;
-  emxEnsureCapacity_int32_T(newIC, i33);
-  for (i33 = 0; i33 < numIC; i33++) {
-    for (i34 = 0; i34 < NumTOp; i34++) {
-      newIC->data[i34 + newIC->size[0] * i33] = 0;
+  emxEnsureCapacity_int32_T(newIC, i31);
+  for (i31 = 0; i31 < numIC; i31++) {
+    for (i32 = 0; i32 < NumTOp; i32++) {
+      newIC->data[i32 + newIC->size[0] * i31] = 0;
     }
   }
 
@@ -107,11 +107,11 @@ void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
       }
 
       loop_ub = IC->size[0];
-      i33 = escolhido_1->size[0];
+      i31 = escolhido_1->size[0];
       escolhido_1->size[0] = loop_ub;
-      emxEnsureCapacity_int32_T(escolhido_1, i33);
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        escolhido_1->data[i33] = IC->data[i33 + IC->size[0] * ((int)minval - 1)];
+      emxEnsureCapacity_int32_T(escolhido_1, i31);
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        escolhido_1->data[i31] = IC->data[i31 + IC->size[0] * ((int)minval - 1)];
       }
 
       /*   1º indivíduo escolhido */
@@ -128,24 +128,24 @@ void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
       }
 
       loop_ub = IC->size[0];
-      i33 = escolhido_2->size[0];
+      i31 = escolhido_2->size[0];
       escolhido_2->size[0] = loop_ub;
-      emxEnsureCapacity_int32_T(escolhido_2, i33);
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        escolhido_2->data[i33] = IC->data[i33 + IC->size[0] * ((int)minval - 1)];
+      emxEnsureCapacity_int32_T(escolhido_2, i31);
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        escolhido_2->data[i31] = IC->data[i31 + IC->size[0] * ((int)minval - 1)];
       }
 
       /*   2º indivíduo escolhido */
-      /* 'cc:18' if sum(escolhido_1==escolhido_2)~=NumTOp */
-      i33 = b_escolhido_1->size[0];
+      /* 'cc:18' if sum((escolhido_1==escolhido_2),1)~=NumTOp */
+      i31 = b_escolhido_1->size[0];
       b_escolhido_1->size[0] = escolhido_1->size[0];
-      emxEnsureCapacity_boolean_T(b_escolhido_1, i33);
+      emxEnsureCapacity_boolean_T(b_escolhido_1, i31);
       loop_ub = escolhido_1->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        b_escolhido_1->data[i33] = (escolhido_1->data[i33] == escolhido_2->
-          data[i33]);
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        b_escolhido_1->data[i31] = (escolhido_1->data[i31] == escolhido_2->
+          data[i31]);
       }
-    } while (!(g_sum(b_escolhido_1) != NumTOp));
+    } while (!(d_sum(b_escolhido_1) != NumTOp));
 
     /* 'cc:24' cc=rand; */
     b_cc = d_rand();
@@ -155,133 +155,133 @@ void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
       /*  Cruzamiento */
       /* 'cc:31' mskReal = int32(round(rand(NumTOp,1))); */
       k_rand(NumTOp, x);
-      i33 = x->size[0];
-      for (k = 0; k < i33; k++) {
+      i31 = x->size[0];
+      for (k = 0; k < i31; k++) {
         x->data[k] = rt_roundd(x->data[k]);
       }
 
-      i33 = mskReal->size[0];
+      i31 = mskReal->size[0];
       mskReal->size[0] = x->size[0];
-      emxEnsureCapacity_int32_T(mskReal, i33);
+      emxEnsureCapacity_int32_T(mskReal, i31);
       loop_ub = x->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        mskReal->data[i33] = (int)rt_roundd(x->data[i33]);
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        mskReal->data[i31] = (int)rt_roundd(x->data[i31]);
       }
 
       /*  quais parâmetros reais serão alterados */
       /* 'cc:33' tempF1 = escolhido_1.*mskReal; */
-      i33 = tempF1->size[0];
+      i31 = tempF1->size[0];
       tempF1->size[0] = escolhido_1->size[0];
-      emxEnsureCapacity_int32_T(tempF1, i33);
+      emxEnsureCapacity_int32_T(tempF1, i31);
       loop_ub = escolhido_1->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        tempF1->data[i33] = escolhido_1->data[i33] * mskReal->data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        tempF1->data[i31] = escolhido_1->data[i31] * mskReal->data[i31];
       }
 
       /* 'cc:34' tempF1(tempF1==0) = []; */
-      i33 = b_escolhido_1->size[0];
+      i31 = b_escolhido_1->size[0];
       b_escolhido_1->size[0] = tempF1->size[0];
-      emxEnsureCapacity_boolean_T(b_escolhido_1, i33);
+      emxEnsureCapacity_boolean_T(b_escolhido_1, i31);
       loop_ub = tempF1->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        b_escolhido_1->data[i33] = (tempF1->data[i33] == 0);
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        b_escolhido_1->data[i31] = (tempF1->data[i31] == 0);
       }
 
       nullAssignment(tempF1, b_escolhido_1);
 
       /* 'cc:36' tempF2 = escolhido_2.*mskReal; */
-      i33 = tempF2->size[0];
+      i31 = tempF2->size[0];
       tempF2->size[0] = escolhido_2->size[0];
-      emxEnsureCapacity_int32_T(tempF2, i33);
+      emxEnsureCapacity_int32_T(tempF2, i31);
       loop_ub = escolhido_2->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        tempF2->data[i33] = escolhido_2->data[i33] * mskReal->data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        tempF2->data[i31] = escolhido_2->data[i31] * mskReal->data[i31];
       }
 
       /* 'cc:37' tempF2(tempF2==0) = []; */
-      i33 = b_escolhido_1->size[0];
+      i31 = b_escolhido_1->size[0];
       b_escolhido_1->size[0] = tempF2->size[0];
-      emxEnsureCapacity_boolean_T(b_escolhido_1, i33);
+      emxEnsureCapacity_boolean_T(b_escolhido_1, i31);
       loop_ub = tempF2->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        b_escolhido_1->data[i33] = (tempF2->data[i33] == 0);
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        b_escolhido_1->data[i31] = (tempF2->data[i31] == 0);
       }
 
       nullAssignment(tempF2, b_escolhido_1);
 
       /* 'cc:39' [~,idx2] = sort(escolhido_2,'ascend'); */
-      i33 = b_x->size[0];
+      i31 = b_x->size[0];
       b_x->size[0] = escolhido_2->size[0];
-      emxEnsureCapacity_int32_T(b_x, i33);
+      emxEnsureCapacity_int32_T(b_x, i31);
       loop_ub = escolhido_2->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        b_x->data[i33] = escolhido_2->data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        b_x->data[i31] = escolhido_2->data[i31];
       }
 
       d_sort(b_x, iidx);
-      i33 = idx2->size[0];
+      i31 = idx2->size[0];
       idx2->size[0] = iidx->size[0];
-      emxEnsureCapacity_int32_T(idx2, i33);
+      emxEnsureCapacity_int32_T(idx2, i31);
       loop_ub = iidx->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        idx2->data[i33] = iidx->data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        idx2->data[i31] = iidx->data[i31];
       }
 
       /* 'cc:39' ~ */
       /* 'cc:40' [~,idx1] = sort(escolhido_1,'ascend'); */
-      i33 = b_x->size[0];
+      i31 = b_x->size[0];
       b_x->size[0] = escolhido_1->size[0];
-      emxEnsureCapacity_int32_T(b_x, i33);
+      emxEnsureCapacity_int32_T(b_x, i31);
       loop_ub = escolhido_1->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        b_x->data[i33] = escolhido_1->data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        b_x->data[i31] = escolhido_1->data[i31];
       }
 
       d_sort(b_x, iidx);
-      i33 = idx1->size[0];
+      i31 = idx1->size[0];
       idx1->size[0] = iidx->size[0];
-      emxEnsureCapacity_int32_T(idx1, i33);
+      emxEnsureCapacity_int32_T(idx1, i31);
       loop_ub = iidx->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        idx1->data[i33] = iidx->data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        idx1->data[i31] = iidx->data[i31];
       }
 
       /* 'cc:40' ~ */
       /* 'cc:42' [~,idxx1] = sort(idx2(tempF1),'ascend'); */
-      i33 = x->size[0];
+      i31 = x->size[0];
       x->size[0] = tempF1->size[0];
-      emxEnsureCapacity_real_T(x, i33);
+      emxEnsureCapacity_real_T(x, i31);
       loop_ub = tempF1->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        x->data[i33] = idx2->data[tempF1->data[i33] - 1];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        x->data[i31] = idx2->data[tempF1->data[i31] - 1];
       }
 
       c_sort(x, iidx);
-      i33 = idxx1->size[0];
+      i31 = idxx1->size[0];
       idxx1->size[0] = iidx->size[0];
-      emxEnsureCapacity_int32_T(idxx1, i33);
+      emxEnsureCapacity_int32_T(idxx1, i31);
       loop_ub = iidx->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        idxx1->data[i33] = iidx->data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        idxx1->data[i31] = iidx->data[i31];
       }
 
       /* 'cc:42' ~ */
       /* 'cc:43' [~,idxx2] = sort(idx1(tempF2),'ascend'); */
-      i33 = x->size[0];
+      i31 = x->size[0];
       x->size[0] = tempF2->size[0];
-      emxEnsureCapacity_real_T(x, i33);
+      emxEnsureCapacity_real_T(x, i31);
       loop_ub = tempF2->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        x->data[i33] = idx1->data[tempF2->data[i33] - 1];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        x->data[i31] = idx1->data[tempF2->data[i31] - 1];
       }
 
       c_sort(x, iidx);
-      i33 = idxx2->size[0];
+      i31 = idxx2->size[0];
       idxx2->size[0] = iidx->size[0];
-      emxEnsureCapacity_int32_T(idxx2, i33);
+      emxEnsureCapacity_int32_T(idxx2, i31);
       loop_ub = iidx->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        idxx2->data[i33] = iidx->data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        idxx2->data[i31] = iidx->data[i31];
       }
 
       /* 'cc:43' ~ */
@@ -312,38 +312,38 @@ void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
     if (j == 1) {
       /* 'cc:50' newIC(:,j-1+j:2*j)=[escolhido_1,escolhido_2]; */
       loop_ub = newIC->size[0];
-      i33 = b_x->size[0];
+      i31 = b_x->size[0];
       b_x->size[0] = loop_ub;
-      emxEnsureCapacity_int32_T(b_x, i33);
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        b_x->data[i33] = i33;
+      emxEnsureCapacity_int32_T(b_x, i31);
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        b_x->data[i31] = i31;
       }
 
-      i33 = iidx->size[0];
+      i31 = iidx->size[0];
       iidx->size[0] = 2;
-      emxEnsureCapacity_int32_T(iidx, i33);
+      emxEnsureCapacity_int32_T(iidx, i31);
       iidx->data[0] = 0;
       iidx->data[1] = 1;
-      i33 = c_escolhido_1->size[0] * c_escolhido_1->size[1];
+      i31 = c_escolhido_1->size[0] * c_escolhido_1->size[1];
       c_escolhido_1->size[0] = escolhido_1->size[0];
       c_escolhido_1->size[1] = 2;
-      emxEnsureCapacity_int32_T(c_escolhido_1, i33);
+      emxEnsureCapacity_int32_T(c_escolhido_1, i31);
       loop_ub = escolhido_1->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        c_escolhido_1->data[i33] = escolhido_1->data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        c_escolhido_1->data[i31] = escolhido_1->data[i31];
       }
 
       loop_ub = escolhido_2->size[0];
-      for (i33 = 0; i33 < loop_ub; i33++) {
-        c_escolhido_1->data[i33 + c_escolhido_1->size[0]] = escolhido_2->
-          data[i33];
+      for (i31 = 0; i31 < loop_ub; i31++) {
+        c_escolhido_1->data[i31 + c_escolhido_1->size[0]] = escolhido_2->
+          data[i31];
       }
 
       partialTrueCount = b_x->size[0];
-      for (i33 = 0; i33 < 2; i33++) {
-        for (i34 = 0; i34 < partialTrueCount; i34++) {
-          newIC->data[b_x->data[i34] + newIC->size[0] * iidx->data[i33]] =
-            c_escolhido_1->data[i34 + partialTrueCount * i33];
+      for (i31 = 0; i31 < 2; i31++) {
+        for (i32 = 0; i32 < partialTrueCount; i32++) {
+          newIC->data[b_x->data[i32] + newIC->size[0] * iidx->data[i31]] =
+            c_escolhido_1->data[i32 + partialTrueCount * i31];
         }
       }
 
@@ -352,35 +352,35 @@ void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
     } else {
       /* 'cc:52' else */
       /* 'cc:53' for k=1:(j-1)*2 */
-      i33 = (j - 1) << 1;
+      i31 = (j - 1) << 1;
       k = 0;
       exitg1 = false;
-      while ((!exitg1) && (k <= i33 - 1)) {
-        /* 'cc:54' if sum(escolhido_1==newIC(:,k))==NumTOp || sum(escolhido_2==newIC(:,k))==NumTOp */
-        i34 = b_escolhido_1->size[0];
+      while ((!exitg1) && (k <= i31 - 1)) {
+        /* 'cc:54' if sum((escolhido_1==newIC(:,k)),1)==NumTOp || sum((escolhido_2==newIC(:,k)),1)==NumTOp */
+        i32 = b_escolhido_1->size[0];
         b_escolhido_1->size[0] = escolhido_1->size[0];
-        emxEnsureCapacity_boolean_T(b_escolhido_1, i34);
+        emxEnsureCapacity_boolean_T(b_escolhido_1, i32);
         loop_ub = escolhido_1->size[0];
-        for (i34 = 0; i34 < loop_ub; i34++) {
-          b_escolhido_1->data[i34] = (escolhido_1->data[i34] == newIC->data[i34
+        for (i32 = 0; i32 < loop_ub; i32++) {
+          b_escolhido_1->data[i32] = (escolhido_1->data[i32] == newIC->data[i32
             + newIC->size[0] * k]);
         }
 
-        if (g_sum(b_escolhido_1) == NumTOp) {
+        if (d_sum(b_escolhido_1) == NumTOp) {
           /* 'cc:55' flag=true; */
           flag = true;
           exitg1 = true;
         } else {
-          i34 = b_escolhido_1->size[0];
+          i32 = b_escolhido_1->size[0];
           b_escolhido_1->size[0] = escolhido_2->size[0];
-          emxEnsureCapacity_boolean_T(b_escolhido_1, i34);
+          emxEnsureCapacity_boolean_T(b_escolhido_1, i32);
           loop_ub = escolhido_2->size[0];
-          for (i34 = 0; i34 < loop_ub; i34++) {
-            b_escolhido_1->data[i34] = (escolhido_2->data[i34] == newIC->
-              data[i34 + newIC->size[0] * k]);
+          for (i32 = 0; i32 < loop_ub; i32++) {
+            b_escolhido_1->data[i32] = (escolhido_2->data[i32] == newIC->
+              data[i32 + newIC->size[0] * k]);
           }
 
-          if (g_sum(b_escolhido_1) == NumTOp) {
+          if (d_sum(b_escolhido_1) == NumTOp) {
             /* 'cc:55' flag=true; */
             flag = true;
             exitg1 = true;
@@ -397,13 +397,13 @@ void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
       } else {
         /* 'cc:61' else */
         /* 'cc:62' newIC(:,j-1+j:2*j)=[escolhido_1,escolhido_2]; */
-        i33 = (j + j) - 2;
+        i31 = (j + j) - 2;
         u16 = (unsigned int)j << 1;
-        if ((unsigned int)(i33 + 1) > u16) {
-          i33 = 0;
-          i34 = 0;
+        if ((unsigned int)(i31 + 1) > u16) {
+          i31 = 0;
+          i32 = 0;
         } else {
-          i34 = (int)u16;
+          i32 = (int)u16;
         }
 
         loop_ub = newIC->size[0];
@@ -416,34 +416,34 @@ void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
         }
 
         partialTrueCount = iidx->size[0];
-        loop_ub = i34 - i33;
+        loop_ub = i32 - i31;
         iidx->size[0] = loop_ub;
         emxEnsureCapacity_int32_T(iidx, partialTrueCount);
-        for (i34 = 0; i34 < loop_ub; i34++) {
-          iidx->data[i34] = i33 + i34;
+        for (i32 = 0; i32 < loop_ub; i32++) {
+          iidx->data[i32] = i31 + i32;
         }
 
-        i33 = c_escolhido_1->size[0] * c_escolhido_1->size[1];
+        i31 = c_escolhido_1->size[0] * c_escolhido_1->size[1];
         c_escolhido_1->size[0] = escolhido_1->size[0];
         c_escolhido_1->size[1] = 2;
-        emxEnsureCapacity_int32_T(c_escolhido_1, i33);
+        emxEnsureCapacity_int32_T(c_escolhido_1, i31);
         loop_ub = escolhido_1->size[0];
-        for (i33 = 0; i33 < loop_ub; i33++) {
-          c_escolhido_1->data[i33] = escolhido_1->data[i33];
+        for (i31 = 0; i31 < loop_ub; i31++) {
+          c_escolhido_1->data[i31] = escolhido_1->data[i31];
         }
 
         loop_ub = escolhido_2->size[0];
-        for (i33 = 0; i33 < loop_ub; i33++) {
-          c_escolhido_1->data[i33 + c_escolhido_1->size[0]] = escolhido_2->
-            data[i33];
+        for (i31 = 0; i31 < loop_ub; i31++) {
+          c_escolhido_1->data[i31 + c_escolhido_1->size[0]] = escolhido_2->
+            data[i31];
         }
 
         partialTrueCount = b_x->size[0];
         loop_ub = iidx->size[0];
-        for (i33 = 0; i33 < loop_ub; i33++) {
-          for (i34 = 0; i34 < partialTrueCount; i34++) {
-            newIC->data[b_x->data[i34] + newIC->size[0] * iidx->data[i33]] =
-              c_escolhido_1->data[i34 + partialTrueCount * i33];
+        for (i31 = 0; i31 < loop_ub; i31++) {
+          for (i32 = 0; i32 < partialTrueCount; i32++) {
+            newIC->data[b_x->data[i32] + newIC->size[0] * iidx->data[i31]] =
+              c_escolhido_1->data[i32 + partialTrueCount * i31];
           }
         }
 

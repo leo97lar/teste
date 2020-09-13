@@ -34,13 +34,13 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
 {
   double y;
   int k;
-  emxArray_real_T *H;
+  emxArray_int32_T *H;
   int Data_idx_0;
   int i21;
   int loop_ub;
-  emxArray_real_T *UltPosRecXDia;
+  emxArray_int32_T *UltPosRecXDia;
   int i22;
-  emxArray_real_T *EspMedOp;
+  emxArray_int32_T *EspMedOp;
   emxArray_int32_T *b_TimeUsoRec;
   emxArray_int32_T *b_PME;
   emxArray_int32_T *b_EP;
@@ -60,12 +60,12 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   emxArray_int32_T *b_PCR;
   int i;
   int contDia;
-  double d4;
   double d5;
   double d6;
   double d7;
   double d8;
   double d9;
+  double d10;
   int CPrOA;
   int IniCPrOA;
   int EndCPrOA;
@@ -93,55 +93,55 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   /*    Detailed explanation goes here */
   /*     NCPrO  |    NME    |     NS    |     NA    |     NAn    |    NCPO     |   NCR */
   /*   Col 1-20 | Col 21-50 | Col 51-62 | Col 63-87 | Col 88-112 | Col 113-132 | Col 133-152 */
-  /* 'sch:7' H = zeros(size(Data,1),sum(NumRec)); */
+  /* 'sch:7' H = zeros(size(Data,1),sum(NumRec), 'int32'); */
   y = NumRec[0];
   for (k = 0; k < 6; k++) {
     y += (double)NumRec[k + 1];
   }
 
-  emxInit_real_T(&H, 2);
+  emxInit_int32_T(&H, 2);
   Data_idx_0 = Data->size[0];
   i21 = H->size[0] * H->size[1];
   H->size[0] = Data_idx_0;
   loop_ub = (int)y;
   H->size[1] = loop_ub;
-  emxEnsureCapacity_real_T(H, i21);
+  emxEnsureCapacity_int32_T(H, i21);
   for (i21 = 0; i21 < loop_ub; i21++) {
     for (i22 = 0; i22 < Data_idx_0; i22++) {
-      H->data[i22 + H->size[0] * i21] = 0.0;
+      H->data[i22 + H->size[0] * i21] = 0;
     }
   }
 
-  emxInit_real_T(&UltPosRecXDia, 2);
+  emxInit_int32_T(&UltPosRecXDia, 2);
 
   /*  Schedule completo */
-  /* 'sch:8' UltPosRecXDia = zeros(size(Dia,1),size(H,2)); */
+  /* 'sch:8' UltPosRecXDia = zeros(size(Dia,1),size(H,2), 'int32'); */
   Data_idx_0 = Dia->size[0];
   i21 = UltPosRecXDia->size[0] * UltPosRecXDia->size[1];
   UltPosRecXDia->size[0] = Data_idx_0;
   UltPosRecXDia->size[1] = loop_ub;
-  emxEnsureCapacity_real_T(UltPosRecXDia, i21);
+  emxEnsureCapacity_int32_T(UltPosRecXDia, i21);
   for (i21 = 0; i21 < loop_ub; i21++) {
     for (i22 = 0; i22 < Data_idx_0; i22++) {
-      UltPosRecXDia->data[i22 + UltPosRecXDia->size[0] * i21] = 0.0;
+      UltPosRecXDia->data[i22 + UltPosRecXDia->size[0] * i21] = 0;
     }
   }
 
-  emxInit_real_T(&EspMedOp, 2);
+  emxInit_int32_T(&EspMedOp, 2);
 
   /*  Ultima posicion asignado del recurso por Dia */
   /* 'sch:10' DiaOp = zeros(NumTOp,1, 'int32'); */
-  /* 'sch:11' EspMedOp = zeros(NumTOp,2); */
+  /* 'sch:11' EspMedOp = zeros(NumTOp,2, 'int32'); */
   i21 = EspMedOp->size[0] * EspMedOp->size[1];
   EspMedOp->size[0] = NumTOp;
   EspMedOp->size[1] = 2;
-  emxEnsureCapacity_real_T(EspMedOp, i21);
+  emxEnsureCapacity_int32_T(EspMedOp, i21);
   for (i21 = 0; i21 < NumTOp; i21++) {
-    EspMedOp->data[i21] = 0.0;
+    EspMedOp->data[i21] = 0;
   }
 
   for (i21 = 0; i21 < NumTOp; i21++) {
-    EspMedOp->data[i21 + EspMedOp->size[0]] = 0.0;
+    EspMedOp->data[i21 + EspMedOp->size[0]] = 0;
   }
 
   emxInit_int32_T(&b_TimeUsoRec, 2);
@@ -415,9 +415,9 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
       b_PCPrO->data[i21] = PCPrO->data[i + PCPrO->size[0] * i21];
     }
 
-    b_funcionDia(NumRec, b_PCPrO, Dia, UltPosRecXDia, TimeUsoRec->data[i],
-                 TimeUsoRec->data[i + TimeUsoRec->size[0]], &contDia, DispMExD,
-                 tempUltPosRecXDia, DispME);
+    funcionDia(NumRec, b_PCPrO, Dia, UltPosRecXDia, TimeUsoRec->data[i],
+               TimeUsoRec->data[i + TimeUsoRec->size[0]], &contDia, DispMExD,
+               tempUltPosRecXDia, DispME);
 
     /* 'sch:33' [ CPrOA,IniCPrOA, EndCPrOA,EndCPrOAxD,EA,AA,AnA,SA,IniSA,EndSA,EndRPxD,CPOA,IniCPOA,EndCPOA,CRA,IniCRA,EndCRA,contDia] = ... */
     /* 'sch:34'         funcionCPrO( NumRec,PCPrO(i,:), PME(i,:),PMA(i,:),PMAn(i,:),PS(i,:),PCPO(i,:),PCR(i,:),H,Dia, UltPosRecXDia,... */
@@ -485,13 +485,13 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
       b_PCR->data[i21] = PCR->data[i + PCR->size[0] * i21];
     }
 
-    b_funcionCPrO(NumRec, b_PCPrO, c_PME, b_PMA, b_PMAn, b_PS, b_PCPO, b_PCR, H,
-                  Dia, UltPosRecXDia, TimeUsoRec->data[i], TimeUsoRec->data[i +
-                  TimeUsoRec->size[0]], TimeUsoRec->data[i + TimeUsoRec->size[0]
-                  * 5], TimeUsoRec->data[i + TimeUsoRec->size[0] * 6], &contDia,
-                  tempUltPosRecXDia, DispMExD, DispME, &CPrOA, &IniCPrOA,
-                  &EndCPrOA, &EndCPrOAxD, EA, AA, AnA, SA, &IniSA, &EndSA,
-                  &EndRPxD, &CPOA, &IniCPOA, &EndCPOA, &CRA, &IniCRA, &EndCRA);
+    funcionCPrO(NumRec, b_PCPrO, c_PME, b_PMA, b_PMAn, b_PS, b_PCPO, b_PCR, H,
+                Dia, UltPosRecXDia, TimeUsoRec->data[i], TimeUsoRec->data[i +
+                TimeUsoRec->size[0]], TimeUsoRec->data[i + TimeUsoRec->size[0] *
+                5], TimeUsoRec->data[i + TimeUsoRec->size[0] * 6], &contDia,
+                tempUltPosRecXDia, DispMExD, DispME, &CPrOA, &IniCPrOA,
+                &EndCPrOA, &EndCPrOAxD, EA, AA, AnA, SA, &IniSA, &EndSA,
+                &EndRPxD, &CPOA, &IniCPOA, &EndCPOA, &CRA, &IniCRA, &EndCRA);
 
     /* 'sch:37' DiaOp(i)=contDia; */
     DiaOp->data[i] = contDia;
@@ -507,7 +507,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
 
     loop_ub = i22 - i21;
     for (i22 = 0; i22 < loop_ub; i22++) {
-      H->data[(i21 + i22) + H->size[0] * (CPrOA - 1)] = (unsigned int)(i + 1);
+      H->data[(i21 + i22) + H->size[0] * (CPrOA - 1)] = i + 1;
     }
 
     /* 'sch:40' UltPosRecXDia(contDia,CPrOA)=EndCPrOAxD; */
@@ -545,8 +545,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
     k = b_EP->size[0];
     for (i22 = 0; i22 < k; i22++) {
       for (i23 = 0; i23 < Data_idx_0; i23++) {
-        H->data[(i21 + i23) + H->size[0] * (b_EP->data[i22] - 1)] = (unsigned
-          int)(i + 1);
+        H->data[(i21 + i23) + H->size[0] * (b_EP->data[i22] - 1)] = i + 1;
       }
     }
 
@@ -574,7 +573,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
       k = NumRec[0] + EA->data[j];
       loop_ub = i25 - i24;
       for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i24 + i22) + H->size[0] * (k - 1)] = (unsigned int)(i + 1);
+        H->data[(i24 + i22) + H->size[0] * (k - 1)] = i + 1;
       }
 
       /* 'sch:48' UltPosRecXDia(contDia,NumRec(1)+EA(j))=EndRPxD; */
@@ -603,7 +602,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
       k = (NumRec_tmp + NumRec[2]) + AA->data[j];
       loop_ub = i27 - i26;
       for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i26 + i22) + H->size[0] * (k - 1)] = (unsigned int)(i + 1);
+        H->data[(i26 + i22) + H->size[0] * (k - 1)] = i + 1;
       }
 
       /* 'sch:57' UltPosRecXDia(contDia,NumRec(1)+NumRec(2)+NumRec(3)+AA(j))=EndRPxD; */
@@ -628,7 +627,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
       k = (((NumRec[0] + NumRec[1]) + NumRec[2]) + NumRec[3]) + AnA->data[j];
       loop_ub = i29 - i28;
       for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i28 + i22) + H->size[0] * (k - 1)] = (unsigned int)(i + 1);
+        H->data[(i28 + i22) + H->size[0] * (k - 1)] = i + 1;
       }
 
       /* 'sch:64' UltPosRecXDia(contDia,NumRec(1)+NumRec(2)+NumRec(3)+NumRec(4)+AnA(j))=EndRPxD; */
@@ -656,7 +655,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
       k = (int)(y + (double)CRA);
       loop_ub = i22 - i21;
       for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i21 + i22) + H->size[0] * (k - 1)] = (unsigned int)(i + 1);
+        H->data[(i21 + i22) + H->size[0] * (k - 1)] = i + 1;
       }
     } else {
       /* 'sch:70' else */
@@ -673,7 +672,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
                   + (double)NumRec[3]) + (double)NumRec[4]) + (double)CPOA);
       loop_ub = i22 - i21;
       for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i21 + i22) + H->size[0] * (k - 1)] = (unsigned int)(i + 1);
+        H->data[(i21 + i22) + H->size[0] * (k - 1)] = i + 1;
       }
 
       /* 'sch:72' H(IniCRA:EndCRA,sum(NumRec(1:6))+CRA)=i; */
@@ -693,7 +692,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
       k = (int)(y + (double)CRA);
       loop_ub = i22 - i21;
       for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i21 + i22) + H->size[0] * (k - 1)] = (unsigned int)(i + 1);
+        H->data[(i21 + i22) + H->size[0] * (k - 1)] = i + 1;
       }
     }
   }
@@ -712,20 +711,20 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   emxFree_int32_T(&EA);
   emxFree_int32_T(&DispME);
   emxFree_int32_T(&tempUltPosRecXDia);
-  emxFree_real_T(&UltPosRecXDia);
+  emxFree_int32_T(&UltPosRecXDia);
 
   /* 'sch:77' schedule=H; */
   /* 'sch:79' [ fitness,Tt,NOFP,TmNOFP,NOE2,NOE3] = favalia( schedule,DiaOp,int32(EP),EspMedOp,k0,k1,k2,k3 ); */
-  b_favalia(H, DiaOp, EP, EspMedOp, k0, k1, k2, k3, &d4, &d5, &d6, &d7, &d8, &d9);
-  *NOE3 = d9;
-  *NOE2 = d8;
-  *TmNOFP = d7;
-  *NOFP = d6;
-  *Tt = d5;
-  *fitness = d4;
-  emxFree_real_T(&EspMedOp);
+  favalia(H, DiaOp, EP, EspMedOp, k0, k1, k2, k3, &d5, &d6, &d7, &d8, &d9, &d10);
+  *NOE3 = d10;
+  *NOE2 = d9;
+  *TmNOFP = d8;
+  *NOFP = d7;
+  *Tt = d6;
+  *fitness = d5;
+  emxFree_int32_T(&EspMedOp);
   emxFree_int32_T(&DiaOp);
-  emxFree_real_T(&H);
+  emxFree_int32_T(&H);
 }
 
 /* End of code generation (sch.c) */

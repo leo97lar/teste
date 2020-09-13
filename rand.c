@@ -406,26 +406,26 @@ void h_rand(double r[15][30])
  */
 void i_rand(int varargin_2, emxArray_real_T *r)
 {
-  int i32;
+  int i30;
   int k;
   unsigned int u14;
   unsigned int u15;
   if (method == 4U) {
-    i32 = r->size[0] * r->size[1];
+    i30 = r->size[0] * r->size[1];
     r->size[0] = 1;
     r->size[1] = varargin_2;
-    emxEnsureCapacity_real_T(r, i32);
-    i32 = r->size[1];
-    for (k = 0; k < i32; k++) {
+    emxEnsureCapacity_real_T(r, i30);
+    i30 = r->size[1];
+    for (k = 0; k < i30; k++) {
       r->data[k] = eml_rand_mcg16807(&state);
     }
   } else if (method == 5U) {
-    i32 = r->size[0] * r->size[1];
+    i30 = r->size[0] * r->size[1];
     r->size[0] = 1;
     r->size[1] = varargin_2;
-    emxEnsureCapacity_real_T(r, i32);
-    i32 = r->size[1];
-    for (k = 0; k < i32; k++) {
+    emxEnsureCapacity_real_T(r, i30);
+    i30 = r->size[1];
+    for (k = 0; k < i30; k++) {
       u14 = 69069U * b_state[0] + 1234567U;
       u15 = b_state[1] ^ b_state[1] << 13;
       u15 ^= u15 >> 17;
@@ -440,12 +440,12 @@ void i_rand(int varargin_2, emxArray_real_T *r)
       state_not_empty = true;
     }
 
-    i32 = r->size[0] * r->size[1];
+    i30 = r->size[0] * r->size[1];
     r->size[0] = 1;
     r->size[1] = varargin_2;
-    emxEnsureCapacity_real_T(r, i32);
-    i32 = r->size[1];
-    for (k = 0; k < i32; k++) {
+    emxEnsureCapacity_real_T(r, i30);
+    i30 = r->size[1];
+    for (k = 0; k < i30; k++) {
       r->data[k] = b_eml_rand_mt19937ar(c_state);
     }
   }
@@ -492,24 +492,24 @@ void j_rand(double r[2])
  */
 void k_rand(int varargin_1, emxArray_real_T *r)
 {
-  int i35;
+  int i33;
   int k;
   unsigned int u19;
   unsigned int u20;
   if (method == 4U) {
-    i35 = r->size[0];
+    i33 = r->size[0];
     r->size[0] = varargin_1;
-    emxEnsureCapacity_real_T(r, i35);
-    i35 = r->size[0];
-    for (k = 0; k < i35; k++) {
+    emxEnsureCapacity_real_T(r, i33);
+    i33 = r->size[0];
+    for (k = 0; k < i33; k++) {
       r->data[k] = eml_rand_mcg16807(&state);
     }
   } else if (method == 5U) {
-    i35 = r->size[0];
+    i33 = r->size[0];
     r->size[0] = varargin_1;
-    emxEnsureCapacity_real_T(r, i35);
-    i35 = r->size[0];
-    for (k = 0; k < i35; k++) {
+    emxEnsureCapacity_real_T(r, i33);
+    i33 = r->size[0];
+    for (k = 0; k < i33; k++) {
       u19 = 69069U * b_state[0] + 1234567U;
       u20 = b_state[1] ^ b_state[1] << 13;
       u20 ^= u20 >> 17;
@@ -524,11 +524,11 @@ void k_rand(int varargin_1, emxArray_real_T *r)
       state_not_empty = true;
     }
 
-    i35 = r->size[0];
+    i33 = r->size[0];
     r->size[0] = varargin_1;
-    emxEnsureCapacity_real_T(r, i35);
-    i35 = r->size[0];
-    for (k = 0; k < i35; k++) {
+    emxEnsureCapacity_real_T(r, i33);
+    i33 = r->size[0];
+    for (k = 0; k < i33; k++) {
       r->data[k] = b_eml_rand_mt19937ar(c_state);
     }
   }

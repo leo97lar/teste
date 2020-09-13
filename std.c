@@ -65,7 +65,7 @@ double b_std(const emxArray_real_T *x)
 
     emxFree_real_T(&absdiff);
     y = xbar * sqrt(y);
-    y /= sqrt((double)x->size[0] - 1.0);
+    y /= sqrt(x->size[0]);
   }
 
   return y;

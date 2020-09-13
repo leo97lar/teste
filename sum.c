@@ -36,30 +36,7 @@ double b_sum(const emxArray_real_T *x)
 /*
  *
  */
-double c_sum(const emxArray_boolean_T *x)
-{
-  double y;
-  int vlen;
-  int k;
-  vlen = x->size[1];
-  if (x->size[1] == 0) {
-    y = 0.0;
-  } else {
-    y = x->data[0];
-    for (k = 2; k <= vlen; k++) {
-      if (vlen >= 2) {
-        y += (double)x->data[k - 1];
-      }
-    }
-  }
-
-  return y;
-}
-
-/*
- *
- */
-void d_sum(const emxArray_int32_T *x, emxArray_real_T *y)
+void c_sum(const emxArray_int32_T *x, emxArray_real_T *y)
 {
   int vlen;
   unsigned int sz_idx_1;
@@ -98,69 +75,7 @@ void d_sum(const emxArray_int32_T *x, emxArray_real_T *y)
 /*
  *
  */
-double e_sum(const emxArray_int32_T *x)
-{
-  double y;
-  int vlen;
-  int k;
-  vlen = x->size[0];
-  if (x->size[0] == 0) {
-    y = 0.0;
-  } else {
-    y = x->data[0];
-    for (k = 2; k <= vlen; k++) {
-      if (vlen >= 2) {
-        y += (double)x->data[k - 1];
-      }
-    }
-  }
-
-  return y;
-}
-
-/*
- *
- */
-void f_sum(const emxArray_real_T *x, emxArray_real_T *y)
-{
-  int vlen;
-  unsigned int sz_idx_1;
-  int i30;
-  int k;
-  int b_k;
-  vlen = x->size[0];
-  if ((x->size[0] == 0) || (x->size[1] == 0)) {
-    sz_idx_1 = (unsigned int)x->size[1];
-    i30 = y->size[0] * y->size[1];
-    y->size[0] = 1;
-    y->size[1] = (int)sz_idx_1;
-    emxEnsureCapacity_real_T(y, i30);
-    vlen = (int)sz_idx_1;
-    for (i30 = 0; i30 < vlen; i30++) {
-      y->data[i30] = 0.0;
-    }
-  } else {
-    sz_idx_1 = (unsigned int)x->size[1];
-    i30 = y->size[0] * y->size[1];
-    y->size[0] = 1;
-    y->size[1] = (int)sz_idx_1;
-    emxEnsureCapacity_real_T(y, i30);
-    i30 = x->size[1];
-    for (k = 0; k < i30; k++) {
-      y->data[k] = x->data[x->size[0] * k];
-      for (b_k = 2; b_k <= vlen; b_k++) {
-        if (vlen >= 2) {
-          y->data[k] += x->data[(b_k + x->size[0] * k) - 1];
-        }
-      }
-    }
-  }
-}
-
-/*
- *
- */
-double g_sum(const emxArray_boolean_T *x)
+double d_sum(const emxArray_boolean_T *x)
 {
   double y;
   int vlen;

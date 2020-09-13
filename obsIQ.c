@@ -249,7 +249,7 @@ void obsIQ(const emxArray_real_T *IQ, int numIQ, int numObsIQ, emxArray_int32_T 
           }
 
           if (j <= c_ii->size[0] - 1) {
-            /* 'obsIQ:25' if sum(Qtem2(1:j))>r */
+            /* 'obsIQ:25' if sum(Qtem2(1:j),2)>r */
             nx = j + 1;
             i18 = c_ii->size[0];
             c_ii->size[0] = idx->size[1];
@@ -332,7 +332,7 @@ void obsIQ(const emxArray_real_T *IQ, int numIQ, int numObsIQ, emxArray_int32_T 
                 }
 
                 if (sum(b_Qtem2) > r) {
-                  /* 'obsIQ:30' elseif sum(Qtem2(1:j))<=r && sum(Qtem2(1:j+1))>r */
+                  /* 'obsIQ:30' elseif sum(Qtem2(1:j),2)<=r && sum(Qtem2(1:j+1),2)>r */
                   /* 'obsIQ:31' Obs(i,idx(j+1))=int32(1); */
                   Obs->data[i + Obs->size[0] * ((int)idx->data[j + 1] - 1)] = 1;
 
