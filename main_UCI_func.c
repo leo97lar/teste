@@ -5,7 +5,7 @@
  * File: main_UCI_func.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -82,37 +82,49 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   double y;
   int k;
   emxArray_int8_T *H;
-  int i8;
-  int loop_ub;
+  int N;
+  int i12;
   emxArray_int32_T *UltPosRecXDia;
-  int end;
+  int i13;
   emxArray_int32_T *TimeUsoRec;
-  emxArray_int32_T *iidx;
+  emxArray_int32_T *b_TimeUsoRec;
+  emxArray_int32_T *r4;
   emxArray_int32_T *varargin_1;
+  int u0;
   boolean_T empty_non_axis_sizes;
-  int input_sizes_idx_1;
+  int input_sizes[2];
+  int b_input_sizes[2];
+  cell_wrap_0 reshapes[2];
+  int end;
   signed char sizes_idx_1;
   emxArray_int32_T *PME;
+  int input_sizes_idx_1;
+  cell_wrap_0 b_reshapes[2];
   emxArray_int32_T *PMA;
+  cell_wrap_0 c_reshapes[2];
   emxArray_int32_T *PMAn;
   emxArray_boolean_T *idx;
-  emxArray_int32_T *r2;
-  emxArray_int32_T *r3;
-  emxArray_int32_T *r4;
+  emxArray_int32_T *r5;
+  emxArray_int32_T *r6;
+  emxArray_int32_T *r7;
+  emxArray_int32_T *r8;
   int i;
   emxArray_int32_T *PCPrO;
   emxArray_int32_T *PS;
   emxArray_int32_T *PCPO;
   emxArray_int32_T *PCR;
-  emxArray_int32_T *EP;
   emxArray_int32_T *scheduleB;
   emxArray_int32_T *DiaOpB;
   emxArray_int32_T *EspMedOpB;
+  emxArray_int32_T c_TimeUsoRec;
+  int iv1[1];
   double varargin_2;
   double varargin_3;
   double varargin_4;
   double varargin_5;
   double varargin_6;
+  unsigned int iidx_idx_0;
+  emxArray_int32_T *iidx;
   emxArray_int32_T *NAWD;
   emxArray_int32_T *x;
   emxArray_int32_T *b_idx;
@@ -175,15 +187,15 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   }
 
   emxInit_int8_T(&H, 2);
-  k = Data->size[0];
-  i8 = H->size[0] * H->size[1];
-  H->size[0] = k;
-  loop_ub = (int)y;
-  H->size[1] = loop_ub;
-  emxEnsureCapacity_int8_T(H, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      H->data[end + H->size[0] * i8] = 0;
+  N = Data->size[0];
+  i12 = H->size[0] * H->size[1];
+  k = (int)y;
+  H->size[1] = k;
+  H->size[0] = N;
+  emxEnsureCapacity_int8_T(H, i12);
+  for (i12 = 0; i12 < N; i12++) {
+    for (i13 = 0; i13 < k; i13++) {
+      H->data[i13 + H->size[1] * i12] = 0;
     }
   }
 
@@ -191,14 +203,14 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
 
   /*  Schedule completo */
   /* 'main_UCI_func:24' UltPosRecXDia = zeros(size(Dia,1),size(H,2), 'int32'); */
-  k = Dia->size[0];
-  i8 = UltPosRecXDia->size[0] * UltPosRecXDia->size[1];
-  UltPosRecXDia->size[0] = k;
-  UltPosRecXDia->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(UltPosRecXDia, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      UltPosRecXDia->data[end + UltPosRecXDia->size[0] * i8] = 0;
+  N = Dia->size[0];
+  i12 = UltPosRecXDia->size[0] * UltPosRecXDia->size[1];
+  UltPosRecXDia->size[1] = k;
+  UltPosRecXDia->size[0] = N;
+  emxEnsureCapacity_int32_T(UltPosRecXDia, i12);
+  for (i12 = 0; i12 < N; i12++) {
+    for (i13 = 0; i13 < k; i13++) {
+      UltPosRecXDia->data[i13 + UltPosRecXDia->size[1] * i12] = 0;
     }
   }
 
@@ -208,216 +220,309 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   /*     %% Matriz con el tiempo de uso necesario de todos los recursos */
   /* Cama Pre-OP,Sala de Operación, Medicos Especialistas, Medicos Asistentes, Medicos Anstesistas, Cama Post-OP, Cama Recuperacion.  */
   /* 'main_UCI_func:30' TimeUsoRec = zeros(NumTOp, 7, 'int32'); */
-  i8 = TimeUsoRec->size[0] * TimeUsoRec->size[1];
-  TimeUsoRec->size[0] = NumTOp;
+  i12 = TimeUsoRec->size[0] * TimeUsoRec->size[1];
   TimeUsoRec->size[1] = 7;
-  emxEnsureCapacity_int32_T(TimeUsoRec, i8);
-  for (i8 = 0; i8 < 7; i8++) {
-    for (end = 0; end < NumTOp; end++) {
-      TimeUsoRec->data[end + TimeUsoRec->size[0] * i8] = 0;
+  TimeUsoRec->size[0] = NumTOp;
+  emxEnsureCapacity_int32_T(TimeUsoRec, i12);
+  for (i12 = 0; i12 < NumTOp; i12++) {
+    for (i13 = 0; i13 < 7; i13++) {
+      TimeUsoRec->data[i13 + 7 * i12] = 0;
     }
   }
 
   /* 'main_UCI_func:31' TimeUsoRec(:,1) = CP(:,6); */
-  loop_ub = CP->size[0];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    TimeUsoRec->data[i8] = CP->data[i8 + CP->size[0] * 5];
+  k = CP->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    TimeUsoRec->data[7 * i12] = CP->data[5 + (i12 << 3)];
   }
+
+  emxInit_int32_T(&b_TimeUsoRec, 2);
 
   /*  Tiempo de uso cama Pre-Operatoria */
   /* 'main_UCI_func:32' TimeUsoRec(:,2) = RO(CP(:,4),4); */
-  loop_ub = CP->size[0];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    TimeUsoRec->data[i8 + TimeUsoRec->size[0]] = RO->data[(CP->data[i8 +
-      CP->size[0] * 3] + RO->size[0] * 3) - 1];
+  k = CP->size[0];
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = RO->data[3 + 7 * (CP->data[3 + (i12 << 3)] - 1)];
   }
 
-  emxInit_int32_T(&iidx, 1);
+  k = CP->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    TimeUsoRec->data[1 + 7 * i12] = b_TimeUsoRec->data[i12];
+  }
 
   /*  Tiempo de uso Salon de operacion */
   /* 'main_UCI_func:33' TimeUsoRec(:,3) = TimeUsoRec(:,2); */
-  loop_ub = TimeUsoRec->size[0] - 1;
-  i8 = iidx->size[0];
-  iidx->size[0] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(iidx, i8);
-  for (i8 = 0; i8 <= loop_ub; i8++) {
-    iidx->data[i8] = TimeUsoRec->data[i8 + TimeUsoRec->size[0]];
+  k = TimeUsoRec->size[0];
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = TimeUsoRec->data[1 + 7 * i12];
   }
 
-  loop_ub = iidx->size[0];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    TimeUsoRec->data[i8 + (TimeUsoRec->size[0] << 1)] = iidx->data[i8];
+  k = b_TimeUsoRec->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    TimeUsoRec->data[2 + 7 * i12] = b_TimeUsoRec->data[i12];
   }
 
   /*  Tiempo de uso Medico Especialista */
   /* 'main_UCI_func:34' TimeUsoRec(:,4) = TimeUsoRec(:,2); */
-  loop_ub = TimeUsoRec->size[0] - 1;
-  i8 = iidx->size[0];
-  iidx->size[0] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(iidx, i8);
-  for (i8 = 0; i8 <= loop_ub; i8++) {
-    iidx->data[i8] = TimeUsoRec->data[i8 + TimeUsoRec->size[0]];
+  k = TimeUsoRec->size[0];
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = TimeUsoRec->data[1 + 7 * i12];
   }
 
-  loop_ub = iidx->size[0];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    TimeUsoRec->data[i8 + TimeUsoRec->size[0] * 3] = iidx->data[i8];
+  k = b_TimeUsoRec->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    TimeUsoRec->data[3 + 7 * i12] = b_TimeUsoRec->data[i12];
   }
 
   /*  Tiempo de uso Medico Asistente */
   /* 'main_UCI_func:35' TimeUsoRec(:,5) = TimeUsoRec(:,2); */
-  loop_ub = TimeUsoRec->size[0] - 1;
-  i8 = iidx->size[0];
-  iidx->size[0] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(iidx, i8);
-  for (i8 = 0; i8 <= loop_ub; i8++) {
-    iidx->data[i8] = TimeUsoRec->data[i8 + TimeUsoRec->size[0]];
+  k = TimeUsoRec->size[0];
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = TimeUsoRec->data[1 + 7 * i12];
   }
 
-  loop_ub = iidx->size[0];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    TimeUsoRec->data[i8 + (TimeUsoRec->size[0] << 2)] = iidx->data[i8];
+  k = b_TimeUsoRec->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    TimeUsoRec->data[4 + 7 * i12] = b_TimeUsoRec->data[i12];
   }
 
   /*  Tiempo de uso Medico Anestesista */
   /* 'main_UCI_func:36' TimeUsoRec(:,6:7) = CP(:,7:8); */
-  loop_ub = CP->size[0];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    TimeUsoRec->data[i8 + TimeUsoRec->size[0] * 5] = CP->data[i8 + CP->size[0] *
-      6];
+  k = CP->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    i13 = i12 << 3;
+    TimeUsoRec->data[7 * i12 + 5] = CP->data[i13 + 6];
+    TimeUsoRec->data[7 * i12 + 6] = CP->data[i13 + 7];
   }
-
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    TimeUsoRec->data[i8 + TimeUsoRec->size[0] * 6] = CP->data[i8 + CP->size[0] *
-      7];
-  }
-
-  emxInit_int32_T(&varargin_1, 2);
 
   /*  Tiempo de uso cama Post-Operatoria y Recuperacion */
   /* 'main_UCI_func:38' PME = [ME(:,RO(CP(:,4),2))' RO(CP(:,4),5)]; */
-  loop_ub = ME->size[0];
   k = CP->size[0];
-  i8 = varargin_1->size[0] * varargin_1->size[1];
-  varargin_1->size[0] = k;
-  varargin_1->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(varargin_1, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      varargin_1->data[end + varargin_1->size[0] * i8] = ME->data[i8 + ME->size
-        [0] * (RO->data[(CP->data[end + CP->size[0] * 3] + RO->size[0]) - 1] - 1)];
-    }
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = CP->data[3 + (i12 << 3)];
   }
 
-  loop_ub = CP->size[0];
-  i8 = iidx->size[0];
-  iidx->size[0] = loop_ub;
-  emxEnsureCapacity_int32_T(iidx, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    iidx->data[i8] = RO->data[(CP->data[i8 + CP->size[0] * 3] + (RO->size[0] <<
-      2)) - 1];
+  emxInit_int32_T(&r4, 2);
+  k = CP->size[0];
+  i12 = r4->size[0] * r4->size[1];
+  r4->size[1] = 1;
+  r4->size[0] = k;
+  emxEnsureCapacity_int32_T(r4, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    r4->data[i12] = CP->data[3 + (i12 << 3)];
+  }
+
+  emxInit_int32_T(&varargin_1, 2);
+  k = CP->size[0];
+  N = ME->size[0];
+  i12 = varargin_1->size[0] * varargin_1->size[1];
+  varargin_1->size[1] = N;
+  varargin_1->size[0] = k;
+  emxEnsureCapacity_int32_T(varargin_1, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    for (i13 = 0; i13 < N; i13++) {
+      varargin_1->data[i13 + varargin_1->size[1] * i12] = ME->data[(RO->data[1 +
+        7 * (b_TimeUsoRec->data[i12] - 1)] + ME->size[1] * i13) - 1];
+    }
   }
 
   if ((varargin_1->size[0] != 0) && (varargin_1->size[1] != 0)) {
-    k = varargin_1->size[0];
+    u0 = varargin_1->size[0];
   } else {
-    i8 = CP->size[0];
-    if (i8 != 0) {
-      k = CP->size[0];
+    i12 = CP->size[0];
+    if (i12 != 0) {
+      u0 = CP->size[0];
     } else {
-      k = varargin_1->size[0];
-      if (k <= 0) {
-        k = 0;
+      u0 = varargin_1->size[0];
+      if (u0 <= 0) {
+        u0 = 0;
       }
 
-      i8 = CP->size[0];
-      if (i8 > k) {
-        k = CP->size[0];
+      i12 = CP->size[0];
+      if (i12 > u0) {
+        u0 = CP->size[0];
       }
     }
   }
 
-  empty_non_axis_sizes = (k == 0);
+  empty_non_axis_sizes = (u0 == 0);
   if (empty_non_axis_sizes || ((varargin_1->size[0] != 0) && (varargin_1->size[1]
         != 0))) {
-    input_sizes_idx_1 = varargin_1->size[1];
+    input_sizes[1] = varargin_1->size[1];
   } else {
-    input_sizes_idx_1 = 0;
+    input_sizes[1] = 0;
+  }
+
+  b_input_sizes[0] = u0;
+  b_input_sizes[1] = input_sizes[1];
+  emxInitMatrix_cell_wrap_0(reshapes);
+  if ((input_sizes[1] == varargin_1->size[1]) && (u0 == varargin_1->size[0])) {
+    N = input_sizes[1];
+    i12 = reshapes[0].f1->size[0] * reshapes[0].f1->size[1];
+    reshapes[0].f1->size[1] = input_sizes[1];
+    reshapes[0].f1->size[0] = u0;
+    emxEnsureCapacity_int32_T(reshapes[0].f1, i12);
+    for (i12 = 0; i12 < u0; i12++) {
+      for (i13 = 0; i13 < N; i13++) {
+        reshapes[0].f1->data[i13 + reshapes[0].f1->size[1] * i12] =
+          varargin_1->data[i13 + N * i12];
+      }
+    }
+  } else {
+    i12 = 0;
+    i13 = 0;
+    N = 0;
+    k = 0;
+    end = reshapes[0].f1->size[0] * reshapes[0].f1->size[1];
+    reshapes[0].f1->size[1] = input_sizes[1];
+    reshapes[0].f1->size[0] = u0;
+    emxEnsureCapacity_int32_T(reshapes[0].f1, end);
+    for (end = 0; end < b_input_sizes[0] * b_input_sizes[1]; end++) {
+      reshapes[0].f1->data[i13 + reshapes[0].f1->size[1] * i12] =
+        varargin_1->data[k + varargin_1->size[1] * N];
+      i12++;
+      N++;
+      if (i12 > reshapes[0].f1->size[0] - 1) {
+        i12 = 0;
+        i13++;
+      }
+
+      if (N > varargin_1->size[0] - 1) {
+        N = 0;
+        k++;
+      }
+    }
   }
 
   if (empty_non_axis_sizes) {
     sizes_idx_1 = 1;
   } else {
-    i8 = CP->size[0];
-    if (i8 != 0) {
+    i12 = CP->size[0];
+    if (i12 != 0) {
       sizes_idx_1 = 1;
     } else {
       sizes_idx_1 = 0;
+    }
+  }
+
+  input_sizes[0] = u0;
+  input_sizes[1] = sizes_idx_1;
+  i12 = 0;
+  i13 = 0;
+  N = 0;
+  k = reshapes[1].f1->size[0] * reshapes[1].f1->size[1];
+  reshapes[1].f1->size[1] = sizes_idx_1;
+  reshapes[1].f1->size[0] = u0;
+  emxEnsureCapacity_int32_T(reshapes[1].f1, k);
+  for (k = 0; k < input_sizes[0] * input_sizes[1]; k++) {
+    reshapes[1].f1->data[i13 + reshapes[1].f1->size[1] * i12] = RO->data[4 + 7 *
+      (r4->data[N] - 1)];
+    i12++;
+    N++;
+    if (i12 > reshapes[1].f1->size[0] - 1) {
+      i12 = 0;
+      i13++;
     }
   }
 
   emxInit_int32_T(&PME, 2);
-  i8 = PME->size[0] * PME->size[1];
-  PME->size[0] = k;
-  PME->size[1] = input_sizes_idx_1 + sizes_idx_1;
-  emxEnsureCapacity_int32_T(PME, i8);
-  for (i8 = 0; i8 < input_sizes_idx_1; i8++) {
-    for (end = 0; end < k; end++) {
-      PME->data[end + PME->size[0] * i8] = varargin_1->data[end + k * i8];
+  i12 = PME->size[0] * PME->size[1];
+  PME->size[1] = reshapes[0].f1->size[1] + reshapes[1].f1->size[1];
+  PME->size[0] = reshapes[0].f1->size[0];
+  emxEnsureCapacity_int32_T(PME, i12);
+  k = reshapes[0].f1->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    N = reshapes[0].f1->size[1];
+    for (i13 = 0; i13 < N; i13++) {
+      PME->data[i13 + PME->size[1] * i12] = reshapes[0].f1->data[i13 + reshapes
+        [0].f1->size[1] * i12];
     }
   }
 
-  loop_ub = sizes_idx_1;
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      PME->data[end + PME->size[0] * input_sizes_idx_1] = iidx->data[end];
+  k = reshapes[1].f1->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    N = reshapes[1].f1->size[1];
+    for (i13 = 0; i13 < N; i13++) {
+      PME->data[(i13 + reshapes[0].f1->size[1]) + PME->size[1] * i12] =
+        reshapes[1].f1->data[i13 + reshapes[1].f1->size[1] * i12];
     }
   }
+
+  emxFreeMatrix_cell_wrap_0(reshapes);
 
   /*  Posibles Medicos Especialistas X Operacion. | Cantidad necesaria de Medicos Especialistas */
   /* 'main_UCI_func:40' PMA = [MA(:,RO(CP(:,4),2))' RO(CP(:,4),6)]; */
-  loop_ub = MA->size[0];
   k = CP->size[0];
-  i8 = varargin_1->size[0] * varargin_1->size[1];
-  varargin_1->size[0] = k;
-  varargin_1->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(varargin_1, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      varargin_1->data[end + varargin_1->size[0] * i8] = MA->data[i8 + MA->size
-        [0] * (RO->data[(CP->data[end + CP->size[0] * 3] + RO->size[0]) - 1] - 1)];
-    }
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = CP->data[3 + (i12 << 3)];
   }
 
-  loop_ub = CP->size[0];
-  i8 = iidx->size[0];
-  iidx->size[0] = loop_ub;
-  emxEnsureCapacity_int32_T(iidx, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    iidx->data[i8] = RO->data[(CP->data[i8 + CP->size[0] * 3] + RO->size[0] * 5)
-      - 1];
+  k = CP->size[0];
+  i12 = r4->size[0] * r4->size[1];
+  r4->size[1] = 1;
+  r4->size[0] = k;
+  emxEnsureCapacity_int32_T(r4, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    r4->data[i12] = CP->data[3 + (i12 << 3)];
+  }
+
+  k = CP->size[0];
+  N = MA->size[0];
+  i12 = varargin_1->size[0] * varargin_1->size[1];
+  varargin_1->size[1] = N;
+  varargin_1->size[0] = k;
+  emxEnsureCapacity_int32_T(varargin_1, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    for (i13 = 0; i13 < N; i13++) {
+      varargin_1->data[i13 + varargin_1->size[1] * i12] = MA->data[(RO->data[1 +
+        7 * (b_TimeUsoRec->data[i12] - 1)] + MA->size[1] * i13) - 1];
+    }
   }
 
   if ((varargin_1->size[0] != 0) && (varargin_1->size[1] != 0)) {
-    k = varargin_1->size[0];
+    u0 = varargin_1->size[0];
   } else {
-    i8 = CP->size[0];
-    if (i8 != 0) {
-      k = CP->size[0];
+    i12 = CP->size[0];
+    if (i12 != 0) {
+      u0 = CP->size[0];
     } else {
-      k = varargin_1->size[0];
-      if (k <= 0) {
-        k = 0;
+      u0 = varargin_1->size[0];
+      if (u0 <= 0) {
+        u0 = 0;
       }
 
-      i8 = CP->size[0];
-      if (i8 > k) {
-        k = CP->size[0];
+      i12 = CP->size[0];
+      if (i12 > u0) {
+        u0 = CP->size[0];
       }
     }
   }
 
-  empty_non_axis_sizes = (k == 0);
+  empty_non_axis_sizes = (u0 == 0);
   if (empty_non_axis_sizes || ((varargin_1->size[0] != 0) && (varargin_1->size[1]
         != 0))) {
     input_sizes_idx_1 = varargin_1->size[1];
@@ -425,80 +530,156 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
     input_sizes_idx_1 = 0;
   }
 
+  input_sizes[0] = u0;
+  input_sizes[1] = input_sizes_idx_1;
+  emxInitMatrix_cell_wrap_0(b_reshapes);
+  if ((input_sizes_idx_1 == varargin_1->size[1]) && (u0 == varargin_1->size[0]))
+  {
+    i12 = b_reshapes[0].f1->size[0] * b_reshapes[0].f1->size[1];
+    b_reshapes[0].f1->size[1] = input_sizes_idx_1;
+    b_reshapes[0].f1->size[0] = u0;
+    emxEnsureCapacity_int32_T(b_reshapes[0].f1, i12);
+    for (i12 = 0; i12 < u0; i12++) {
+      for (i13 = 0; i13 < input_sizes_idx_1; i13++) {
+        b_reshapes[0].f1->data[i13 + b_reshapes[0].f1->size[1] * i12] =
+          varargin_1->data[i13 + input_sizes_idx_1 * i12];
+      }
+    }
+  } else {
+    i12 = 0;
+    i13 = 0;
+    N = 0;
+    k = 0;
+    end = b_reshapes[0].f1->size[0] * b_reshapes[0].f1->size[1];
+    b_reshapes[0].f1->size[1] = input_sizes_idx_1;
+    b_reshapes[0].f1->size[0] = u0;
+    emxEnsureCapacity_int32_T(b_reshapes[0].f1, end);
+    for (end = 0; end < input_sizes[0] * input_sizes[1]; end++) {
+      b_reshapes[0].f1->data[i13 + b_reshapes[0].f1->size[1] * i12] =
+        varargin_1->data[k + varargin_1->size[1] * N];
+      i12++;
+      N++;
+      if (i12 > b_reshapes[0].f1->size[0] - 1) {
+        i12 = 0;
+        i13++;
+      }
+
+      if (N > varargin_1->size[0] - 1) {
+        N = 0;
+        k++;
+      }
+    }
+  }
+
   if (empty_non_axis_sizes) {
     sizes_idx_1 = 1;
   } else {
-    i8 = CP->size[0];
-    if (i8 != 0) {
+    i12 = CP->size[0];
+    if (i12 != 0) {
       sizes_idx_1 = 1;
     } else {
       sizes_idx_1 = 0;
+    }
+  }
+
+  input_sizes[0] = u0;
+  input_sizes[1] = sizes_idx_1;
+  i12 = 0;
+  i13 = 0;
+  N = 0;
+  k = b_reshapes[1].f1->size[0] * b_reshapes[1].f1->size[1];
+  b_reshapes[1].f1->size[1] = sizes_idx_1;
+  b_reshapes[1].f1->size[0] = u0;
+  emxEnsureCapacity_int32_T(b_reshapes[1].f1, k);
+  for (k = 0; k < input_sizes[0] * input_sizes[1]; k++) {
+    b_reshapes[1].f1->data[i13 + b_reshapes[1].f1->size[1] * i12] = RO->data[5 +
+      7 * (r4->data[N] - 1)];
+    i12++;
+    N++;
+    if (i12 > b_reshapes[1].f1->size[0] - 1) {
+      i12 = 0;
+      i13++;
     }
   }
 
   emxInit_int32_T(&PMA, 2);
-  i8 = PMA->size[0] * PMA->size[1];
-  PMA->size[0] = k;
-  PMA->size[1] = input_sizes_idx_1 + sizes_idx_1;
-  emxEnsureCapacity_int32_T(PMA, i8);
-  for (i8 = 0; i8 < input_sizes_idx_1; i8++) {
-    for (end = 0; end < k; end++) {
-      PMA->data[end + PMA->size[0] * i8] = varargin_1->data[end + k * i8];
+  i12 = PMA->size[0] * PMA->size[1];
+  PMA->size[1] = b_reshapes[0].f1->size[1] + b_reshapes[1].f1->size[1];
+  PMA->size[0] = b_reshapes[0].f1->size[0];
+  emxEnsureCapacity_int32_T(PMA, i12);
+  k = b_reshapes[0].f1->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    N = b_reshapes[0].f1->size[1];
+    for (i13 = 0; i13 < N; i13++) {
+      PMA->data[i13 + PMA->size[1] * i12] = b_reshapes[0].f1->data[i13 +
+        b_reshapes[0].f1->size[1] * i12];
     }
   }
 
-  loop_ub = sizes_idx_1;
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      PMA->data[end + PMA->size[0] * input_sizes_idx_1] = iidx->data[end];
+  k = b_reshapes[1].f1->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    N = b_reshapes[1].f1->size[1];
+    for (i13 = 0; i13 < N; i13++) {
+      PMA->data[(i13 + b_reshapes[0].f1->size[1]) + PMA->size[1] * i12] =
+        b_reshapes[1].f1->data[i13 + b_reshapes[1].f1->size[1] * i12];
     }
   }
+
+  emxFreeMatrix_cell_wrap_0(b_reshapes);
 
   /*  Posibles Medicos Asistentes X Operacion. | Cantidad necesaria de Medicos Asistentes */
   /* 'main_UCI_func:42' PMAn = [MAn(:,RO(CP(:,4),2))' RO(CP(:,4),7)]; */
-  loop_ub = MAn->size[0];
   k = CP->size[0];
-  i8 = varargin_1->size[0] * varargin_1->size[1];
-  varargin_1->size[0] = k;
-  varargin_1->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(varargin_1, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      varargin_1->data[end + varargin_1->size[0] * i8] = MAn->data[i8 +
-        MAn->size[0] * (RO->data[(CP->data[end + CP->size[0] * 3] + RO->size[0])
-                        - 1] - 1)];
-    }
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = CP->data[3 + (i12 << 3)];
   }
 
-  loop_ub = CP->size[0];
-  i8 = iidx->size[0];
-  iidx->size[0] = loop_ub;
-  emxEnsureCapacity_int32_T(iidx, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    iidx->data[i8] = RO->data[(CP->data[i8 + CP->size[0] * 3] + RO->size[0] * 6)
-      - 1];
+  k = CP->size[0];
+  i12 = r4->size[0] * r4->size[1];
+  r4->size[1] = 1;
+  r4->size[0] = k;
+  emxEnsureCapacity_int32_T(r4, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    r4->data[i12] = CP->data[3 + (i12 << 3)];
+  }
+
+  k = CP->size[0];
+  N = MAn->size[0];
+  i12 = varargin_1->size[0] * varargin_1->size[1];
+  varargin_1->size[1] = N;
+  varargin_1->size[0] = k;
+  emxEnsureCapacity_int32_T(varargin_1, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    for (i13 = 0; i13 < N; i13++) {
+      varargin_1->data[i13 + varargin_1->size[1] * i12] = MAn->data[(RO->data[1
+        + 7 * (b_TimeUsoRec->data[i12] - 1)] + MAn->size[1] * i13) - 1];
+    }
   }
 
   if ((varargin_1->size[0] != 0) && (varargin_1->size[1] != 0)) {
-    k = varargin_1->size[0];
+    u0 = varargin_1->size[0];
   } else {
-    i8 = CP->size[0];
-    if (i8 != 0) {
-      k = CP->size[0];
+    i12 = CP->size[0];
+    if (i12 != 0) {
+      u0 = CP->size[0];
     } else {
-      k = varargin_1->size[0];
-      if (k <= 0) {
-        k = 0;
+      u0 = varargin_1->size[0];
+      if (u0 <= 0) {
+        u0 = 0;
       }
 
-      i8 = CP->size[0];
-      if (i8 > k) {
-        k = CP->size[0];
+      i12 = CP->size[0];
+      if (i12 > u0) {
+        u0 = CP->size[0];
       }
     }
   }
 
-  empty_non_axis_sizes = (k == 0);
+  empty_non_axis_sizes = (u0 == 0);
   if (empty_non_axis_sizes || ((varargin_1->size[0] != 0) && (varargin_1->size[1]
         != 0))) {
     input_sizes_idx_1 = varargin_1->size[1];
@@ -506,260 +687,392 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
     input_sizes_idx_1 = 0;
   }
 
+  input_sizes[0] = u0;
+  input_sizes[1] = input_sizes_idx_1;
+  emxInitMatrix_cell_wrap_0(c_reshapes);
+  if ((input_sizes_idx_1 == varargin_1->size[1]) && (u0 == varargin_1->size[0]))
+  {
+    i12 = c_reshapes[0].f1->size[0] * c_reshapes[0].f1->size[1];
+    c_reshapes[0].f1->size[1] = input_sizes_idx_1;
+    c_reshapes[0].f1->size[0] = u0;
+    emxEnsureCapacity_int32_T(c_reshapes[0].f1, i12);
+    for (i12 = 0; i12 < u0; i12++) {
+      for (i13 = 0; i13 < input_sizes_idx_1; i13++) {
+        c_reshapes[0].f1->data[i13 + c_reshapes[0].f1->size[1] * i12] =
+          varargin_1->data[i13 + input_sizes_idx_1 * i12];
+      }
+    }
+  } else {
+    i12 = 0;
+    i13 = 0;
+    N = 0;
+    k = 0;
+    end = c_reshapes[0].f1->size[0] * c_reshapes[0].f1->size[1];
+    c_reshapes[0].f1->size[1] = input_sizes_idx_1;
+    c_reshapes[0].f1->size[0] = u0;
+    emxEnsureCapacity_int32_T(c_reshapes[0].f1, end);
+    for (end = 0; end < input_sizes[0] * input_sizes[1]; end++) {
+      c_reshapes[0].f1->data[i13 + c_reshapes[0].f1->size[1] * i12] =
+        varargin_1->data[k + varargin_1->size[1] * N];
+      i12++;
+      N++;
+      if (i12 > c_reshapes[0].f1->size[0] - 1) {
+        i12 = 0;
+        i13++;
+      }
+
+      if (N > varargin_1->size[0] - 1) {
+        N = 0;
+        k++;
+      }
+    }
+  }
+
   if (empty_non_axis_sizes) {
     sizes_idx_1 = 1;
   } else {
-    i8 = CP->size[0];
-    if (i8 != 0) {
+    i12 = CP->size[0];
+    if (i12 != 0) {
       sizes_idx_1 = 1;
     } else {
       sizes_idx_1 = 0;
     }
   }
 
-  emxInit_int32_T(&PMAn, 2);
-  i8 = PMAn->size[0] * PMAn->size[1];
-  PMAn->size[0] = k;
-  PMAn->size[1] = input_sizes_idx_1 + sizes_idx_1;
-  emxEnsureCapacity_int32_T(PMAn, i8);
-  for (i8 = 0; i8 < input_sizes_idx_1; i8++) {
-    for (end = 0; end < k; end++) {
-      PMAn->data[end + PMAn->size[0] * i8] = varargin_1->data[end + k * i8];
-    }
-  }
-
-  loop_ub = sizes_idx_1;
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      PMAn->data[end + PMAn->size[0] * input_sizes_idx_1] = iidx->data[end];
-    }
-  }
-
-  /*  Posibles Medicos Anestesistas X Operacion. | Cantidad necesaria de Medicos Anestesistas */
-  /* 'main_UCI_func:44' CxO = RO(CP(:,4),3); */
-  /*  Complejidad de la Operacion */
-  /* 'main_UCI_func:46' for i=1:NumTOp */
-  emxInit_boolean_T(&idx, 2);
-  emxInit_int32_T(&r2, 2);
-  emxInit_int32_T(&r3, 2);
-  emxInit_int32_T(&r4, 2);
-  for (i = 0; i < NumTOp; i++) {
-    /* 'main_UCI_func:48' if CxO(i)==1 */
-    if (RO->data[(CP->data[i + CP->size[0] * 3] + (RO->size[0] << 1)) - 1] == 1)
-    {
-      /*  Si la operacion es de alto riesgo quitar los Medicos de nivel 3 como opcion */
-      /* 'main_UCI_func:50' idx= PME(i,1:end-1)==3; */
-      if (1 > PME->size[1] - 1) {
-        loop_ub = 0;
-      } else {
-        loop_ub = PME->size[1] - 1;
-      }
-
-      i8 = idx->size[0] * idx->size[1];
-      idx->size[0] = 1;
-      idx->size[1] = loop_ub;
-      emxEnsureCapacity_boolean_T(idx, i8);
-      for (i8 = 0; i8 < loop_ub; i8++) {
-        idx->data[i8] = (PME->data[i + PME->size[0] * i8] == 3);
-      }
-
-      /* 'main_UCI_func:51' PME(i,idx)=0; */
-      end = idx->size[1] - 1;
-      k = 0;
-      for (input_sizes_idx_1 = 0; input_sizes_idx_1 <= end; input_sizes_idx_1++)
-      {
-        if (idx->data[input_sizes_idx_1]) {
-          k++;
-        }
-      }
-
-      i8 = r2->size[0] * r2->size[1];
-      r2->size[0] = 1;
-      r2->size[1] = k;
-      emxEnsureCapacity_int32_T(r2, i8);
-      k = 0;
-      for (input_sizes_idx_1 = 0; input_sizes_idx_1 <= end; input_sizes_idx_1++)
-      {
-        if (idx->data[input_sizes_idx_1]) {
-          r2->data[k] = input_sizes_idx_1 + 1;
-          k++;
-        }
-      }
-
-      k = r2->size[1];
-      for (i8 = 0; i8 < k; i8++) {
-        PME->data[i + PME->size[0] * (r2->data[i8] - 1)] = 0;
-      }
-
-      /* 'main_UCI_func:53' idx= PMA(i,1:end-1)==3; */
-      if (1 > PMA->size[1] - 1) {
-        loop_ub = 0;
-      } else {
-        loop_ub = PMA->size[1] - 1;
-      }
-
-      i8 = idx->size[0] * idx->size[1];
-      idx->size[0] = 1;
-      idx->size[1] = loop_ub;
-      emxEnsureCapacity_boolean_T(idx, i8);
-      for (i8 = 0; i8 < loop_ub; i8++) {
-        idx->data[i8] = (PMA->data[i + PMA->size[0] * i8] == 3);
-      }
-
-      /* 'main_UCI_func:54' PMA(i,idx)=0; */
-      end = idx->size[1] - 1;
-      k = 0;
-      for (input_sizes_idx_1 = 0; input_sizes_idx_1 <= end; input_sizes_idx_1++)
-      {
-        if (idx->data[input_sizes_idx_1]) {
-          k++;
-        }
-      }
-
-      i8 = r3->size[0] * r3->size[1];
-      r3->size[0] = 1;
-      r3->size[1] = k;
-      emxEnsureCapacity_int32_T(r3, i8);
-      k = 0;
-      for (input_sizes_idx_1 = 0; input_sizes_idx_1 <= end; input_sizes_idx_1++)
-      {
-        if (idx->data[input_sizes_idx_1]) {
-          r3->data[k] = input_sizes_idx_1 + 1;
-          k++;
-        }
-      }
-
-      k = r3->size[1];
-      for (i8 = 0; i8 < k; i8++) {
-        PMA->data[i + PMA->size[0] * (r3->data[i8] - 1)] = 0;
-      }
-
-      /* 'main_UCI_func:56' idx=PMAn(i,1:end-1)==3; */
-      if (1 > PMAn->size[1] - 1) {
-        loop_ub = 0;
-      } else {
-        loop_ub = PMAn->size[1] - 1;
-      }
-
-      i8 = idx->size[0] * idx->size[1];
-      idx->size[0] = 1;
-      idx->size[1] = loop_ub;
-      emxEnsureCapacity_boolean_T(idx, i8);
-      for (i8 = 0; i8 < loop_ub; i8++) {
-        idx->data[i8] = (PMAn->data[i + PMAn->size[0] * i8] == 3);
-      }
-
-      /* 'main_UCI_func:57' PMAn(i,idx)=0; */
-      end = idx->size[1] - 1;
-      k = 0;
-      for (input_sizes_idx_1 = 0; input_sizes_idx_1 <= end; input_sizes_idx_1++)
-      {
-        if (idx->data[input_sizes_idx_1]) {
-          k++;
-        }
-      }
-
-      i8 = r4->size[0] * r4->size[1];
-      r4->size[0] = 1;
-      r4->size[1] = k;
-      emxEnsureCapacity_int32_T(r4, i8);
-      k = 0;
-      for (input_sizes_idx_1 = 0; input_sizes_idx_1 <= end; input_sizes_idx_1++)
-      {
-        if (idx->data[input_sizes_idx_1]) {
-          r4->data[k] = input_sizes_idx_1 + 1;
-          k++;
-        }
-      }
-
-      k = r4->size[1];
-      for (i8 = 0; i8 < k; i8++) {
-        PMAn->data[i + PMAn->size[0] * (r4->data[i8] - 1)] = 0;
-      }
+  input_sizes[0] = u0;
+  input_sizes[1] = sizes_idx_1;
+  i12 = 0;
+  i13 = 0;
+  N = 0;
+  k = c_reshapes[1].f1->size[0] * c_reshapes[1].f1->size[1];
+  c_reshapes[1].f1->size[1] = sizes_idx_1;
+  c_reshapes[1].f1->size[0] = u0;
+  emxEnsureCapacity_int32_T(c_reshapes[1].f1, k);
+  for (k = 0; k < input_sizes[0] * input_sizes[1]; k++) {
+    c_reshapes[1].f1->data[i13 + c_reshapes[1].f1->size[1] * i12] = RO->data[6 +
+      7 * (r4->data[N] - 1)];
+    i12++;
+    N++;
+    if (i12 > c_reshapes[1].f1->size[0] - 1) {
+      i12 = 0;
+      i13++;
     }
   }
 
   emxFree_int32_T(&r4);
-  emxFree_int32_T(&r3);
-  emxFree_int32_T(&r2);
-  emxFree_boolean_T(&idx);
-  emxInit_int32_T(&PCPrO, 2);
-
-  /* 'main_UCI_func:64' PCPrO = CPrO(:,RO(CP(:,4),2))'; */
-  loop_ub = CPrO->size[0];
-  k = CP->size[0];
-  i8 = PCPrO->size[0] * PCPrO->size[1];
-  PCPrO->size[0] = k;
-  PCPrO->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(PCPrO, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      PCPrO->data[end + PCPrO->size[0] * i8] = CPrO->data[i8 + CPrO->size[0] *
-        (RO->data[(CP->data[end + CP->size[0] * 3] + RO->size[0]) - 1] - 1)];
+  emxInit_int32_T(&PMAn, 2);
+  i12 = PMAn->size[0] * PMAn->size[1];
+  PMAn->size[1] = c_reshapes[0].f1->size[1] + c_reshapes[1].f1->size[1];
+  PMAn->size[0] = c_reshapes[0].f1->size[0];
+  emxEnsureCapacity_int32_T(PMAn, i12);
+  k = c_reshapes[0].f1->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    N = c_reshapes[0].f1->size[1];
+    for (i13 = 0; i13 < N; i13++) {
+      PMAn->data[i13 + PMAn->size[1] * i12] = c_reshapes[0].f1->data[i13 +
+        c_reshapes[0].f1->size[1] * i12];
     }
   }
 
-  emxInit_int32_T(&PS, 2);
+  k = c_reshapes[1].f1->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    N = c_reshapes[1].f1->size[1];
+    for (i13 = 0; i13 < N; i13++) {
+      PMAn->data[(i13 + c_reshapes[0].f1->size[1]) + PMAn->size[1] * i12] =
+        c_reshapes[1].f1->data[i13 + c_reshapes[1].f1->size[1] * i12];
+    }
+  }
+
+  emxFreeMatrix_cell_wrap_0(c_reshapes);
+
+  /*  Posibles Medicos Anestesistas X Operacion. | Cantidad necesaria de Medicos Anestesistas */
+  /* 'main_UCI_func:44' CxO = RO(CP(:,4),3); */
+  k = CP->size[0];
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = CP->data[3 + (i12 << 3)];
+  }
+
+  /*  Complejidad de la Operacion */
+  /* 'main_UCI_func:46' for i=1:NumTOp */
+  emxInit_boolean_T(&idx, 2);
+  emxInit_int32_T(&r5, 2);
+  emxInit_int32_T(&r6, 2);
+  emxInit_int32_T(&r7, 2);
+  emxInit_int32_T(&r8, 2);
+  for (i = 0; i < NumTOp; i++) {
+    /* 'main_UCI_func:48' if CxO(i)==1 */
+    if (RO->data[2 + 7 * (b_TimeUsoRec->data[i] - 1)] == 1) {
+      /*  Si la operacion es de alto riesgo quitar los Medicos de nivel 3 como opcion */
+      /* 'main_UCI_func:50' idx= PME(i,1:end-1)==3; */
+      if (1 > PME->size[1] - 1) {
+        k = 0;
+      } else {
+        k = PME->size[1] - 1;
+      }
+
+      i12 = idx->size[0] * idx->size[1];
+      idx->size[1] = k;
+      idx->size[0] = 1;
+      emxEnsureCapacity_boolean_T(idx, i12);
+      for (i12 = 0; i12 < k; i12++) {
+        idx->data[i12] = (PME->data[i12 + PME->size[1] * i] == 3);
+      }
+
+      /* 'main_UCI_func:51' PME(i,idx)=0; */
+      end = idx->size[1] - 1;
+      N = 0;
+      for (k = 0; k <= end; k++) {
+        if (idx->data[k]) {
+          N++;
+        }
+      }
+
+      i12 = r5->size[0] * r5->size[1];
+      r5->size[1] = N;
+      r5->size[0] = 1;
+      emxEnsureCapacity_int32_T(r5, i12);
+      N = 0;
+      for (k = 0; k <= end; k++) {
+        if (idx->data[k]) {
+          r5->data[N] = k + 1;
+          N++;
+        }
+      }
+
+      i12 = r8->size[0] * r8->size[1];
+      r8->size[1] = r5->size[1];
+      r8->size[0] = 1;
+      emxEnsureCapacity_int32_T(r8, i12);
+      k = r5->size[1];
+      for (i12 = 0; i12 < k; i12++) {
+        r8->data[i12] = r5->data[i12] - 1;
+      }
+
+      N = r5->size[1];
+      for (i12 = 0; i12 < N; i12++) {
+        PME->data[r8->data[i12] + PME->size[1] * i] = 0;
+      }
+
+      /* 'main_UCI_func:53' idx= PMA(i,1:end-1)==3; */
+      if (1 > PMA->size[1] - 1) {
+        k = 0;
+      } else {
+        k = PMA->size[1] - 1;
+      }
+
+      i12 = idx->size[0] * idx->size[1];
+      idx->size[1] = k;
+      idx->size[0] = 1;
+      emxEnsureCapacity_boolean_T(idx, i12);
+      for (i12 = 0; i12 < k; i12++) {
+        idx->data[i12] = (PMA->data[i12 + PMA->size[1] * i] == 3);
+      }
+
+      /* 'main_UCI_func:54' PMA(i,idx)=0; */
+      end = idx->size[1] - 1;
+      N = 0;
+      for (k = 0; k <= end; k++) {
+        if (idx->data[k]) {
+          N++;
+        }
+      }
+
+      i12 = r6->size[0] * r6->size[1];
+      r6->size[1] = N;
+      r6->size[0] = 1;
+      emxEnsureCapacity_int32_T(r6, i12);
+      N = 0;
+      for (k = 0; k <= end; k++) {
+        if (idx->data[k]) {
+          r6->data[N] = k + 1;
+          N++;
+        }
+      }
+
+      i12 = r8->size[0] * r8->size[1];
+      r8->size[1] = r6->size[1];
+      r8->size[0] = 1;
+      emxEnsureCapacity_int32_T(r8, i12);
+      k = r6->size[1];
+      for (i12 = 0; i12 < k; i12++) {
+        r8->data[i12] = r6->data[i12] - 1;
+      }
+
+      N = r6->size[1];
+      for (i12 = 0; i12 < N; i12++) {
+        PMA->data[r8->data[i12] + PMA->size[1] * i] = 0;
+      }
+
+      /* 'main_UCI_func:56' idx=PMAn(i,1:end-1)==3; */
+      if (1 > PMAn->size[1] - 1) {
+        k = 0;
+      } else {
+        k = PMAn->size[1] - 1;
+      }
+
+      i12 = idx->size[0] * idx->size[1];
+      idx->size[1] = k;
+      idx->size[0] = 1;
+      emxEnsureCapacity_boolean_T(idx, i12);
+      for (i12 = 0; i12 < k; i12++) {
+        idx->data[i12] = (PMAn->data[i12 + PMAn->size[1] * i] == 3);
+      }
+
+      /* 'main_UCI_func:57' PMAn(i,idx)=0; */
+      end = idx->size[1] - 1;
+      N = 0;
+      for (k = 0; k <= end; k++) {
+        if (idx->data[k]) {
+          N++;
+        }
+      }
+
+      i12 = r7->size[0] * r7->size[1];
+      r7->size[1] = N;
+      r7->size[0] = 1;
+      emxEnsureCapacity_int32_T(r7, i12);
+      N = 0;
+      for (k = 0; k <= end; k++) {
+        if (idx->data[k]) {
+          r7->data[N] = k + 1;
+          N++;
+        }
+      }
+
+      i12 = r8->size[0] * r8->size[1];
+      r8->size[1] = r7->size[1];
+      r8->size[0] = 1;
+      emxEnsureCapacity_int32_T(r8, i12);
+      k = r7->size[1];
+      for (i12 = 0; i12 < k; i12++) {
+        r8->data[i12] = r7->data[i12] - 1;
+      }
+
+      N = r7->size[1];
+      for (i12 = 0; i12 < N; i12++) {
+        PMAn->data[r8->data[i12] + PMAn->size[1] * i] = 0;
+      }
+    }
+  }
+
+  emxFree_int32_T(&r8);
+  emxFree_int32_T(&r7);
+  emxFree_int32_T(&r6);
+  emxFree_int32_T(&r5);
+  emxFree_boolean_T(&idx);
+
+  /* 'main_UCI_func:64' PCPrO = CPrO(:,RO(CP(:,4),2))'; */
+  k = CP->size[0];
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = CP->data[3 + (i12 << 3)];
+  }
+
+  emxInit_int32_T(&PCPrO, 2);
+  k = CP->size[0];
+  N = CPrO->size[0];
+  i12 = PCPrO->size[0] * PCPrO->size[1];
+  PCPrO->size[1] = N;
+  PCPrO->size[0] = k;
+  emxEnsureCapacity_int32_T(PCPrO, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    for (i13 = 0; i13 < N; i13++) {
+      PCPrO->data[i13 + PCPrO->size[1] * i12] = CPrO->data[(RO->data[1 + 7 *
+        (b_TimeUsoRec->data[i12] - 1)] + CPrO->size[1] * i13) - 1];
+    }
+  }
 
   /*  Posibles Camas PreOperatorias X Operacion. */
   /* 'main_UCI_func:65' PS = S(:,RO(CP(:,4),2))'; */
-  loop_ub = S->size[0];
   k = CP->size[0];
-  i8 = PS->size[0] * PS->size[1];
-  PS->size[0] = k;
-  PS->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(PS, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      PS->data[end + PS->size[0] * i8] = S->data[i8 + S->size[0] * (RO->data
-        [(CP->data[end + CP->size[0] * 3] + RO->size[0]) - 1] - 1)];
-    }
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = CP->data[3 + (i12 << 3)];
   }
 
-  emxInit_int32_T(&PCPO, 2);
+  emxInit_int32_T(&PS, 2);
+  k = CP->size[0];
+  N = S->size[0];
+  i12 = PS->size[0] * PS->size[1];
+  PS->size[1] = N;
+  PS->size[0] = k;
+  emxEnsureCapacity_int32_T(PS, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    for (i13 = 0; i13 < N; i13++) {
+      PS->data[i13 + PS->size[1] * i12] = S->data[(RO->data[1 + 7 *
+        (b_TimeUsoRec->data[i12] - 1)] + S->size[1] * i13) - 1];
+    }
+  }
 
   /*  Posibles Salon X Operacion. */
   /* 'main_UCI_func:66' PCPO = CPO(:,RO(CP(:,4),2))'; */
-  loop_ub = CPO->size[0];
   k = CP->size[0];
-  i8 = PCPO->size[0] * PCPO->size[1];
-  PCPO->size[0] = k;
-  PCPO->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(PCPO, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      PCPO->data[end + PCPO->size[0] * i8] = CPO->data[i8 + CPO->size[0] *
-        (RO->data[(CP->data[end + CP->size[0] * 3] + RO->size[0]) - 1] - 1)];
-    }
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = CP->data[3 + (i12 << 3)];
   }
 
-  emxInit_int32_T(&PCR, 2);
+  emxInit_int32_T(&PCPO, 2);
+  k = CP->size[0];
+  N = CPO->size[0];
+  i12 = PCPO->size[0] * PCPO->size[1];
+  PCPO->size[1] = N;
+  PCPO->size[0] = k;
+  emxEnsureCapacity_int32_T(PCPO, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    for (i13 = 0; i13 < N; i13++) {
+      PCPO->data[i13 + PCPO->size[1] * i12] = CPO->data[(RO->data[1 + 7 *
+        (b_TimeUsoRec->data[i12] - 1)] + CPO->size[1] * i13) - 1];
+    }
+  }
 
   /*  Posibles Camas PostOperatorias X Operacion. */
   /* 'main_UCI_func:67' PCR = CR(:,RO(CP(:,4),2))'; */
-  loop_ub = CR->size[0];
   k = CP->size[0];
-  i8 = PCR->size[0] * PCR->size[1];
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = CP->data[3 + (i12 << 3)];
+  }
+
+  emxInit_int32_T(&PCR, 2);
+  k = CP->size[0];
+  N = CR->size[0];
+  i12 = PCR->size[0] * PCR->size[1];
+  PCR->size[1] = N;
   PCR->size[0] = k;
-  PCR->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(PCR, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    for (end = 0; end < k; end++) {
-      PCR->data[end + PCR->size[0] * i8] = CR->data[i8 + CR->size[0] * (RO->
-        data[(CP->data[end + CP->size[0] * 3] + RO->size[0]) - 1] - 1)];
+  emxEnsureCapacity_int32_T(PCR, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    for (i13 = 0; i13 < N; i13++) {
+      PCR->data[i13 + PCR->size[1] * i12] = CR->data[(RO->data[1 + 7 *
+        (b_TimeUsoRec->data[i12] - 1)] + CR->size[1] * i13) - 1];
     }
   }
 
-  emxInit_int32_T(&EP, 1);
-
   /*  Posibles Camas de Recuperacion X Operacion. */
   /* 'main_UCI_func:69' EP = CP(:,3); */
-  loop_ub = CP->size[0];
-  i8 = EP->size[0];
-  EP->size[0] = loop_ub;
-  emxEnsureCapacity_int32_T(EP, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    EP->data[i8] = CP->data[i8 + (CP->size[0] << 1)];
+  k = CP->size[0];
+  i12 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+  b_TimeUsoRec->size[1] = 1;
+  b_TimeUsoRec->size[0] = k;
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    b_TimeUsoRec->data[i12] = CP->data[2 + (i12 << 3)];
   }
 
   emxInit_int32_T(&scheduleB, 2);
@@ -767,29 +1080,29 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   /*  Estado del paciente. */
   /*     %% Caso Base */
   /* 'main_UCI_func:72' [ scheduleB,DiaOpB,EspMedOpB ] = casorandom( NumTOp,H,NumRec,PCPrO,PME,PMA,PMAn,PS,PCPO,PCR,Dia,UltPosRecXDia,TimeUsoRec,DispMExD); */
-  i8 = scheduleB->size[0] * scheduleB->size[1];
-  scheduleB->size[0] = H->size[0];
+  i12 = scheduleB->size[0] * scheduleB->size[1];
   scheduleB->size[1] = H->size[1];
-  emxEnsureCapacity_int32_T(scheduleB, i8);
-  loop_ub = H->size[1];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = H->size[0];
-    for (end = 0; end < k; end++) {
-      scheduleB->data[end + scheduleB->size[0] * i8] = H->data[end + H->size[0] *
-        i8];
+  scheduleB->size[0] = H->size[0];
+  emxEnsureCapacity_int32_T(scheduleB, i12);
+  k = H->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    N = H->size[1];
+    for (i13 = 0; i13 < N; i13++) {
+      scheduleB->data[i13 + scheduleB->size[1] * i12] = H->data[i13 + H->size[1]
+        * i12];
     }
   }
 
-  i8 = varargin_1->size[0] * varargin_1->size[1];
-  varargin_1->size[0] = UltPosRecXDia->size[0];
+  i12 = varargin_1->size[0] * varargin_1->size[1];
   varargin_1->size[1] = UltPosRecXDia->size[1];
-  emxEnsureCapacity_int32_T(varargin_1, i8);
-  loop_ub = UltPosRecXDia->size[1];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = UltPosRecXDia->size[0];
-    for (end = 0; end < k; end++) {
-      varargin_1->data[end + varargin_1->size[0] * i8] = UltPosRecXDia->data[end
-        + UltPosRecXDia->size[0] * i8];
+  varargin_1->size[0] = UltPosRecXDia->size[0];
+  emxEnsureCapacity_int32_T(varargin_1, i12);
+  k = UltPosRecXDia->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    N = UltPosRecXDia->size[1];
+    for (i13 = 0; i13 < N; i13++) {
+      varargin_1->data[i13 + varargin_1->size[1] * i12] = UltPosRecXDia->
+        data[i13 + UltPosRecXDia->size[1] * i12];
     }
   }
 
@@ -799,8 +1112,13 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
              Dia, varargin_1, TimeUsoRec, DispMExD, DiaOpB, EspMedOpB);
 
   /* 'main_UCI_func:74' [ fitnessB,TtB,NOFPB,TmNOFPB,NOE2B,NOE3B] = favalia(scheduleB,DiaOpB,EP,EspMedOpB,k0,k1,k2,k3); */
-  favalia(scheduleB, DiaOpB, EP, EspMedOpB, k0, k1, k2, k3, &y, &varargin_2,
-          &varargin_3, &varargin_4, &varargin_5, &varargin_6);
+  i12 = CP->size[0];
+  c_TimeUsoRec = *b_TimeUsoRec;
+  iv1[0] = i12;
+  c_TimeUsoRec.size = &iv1[0];
+  c_TimeUsoRec.numDimensions = 1;
+  favalia(scheduleB, DiaOpB, &c_TimeUsoRec, EspMedOpB, k0, k1, k2, k3, &y,
+          &varargin_2, &varargin_3, &varargin_4, &varargin_5, &varargin_6);
 
   /* 'main_UCI_func:76' fprintf('Fitness: %10.5f - \t Tt: %10.5f - \t NOFP: %10.5f - \t TmOFP: %10.5f - \t NOE2: %10.5f - \t NOE3: %10.5f \n',fitnessB,TtB,NOFPB,TmNOFPB,NOE2B,NOE3B); */
   printf("Fitness: %10.5f - \t Tt: %10.5f - \t NOFP: %10.5f - \t TmOFP: %10.5f - \t NOE2: %10.5f - \t NOE3: %10.5f \n",
@@ -812,62 +1130,65 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
 
   /*     %% Reorganizando la lista de espera */
   /* 'main_UCI_func:81' NAWD = ((max(CP(:,2),[],1)-CP(:,2))+1).*(360./EP); */
-  i8 = CP->size[0];
-  end = iidx->size[0];
-  iidx->size[0] = i8;
-  emxEnsureCapacity_int32_T(iidx, end);
+  i12 = CP->size[0];
+  iidx_idx_0 = (unsigned int)i12;
   emxFree_int32_T(&varargin_1);
   emxFree_int32_T(&EspMedOpB);
   emxFree_int32_T(&DiaOpB);
   emxFree_int32_T(&scheduleB);
-  for (k = 0; k < i8; k++) {
-    iidx->data[k] = (int)rt_roundd(360.0 / (double)CP->data[k + (CP->size[0] <<
-      1)]);
+  emxInit_int32_T(&iidx, 1);
+  i12 = iidx->size[0];
+  iidx->size[0] = (int)iidx_idx_0;
+  emxEnsureCapacity_int32_T(iidx, i12);
+  N = (int)iidx_idx_0;
+  for (k = 0; k < N; k++) {
+    iidx->data[k] = (int)rt_roundd(360.0 / (double)b_TimeUsoRec->data[k]);
   }
 
-  input_sizes_idx_1 = CP->size[0];
+  N = CP->size[0];
   end = 0;
-  i8 = CP->size[0];
-  if (i8 >= 1) {
-    end = CP->data[CP->size[0]];
-    for (k = 2; k <= input_sizes_idx_1; k++) {
-      if (end < CP->data[(k + CP->size[0]) - 1]) {
-        end = CP->data[(k + CP->size[0]) - 1];
+  i12 = CP->size[0];
+  if (i12 >= 1) {
+    end = CP->data[1];
+    for (k = 2; k <= N; k++) {
+      i12 = 1 + ((k - 1) << 3);
+      if (end < CP->data[i12]) {
+        end = CP->data[i12];
       }
     }
   }
 
   emxInit_int32_T(&NAWD, 1);
-  loop_ub = CP->size[0];
-  i8 = NAWD->size[0];
-  NAWD->size[0] = loop_ub;
-  emxEnsureCapacity_int32_T(NAWD, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    NAWD->data[i8] = ((end - CP->data[i8 + CP->size[0]]) + 1) * iidx->data[i8];
+  k = CP->size[0];
+  i12 = NAWD->size[0];
+  NAWD->size[0] = k;
+  emxEnsureCapacity_int32_T(NAWD, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    NAWD->data[i12] = ((end - CP->data[1 + (i12 << 3)]) + 1) * iidx->data[i12];
   }
 
   emxInit_int32_T(&x, 1);
 
   /*  Ajuste de la lista de espera dependiente del estado del paciente y el tiempo de entrada a la lista. */
   /* 'main_UCI_func:83' [~,idx] = sort(NAWD(:,1),'descend'); */
-  loop_ub = NAWD->size[0];
-  i8 = x->size[0];
-  x->size[0] = loop_ub;
-  emxEnsureCapacity_int32_T(x, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    x->data[i8] = NAWD->data[i8];
+  k = NAWD->size[0];
+  i12 = x->size[0];
+  x->size[0] = k;
+  emxEnsureCapacity_int32_T(x, i12);
+  for (i12 = 0; i12 < k; i12++) {
+    x->data[i12] = NAWD->data[i12];
   }
 
   emxFree_int32_T(&NAWD);
   emxInit_int32_T(&b_idx, 1);
   b_sort(x, iidx);
-  i8 = b_idx->size[0];
+  i12 = b_idx->size[0];
   b_idx->size[0] = iidx->size[0];
-  emxEnsureCapacity_int32_T(b_idx, i8);
-  loop_ub = iidx->size[0];
+  emxEnsureCapacity_int32_T(b_idx, i12);
+  k = iidx->size[0];
   emxFree_int32_T(&x);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    b_idx->data[i8] = iidx->data[i8];
+  for (i12 = 0; i12 < k; i12++) {
+    b_idx->data[i12] = iidx->data[i12];
   }
 
   emxFree_int32_T(&iidx);
@@ -877,15 +1198,15 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   /* 'main_UCI_func:85' NewCP = CP(idx,:); */
   /*  Organizo la Lista de Espera */
   /* 'main_UCI_func:87' NewTimeUsoRec = TimeUsoRec(idx,:); */
-  i8 = NewTimeUsoRec->size[0] * NewTimeUsoRec->size[1];
-  NewTimeUsoRec->size[0] = b_idx->size[0];
+  i12 = NewTimeUsoRec->size[0] * NewTimeUsoRec->size[1];
   NewTimeUsoRec->size[1] = 7;
-  emxEnsureCapacity_int32_T(NewTimeUsoRec, i8);
-  for (i8 = 0; i8 < 7; i8++) {
-    loop_ub = b_idx->size[0];
-    for (end = 0; end < loop_ub; end++) {
-      NewTimeUsoRec->data[end + NewTimeUsoRec->size[0] * i8] = TimeUsoRec->data
-        [(b_idx->data[end] + TimeUsoRec->size[0] * i8) - 1];
+  NewTimeUsoRec->size[0] = b_idx->size[0];
+  emxEnsureCapacity_int32_T(NewTimeUsoRec, i12);
+  k = b_idx->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    for (i13 = 0; i13 < 7; i13++) {
+      NewTimeUsoRec->data[i13 + 7 * i12] = TimeUsoRec->data[i13 + 7 *
+        (b_idx->data[i12] - 1)];
     }
   }
 
@@ -893,16 +1214,16 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   emxInit_int32_T(&NewPME, 2);
 
   /* 'main_UCI_func:89' NewPME = PME(idx,:); */
-  loop_ub = PME->size[1];
-  i8 = NewPME->size[0] * NewPME->size[1];
+  k = PME->size[1];
+  i12 = NewPME->size[0] * NewPME->size[1];
+  NewPME->size[1] = k;
   NewPME->size[0] = b_idx->size[0];
-  NewPME->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(NewPME, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = b_idx->size[0];
-    for (end = 0; end < k; end++) {
-      NewPME->data[end + NewPME->size[0] * i8] = PME->data[(b_idx->data[end] +
-        PME->size[0] * i8) - 1];
+  emxEnsureCapacity_int32_T(NewPME, i12);
+  N = b_idx->size[0];
+  for (i12 = 0; i12 < N; i12++) {
+    for (i13 = 0; i13 < k; i13++) {
+      NewPME->data[i13 + NewPME->size[1] * i12] = PME->data[i13 + PME->size[1] *
+        (b_idx->data[i12] - 1)];
     }
   }
 
@@ -911,16 +1232,16 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
 
   /*  Posibles Medicos Especialistas X Operacion. */
   /* 'main_UCI_func:90' NewPMA = PMA(idx,:); */
-  loop_ub = PMA->size[1];
-  i8 = NewPMA->size[0] * NewPMA->size[1];
+  k = PMA->size[1];
+  i12 = NewPMA->size[0] * NewPMA->size[1];
+  NewPMA->size[1] = k;
   NewPMA->size[0] = b_idx->size[0];
-  NewPMA->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(NewPMA, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = b_idx->size[0];
-    for (end = 0; end < k; end++) {
-      NewPMA->data[end + NewPMA->size[0] * i8] = PMA->data[(b_idx->data[end] +
-        PMA->size[0] * i8) - 1];
+  emxEnsureCapacity_int32_T(NewPMA, i12);
+  N = b_idx->size[0];
+  for (i12 = 0; i12 < N; i12++) {
+    for (i13 = 0; i13 < k; i13++) {
+      NewPMA->data[i13 + NewPMA->size[1] * i12] = PMA->data[i13 + PMA->size[1] *
+        (b_idx->data[i12] - 1)];
     }
   }
 
@@ -929,16 +1250,16 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
 
   /*  Posibles Medicos Asistentes X Operacion. */
   /* 'main_UCI_func:91' NewPMAn = PMAn(idx,:); */
-  loop_ub = PMAn->size[1];
-  i8 = NewPMAn->size[0] * NewPMAn->size[1];
+  k = PMAn->size[1];
+  i12 = NewPMAn->size[0] * NewPMAn->size[1];
+  NewPMAn->size[1] = k;
   NewPMAn->size[0] = b_idx->size[0];
-  NewPMAn->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(NewPMAn, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = b_idx->size[0];
-    for (end = 0; end < k; end++) {
-      NewPMAn->data[end + NewPMAn->size[0] * i8] = PMAn->data[(b_idx->data[end]
-        + PMAn->size[0] * i8) - 1];
+  emxEnsureCapacity_int32_T(NewPMAn, i12);
+  N = b_idx->size[0];
+  for (i12 = 0; i12 < N; i12++) {
+    for (i13 = 0; i13 < k; i13++) {
+      NewPMAn->data[i13 + NewPMAn->size[1] * i12] = PMAn->data[i13 + PMAn->size
+        [1] * (b_idx->data[i12] - 1)];
     }
   }
 
@@ -947,16 +1268,16 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
 
   /*  Posibles Medicos Anestesistas X Operacion. */
   /* 'main_UCI_func:93' NewPCPrO = PCPrO(idx,:); */
-  loop_ub = PCPrO->size[1];
-  i8 = NewPCPrO->size[0] * NewPCPrO->size[1];
+  k = PCPrO->size[1];
+  i12 = NewPCPrO->size[0] * NewPCPrO->size[1];
+  NewPCPrO->size[1] = k;
   NewPCPrO->size[0] = b_idx->size[0];
-  NewPCPrO->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(NewPCPrO, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = b_idx->size[0];
-    for (end = 0; end < k; end++) {
-      NewPCPrO->data[end + NewPCPrO->size[0] * i8] = PCPrO->data[(b_idx->
-        data[end] + PCPrO->size[0] * i8) - 1];
+  emxEnsureCapacity_int32_T(NewPCPrO, i12);
+  N = b_idx->size[0];
+  for (i12 = 0; i12 < N; i12++) {
+    for (i13 = 0; i13 < k; i13++) {
+      NewPCPrO->data[i13 + NewPCPrO->size[1] * i12] = PCPrO->data[i13 +
+        PCPrO->size[1] * (b_idx->data[i12] - 1)];
     }
   }
 
@@ -965,16 +1286,16 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
 
   /*  Posibles Camas PreOperatorias X Operacion. */
   /* 'main_UCI_func:94' NewPS = PS(idx,:); */
-  loop_ub = PS->size[1];
-  i8 = NewPS->size[0] * NewPS->size[1];
+  k = PS->size[1];
+  i12 = NewPS->size[0] * NewPS->size[1];
+  NewPS->size[1] = k;
   NewPS->size[0] = b_idx->size[0];
-  NewPS->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(NewPS, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = b_idx->size[0];
-    for (end = 0; end < k; end++) {
-      NewPS->data[end + NewPS->size[0] * i8] = PS->data[(b_idx->data[end] +
-        PS->size[0] * i8) - 1];
+  emxEnsureCapacity_int32_T(NewPS, i12);
+  N = b_idx->size[0];
+  for (i12 = 0; i12 < N; i12++) {
+    for (i13 = 0; i13 < k; i13++) {
+      NewPS->data[i13 + NewPS->size[1] * i12] = PS->data[i13 + PS->size[1] *
+        (b_idx->data[i12] - 1)];
     }
   }
 
@@ -983,16 +1304,16 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
 
   /*  Posibles Salon X Operacion. */
   /* 'main_UCI_func:95' NewPCPO = PCPO(idx,:); */
-  loop_ub = PCPO->size[1];
-  i8 = NewPCPO->size[0] * NewPCPO->size[1];
+  k = PCPO->size[1];
+  i12 = NewPCPO->size[0] * NewPCPO->size[1];
+  NewPCPO->size[1] = k;
   NewPCPO->size[0] = b_idx->size[0];
-  NewPCPO->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(NewPCPO, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = b_idx->size[0];
-    for (end = 0; end < k; end++) {
-      NewPCPO->data[end + NewPCPO->size[0] * i8] = PCPO->data[(b_idx->data[end]
-        + PCPO->size[0] * i8) - 1];
+  emxEnsureCapacity_int32_T(NewPCPO, i12);
+  N = b_idx->size[0];
+  for (i12 = 0; i12 < N; i12++) {
+    for (i13 = 0; i13 < k; i13++) {
+      NewPCPO->data[i13 + NewPCPO->size[1] * i12] = PCPO->data[i13 + PCPO->size
+        [1] * (b_idx->data[i12] - 1)];
     }
   }
 
@@ -1001,16 +1322,16 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
 
   /*  Posibles Camas PostOperatorias X Operacion. */
   /* 'main_UCI_func:96' NewPCR = PCR(idx,:); */
-  loop_ub = PCR->size[1];
-  i8 = NewPCR->size[0] * NewPCR->size[1];
+  k = PCR->size[1];
+  i12 = NewPCR->size[0] * NewPCR->size[1];
+  NewPCR->size[1] = k;
   NewPCR->size[0] = b_idx->size[0];
-  NewPCR->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(NewPCR, i8);
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = b_idx->size[0];
-    for (end = 0; end < k; end++) {
-      NewPCR->data[end + NewPCR->size[0] * i8] = PCR->data[(b_idx->data[end] +
-        PCR->size[0] * i8) - 1];
+  emxEnsureCapacity_int32_T(NewPCR, i12);
+  N = b_idx->size[0];
+  for (i12 = 0; i12 < N; i12++) {
+    for (i13 = 0; i13 < k; i13++) {
+      NewPCR->data[i13 + NewPCR->size[1] * i12] = PCR->data[i13 + PCR->size[1] *
+        (b_idx->data[i12] - 1)];
     }
   }
 
@@ -1019,30 +1340,30 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
 
   /*  Posibles Camas de Recuperacion X Operacion. */
   /* 'main_UCI_func:98' NewEP = EP(idx); */
-  i8 = NewEP->size[0];
+  i12 = NewEP->size[0];
   NewEP->size[0] = b_idx->size[0];
-  emxEnsureCapacity_int32_T(NewEP, i8);
-  loop_ub = b_idx->size[0];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    NewEP->data[i8] = EP->data[b_idx->data[i8] - 1];
+  emxEnsureCapacity_int32_T(NewEP, i12);
+  k = b_idx->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    NewEP->data[i12] = b_TimeUsoRec->data[b_idx->data[i12] - 1];
   }
 
+  emxFree_int32_T(&b_TimeUsoRec);
   emxFree_int32_T(&b_idx);
-  emxFree_int32_T(&EP);
   emxInit_int32_T(&schedule, 2);
 
   /*     %% Caso Base */
   /* 'main_UCI_func:102' [ schedule,DiaOp,EspMedOp ] = casorandom( NumTOp,H,NumRec,NewPCPrO,NewPME,NewPMA,NewPMAn,NewPS,NewPCPO,NewPCR,Dia,UltPosRecXDia,NewTimeUsoRec,DispMExD); */
-  i8 = schedule->size[0] * schedule->size[1];
-  schedule->size[0] = H->size[0];
+  i12 = schedule->size[0] * schedule->size[1];
   schedule->size[1] = H->size[1];
-  emxEnsureCapacity_int32_T(schedule, i8);
-  loop_ub = H->size[1];
-  for (i8 = 0; i8 < loop_ub; i8++) {
-    k = H->size[0];
-    for (end = 0; end < k; end++) {
-      schedule->data[end + schedule->size[0] * i8] = H->data[end + H->size[0] *
-        i8];
+  schedule->size[0] = H->size[0];
+  emxEnsureCapacity_int32_T(schedule, i12);
+  k = H->size[0];
+  for (i12 = 0; i12 < k; i12++) {
+    N = H->size[1];
+    for (i13 = 0; i13 < N; i13++) {
+      schedule->data[i13 + schedule->size[1] * i12] = H->data[i13 + H->size[1] *
+        i12];
     }
   }
 

@@ -5,7 +5,7 @@
  * File: randi.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -21,24 +21,11 @@
  * Arguments    : void
  * Return Type  : double
  */
-double b_randi(void)
+double randi(void)
 {
   double r;
   r = d_rand();
   return 1.0 + floor(r * 30.0);
-}
-
-/*
- * Arguments    : double r[2000]
- * Return Type  : void
- */
-void randi(double r[2000])
-{
-  int k;
-  c_rand(r);
-  for (k = 0; k < 2000; k++) {
-    r[k] = 1.0 + floor(r[k] * 200.0);
-  }
 }
 
 /*

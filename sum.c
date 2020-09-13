@@ -5,7 +5,7 @@
  * File: sum.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -42,32 +42,36 @@ void c_sum(const emxArray_int32_T *x, emxArray_real_T *y)
 {
   int vlen;
   unsigned int sz_idx_1;
-  int i9;
+  int i14;
   int k;
   int b_k;
   vlen = x->size[0];
   if ((x->size[0] == 0) || (x->size[1] == 0)) {
     sz_idx_1 = (unsigned int)x->size[1];
-    i9 = y->size[0] * y->size[1];
-    y->size[0] = 1;
+    i14 = y->size[0] * y->size[1];
     y->size[1] = (int)sz_idx_1;
-    emxEnsureCapacity_real_T(y, i9);
+    y->size[0] = 1;
+    emxEnsureCapacity_real_T(y, i14);
     vlen = (int)sz_idx_1;
-    for (i9 = 0; i9 < vlen; i9++) {
-      y->data[i9] = 0.0;
+    for (i14 = 0; i14 < vlen; i14++) {
+      y->data[i14] = 0.0;
     }
   } else {
     sz_idx_1 = (unsigned int)x->size[1];
-    i9 = y->size[0] * y->size[1];
-    y->size[0] = 1;
+    i14 = y->size[0] * y->size[1];
     y->size[1] = (int)sz_idx_1;
-    emxEnsureCapacity_real_T(y, i9);
-    i9 = x->size[1];
-    for (k = 0; k < i9; k++) {
-      y->data[k] = x->data[x->size[0] * k];
-      for (b_k = 2; b_k <= vlen; b_k++) {
+    y->size[0] = 1;
+    emxEnsureCapacity_real_T(y, i14);
+    i14 = x->size[1];
+    for (k = 0; k < i14; k++) {
+      y->data[k] = x->data[k];
+    }
+
+    for (k = 2; k <= vlen; k++) {
+      i14 = x->size[1];
+      for (b_k = 0; b_k < i14; b_k++) {
         if (vlen >= 2) {
-          y->data[k] += (double)x->data[(b_k + x->size[0] * k) - 1];
+          y->data[b_k] += (double)x->data[b_k + x->size[1] * (k - 1)];
         }
       }
     }

@@ -5,7 +5,7 @@
  * File: randperm.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -57,8 +57,8 @@ void c_randperm(int n, emxArray_real_T *p)
   b_n = p->size[1] + 1;
   i = p->size[1];
   i2 = idx->size[0] * idx->size[1];
-  idx->size[0] = 1;
   idx->size[1] = i;
+  idx->size[0] = 1;
   emxEnsureCapacity_int32_T(idx, i2);
   for (i2 = 0; i2 < i; i2++) {
     idx->data[i2] = 0;
@@ -140,8 +140,8 @@ void c_randperm(int n, emxArray_real_T *p)
 
   i = p->size[1];
   i2 = p->size[0] * p->size[1];
-  p->size[0] = 1;
   p->size[1] = i;
+  p->size[0] = 1;
   emxEnsureCapacity_real_T(p, i2);
   for (i2 = 0; i2 < i; i2++) {
     p->data[i2] = idx->data[i2];

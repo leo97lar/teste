@@ -5,7 +5,7 @@
  * File: model_emxutil.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -15,7 +15,29 @@
 #include "main_UCI_func.h"
 #include "model_emxutil.h"
 
+/* Function Declarations */
+static void emxFreeStruct_cell_wrap_0(cell_wrap_0 *pStruct);
+static void emxInitStruct_cell_wrap_0(cell_wrap_0 *pStruct);
+
 /* Function Definitions */
+
+/*
+ * Arguments    : cell_wrap_0 *pStruct
+ * Return Type  : void
+ */
+static void emxFreeStruct_cell_wrap_0(cell_wrap_0 *pStruct)
+{
+  emxFree_int32_T(&pStruct->f1);
+}
+
+/*
+ * Arguments    : cell_wrap_0 *pStruct
+ * Return Type  : void
+ */
+static void emxInitStruct_cell_wrap_0(cell_wrap_0 *pStruct)
+{
+  emxInit_int32_T(&pStruct->f1, 2);
+}
 
 /*
  * Arguments    : emxArray_boolean_T *emxArray
@@ -300,6 +322,16 @@ void emxEnsureCapacity_uint32_T(emxArray_uint32_T *emxArray, int oldNumel)
 }
 
 /*
+ * Arguments    : cell_wrap_0 pMatrix[2]
+ * Return Type  : void
+ */
+void emxFreeMatrix_cell_wrap_0(cell_wrap_0 pMatrix[2])
+{
+  emxFreeStruct_cell_wrap_0(&pMatrix[0]);
+  emxFreeStruct_cell_wrap_0(&pMatrix[1]);
+}
+
+/*
  * Arguments    : emxArray_boolean_T **pEmxArray
  * Return Type  : void
  */
@@ -402,6 +434,16 @@ void emxFree_uint32_T(emxArray_uint32_T **pEmxArray)
     free(*pEmxArray);
     *pEmxArray = (emxArray_uint32_T *)NULL;
   }
+}
+
+/*
+ * Arguments    : cell_wrap_0 pMatrix[2]
+ * Return Type  : void
+ */
+void emxInitMatrix_cell_wrap_0(cell_wrap_0 pMatrix[2])
+{
+  emxInitStruct_cell_wrap_0(&pMatrix[0]);
+  emxInitStruct_cell_wrap_0(&pMatrix[1]);
 }
 
 /*

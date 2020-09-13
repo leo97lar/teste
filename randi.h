@@ -5,7 +5,7 @@
  * File: randi.h
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 #ifndef RANDI_H
@@ -18,8 +18,7 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern double b_randi(void);
-extern void randi(double r[2000]);
+extern double randi(void);
 
 #endif
 

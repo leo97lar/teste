@@ -5,7 +5,7 @@
  * File: aevSPLap.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -82,14 +82,14 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   int numObsIQ;
   emxArray_int32_T *IC;
   int loop_ub;
-  int i11;
+  int i17;
   emxArray_int32_T *best;
   emxArray_real_T *bestFitness;
-  int i12;
+  int i18;
   int n;
-  emxArray_int32_T *y;
+  emxArray_int32_T *r10;
   int yk;
-  int input_sizes_idx_1;
+  int k;
   emxArray_real_T *fitness;
   emxArray_int32_T *aux_classic_1;
   emxArray_real_T *aux_fitness_1;
@@ -99,12 +99,15 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   emxArray_real_T *tmpColumn;
   emxArray_int32_T *idx_1;
   emxArray_int32_T *idx_2;
+  emxArray_int32_T *r11;
+  cell_wrap_0 reshapes[2];
   emxArray_real_T *x;
   emxArray_int32_T *iidx;
+  cell_wrap_0 b_reshapes[2];
   emxArray_int8_T *num2bin;
   emxArray_real_T *b_aux_fitness_2;
   emxArray_real_T *b_fitness;
-  emxArray_real_T *r5;
+  emxArray_real_T *r12;
   emxArray_int32_T *b_PCPrO;
   emxArray_int32_T *b_PME;
   emxArray_int32_T *b_PMA;
@@ -116,16 +119,18 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   emxArray_int32_T *b_EP;
   int g;
   int j;
+  int result;
   boolean_T empty_non_axis_sizes;
-  signed char b_input_sizes_idx_1;
-  int b_loop_ub;
-  int i13;
+  int input_sizes[2];
+  signed char i19;
+  int i20;
   double d0;
   double varargin_5;
   double d1;
   double d2;
   double d3;
   double d4;
+  int b_g[9];
   int i;
   emxInit_real_T(&IQ, 2);
 
@@ -167,36 +172,36 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   /*  PARÂMETROS DE INTERESSE */
   /* 'aevSPLap:31' bestexperimento = IC(:,1); */
   loop_ub = IC->size[0];
-  i11 = bestexperimento->size[0];
+  i17 = bestexperimento->size[0];
   bestexperimento->size[0] = loop_ub;
-  emxEnsureCapacity_int32_T(bestexperimento, i11);
-  for (i11 = 0; i11 < loop_ub; i11++) {
-    bestexperimento->data[i11] = IC->data[i11];
+  emxEnsureCapacity_int32_T(bestexperimento, i17);
+  for (i17 = 0; i17 < loop_ub; i17++) {
+    bestexperimento->data[i17] = IC->data[IC->size[1] * i17];
   }
 
   emxInit_int32_T(&best, 2);
 
   /* 'aevSPLap:33' best = zeros(NumTOp,numIC, 'int32'); */
-  i11 = best->size[0] * best->size[1];
-  best->size[0] = NumTOp;
+  i17 = best->size[0] * best->size[1];
   best->size[1] = numIC;
-  emxEnsureCapacity_int32_T(best, i11);
-  for (i11 = 0; i11 < numIC; i11++) {
-    for (i12 = 0; i12 < NumTOp; i12++) {
-      best->data[i12 + best->size[0] * i11] = 0;
+  best->size[0] = NumTOp;
+  emxEnsureCapacity_int32_T(best, i17);
+  for (i17 = 0; i17 < NumTOp; i17++) {
+    for (i18 = 0; i18 < numIC; i18++) {
+      best->data[i18 + best->size[1] * i17] = 0;
     }
   }
 
   emxInit_real_T(&bestFitness, 2);
 
   /* 'aevSPLap:34' bestFitness = zeros(numIC,6); */
-  i11 = bestFitness->size[0] * bestFitness->size[1];
-  bestFitness->size[0] = numIC;
+  i17 = bestFitness->size[0] * bestFitness->size[1];
   bestFitness->size[1] = 6;
-  emxEnsureCapacity_real_T(bestFitness, i11);
-  for (i11 = 0; i11 < 6; i11++) {
-    for (i12 = 0; i12 < numIC; i12++) {
-      bestFitness->data[i12 + bestFitness->size[0] * i11] = 0.0;
+  bestFitness->size[0] = numIC;
+  emxEnsureCapacity_real_T(bestFitness, i17);
+  for (i17 = 0; i17 < numIC; i17++) {
+    for (i18 = 0; i18 < 6; i18++) {
+      bestFitness->data[i18 + 6 * i17] = 0.0;
     }
   }
 
@@ -207,39 +212,39 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
     n = NumTOp;
   }
 
-  emxInit_int32_T(&y, 2);
-  i11 = y->size[0] * y->size[1];
-  y->size[0] = 1;
-  y->size[1] = n;
-  emxEnsureCapacity_int32_T(y, i11);
+  emxInit_int32_T(&r10, 2);
+  i17 = r10->size[0] * r10->size[1];
+  r10->size[1] = n;
+  r10->size[0] = 1;
+  emxEnsureCapacity_int32_T(r10, i17);
   if (n > 0) {
-    y->data[0] = 1;
+    r10->data[0] = 1;
     yk = 1;
-    for (input_sizes_idx_1 = 2; input_sizes_idx_1 <= n; input_sizes_idx_1++) {
+    for (k = 2; k <= n; k++) {
       yk++;
-      y->data[input_sizes_idx_1 - 1] = yk;
+      r10->data[k - 1] = yk;
     }
   }
 
-  loop_ub = y->size[1];
-  for (i11 = 0; i11 < loop_ub; i11++) {
-    best->data[i11] = y->data[i11];
+  yk = r10->size[1];
+  for (i17 = 0; i17 < yk; i17++) {
+    best->data[best->size[1] * i17] = r10->data[i17];
   }
 
-  emxFree_int32_T(&y);
+  emxFree_int32_T(&r10);
 
   /* 'aevSPLap:37' bestFitness(1,:) = fitnessB; */
-  for (i11 = 0; i11 < 6; i11++) {
-    bestFitness->data[bestFitness->size[0] * i11] = fitnessB[i11];
+  for (i17 = 0; i17 < 6; i17++) {
+    bestFitness->data[i17] = fitnessB[i17];
   }
 
   /* 'aevSPLap:39' trace = zeros(generations,9); */
   /*  INICIALIZA LOOPING */
   /* 'aevSPLap:44' for g = 1:generations */
-  i11 = trace->size[0] * trace->size[1];
-  trace->size[0] = generations;
+  i17 = trace->size[0] * trace->size[1];
   trace->size[1] = 9;
-  emxEnsureCapacity_real_T(trace, i11);
+  trace->size[0] = generations;
+  emxEnsureCapacity_real_T(trace, i17);
   emxInit_real_T(&fitness, 2);
   emxInit_int32_T(&aux_classic_1, 2);
   emxInit_real_T(&aux_fitness_1, 2);
@@ -249,12 +254,15 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   emxInit_real_T(&tmpColumn, 2);
   emxInit_int32_T(&idx_1, 1);
   emxInit_int32_T(&idx_2, 1);
+  emxInit_int32_T(&r11, 2);
+  emxInitMatrix_cell_wrap_0(reshapes);
   emxInit_real_T(&x, 1);
   emxInit_int32_T(&iidx, 1);
+  emxInitMatrix_cell_wrap_0(b_reshapes);
   emxInit_int8_T(&num2bin, 2);
   emxInit_real_T(&b_aux_fitness_2, 2);
   emxInit_real_T(&b_fitness, 1);
-  emxInit_real_T(&r5, 2);
+  emxInit_real_T(&r12, 2);
   emxInit_int32_T(&b_PCPrO, 2);
   emxInit_int32_T(&b_PME, 2);
   emxInit_int32_T(&b_PMA, 2);
@@ -266,13 +274,13 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   emxInit_int32_T(&b_EP, 1);
   for (g = 0; g < generations; g++) {
     /* 'aevSPLap:47' fitness=zeros(numIC,6); */
-    i11 = fitness->size[0] * fitness->size[1];
-    fitness->size[0] = numIC;
+    i17 = fitness->size[0] * fitness->size[1];
     fitness->size[1] = 6;
-    emxEnsureCapacity_real_T(fitness, i11);
-    for (i11 = 0; i11 < 6; i11++) {
-      for (i12 = 0; i12 < numIC; i12++) {
-        fitness->data[i12 + fitness->size[0] * i11] = 0.0;
+    fitness->size[0] = numIC;
+    emxEnsureCapacity_real_T(fitness, i17);
+    for (i17 = 0; i17 < numIC; i17++) {
+      for (i18 = 0; i18 < 6; i18++) {
+        fitness->data[i18 + 6 * i17] = 0.0;
       }
     }
 
@@ -281,133 +289,133 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
     for (j = 0; j < numIC; j++) {
       /* 'aevSPLap:51' [ fitness(j,1),fitness(j,2),fitness(j,3),fitness(j,4),fitness(j,5),fitness(j,6)] = sch(NumTOp,IC(:,j),NumRec,PCPrO,PME,PMA,PMAn,PS,PCPO,PCR,Dia,Data,TimeUsoRec,DispMExD,EP,k0,k1,k2,k3); */
       loop_ub = IC->size[0];
-      i11 = iidx->size[0];
+      i17 = iidx->size[0];
       iidx->size[0] = loop_ub;
-      emxEnsureCapacity_int32_T(iidx, i11);
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        iidx->data[i11] = IC->data[i11 + IC->size[0] * j];
+      emxEnsureCapacity_int32_T(iidx, i17);
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        iidx->data[i17] = IC->data[j + IC->size[1] * i17];
       }
 
-      i11 = b_PCPrO->size[0] * b_PCPrO->size[1];
-      b_PCPrO->size[0] = PCPrO->size[0];
+      i17 = b_PCPrO->size[0] * b_PCPrO->size[1];
       b_PCPrO->size[1] = PCPrO->size[1];
-      emxEnsureCapacity_int32_T(b_PCPrO, i11);
-      loop_ub = PCPrO->size[1];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        b_loop_ub = PCPrO->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          b_PCPrO->data[i12 + b_PCPrO->size[0] * i11] = PCPrO->data[i12 +
-            PCPrO->size[0] * i11];
+      b_PCPrO->size[0] = PCPrO->size[0];
+      emxEnsureCapacity_int32_T(b_PCPrO, i17);
+      loop_ub = PCPrO->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = PCPrO->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          b_PCPrO->data[i18 + b_PCPrO->size[1] * i17] = PCPrO->data[i18 +
+            PCPrO->size[1] * i17];
         }
       }
 
-      i11 = b_PME->size[0] * b_PME->size[1];
-      b_PME->size[0] = PME->size[0];
+      i17 = b_PME->size[0] * b_PME->size[1];
       b_PME->size[1] = PME->size[1];
-      emxEnsureCapacity_int32_T(b_PME, i11);
-      loop_ub = PME->size[1];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        b_loop_ub = PME->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          b_PME->data[i12 + b_PME->size[0] * i11] = PME->data[i12 + PME->size[0]
-            * i11];
+      b_PME->size[0] = PME->size[0];
+      emxEnsureCapacity_int32_T(b_PME, i17);
+      loop_ub = PME->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = PME->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          b_PME->data[i18 + b_PME->size[1] * i17] = PME->data[i18 + PME->size[1]
+            * i17];
         }
       }
 
-      i11 = b_PMA->size[0] * b_PMA->size[1];
-      b_PMA->size[0] = PMA->size[0];
+      i17 = b_PMA->size[0] * b_PMA->size[1];
       b_PMA->size[1] = PMA->size[1];
-      emxEnsureCapacity_int32_T(b_PMA, i11);
-      loop_ub = PMA->size[1];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        b_loop_ub = PMA->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          b_PMA->data[i12 + b_PMA->size[0] * i11] = PMA->data[i12 + PMA->size[0]
-            * i11];
+      b_PMA->size[0] = PMA->size[0];
+      emxEnsureCapacity_int32_T(b_PMA, i17);
+      loop_ub = PMA->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = PMA->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          b_PMA->data[i18 + b_PMA->size[1] * i17] = PMA->data[i18 + PMA->size[1]
+            * i17];
         }
       }
 
-      i11 = b_PMAn->size[0] * b_PMAn->size[1];
-      b_PMAn->size[0] = PMAn->size[0];
+      i17 = b_PMAn->size[0] * b_PMAn->size[1];
       b_PMAn->size[1] = PMAn->size[1];
-      emxEnsureCapacity_int32_T(b_PMAn, i11);
-      loop_ub = PMAn->size[1];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        b_loop_ub = PMAn->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          b_PMAn->data[i12 + b_PMAn->size[0] * i11] = PMAn->data[i12 +
-            PMAn->size[0] * i11];
+      b_PMAn->size[0] = PMAn->size[0];
+      emxEnsureCapacity_int32_T(b_PMAn, i17);
+      loop_ub = PMAn->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = PMAn->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          b_PMAn->data[i18 + b_PMAn->size[1] * i17] = PMAn->data[i18 +
+            PMAn->size[1] * i17];
         }
       }
 
-      i11 = b_PS->size[0] * b_PS->size[1];
-      b_PS->size[0] = PS->size[0];
+      i17 = b_PS->size[0] * b_PS->size[1];
       b_PS->size[1] = PS->size[1];
-      emxEnsureCapacity_int32_T(b_PS, i11);
-      loop_ub = PS->size[1];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        b_loop_ub = PS->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          b_PS->data[i12 + b_PS->size[0] * i11] = PS->data[i12 + PS->size[0] *
-            i11];
+      b_PS->size[0] = PS->size[0];
+      emxEnsureCapacity_int32_T(b_PS, i17);
+      loop_ub = PS->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = PS->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          b_PS->data[i18 + b_PS->size[1] * i17] = PS->data[i18 + PS->size[1] *
+            i17];
         }
       }
 
-      i11 = b_PCPO->size[0] * b_PCPO->size[1];
-      b_PCPO->size[0] = PCPO->size[0];
+      i17 = b_PCPO->size[0] * b_PCPO->size[1];
       b_PCPO->size[1] = PCPO->size[1];
-      emxEnsureCapacity_int32_T(b_PCPO, i11);
-      loop_ub = PCPO->size[1];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        b_loop_ub = PCPO->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          b_PCPO->data[i12 + b_PCPO->size[0] * i11] = PCPO->data[i12 +
-            PCPO->size[0] * i11];
+      b_PCPO->size[0] = PCPO->size[0];
+      emxEnsureCapacity_int32_T(b_PCPO, i17);
+      loop_ub = PCPO->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = PCPO->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          b_PCPO->data[i18 + b_PCPO->size[1] * i17] = PCPO->data[i18 +
+            PCPO->size[1] * i17];
         }
       }
 
-      i11 = b_PCR->size[0] * b_PCR->size[1];
-      b_PCR->size[0] = PCR->size[0];
+      i17 = b_PCR->size[0] * b_PCR->size[1];
       b_PCR->size[1] = PCR->size[1];
-      emxEnsureCapacity_int32_T(b_PCR, i11);
-      loop_ub = PCR->size[1];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        b_loop_ub = PCR->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          b_PCR->data[i12 + b_PCR->size[0] * i11] = PCR->data[i12 + PCR->size[0]
-            * i11];
+      b_PCR->size[0] = PCR->size[0];
+      emxEnsureCapacity_int32_T(b_PCR, i17);
+      loop_ub = PCR->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = PCR->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          b_PCR->data[i18 + b_PCR->size[1] * i17] = PCR->data[i18 + PCR->size[1]
+            * i17];
         }
       }
 
-      i11 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
-      b_TimeUsoRec->size[0] = TimeUsoRec->size[0];
+      i17 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
       b_TimeUsoRec->size[1] = 7;
-      emxEnsureCapacity_int32_T(b_TimeUsoRec, i11);
-      for (i11 = 0; i11 < 7; i11++) {
-        loop_ub = TimeUsoRec->size[0];
-        for (i12 = 0; i12 < loop_ub; i12++) {
-          b_TimeUsoRec->data[i12 + b_TimeUsoRec->size[0] * i11] =
-            TimeUsoRec->data[i12 + TimeUsoRec->size[0] * i11];
+      b_TimeUsoRec->size[0] = TimeUsoRec->size[0];
+      emxEnsureCapacity_int32_T(b_TimeUsoRec, i17);
+      loop_ub = TimeUsoRec->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        for (i18 = 0; i18 < 7; i18++) {
+          i20 = i18 + 7 * i17;
+          b_TimeUsoRec->data[i20] = TimeUsoRec->data[i20];
         }
       }
 
-      i11 = b_EP->size[0];
+      i17 = b_EP->size[0];
       b_EP->size[0] = EP->size[0];
-      emxEnsureCapacity_int32_T(b_EP, i11);
+      emxEnsureCapacity_int32_T(b_EP, i17);
       loop_ub = EP->size[0];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        b_EP->data[i11] = EP->data[i11];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        b_EP->data[i17] = EP->data[i17];
       }
 
       sch(NumTOp, iidx, NumRec, b_PCPrO, b_PME, b_PMA, b_PMAn, b_PS, b_PCPO,
           b_PCR, Dia, Data, b_TimeUsoRec, DispMExD, b_EP, k0, k1, k2, k3, &d0,
           &varargin_5, &d1, &d2, &d3, &d4);
-      fitness->data[j] = d0;
-      fitness->data[j + fitness->size[0]] = varargin_5;
-      fitness->data[j + (fitness->size[0] << 1)] = d1;
-      fitness->data[j + fitness->size[0] * 3] = d2;
-      fitness->data[j + (fitness->size[0] << 2)] = d3;
-      fitness->data[j + fitness->size[0] * 5] = d4;
+      fitness->data[6 * j] = d0;
+      fitness->data[1 + 6 * j] = varargin_5;
+      fitness->data[2 + 6 * j] = d1;
+      fitness->data[3 + 6 * j] = d2;
+      fitness->data[4 + 6 * j] = d3;
+      fitness->data[5 + 6 * j] = d4;
     }
 
     /*     save(strcat('fitness_', int2str(g),'.mat'),'fitness'); */
@@ -417,102 +425,166 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
     /* 'aevSPLap:60' if (g == 1) */
     if (1 + g == 1) {
       /* 'aevSPLap:61' aux_classic_1 = [best(:,1), IC]; */
-      i11 = best->size[0];
-      if (i11 != 0) {
-        yk = best->size[0];
+      loop_ub = best->size[0];
+      i17 = r11->size[0] * r11->size[1];
+      r11->size[1] = 1;
+      r11->size[0] = loop_ub;
+      emxEnsureCapacity_int32_T(r11, i17);
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        r11->data[i17] = best->data[best->size[1] * i17];
+      }
+
+      i17 = best->size[0];
+      if (i17 != 0) {
+        result = best->size[0];
       } else if ((IC->size[0] != 0) && (IC->size[1] != 0)) {
-        yk = IC->size[0];
+        result = IC->size[0];
       } else {
-        i11 = best->size[0];
-        if (i11 > 0) {
-          yk = best->size[0];
+        i17 = best->size[0];
+        if (i17 > 0) {
+          result = best->size[0];
         } else {
-          yk = 0;
+          result = 0;
         }
 
-        if (IC->size[0] > yk) {
-          yk = IC->size[0];
+        if (IC->size[0] > result) {
+          result = IC->size[0];
         }
       }
 
-      empty_non_axis_sizes = (yk == 0);
+      empty_non_axis_sizes = (result == 0);
       if (empty_non_axis_sizes) {
-        b_input_sizes_idx_1 = 1;
+        i19 = 1;
       } else {
-        i11 = best->size[0];
-        if (i11 != 0) {
-          b_input_sizes_idx_1 = 1;
+        i17 = best->size[0];
+        if (i17 != 0) {
+          i19 = 1;
         } else {
-          b_input_sizes_idx_1 = 0;
+          i19 = 0;
+        }
+      }
+
+      input_sizes[0] = result;
+      input_sizes[1] = i19;
+      i17 = 0;
+      i18 = 0;
+      i20 = 0;
+      k = b_reshapes[0].f1->size[0] * b_reshapes[0].f1->size[1];
+      b_reshapes[0].f1->size[1] = i19;
+      b_reshapes[0].f1->size[0] = result;
+      emxEnsureCapacity_int32_T(b_reshapes[0].f1, k);
+      for (k = 0; k < input_sizes[0] * input_sizes[1]; k++) {
+        b_reshapes[0].f1->data[i18 + b_reshapes[0].f1->size[1] * i17] =
+          r11->data[i20];
+        i17++;
+        i20++;
+        if (i17 > b_reshapes[0].f1->size[0] - 1) {
+          i17 = 0;
+          i18++;
         }
       }
 
       if (empty_non_axis_sizes || ((IC->size[0] != 0) && (IC->size[1] != 0))) {
-        input_sizes_idx_1 = IC->size[1];
+        yk = IC->size[1];
       } else {
-        input_sizes_idx_1 = 0;
+        yk = 0;
       }
 
-      loop_ub = best->size[0];
-      i11 = iidx->size[0];
-      iidx->size[0] = loop_ub;
-      emxEnsureCapacity_int32_T(iidx, i11);
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        iidx->data[i11] = best->data[i11];
-      }
+      input_sizes[0] = result;
+      input_sizes[1] = yk;
+      if ((yk == IC->size[1]) && (result == IC->size[0])) {
+        i17 = b_reshapes[1].f1->size[0] * b_reshapes[1].f1->size[1];
+        b_reshapes[1].f1->size[1] = yk;
+        b_reshapes[1].f1->size[0] = result;
+        emxEnsureCapacity_int32_T(b_reshapes[1].f1, i17);
+        for (i17 = 0; i17 < result; i17++) {
+          for (i18 = 0; i18 < yk; i18++) {
+            b_reshapes[1].f1->data[i18 + b_reshapes[1].f1->size[1] * i17] =
+              IC->data[i18 + yk * i17];
+          }
+        }
+      } else {
+        i17 = 0;
+        i18 = 0;
+        i20 = 0;
+        k = 0;
+        n = b_reshapes[1].f1->size[0] * b_reshapes[1].f1->size[1];
+        b_reshapes[1].f1->size[1] = yk;
+        b_reshapes[1].f1->size[0] = result;
+        emxEnsureCapacity_int32_T(b_reshapes[1].f1, n);
+        for (n = 0; n < input_sizes[0] * input_sizes[1]; n++) {
+          b_reshapes[1].f1->data[i18 + b_reshapes[1].f1->size[1] * i17] =
+            IC->data[k + IC->size[1] * i20];
+          i17++;
+          i20++;
+          if (i17 > b_reshapes[1].f1->size[0] - 1) {
+            i17 = 0;
+            i18++;
+          }
 
-      i11 = aux_classic_1->size[0] * aux_classic_1->size[1];
-      aux_classic_1->size[0] = yk;
-      aux_classic_1->size[1] = b_input_sizes_idx_1 + input_sizes_idx_1;
-      emxEnsureCapacity_int32_T(aux_classic_1, i11);
-      loop_ub = b_input_sizes_idx_1;
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        for (i12 = 0; i12 < yk; i12++) {
-          aux_classic_1->data[i12] = iidx->data[i12];
+          if (i20 > IC->size[0] - 1) {
+            i20 = 0;
+            k++;
+          }
         }
       }
 
-      for (i11 = 0; i11 < input_sizes_idx_1; i11++) {
-        for (i12 = 0; i12 < yk; i12++) {
-          aux_classic_1->data[i12 + aux_classic_1->size[0] * (i11 +
-            b_input_sizes_idx_1)] = IC->data[i12 + yk * i11];
+      i17 = aux_classic_1->size[0] * aux_classic_1->size[1];
+      aux_classic_1->size[1] = b_reshapes[0].f1->size[1] + b_reshapes[1]
+        .f1->size[1];
+      aux_classic_1->size[0] = b_reshapes[0].f1->size[0];
+      emxEnsureCapacity_int32_T(aux_classic_1, i17);
+      loop_ub = b_reshapes[0].f1->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = b_reshapes[0].f1->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          aux_classic_1->data[i18 + aux_classic_1->size[1] * i17] = b_reshapes[0]
+            .f1->data[i18 + b_reshapes[0].f1->size[1] * i17];
+        }
+      }
+
+      loop_ub = b_reshapes[1].f1->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = b_reshapes[1].f1->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          aux_classic_1->data[(i18 + b_reshapes[0].f1->size[1]) +
+            aux_classic_1->size[1] * i17] = b_reshapes[1].f1->data[i18 +
+            b_reshapes[1].f1->size[1] * i17];
         }
       }
 
       /* 'aevSPLap:62' aux_fitness_1 = [bestFitness(1,:); fitness]; */
-      i11 = aux_fitness_1->size[0] * aux_fitness_1->size[1];
-      aux_fitness_1->size[0] = 1 + fitness->size[0];
+      i17 = aux_fitness_1->size[0] * aux_fitness_1->size[1];
       aux_fitness_1->size[1] = 6;
-      emxEnsureCapacity_real_T(aux_fitness_1, i11);
-      for (i11 = 0; i11 < 6; i11++) {
-        aux_fitness_1->data[aux_fitness_1->size[0] * i11] = bestFitness->
-          data[bestFitness->size[0] * i11];
+      aux_fitness_1->size[0] = 1 + fitness->size[0];
+      emxEnsureCapacity_real_T(aux_fitness_1, i17);
+      for (i17 = 0; i17 < 6; i17++) {
+        aux_fitness_1->data[i17] = bestFitness->data[i17];
       }
 
-      for (i11 = 0; i11 < 6; i11++) {
-        loop_ub = fitness->size[0];
-        for (i12 = 0; i12 < loop_ub; i12++) {
-          aux_fitness_1->data[(i12 + aux_fitness_1->size[0] * i11) + 1] =
-            fitness->data[i12 + fitness->size[0] * i11];
+      loop_ub = fitness->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        for (i18 = 0; i18 < 6; i18++) {
+          aux_fitness_1->data[i18 + 6 * (i17 + 1)] = fitness->data[i18 + 6 * i17];
         }
       }
 
       /* 'aevSPLap:63' [~,idx_1] = sort(aux_fitness_1(:,1),'ascend'); */
       loop_ub = aux_fitness_1->size[0];
-      i11 = x->size[0];
+      i17 = x->size[0];
       x->size[0] = loop_ub;
-      emxEnsureCapacity_real_T(x, i11);
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        x->data[i11] = aux_fitness_1->data[i11];
+      emxEnsureCapacity_real_T(x, i17);
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        x->data[i17] = aux_fitness_1->data[6 * i17];
       }
 
       c_sort(x, iidx);
-      i11 = idx_1->size[0];
+      i17 = idx_1->size[0];
       idx_1->size[0] = iidx->size[0];
-      emxEnsureCapacity_int32_T(idx_1, i11);
+      emxEnsureCapacity_int32_T(idx_1, i17);
       loop_ub = iidx->size[0];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        idx_1->data[i11] = iidx->data[i11];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        idx_1->data[i17] = iidx->data[i17];
       }
 
       /* 'aevSPLap:63' ~ */
@@ -525,27 +597,26 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
         loop_ub = numIC;
       }
 
-      i11 = b_aux_fitness_2->size[0] * b_aux_fitness_2->size[1];
-      b_aux_fitness_2->size[0] = idx_1->size[0];
+      i17 = b_aux_fitness_2->size[0] * b_aux_fitness_2->size[1];
       b_aux_fitness_2->size[1] = 6;
-      emxEnsureCapacity_real_T(b_aux_fitness_2, i11);
-      for (i11 = 0; i11 < 6; i11++) {
-        b_loop_ub = idx_1->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          b_aux_fitness_2->data[i12 + b_aux_fitness_2->size[0] * i11] =
-            aux_fitness_1->data[(idx_1->data[i12] + aux_fitness_1->size[0] * i11)
-            - 1];
+      b_aux_fitness_2->size[0] = idx_1->size[0];
+      emxEnsureCapacity_real_T(b_aux_fitness_2, i17);
+      n = idx_1->size[0];
+      for (i17 = 0; i17 < n; i17++) {
+        for (i18 = 0; i18 < 6; i18++) {
+          b_aux_fitness_2->data[i18 + 6 * i17] = aux_fitness_1->data[i18 + 6 *
+            (idx_1->data[i17] - 1)];
         }
       }
 
-      i11 = fitness->size[0] * fitness->size[1];
-      fitness->size[0] = loop_ub;
+      i17 = fitness->size[0] * fitness->size[1];
       fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i11);
-      for (i11 = 0; i11 < 6; i11++) {
-        for (i12 = 0; i12 < loop_ub; i12++) {
-          fitness->data[i12 + fitness->size[0] * i11] = b_aux_fitness_2->
-            data[i12 + b_aux_fitness_2->size[0] * i11];
+      fitness->size[0] = loop_ub;
+      emxEnsureCapacity_real_T(fitness, i17);
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        for (i18 = 0; i18 < 6; i18++) {
+          i20 = i18 + 6 * i17;
+          fitness->data[i20] = b_aux_fitness_2->data[i20];
         }
       }
 
@@ -556,161 +627,248 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
         loop_ub = numIC;
       }
 
-      b_loop_ub = aux_classic_1->size[0] - 1;
+      n = aux_classic_1->size[0] - 1;
       yk = aux_classic_1->size[0];
-      i11 = b_PCPrO->size[0] * b_PCPrO->size[1];
-      b_PCPrO->size[0] = yk;
+      i17 = b_PCPrO->size[0] * b_PCPrO->size[1];
       b_PCPrO->size[1] = idx_1->size[0];
-      emxEnsureCapacity_int32_T(b_PCPrO, i11);
-      input_sizes_idx_1 = idx_1->size[0];
-      for (i11 = 0; i11 < input_sizes_idx_1; i11++) {
-        for (i12 = 0; i12 < yk; i12++) {
-          b_PCPrO->data[i12 + b_PCPrO->size[0] * i11] = aux_classic_1->data[i12
-            + aux_classic_1->size[0] * (idx_1->data[i11] - 1)];
+      b_PCPrO->size[0] = yk;
+      emxEnsureCapacity_int32_T(b_PCPrO, i17);
+      for (i17 = 0; i17 < yk; i17++) {
+        k = idx_1->size[0];
+        for (i18 = 0; i18 < k; i18++) {
+          b_PCPrO->data[i18 + b_PCPrO->size[1] * i17] = aux_classic_1->data
+            [(idx_1->data[i18] + aux_classic_1->size[1] * i17) - 1];
         }
       }
 
-      i11 = rank_classic->size[0] * rank_classic->size[1];
-      rank_classic->size[0] = b_loop_ub + 1;
+      i17 = rank_classic->size[0] * rank_classic->size[1];
       rank_classic->size[1] = loop_ub;
-      emxEnsureCapacity_int32_T(rank_classic, i11);
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        for (i12 = 0; i12 <= b_loop_ub; i12++) {
-          rank_classic->data[i12 + rank_classic->size[0] * i11] = b_PCPrO->
-            data[i12 + b_PCPrO->size[0] * i11];
+      rank_classic->size[0] = n + 1;
+      emxEnsureCapacity_int32_T(rank_classic, i17);
+      for (i17 = 0; i17 <= n; i17++) {
+        for (i18 = 0; i18 < loop_ub; i18++) {
+          rank_classic->data[i18 + rank_classic->size[1] * i17] = b_PCPrO->
+            data[i18 + b_PCPrO->size[1] * i17];
         }
       }
     } else {
       /* 'aevSPLap:69' else */
       /* 'aevSPLap:70' aux_classic_2 = [best(:,1:(numIC*taxE)/100), IC]; */
-      i11 = (int)rt_roundd((double)(int)rt_roundd((double)numIC * taxE) / 100.0);
-      if (1 > i11) {
+      i17 = (int)rt_roundd((double)(int)rt_roundd((double)numIC * taxE) / 100.0);
+      if (1 > i17) {
         loop_ub = 0;
       } else {
-        loop_ub = i11;
+        loop_ub = i17;
       }
 
-      i12 = best->size[0];
-      if ((i12 != 0) && (loop_ub != 0)) {
-        yk = best->size[0];
+      i18 = best->size[0];
+      if ((i18 != 0) && (loop_ub != 0)) {
+        result = best->size[0];
       } else if ((IC->size[0] != 0) && (IC->size[1] != 0)) {
-        yk = IC->size[0];
+        result = IC->size[0];
       } else {
-        i12 = best->size[0];
-        if (i12 > 0) {
-          yk = best->size[0];
+        i18 = best->size[0];
+        if (i18 > 0) {
+          result = best->size[0];
+        } else {
+          result = 0;
+        }
+
+        if (IC->size[0] > result) {
+          result = IC->size[0];
+        }
+      }
+
+      empty_non_axis_sizes = (result == 0);
+      if (empty_non_axis_sizes) {
+        yk = loop_ub;
+      } else {
+        i18 = best->size[0];
+        if ((i18 != 0) && (loop_ub != 0)) {
+          yk = loop_ub;
         } else {
           yk = 0;
         }
-
-        if (IC->size[0] > yk) {
-          yk = IC->size[0];
-        }
       }
 
-      empty_non_axis_sizes = (yk == 0);
-      if (empty_non_axis_sizes) {
-        input_sizes_idx_1 = loop_ub;
+      input_sizes[0] = result;
+      input_sizes[1] = yk;
+      i18 = best->size[0];
+      if ((yk == loop_ub) && (result == i18)) {
+        n = best->size[0] - 1;
+        i18 = b_PCPrO->size[0] * b_PCPrO->size[1];
+        b_PCPrO->size[1] = loop_ub;
+        b_PCPrO->size[0] = n + 1;
+        emxEnsureCapacity_int32_T(b_PCPrO, i18);
+        for (i18 = 0; i18 <= n; i18++) {
+          for (i20 = 0; i20 < loop_ub; i20++) {
+            b_PCPrO->data[i20 + b_PCPrO->size[1] * i18] = best->data[i20 +
+              best->size[1] * i18];
+          }
+        }
+
+        i18 = best->size[0] * best->size[1];
+        best->size[1] = b_PCPrO->size[1];
+        best->size[0] = b_PCPrO->size[0];
+        emxEnsureCapacity_int32_T(best, i18);
+        loop_ub = b_PCPrO->size[0];
+        for (i18 = 0; i18 < loop_ub; i18++) {
+          n = b_PCPrO->size[1];
+          for (i20 = 0; i20 < n; i20++) {
+            best->data[i20 + best->size[1] * i18] = b_PCPrO->data[i20 +
+              b_PCPrO->size[1] * i18];
+          }
+        }
+
+        i18 = reshapes[0].f1->size[0] * reshapes[0].f1->size[1];
+        reshapes[0].f1->size[1] = yk;
+        reshapes[0].f1->size[0] = result;
+        emxEnsureCapacity_int32_T(reshapes[0].f1, i18);
+        for (i18 = 0; i18 < result; i18++) {
+          for (i20 = 0; i20 < yk; i20++) {
+            reshapes[0].f1->data[i20 + reshapes[0].f1->size[1] * i18] =
+              best->data[i20 + yk * i18];
+          }
+        }
       } else {
-        i12 = best->size[0];
-        if ((i12 != 0) && (loop_ub != 0)) {
-          input_sizes_idx_1 = loop_ub;
-        } else {
-          input_sizes_idx_1 = 0;
+        i18 = 0;
+        i20 = 0;
+        k = 0;
+        n = 0;
+        loop_ub = reshapes[0].f1->size[0] * reshapes[0].f1->size[1];
+        reshapes[0].f1->size[1] = yk;
+        reshapes[0].f1->size[0] = result;
+        emxEnsureCapacity_int32_T(reshapes[0].f1, loop_ub);
+        for (loop_ub = 0; loop_ub < input_sizes[0] * input_sizes[1]; loop_ub++)
+        {
+          reshapes[0].f1->data[i20 + reshapes[0].f1->size[1] * i18] = best->
+            data[n + best->size[1] * k];
+          i18++;
+          k++;
+          if (i18 > reshapes[0].f1->size[0] - 1) {
+            i18 = 0;
+            i20++;
+          }
+
+          yk = best->size[0] - 1;
+          if (k > yk) {
+            k = 0;
+            n++;
+          }
         }
       }
 
       if (empty_non_axis_sizes || ((IC->size[0] != 0) && (IC->size[1] != 0))) {
-        n = IC->size[1];
+        yk = IC->size[1];
       } else {
+        yk = 0;
+      }
+
+      input_sizes[0] = result;
+      input_sizes[1] = yk;
+      if ((yk == IC->size[1]) && (result == IC->size[0])) {
+        i18 = reshapes[1].f1->size[0] * reshapes[1].f1->size[1];
+        reshapes[1].f1->size[1] = yk;
+        reshapes[1].f1->size[0] = result;
+        emxEnsureCapacity_int32_T(reshapes[1].f1, i18);
+        for (i18 = 0; i18 < result; i18++) {
+          for (i20 = 0; i20 < yk; i20++) {
+            reshapes[1].f1->data[i20 + reshapes[1].f1->size[1] * i18] = IC->
+              data[i20 + yk * i18];
+          }
+        }
+      } else {
+        i18 = 0;
+        i20 = 0;
+        k = 0;
         n = 0;
-      }
+        loop_ub = reshapes[1].f1->size[0] * reshapes[1].f1->size[1];
+        reshapes[1].f1->size[1] = yk;
+        reshapes[1].f1->size[0] = result;
+        emxEnsureCapacity_int32_T(reshapes[1].f1, loop_ub);
+        for (loop_ub = 0; loop_ub < input_sizes[0] * input_sizes[1]; loop_ub++)
+        {
+          reshapes[1].f1->data[i20 + reshapes[1].f1->size[1] * i18] = IC->data[n
+            + IC->size[1] * k];
+          i18++;
+          k++;
+          if (i18 > reshapes[1].f1->size[0] - 1) {
+            i18 = 0;
+            i20++;
+          }
 
-      b_loop_ub = best->size[0] - 1;
-      i12 = b_PCPrO->size[0] * b_PCPrO->size[1];
-      b_PCPrO->size[0] = b_loop_ub + 1;
-      b_PCPrO->size[1] = loop_ub;
-      emxEnsureCapacity_int32_T(b_PCPrO, i12);
-      for (i12 = 0; i12 < loop_ub; i12++) {
-        for (i13 = 0; i13 <= b_loop_ub; i13++) {
-          b_PCPrO->data[i13 + b_PCPrO->size[0] * i12] = best->data[i13 +
-            best->size[0] * i12];
+          if (k > IC->size[0] - 1) {
+            k = 0;
+            n++;
+          }
         }
       }
 
-      i12 = best->size[0] * best->size[1];
-      best->size[0] = b_PCPrO->size[0];
-      best->size[1] = b_PCPrO->size[1];
-      emxEnsureCapacity_int32_T(best, i12);
-      loop_ub = b_PCPrO->size[1];
-      for (i12 = 0; i12 < loop_ub; i12++) {
-        b_loop_ub = b_PCPrO->size[0];
-        for (i13 = 0; i13 < b_loop_ub; i13++) {
-          best->data[i13 + best->size[0] * i12] = b_PCPrO->data[i13 +
-            b_PCPrO->size[0] * i12];
+      i18 = aux_classic_2->size[0] * aux_classic_2->size[1];
+      aux_classic_2->size[1] = reshapes[0].f1->size[1] + reshapes[1].f1->size[1];
+      aux_classic_2->size[0] = reshapes[0].f1->size[0];
+      emxEnsureCapacity_int32_T(aux_classic_2, i18);
+      loop_ub = reshapes[0].f1->size[0];
+      for (i18 = 0; i18 < loop_ub; i18++) {
+        n = reshapes[0].f1->size[1];
+        for (i20 = 0; i20 < n; i20++) {
+          aux_classic_2->data[i20 + aux_classic_2->size[1] * i18] = reshapes[0].
+            f1->data[i20 + reshapes[0].f1->size[1] * i18];
         }
       }
 
-      i12 = aux_classic_2->size[0] * aux_classic_2->size[1];
-      aux_classic_2->size[0] = yk;
-      aux_classic_2->size[1] = input_sizes_idx_1 + n;
-      emxEnsureCapacity_int32_T(aux_classic_2, i12);
-      for (i12 = 0; i12 < input_sizes_idx_1; i12++) {
-        for (i13 = 0; i13 < yk; i13++) {
-          aux_classic_2->data[i13 + aux_classic_2->size[0] * i12] = best->
-            data[i13 + yk * i12];
-        }
-      }
-
-      for (i12 = 0; i12 < n; i12++) {
-        for (i13 = 0; i13 < yk; i13++) {
-          aux_classic_2->data[i13 + aux_classic_2->size[0] * (i12 +
-            input_sizes_idx_1)] = IC->data[i13 + yk * i12];
+      loop_ub = reshapes[1].f1->size[0];
+      for (i18 = 0; i18 < loop_ub; i18++) {
+        n = reshapes[1].f1->size[1];
+        for (i20 = 0; i20 < n; i20++) {
+          aux_classic_2->data[(i20 + reshapes[0].f1->size[1]) +
+            aux_classic_2->size[1] * i18] = reshapes[1].f1->data[i20 + reshapes
+            [1].f1->size[1] * i18];
         }
       }
 
       /* 'aevSPLap:71' aux_fitness_2 = [bestFitness(1:(numIC*taxE)/100,:); fitness]; */
-      if (1 > i11) {
+      if (1 > i17) {
         loop_ub = 0;
       } else {
-        loop_ub = i11;
+        loop_ub = i17;
       }
 
-      i11 = aux_fitness_2->size[0] * aux_fitness_2->size[1];
-      aux_fitness_2->size[0] = loop_ub + fitness->size[0];
+      i17 = aux_fitness_2->size[0] * aux_fitness_2->size[1];
       aux_fitness_2->size[1] = 6;
-      emxEnsureCapacity_real_T(aux_fitness_2, i11);
-      for (i11 = 0; i11 < 6; i11++) {
-        for (i12 = 0; i12 < loop_ub; i12++) {
-          aux_fitness_2->data[i12 + aux_fitness_2->size[0] * i11] =
-            bestFitness->data[i12 + bestFitness->size[0] * i11];
+      aux_fitness_2->size[0] = loop_ub + fitness->size[0];
+      emxEnsureCapacity_real_T(aux_fitness_2, i17);
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        for (i18 = 0; i18 < 6; i18++) {
+          i20 = i18 + 6 * i17;
+          aux_fitness_2->data[i20] = bestFitness->data[i20];
         }
       }
 
-      for (i11 = 0; i11 < 6; i11++) {
-        b_loop_ub = fitness->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          aux_fitness_2->data[(i12 + loop_ub) + aux_fitness_2->size[0] * i11] =
-            fitness->data[i12 + fitness->size[0] * i11];
+      n = fitness->size[0];
+      for (i17 = 0; i17 < n; i17++) {
+        for (i18 = 0; i18 < 6; i18++) {
+          aux_fitness_2->data[i18 + 6 * (i17 + loop_ub)] = fitness->data[i18 + 6
+            * i17];
         }
       }
 
       /* 'aevSPLap:72' [~,idx_2] = sort(aux_fitness_2(:,1),'ascend'); */
       loop_ub = aux_fitness_2->size[0];
-      i11 = x->size[0];
+      i17 = x->size[0];
       x->size[0] = loop_ub;
-      emxEnsureCapacity_real_T(x, i11);
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        x->data[i11] = aux_fitness_2->data[i11];
+      emxEnsureCapacity_real_T(x, i17);
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        x->data[i17] = aux_fitness_2->data[6 * i17];
       }
 
       c_sort(x, iidx);
-      i11 = idx_2->size[0];
+      i17 = idx_2->size[0];
       idx_2->size[0] = iidx->size[0];
-      emxEnsureCapacity_int32_T(idx_2, i11);
+      emxEnsureCapacity_int32_T(idx_2, i17);
       loop_ub = iidx->size[0];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        idx_2->data[i11] = iidx->data[i11];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        idx_2->data[i17] = iidx->data[i17];
       }
 
       /* 'aevSPLap:72' ~ */
@@ -723,27 +881,26 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
         loop_ub = numIC;
       }
 
-      i11 = b_aux_fitness_2->size[0] * b_aux_fitness_2->size[1];
-      b_aux_fitness_2->size[0] = idx_2->size[0];
+      i17 = b_aux_fitness_2->size[0] * b_aux_fitness_2->size[1];
       b_aux_fitness_2->size[1] = 6;
-      emxEnsureCapacity_real_T(b_aux_fitness_2, i11);
-      for (i11 = 0; i11 < 6; i11++) {
-        b_loop_ub = idx_2->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          b_aux_fitness_2->data[i12 + b_aux_fitness_2->size[0] * i11] =
-            aux_fitness_2->data[(idx_2->data[i12] + aux_fitness_2->size[0] * i11)
-            - 1];
+      b_aux_fitness_2->size[0] = idx_2->size[0];
+      emxEnsureCapacity_real_T(b_aux_fitness_2, i17);
+      n = idx_2->size[0];
+      for (i17 = 0; i17 < n; i17++) {
+        for (i18 = 0; i18 < 6; i18++) {
+          b_aux_fitness_2->data[i18 + 6 * i17] = aux_fitness_2->data[i18 + 6 *
+            (idx_2->data[i17] - 1)];
         }
       }
 
-      i11 = fitness->size[0] * fitness->size[1];
-      fitness->size[0] = loop_ub;
+      i17 = fitness->size[0] * fitness->size[1];
       fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i11);
-      for (i11 = 0; i11 < 6; i11++) {
-        for (i12 = 0; i12 < loop_ub; i12++) {
-          fitness->data[i12 + fitness->size[0] * i11] = b_aux_fitness_2->
-            data[i12 + b_aux_fitness_2->size[0] * i11];
+      fitness->size[0] = loop_ub;
+      emxEnsureCapacity_real_T(fitness, i17);
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        for (i18 = 0; i18 < 6; i18++) {
+          i20 = i18 + 6 * i17;
+          fitness->data[i20] = b_aux_fitness_2->data[i20];
         }
       }
 
@@ -754,28 +911,28 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
         loop_ub = numIC;
       }
 
-      b_loop_ub = aux_classic_2->size[0] - 1;
+      n = aux_classic_2->size[0] - 1;
       yk = aux_classic_2->size[0];
-      i11 = b_PCPrO->size[0] * b_PCPrO->size[1];
-      b_PCPrO->size[0] = yk;
+      i17 = b_PCPrO->size[0] * b_PCPrO->size[1];
       b_PCPrO->size[1] = idx_2->size[0];
-      emxEnsureCapacity_int32_T(b_PCPrO, i11);
-      input_sizes_idx_1 = idx_2->size[0];
-      for (i11 = 0; i11 < input_sizes_idx_1; i11++) {
-        for (i12 = 0; i12 < yk; i12++) {
-          b_PCPrO->data[i12 + b_PCPrO->size[0] * i11] = aux_classic_2->data[i12
-            + aux_classic_2->size[0] * (idx_2->data[i11] - 1)];
+      b_PCPrO->size[0] = yk;
+      emxEnsureCapacity_int32_T(b_PCPrO, i17);
+      for (i17 = 0; i17 < yk; i17++) {
+        k = idx_2->size[0];
+        for (i18 = 0; i18 < k; i18++) {
+          b_PCPrO->data[i18 + b_PCPrO->size[1] * i17] = aux_classic_2->data
+            [(idx_2->data[i18] + aux_classic_2->size[1] * i17) - 1];
         }
       }
 
-      i11 = rank_classic->size[0] * rank_classic->size[1];
-      rank_classic->size[0] = b_loop_ub + 1;
+      i17 = rank_classic->size[0] * rank_classic->size[1];
       rank_classic->size[1] = loop_ub;
-      emxEnsureCapacity_int32_T(rank_classic, i11);
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        for (i12 = 0; i12 <= b_loop_ub; i12++) {
-          rank_classic->data[i12 + rank_classic->size[0] * i11] = b_PCPrO->
-            data[i12 + b_PCPrO->size[0] * i11];
+      rank_classic->size[0] = n + 1;
+      emxEnsureCapacity_int32_T(rank_classic, i17);
+      for (i17 = 0; i17 <= n; i17++) {
+        for (i18 = 0; i18 < loop_ub; i18++) {
+          rank_classic->data[i18 + rank_classic->size[1] * i17] = b_PCPrO->
+            data[i18 + b_PCPrO->size[1] * i17];
         }
       }
     }
@@ -783,103 +940,100 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
     /* REMOVE INDIVÍDUOS MAIS FRACOS (EXCEDENTES) */
     /* 'aevSPLap:83' IC = rank_classic; */
     /* 'aevSPLap:84' best = IC; */
-    i11 = best->size[0] * best->size[1];
-    best->size[0] = rank_classic->size[0];
+    i17 = best->size[0] * best->size[1];
     best->size[1] = rank_classic->size[1];
-    emxEnsureCapacity_int32_T(best, i11);
-    loop_ub = rank_classic->size[1];
-    for (i11 = 0; i11 < loop_ub; i11++) {
-      b_loop_ub = rank_classic->size[0];
-      for (i12 = 0; i12 < b_loop_ub; i12++) {
-        best->data[i12 + best->size[0] * i11] = rank_classic->data[i12 +
-          rank_classic->size[0] * i11];
+    best->size[0] = rank_classic->size[0];
+    emxEnsureCapacity_int32_T(best, i17);
+    loop_ub = rank_classic->size[0];
+    for (i17 = 0; i17 < loop_ub; i17++) {
+      n = rank_classic->size[1];
+      for (i18 = 0; i18 < n; i18++) {
+        best->data[i18 + best->size[1] * i17] = rank_classic->data[i18 +
+          rank_classic->size[1] * i17];
       }
     }
 
     /* 'aevSPLap:85' bestFitness = fitness; */
-    i11 = bestFitness->size[0] * bestFitness->size[1];
-    bestFitness->size[0] = fitness->size[0];
+    i17 = bestFitness->size[0] * bestFitness->size[1];
     bestFitness->size[1] = 6;
-    emxEnsureCapacity_real_T(bestFitness, i11);
-    for (i11 = 0; i11 < 6; i11++) {
-      loop_ub = fitness->size[0];
-      for (i12 = 0; i12 < loop_ub; i12++) {
-        bestFitness->data[i12 + bestFitness->size[0] * i11] = fitness->data[i12
-          + fitness->size[0] * i11];
+    bestFitness->size[0] = fitness->size[0];
+    emxEnsureCapacity_real_T(bestFitness, i17);
+    loop_ub = fitness->size[0];
+    for (i17 = 0; i17 < loop_ub; i17++) {
+      for (i18 = 0; i18 < 6; i18++) {
+        i20 = i18 + 6 * i17;
+        bestFitness->data[i20] = fitness->data[i20];
       }
     }
 
     /*  GUARDA MELHOR INDIVÍDUO */
     /* 'aevSPLap:89' bestexperimento = IC(:,1); */
     loop_ub = rank_classic->size[0];
-    i11 = bestexperimento->size[0];
+    i17 = bestexperimento->size[0];
     bestexperimento->size[0] = loop_ub;
-    emxEnsureCapacity_int32_T(bestexperimento, i11);
-    for (i11 = 0; i11 < loop_ub; i11++) {
-      bestexperimento->data[i11] = rank_classic->data[i11];
+    emxEnsureCapacity_int32_T(bestexperimento, i17);
+    for (i17 = 0; i17 < loop_ub; i17++) {
+      bestexperimento->data[i17] = rank_classic->data[rank_classic->size[1] *
+        i17];
     }
 
     /*  SALVA A GERAÇÃO, FITNESS do Melhor ind., a MÉDIA DO FITNESS e a STD DO FITNESS  */
     /* 'aevSPLap:93' trace(g,:) = [g,bestFitness(1,1),mean(bestFitness(:,1),1),std(bestFitness(:,1),1),bestFitness(1,2),bestFitness(1,3),bestFitness(1,4),bestFitness(1,5),bestFitness(1,6)]; */
     loop_ub = fitness->size[0];
-    i11 = x->size[0];
+    n = fitness->size[0];
+    i17 = x->size[0];
     x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i11);
-    for (i11 = 0; i11 < loop_ub; i11++) {
-      x->data[i11] = fitness->data[i11];
+    emxEnsureCapacity_real_T(x, i17);
+    for (i17 = 0; i17 < loop_ub; i17++) {
+      x->data[i17] = fitness->data[6 * i17];
     }
 
-    loop_ub = fitness->size[0];
-    i11 = b_fitness->size[0];
-    b_fitness->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(b_fitness, i11);
-    for (i11 = 0; i11 < loop_ub; i11++) {
-      b_fitness->data[i11] = fitness->data[i11];
+    i17 = b_fitness->size[0];
+    b_fitness->size[0] = n;
+    emxEnsureCapacity_real_T(b_fitness, i17);
+    for (i17 = 0; i17 < n; i17++) {
+      b_fitness->data[i17] = fitness->data[6 * i17];
     }
 
     varargin_5 = mean(x);
     d1 = b_std(b_fitness);
-    trace->data[g] = 1 + g;
-    trace->data[g + trace->size[0]] = (int)rt_roundd(fitness->data[0]);
-    trace->data[g + (trace->size[0] << 1)] = (int)rt_roundd(varargin_5);
-    trace->data[g + trace->size[0] * 3] = (int)rt_roundd(d1);
-    trace->data[g + (trace->size[0] << 2)] = (int)rt_roundd(fitness->
-      data[fitness->size[0]]);
-    trace->data[g + trace->size[0] * 5] = (int)rt_roundd(fitness->data
-      [fitness->size[0] << 1]);
-    trace->data[g + trace->size[0] * 6] = (int)rt_roundd(fitness->data
-      [fitness->size[0] * 3]);
-    trace->data[g + trace->size[0] * 7] = (int)rt_roundd(fitness->data
-      [fitness->size[0] << 2]);
-    trace->data[g + (trace->size[0] << 3)] = (int)rt_roundd(fitness->
-      data[fitness->size[0] * 5]);
+    b_g[0] = 1 + g;
+    b_g[1] = (int)rt_roundd(fitness->data[0]);
+    b_g[2] = (int)rt_roundd(varargin_5);
+    b_g[3] = (int)rt_roundd(d1);
+    b_g[4] = (int)rt_roundd(fitness->data[1]);
+    b_g[5] = (int)rt_roundd(fitness->data[2]);
+    b_g[6] = (int)rt_roundd(fitness->data[3]);
+    b_g[7] = (int)rt_roundd(fitness->data[4]);
+    b_g[8] = (int)rt_roundd(fitness->data[5]);
+    for (i17 = 0; i17 < 9; i17++) {
+      trace->data[i17 + 9 * g] = b_g[i17];
+    }
 
     /*  IMPRIME STATUS DA EVOLUÇÃO */
     /* 'aevSPLap:97' fprintf('Ger: %d - \t Ini: %10.5f - \t Best: %10.5f - \t Mean: %10.5f - \t STD: %10.5f - \t Tt: %10.5f - \t NOFP: %10.5f - \t TmOFP: %10.5f - \t NOE2: %10.5f - \t NOE3: %10.5f \n',... */
     /* 'aevSPLap:98'                g,         fitnessB(1,1),      bestFitness(1,1),mean(bestFitness(:,1),1),std(bestFitness(:,1),1),bestFitness(1,2),bestFitness(1,3),bestFitness(1,4),bestFitness(1,5),bestFitness(1,6)); */
     loop_ub = fitness->size[0];
-    i11 = x->size[0];
+    i17 = x->size[0];
     x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i11);
-    for (i11 = 0; i11 < loop_ub; i11++) {
-      x->data[i11] = fitness->data[i11];
+    emxEnsureCapacity_real_T(x, i17);
+    for (i17 = 0; i17 < loop_ub; i17++) {
+      x->data[i17] = fitness->data[6 * i17];
     }
 
     varargin_5 = b_std(x);
     loop_ub = fitness->size[0];
-    i11 = x->size[0];
+    i17 = x->size[0];
     x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i11);
-    for (i11 = 0; i11 < loop_ub; i11++) {
-      x->data[i11] = fitness->data[i11];
+    emxEnsureCapacity_real_T(x, i17);
+    for (i17 = 0; i17 < loop_ub; i17++) {
+      x->data[i17] = fitness->data[6 * i17];
     }
 
     printf("Ger: %d - \t Ini: %10.5f - \t Best: %10.5f - \t Mean: %10.5f - \t STD: %10.5f - \t Tt: %10.5f - \t NOFP: %10.5f - \t TmOFP: %10.5f - \t "
            "NOE2: %10.5f - \t NOE3: %10.5f \n", 1 + g, fitnessB[0],
-           fitness->data[0], mean(x), varargin_5, fitness->data[fitness->size[0]],
-           fitness->data[fitness->size[0] << 1], fitness->data[fitness->size[0] *
-           3], fitness->data[fitness->size[0] << 2], fitness->data[fitness->
-           size[0] * 5]);
+           fitness->data[0], mean(x), varargin_5, fitness->data[1],
+           fitness->data[2], fitness->data[3], fitness->data[4], fitness->data[5]);
     fflush(stdout);
 
     /*  REPOSICIONA PULSOS DE ACORDO COM MELHORES INDIVÍDUOS */
@@ -902,23 +1056,23 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
       /*          taxAct = (maximo-minimo)*taxAct+minimo; */
       /* 'aevSPLap:112' taxAct = 0.00001; */
       /* 'aevSPLap:114' [ IQtemp ] = actIQ(IQ(1:end-NumTOp,:),IC(:,tmpColumn),taxAct); */
-      i11 = IQ->size[0] - NumTOp;
-      if (1 > i11) {
+      i17 = IQ->size[0] - NumTOp;
+      if (1 > i17) {
         loop_ub = 0;
       } else {
-        loop_ub = i11;
+        loop_ub = i17;
       }
 
-      b_loop_ub = rank_classic->size[0];
-      i11 = IC->size[0] * IC->size[1];
-      IC->size[0] = b_loop_ub;
-      IC->size[1] = tmpColumn->size[1];
-      emxEnsureCapacity_int32_T(IC, i11);
       yk = tmpColumn->size[1];
-      for (i11 = 0; i11 < yk; i11++) {
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          IC->data[i12 + IC->size[0] * i11] = rank_classic->data[i12 +
-            rank_classic->size[0] * ((int)tmpColumn->data[i11] - 1)];
+      n = rank_classic->size[0];
+      i17 = IC->size[0] * IC->size[1];
+      IC->size[1] = yk;
+      IC->size[0] = n;
+      emxEnsureCapacity_int32_T(IC, i17);
+      for (i17 = 0; i17 < n; i17++) {
+        for (i18 = 0; i18 < yk; i18++) {
+          IC->data[i18 + IC->size[1] * i17] = rank_classic->data[((int)
+            tmpColumn->data[i18] + rank_classic->size[1] * i17) - 1];
         }
       }
 
@@ -926,64 +1080,51 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
       /*    Detailed explanation goes here */
       /* Convertir de numerico a representacion binaria. */
       /* 'actIQ:7' num2bin = zeros(size(IC,1)*size(IC,2),size(IC,1)); */
-      i11 = rank_classic->size[0];
-      b_loop_ub = rank_classic->size[0];
-      i12 = x->size[0];
-      x->size[0] = tmpColumn->size[1];
-      emxEnsureCapacity_real_T(x, i12);
-      yk = tmpColumn->size[1];
-      for (i12 = 0; i12 < yk; i12++) {
-        x->data[i12] = tmpColumn->data[i12];
-      }
-
-      yk = (int)((double)i11 * (double)x->size[0]);
-      i11 = num2bin->size[0] * num2bin->size[1];
-      num2bin->size[0] = yk;
-      num2bin->size[1] = b_loop_ub;
-      emxEnsureCapacity_int8_T(num2bin, i11);
-      for (i11 = 0; i11 < b_loop_ub; i11++) {
-        for (i12 = 0; i12 < yk; i12++) {
-          num2bin->data[i12 + num2bin->size[0] * i11] = 0;
+      n = rank_classic->size[0];
+      i17 = rank_classic->size[0];
+      result = (int)((double)i17 * (double)tmpColumn->size[1]);
+      i17 = num2bin->size[0] * num2bin->size[1];
+      num2bin->size[1] = n;
+      num2bin->size[0] = result;
+      emxEnsureCapacity_int8_T(num2bin, i17);
+      for (i17 = 0; i17 < result; i17++) {
+        for (i18 = 0; i18 < n; i18++) {
+          num2bin->data[i18 + num2bin->size[1] * i17] = 0;
         }
       }
 
       /* 'actIQ:9' for i=1:size(num2bin,1) */
-      i11 = rank_classic->size[0];
-      i12 = x->size[0];
-      x->size[0] = tmpColumn->size[1];
-      emxEnsureCapacity_real_T(x, i12);
-      b_loop_ub = tmpColumn->size[1];
-      for (i12 = 0; i12 < b_loop_ub; i12++) {
-        x->data[i12] = tmpColumn->data[i12];
-      }
-
-      i11 = (int)((double)i11 * (double)x->size[0]);
-      for (i = 0; i < i11; i++) {
+      i17 = rank_classic->size[0];
+      i17 = (int)((double)i17 * (double)tmpColumn->size[1]);
+      for (i = 0; i < i17; i++) {
         /* 'actIQ:10' num2bin(i,IC(i))=1; */
-        num2bin->data[i + num2bin->size[0] * (IC->data[i] - 1)] = 1;
+        i18 = rank_classic->size[0];
+        i20 = tmpColumn->size[1];
+        num2bin->data[(IC->data[i % i18 * i20 + i / i18] + num2bin->size[1] * i)
+          - 1] = 1;
       }
 
       /* 'actIQ:13' IQact = (1-taxAct)*IQ+taxAct*num2bin; */
       /* %%%%%%%%%%%%% MODIFICADO %%%%%%%%%%%%%%%%% */
       /* 'aevSPLap:115' IQ(1:end-NumTOp,:)=IQtemp; */
-      b_loop_ub = IQ->size[1] - 1;
-      i11 = r5->size[0] * r5->size[1];
-      r5->size[0] = loop_ub;
-      r5->size[1] = b_loop_ub + 1;
-      emxEnsureCapacity_real_T(r5, i11);
-      for (i11 = 0; i11 <= b_loop_ub; i11++) {
-        for (i12 = 0; i12 < loop_ub; i12++) {
-          r5->data[i12 + r5->size[0] * i11] = 0.99999 * IQ->data[i12 + IQ->size
-            [0] * i11] + 1.0E-5 * (double)num2bin->data[i12 + num2bin->size[0] *
-            i11];
+      n = IQ->size[1] - 1;
+      i17 = r12->size[0] * r12->size[1];
+      r12->size[1] = n + 1;
+      r12->size[0] = loop_ub;
+      emxEnsureCapacity_real_T(r12, i17);
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        for (i18 = 0; i18 <= n; i18++) {
+          r12->data[i18 + r12->size[1] * i17] = 0.99999 * IQ->data[i18 +
+            IQ->size[1] * i17] + 1.0E-5 * (double)num2bin->data[i18 +
+            num2bin->size[1] * i17];
         }
       }
 
-      loop_ub = r5->size[1];
-      for (i11 = 0; i11 < loop_ub; i11++) {
-        b_loop_ub = r5->size[0];
-        for (i12 = 0; i12 < b_loop_ub; i12++) {
-          IQ->data[i12 + IQ->size[0] * i11] = r5->data[i12 + r5->size[0] * i11];
+      loop_ub = r12->size[0];
+      for (i17 = 0; i17 < loop_ub; i17++) {
+        n = r12->size[1];
+        for (i18 = 0; i18 < n; i18++) {
+          IQ->data[i18 + IQ->size[1] * i17] = r12->data[i18 + r12->size[1] * i17];
         }
       }
 
@@ -1019,12 +1160,15 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   emxFree_int32_T(&b_PMA);
   emxFree_int32_T(&b_PME);
   emxFree_int32_T(&b_PCPrO);
-  emxFree_real_T(&r5);
+  emxFree_real_T(&r12);
   emxFree_real_T(&b_fitness);
   emxFree_real_T(&b_aux_fitness_2);
   emxFree_int8_T(&num2bin);
+  emxFreeMatrix_cell_wrap_0(b_reshapes);
   emxFree_int32_T(&iidx);
   emxFree_real_T(&x);
+  emxFreeMatrix_cell_wrap_0(reshapes);
+  emxFree_int32_T(&r11);
   emxFree_int32_T(&idx_2);
   emxFree_int32_T(&idx_1);
   emxFree_real_T(&tmpColumn);

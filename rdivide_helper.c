@@ -5,7 +5,7 @@
  * File: rdivide_helper.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -23,14 +23,14 @@
  */
 void b_rdivide_helper(const emxArray_real_T *y, emxArray_real_T *z)
 {
-  int i17;
+  int i24;
   int loop_ub;
-  i17 = z->size[0];
+  i24 = z->size[0];
   z->size[0] = y->size[0];
-  emxEnsureCapacity_real_T(z, i17);
+  emxEnsureCapacity_real_T(z, i24);
   loop_ub = y->size[0];
-  for (i17 = 0; i17 < loop_ub; i17++) {
-    z->data[i17] = 1.0 / y->data[i17];
+  for (i24 = 0; i24 < loop_ub; i24++) {
+    z->data[i24] = 1.0 / y->data[i24];
   }
 }
 

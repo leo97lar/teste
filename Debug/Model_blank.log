@@ -5,23 +5,26 @@
   combineVectorElements.c
   CreaPoQunniforme.c
   Edade.c
+  eml_rand.c
+  eml_rand_mcg16807_stateful.c
   eml_rand_mt19937ar_stateful.c
+  eml_rand_shr3cong_stateful.c
   favalia.c
   funcionCPrO.c
   funcionDia.c
   getTime.c
   main.c
-C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Codigo Final\codegen\lib\Model_blank\main.c(16,9): warning C4101: 'j': unreferenced local variable
-C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Codigo Final\codegen\lib\Model_blank\main.c(16,41): warning C4101: 'aux_int': unreferenced local variable
+C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Git\main.c(16,9): warning C4101: 'j': unreferenced local variable
+C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Git\main.c(16,41): warning C4101: 'aux_int': unreferenced local variable
   main_UCI_func.c
   mean.c
   model_data.c
   model_emxAPI.c
+  Generating Code...
+  Compiling...
   model_emxutil.c
   model_initialize.c
   model_rtwutil.c
-  Generating Code...
-  Compiling...
   model_terminate.c
   nullAssignment.c
   obsIQ.c
@@ -39,6 +42,8 @@ C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Codigo Final\codegen\lib
   sum.c
   tic.c
   timeKeeper.c
+  Generating Code...
+  Compiling...
   toc.c
   Generating Code...
-  Model_blank.vcxproj -> C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Codigo Final\codegen\lib\Model_blank\Debug\Model_blank.exe
+  Model_blank.vcxproj -> C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Git\Debug\Model_blank.exe

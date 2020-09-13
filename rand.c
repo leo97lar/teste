@@ -5,7 +5,7 @@
  * File: rand.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -271,27 +271,53 @@ double d_rand(void)
 }
 
 /*
- * Arguments    : double r[15][10]
+ * Arguments    : double r[10][15]
  * Return Type  : void
  */
-void e_rand(double r[15][10])
+void e_rand(double r[10][15])
 {
+  boolean_T b0;
+  int i8;
   int k;
   unsigned int u6;
   unsigned int u7;
   if (method == 4U) {
+    b0 = true;
+    i8 = 0;
     for (k = 0; k < 150; k++) {
-      (&r[0][0])[k] = eml_rand_mcg16807(&state);
+      if (b0) {
+        b0 = false;
+        i8 = k % 10 * 15 + k / 10;
+      } else {
+        i8 += 15;
+        if (i8 > 149) {
+          i8 -= 149;
+        }
+      }
+
+      (&r[0][0])[i8] = eml_rand_mcg16807(&state);
     }
   } else if (method == 5U) {
+    b0 = true;
+    i8 = 0;
     for (k = 0; k < 150; k++) {
+      if (b0) {
+        b0 = false;
+        i8 = k % 10 * 15 + k / 10;
+      } else {
+        i8 += 15;
+        if (i8 > 149) {
+          i8 -= 149;
+        }
+      }
+
       u6 = 69069U * b_state[0] + 1234567U;
       u7 = b_state[1] ^ b_state[1] << 13;
       u7 ^= u7 >> 17;
       u7 ^= u7 << 5;
       b_state[0] = u6;
       b_state[1] = u7;
-      (&r[0][0])[k] = (double)(u6 + u7) * 2.328306436538696E-10;
+      (&r[0][0])[i8] = (double)(u6 + u7) * 2.328306436538696E-10;
     }
   } else {
     if (!state_not_empty) {
@@ -299,8 +325,20 @@ void e_rand(double r[15][10])
       state_not_empty = true;
     }
 
+    b0 = true;
+    i8 = 0;
     for (k = 0; k < 150; k++) {
-      (&r[0][0])[k] = b_eml_rand_mt19937ar(c_state);
+      if (b0) {
+        b0 = false;
+        i8 = k % 10 * 15 + k / 10;
+      } else {
+        i8 += 15;
+        if (i8 > 149) {
+          i8 -= 149;
+        }
+      }
+
+      (&r[0][0])[i8] = b_eml_rand_mt19937ar(c_state);
     }
   }
 }
@@ -311,22 +349,48 @@ void e_rand(double r[15][10])
  */
 void f_rand(double r[15][15])
 {
+  boolean_T b1;
+  int i9;
   int k;
   unsigned int u8;
   unsigned int u9;
   if (method == 4U) {
+    b1 = true;
+    i9 = 0;
     for (k = 0; k < 225; k++) {
-      (&r[0][0])[k] = eml_rand_mcg16807(&state);
+      if (b1) {
+        b1 = false;
+        i9 = k % 15 * 15 + k / 15;
+      } else {
+        i9 += 15;
+        if (i9 > 224) {
+          i9 -= 224;
+        }
+      }
+
+      (&r[0][0])[i9] = eml_rand_mcg16807(&state);
     }
   } else if (method == 5U) {
+    b1 = true;
+    i9 = 0;
     for (k = 0; k < 225; k++) {
+      if (b1) {
+        b1 = false;
+        i9 = k % 15 * 15 + k / 15;
+      } else {
+        i9 += 15;
+        if (i9 > 224) {
+          i9 -= 224;
+        }
+      }
+
       u8 = 69069U * b_state[0] + 1234567U;
       u9 = b_state[1] ^ b_state[1] << 13;
       u9 ^= u9 >> 17;
       u9 ^= u9 << 5;
       b_state[0] = u8;
       b_state[1] = u9;
-      (&r[0][0])[k] = (double)(u8 + u9) * 2.328306436538696E-10;
+      (&r[0][0])[i9] = (double)(u8 + u9) * 2.328306436538696E-10;
     }
   } else {
     if (!state_not_empty) {
@@ -334,34 +398,72 @@ void f_rand(double r[15][15])
       state_not_empty = true;
     }
 
+    b1 = true;
+    i9 = 0;
     for (k = 0; k < 225; k++) {
-      (&r[0][0])[k] = b_eml_rand_mt19937ar(c_state);
+      if (b1) {
+        b1 = false;
+        i9 = k % 15 * 15 + k / 15;
+      } else {
+        i9 += 15;
+        if (i9 > 224) {
+          i9 -= 224;
+        }
+      }
+
+      (&r[0][0])[i9] = b_eml_rand_mt19937ar(c_state);
     }
   }
 }
 
 /*
- * Arguments    : double r[15][25]
+ * Arguments    : double r[25][15]
  * Return Type  : void
  */
-void g_rand(double r[15][25])
+void g_rand(double r[25][15])
 {
+  boolean_T b2;
+  int i10;
   int k;
   unsigned int u10;
   unsigned int u11;
   if (method == 4U) {
+    b2 = true;
+    i10 = 0;
     for (k = 0; k < 375; k++) {
-      (&r[0][0])[k] = eml_rand_mcg16807(&state);
+      if (b2) {
+        b2 = false;
+        i10 = k % 25 * 15 + k / 25;
+      } else {
+        i10 += 15;
+        if (i10 > 374) {
+          i10 -= 374;
+        }
+      }
+
+      (&r[0][0])[i10] = eml_rand_mcg16807(&state);
     }
   } else if (method == 5U) {
+    b2 = true;
+    i10 = 0;
     for (k = 0; k < 375; k++) {
+      if (b2) {
+        b2 = false;
+        i10 = k % 25 * 15 + k / 25;
+      } else {
+        i10 += 15;
+        if (i10 > 374) {
+          i10 -= 374;
+        }
+      }
+
       u10 = 69069U * b_state[0] + 1234567U;
       u11 = b_state[1] ^ b_state[1] << 13;
       u11 ^= u11 >> 17;
       u11 ^= u11 << 5;
       b_state[0] = u10;
       b_state[1] = u11;
-      (&r[0][0])[k] = (double)(u10 + u11) * 2.328306436538696E-10;
+      (&r[0][0])[i10] = (double)(u10 + u11) * 2.328306436538696E-10;
     }
   } else {
     if (!state_not_empty) {
@@ -369,34 +471,72 @@ void g_rand(double r[15][25])
       state_not_empty = true;
     }
 
+    b2 = true;
+    i10 = 0;
     for (k = 0; k < 375; k++) {
-      (&r[0][0])[k] = b_eml_rand_mt19937ar(c_state);
+      if (b2) {
+        b2 = false;
+        i10 = k % 25 * 15 + k / 25;
+      } else {
+        i10 += 15;
+        if (i10 > 374) {
+          i10 -= 374;
+        }
+      }
+
+      (&r[0][0])[i10] = b_eml_rand_mt19937ar(c_state);
     }
   }
 }
 
 /*
- * Arguments    : double r[15][30]
+ * Arguments    : double r[30][15]
  * Return Type  : void
  */
-void h_rand(double r[15][30])
+void h_rand(double r[30][15])
 {
+  boolean_T b3;
+  int i11;
   int k;
   unsigned int u12;
   unsigned int u13;
   if (method == 4U) {
+    b3 = true;
+    i11 = 0;
     for (k = 0; k < 450; k++) {
-      (&r[0][0])[k] = eml_rand_mcg16807(&state);
+      if (b3) {
+        b3 = false;
+        i11 = k % 30 * 15 + k / 30;
+      } else {
+        i11 += 15;
+        if (i11 > 449) {
+          i11 -= 449;
+        }
+      }
+
+      (&r[0][0])[i11] = eml_rand_mcg16807(&state);
     }
   } else if (method == 5U) {
+    b3 = true;
+    i11 = 0;
     for (k = 0; k < 450; k++) {
+      if (b3) {
+        b3 = false;
+        i11 = k % 30 * 15 + k / 30;
+      } else {
+        i11 += 15;
+        if (i11 > 449) {
+          i11 -= 449;
+        }
+      }
+
       u12 = 69069U * b_state[0] + 1234567U;
       u13 = b_state[1] ^ b_state[1] << 13;
       u13 ^= u13 >> 17;
       u13 ^= u13 << 5;
       b_state[0] = u12;
       b_state[1] = u13;
-      (&r[0][0])[k] = (double)(u12 + u13) * 2.328306436538696E-10;
+      (&r[0][0])[i11] = (double)(u12 + u13) * 2.328306436538696E-10;
     }
   } else {
     if (!state_not_empty) {
@@ -404,8 +544,20 @@ void h_rand(double r[15][30])
       state_not_empty = true;
     }
 
+    b3 = true;
+    i11 = 0;
     for (k = 0; k < 450; k++) {
-      (&r[0][0])[k] = b_eml_rand_mt19937ar(c_state);
+      if (b3) {
+        b3 = false;
+        i11 = k % 30 * 15 + k / 30;
+      } else {
+        i11 += 15;
+        if (i11 > 449) {
+          i11 -= 449;
+        }
+      }
+
+      (&r[0][0])[i11] = b_eml_rand_mt19937ar(c_state);
     }
   }
 }
@@ -417,26 +569,26 @@ void h_rand(double r[15][30])
  */
 void i_rand(int varargin_2, emxArray_real_T *r)
 {
-  int i30;
+  int i36;
   int k;
   unsigned int u14;
   unsigned int u15;
   if (method == 4U) {
-    i30 = r->size[0] * r->size[1];
-    r->size[0] = 1;
+    i36 = r->size[0] * r->size[1];
     r->size[1] = varargin_2;
-    emxEnsureCapacity_real_T(r, i30);
-    i30 = r->size[1];
-    for (k = 0; k < i30; k++) {
+    r->size[0] = 1;
+    emxEnsureCapacity_real_T(r, i36);
+    i36 = r->size[1];
+    for (k = 0; k < i36; k++) {
       r->data[k] = eml_rand_mcg16807(&state);
     }
   } else if (method == 5U) {
-    i30 = r->size[0] * r->size[1];
-    r->size[0] = 1;
+    i36 = r->size[0] * r->size[1];
     r->size[1] = varargin_2;
-    emxEnsureCapacity_real_T(r, i30);
-    i30 = r->size[1];
-    for (k = 0; k < i30; k++) {
+    r->size[0] = 1;
+    emxEnsureCapacity_real_T(r, i36);
+    i36 = r->size[1];
+    for (k = 0; k < i36; k++) {
       u14 = 69069U * b_state[0] + 1234567U;
       u15 = b_state[1] ^ b_state[1] << 13;
       u15 ^= u15 >> 17;
@@ -451,12 +603,12 @@ void i_rand(int varargin_2, emxArray_real_T *r)
       state_not_empty = true;
     }
 
-    i30 = r->size[0] * r->size[1];
-    r->size[0] = 1;
+    i36 = r->size[0] * r->size[1];
     r->size[1] = varargin_2;
-    emxEnsureCapacity_real_T(r, i30);
-    i30 = r->size[1];
-    for (k = 0; k < i30; k++) {
+    r->size[0] = 1;
+    emxEnsureCapacity_real_T(r, i36);
+    i36 = r->size[1];
+    for (k = 0; k < i36; k++) {
       r->data[k] = b_eml_rand_mt19937ar(c_state);
     }
   }
@@ -506,24 +658,24 @@ void j_rand(double r[2])
  */
 void k_rand(int varargin_1, emxArray_real_T *r)
 {
-  int i33;
+  int i39;
   int k;
   unsigned int u19;
   unsigned int u20;
   if (method == 4U) {
-    i33 = r->size[0];
+    i39 = r->size[0];
     r->size[0] = varargin_1;
-    emxEnsureCapacity_real_T(r, i33);
-    i33 = r->size[0];
-    for (k = 0; k < i33; k++) {
+    emxEnsureCapacity_real_T(r, i39);
+    i39 = r->size[0];
+    for (k = 0; k < i39; k++) {
       r->data[k] = eml_rand_mcg16807(&state);
     }
   } else if (method == 5U) {
-    i33 = r->size[0];
+    i39 = r->size[0];
     r->size[0] = varargin_1;
-    emxEnsureCapacity_real_T(r, i33);
-    i33 = r->size[0];
-    for (k = 0; k < i33; k++) {
+    emxEnsureCapacity_real_T(r, i39);
+    i39 = r->size[0];
+    for (k = 0; k < i39; k++) {
       u19 = 69069U * b_state[0] + 1234567U;
       u20 = b_state[1] ^ b_state[1] << 13;
       u20 ^= u20 >> 17;
@@ -538,11 +690,11 @@ void k_rand(int varargin_1, emxArray_real_T *r)
       state_not_empty = true;
     }
 
-    i33 = r->size[0];
+    i39 = r->size[0];
     r->size[0] = varargin_1;
-    emxEnsureCapacity_real_T(r, i33);
-    i33 = r->size[0];
-    for (k = 0; k < i33; k++) {
+    emxEnsureCapacity_real_T(r, i39);
+    i39 = r->size[0];
+    for (k = 0; k < i39; k++) {
       r->data[k] = b_eml_rand_mt19937ar(c_state);
     }
   }

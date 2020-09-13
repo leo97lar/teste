@@ -5,7 +5,7 @@
  * File: sort1.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -26,11 +26,10 @@
 void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 {
   int dim;
-  int i47;
+  int i51;
   emxArray_int32_T *vwork;
   int vlen;
   int j;
-  unsigned int unnamed_idx_0;
   int vstride;
   int k;
   emxArray_int32_T *iidx;
@@ -40,24 +39,24 @@ void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
   }
 
   if (dim + 2 <= 1) {
-    i47 = x->size[0];
+    i51 = x->size[0];
   } else {
-    i47 = 1;
+    i51 = 1;
   }
 
   emxInit_int32_T(&vwork, 1);
-  vlen = i47 - 1;
+  vlen = i51 - 1;
   j = vwork->size[0];
-  vwork->size[0] = i47;
+  vwork->size[0] = i51;
   emxEnsureCapacity_int32_T(vwork, j);
-  unnamed_idx_0 = (unsigned int)x->size[0];
-  i47 = idx->size[0];
-  idx->size[0] = (int)unnamed_idx_0;
-  emxEnsureCapacity_int32_T(idx, i47);
+  j = x->size[0];
+  i51 = idx->size[0];
+  idx->size[0] = j;
+  emxEnsureCapacity_int32_T(idx, i51);
   vstride = 1;
   for (k = 0; k <= dim; k++) {
-    i47 = x->size[0];
-    vstride *= i47;
+    i51 = x->size[0];
+    vstride *= i51;
   }
 
   emxInit_int32_T(&iidx, 1);
@@ -68,9 +67,9 @@ void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 
     b_sortIdx(vwork, iidx);
     for (k = 0; k <= vlen; k++) {
-      i47 = j + k * vstride;
-      x->data[i47] = vwork->data[k];
-      idx->data[i47] = iidx->data[k];
+      i51 = j + k * vstride;
+      x->data[i51] = vwork->data[k];
+      idx->data[i51] = iidx->data[k];
     }
   }
 
@@ -86,11 +85,10 @@ void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
 {
   int dim;
-  int i51;
+  int i55;
   emxArray_real_T *vwork;
   int vlen;
   int j;
-  unsigned int unnamed_idx_0;
   int vstride;
   int k;
   emxArray_int32_T *iidx;
@@ -100,24 +98,24 @@ void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
   }
 
   if (dim + 2 <= 1) {
-    i51 = x->size[0];
+    i55 = x->size[0];
   } else {
-    i51 = 1;
+    i55 = 1;
   }
 
   emxInit_real_T(&vwork, 1);
-  vlen = i51 - 1;
+  vlen = i55 - 1;
   j = vwork->size[0];
-  vwork->size[0] = i51;
+  vwork->size[0] = i55;
   emxEnsureCapacity_real_T(vwork, j);
-  unnamed_idx_0 = (unsigned int)x->size[0];
-  i51 = idx->size[0];
-  idx->size[0] = (int)unnamed_idx_0;
-  emxEnsureCapacity_int32_T(idx, i51);
+  j = x->size[0];
+  i55 = idx->size[0];
+  idx->size[0] = j;
+  emxEnsureCapacity_int32_T(idx, i55);
   vstride = 1;
   for (k = 0; k <= dim; k++) {
-    i51 = x->size[0];
-    vstride *= i51;
+    i55 = x->size[0];
+    vstride *= i55;
   }
 
   emxInit_int32_T(&iidx, 1);
@@ -128,9 +126,9 @@ void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
 
     c_sortIdx(vwork, iidx);
     for (k = 0; k <= vlen; k++) {
-      i51 = j + k * vstride;
-      x->data[i51] = vwork->data[k];
-      idx->data[i51] = iidx->data[k];
+      i55 = j + k * vstride;
+      x->data[i55] = vwork->data[k];
+      idx->data[i55] = iidx->data[k];
     }
   }
 
@@ -146,11 +144,10 @@ void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
 void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 {
   int dim;
-  int i55;
+  int i59;
   emxArray_int32_T *vwork;
   int vlen;
   int j;
-  unsigned int unnamed_idx_0;
   int vstride;
   int k;
   emxArray_int32_T *iidx;
@@ -160,24 +157,24 @@ void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
   }
 
   if (dim + 2 <= 1) {
-    i55 = x->size[0];
+    i59 = x->size[0];
   } else {
-    i55 = 1;
+    i59 = 1;
   }
 
   emxInit_int32_T(&vwork, 1);
-  vlen = i55 - 1;
+  vlen = i59 - 1;
   j = vwork->size[0];
-  vwork->size[0] = i55;
+  vwork->size[0] = i59;
   emxEnsureCapacity_int32_T(vwork, j);
-  unnamed_idx_0 = (unsigned int)x->size[0];
-  i55 = idx->size[0];
-  idx->size[0] = (int)unnamed_idx_0;
-  emxEnsureCapacity_int32_T(idx, i55);
+  j = x->size[0];
+  i59 = idx->size[0];
+  idx->size[0] = j;
+  emxEnsureCapacity_int32_T(idx, i59);
   vstride = 1;
   for (k = 0; k <= dim; k++) {
-    i55 = x->size[0];
-    vstride *= i55;
+    i59 = x->size[0];
+    vstride *= i59;
   }
 
   emxInit_int32_T(&iidx, 1);
@@ -188,9 +185,9 @@ void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 
     d_sortIdx(vwork, iidx);
     for (k = 0; k <= vlen; k++) {
-      i55 = j + k * vstride;
-      x->data[i55] = vwork->data[k];
-      idx->data[i55] = iidx->data[k];
+      i59 = j + k * vstride;
+      x->data[i59] = vwork->data[k];
+      idx->data[i59] = iidx->data[k];
     }
   }
 

@@ -5,7 +5,7 @@
  * File: main_UCI_func.h
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 #ifndef MAIN_UCI_FUNC_H

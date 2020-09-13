@@ -5,7 +5,7 @@
  * File: BDCreator_func.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -40,6 +40,7 @@ void BDCreator_func(void)
 {
   double filled;
   emxArray_int16_T *r0;
+  emxArray_int16_T *r1;
   int i;
   double unusedExpr[200];
   double ops;
@@ -65,6 +66,7 @@ void BDCreator_func(void)
   int exitg1;
   double y;
   emxArray_real_T *CExD;
+  emxArray_real_T *b_auxCExD;
   double Exc;
   short DE[2000];
   int i1;
@@ -72,12 +74,12 @@ void BDCreator_func(void)
   short b_DE[2000];
   double x[2000];
   int g_unusedExpr[2000];
-  double h_unusedExpr[15][10];
+  double h_unusedExpr[10][15];
   double i_unusedExpr[15][15];
-  double j_unusedExpr[15][10];
-  double k_unusedExpr[15][25];
-  double l_unusedExpr[15][30];
-  double m_unusedExpr[15][10];
+  double j_unusedExpr[10][15];
+  double k_unusedExpr[25][15];
+  double l_unusedExpr[30][15];
+  double m_unusedExpr[10][15];
 
   /* 'BDCreator_func:9' tic; */
   tic();
@@ -123,18 +125,27 @@ void BDCreator_func(void)
 
   /* 'BDCreator_func:40' for i=1:length(POPE) */
   emxInit_int16_T(&r0, 2);
+  emxInit_int16_T(&r1, 1);
   for (i = 0; i < 15; i++) {
     /* 'BDCreator_func:41' ops = POPE(i)*TipoOp/100; */
     ops = (double)POPE[i] * 200.0 / 100.0;
 
     /* 'BDCreator_func:42' OpXEsp(filled+1 : filled+ops) = i; */
-    i0 = r0->size[0] * r0->size[1];
-    r0->size[0] = 1;
+    i0 = r1->size[0];
     k = (int)floor(ops - 1.0);
-    r0->size[1] = k + 1;
-    emxEnsureCapacity_int16_T(r0, i0);
+    r1->size[0] = k + 1;
+    emxEnsureCapacity_int16_T(r1, i0);
     for (i0 = 0; i0 <= k; i0++) {
-      r0->data[i0] = (short)(filled + (1.0 + (double)i0));
+      r1->data[i0] = (short)(filled + (1.0 + (double)i0));
+    }
+
+    k = r1->size[0];
+    i0 = r0->size[0] * r0->size[1];
+    r0->size[1] = k;
+    r0->size[0] = 1;
+    emxEnsureCapacity_int16_T(r0, i0);
+    for (i0 = 0; i0 < k; i0++) {
+      r0->data[i0] = r1->data[i0];
     }
 
     /* 'BDCreator_func:43' filled = filled + ops; */
@@ -162,13 +173,21 @@ void BDCreator_func(void)
     ops = (double)PCO[i] * 200.0 / 100.0;
 
     /* 'BDCreator_func:62' CompOp(filled+1 : filled+ops) = i; */
-    i0 = r0->size[0] * r0->size[1];
-    r0->size[0] = 1;
+    i0 = r1->size[0];
     k = (int)floor(ops - 1.0);
-    r0->size[1] = k + 1;
-    emxEnsureCapacity_int16_T(r0, i0);
+    r1->size[0] = k + 1;
+    emxEnsureCapacity_int16_T(r1, i0);
     for (i0 = 0; i0 <= k; i0++) {
-      r0->data[i0] = (short)(filled + (1.0 + (double)i0));
+      r1->data[i0] = (short)(filled + (1.0 + (double)i0));
+    }
+
+    k = r1->size[0];
+    i0 = r0->size[0] * r0->size[1];
+    r0->size[1] = k;
+    r0->size[0] = 1;
+    emxEnsureCapacity_int16_T(r0, i0);
+    for (i0 = 0; i0 < k; i0++) {
+      r0->data[i0] = r1->data[i0];
     }
 
     /* 'BDCreator_func:63' filled = filled + ops; */
@@ -199,13 +218,21 @@ void BDCreator_func(void)
     ops = (double)PTO[i] * 200.0 / 100.0;
 
     /* 'BDCreator_func:85' TimeOp(filled+1 : filled+ops) = Hr(i); */
-    i0 = r0->size[0] * r0->size[1];
-    r0->size[0] = 1;
+    i0 = r1->size[0];
     k = (int)floor(ops - 1.0);
-    r0->size[1] = k + 1;
-    emxEnsureCapacity_int16_T(r0, i0);
+    r1->size[0] = k + 1;
+    emxEnsureCapacity_int16_T(r1, i0);
     for (i0 = 0; i0 <= k; i0++) {
-      r0->data[i0] = (short)(filled + (1.0 + (double)i0));
+      r1->data[i0] = (short)(filled + (1.0 + (double)i0));
+    }
+
+    k = r1->size[0];
+    i0 = r0->size[0] * r0->size[1];
+    r0->size[1] = k;
+    r0->size[0] = 1;
+    emxEnsureCapacity_int16_T(r0, i0);
+    for (i0 = 0; i0 < k; i0++) {
+      r0->data[i0] = r1->data[i0];
     }
 
     /* 'BDCreator_func:86' filled = filled + ops; */
@@ -227,7 +254,7 @@ void BDCreator_func(void)
   /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   /*     %% Caracteristicas de los pacientes por Operacion */
   /* 'BDCreator_func:140' TOPP = randi([1 TipoOp],1,NumTOp)'; */
-  randi(d_unusedExpr);
+  c_rand(d_unusedExpr);
 
   /*  Tipo de operacion por paciente */
   /* 'BDCreator_func:141' EPP = Edade( 5,75,NumTOp); */
@@ -254,13 +281,21 @@ void BDCreator_func(void)
     ops = (double)PPE[i] * 200.0 / 100.0;
 
     /* 'BDCreator_func:159' EP(filled+1 : filled+ops) = PE(i); */
-    i0 = r0->size[0] * r0->size[1];
-    r0->size[0] = 1;
+    i0 = r1->size[0];
     k = (int)floor(ops - 1.0);
-    r0->size[1] = k + 1;
-    emxEnsureCapacity_int16_T(r0, i0);
+    r1->size[0] = k + 1;
+    emxEnsureCapacity_int16_T(r1, i0);
     for (i0 = 0; i0 <= k; i0++) {
-      r0->data[i0] = (short)(filled + (1.0 + (double)i0));
+      r1->data[i0] = (short)(filled + (1.0 + (double)i0));
+    }
+
+    k = r1->size[0];
+    i0 = r0->size[0] * r0->size[1];
+    r0->size[1] = k;
+    r0->size[0] = 1;
+    emxEnsureCapacity_int16_T(r0, i0);
+    for (i0 = 0; i0 < k; i0++) {
+      r0->data[i0] = r1->data[i0];
     }
 
     /* 'BDCreator_func:160' filled = filled + ops; */
@@ -286,7 +321,7 @@ void BDCreator_func(void)
   /* 'BDCreator_func:226' INI = MaxEPD; */
   /*  Cantidad de entradas en el 1er dia */
   /* 'BDCreator_func:228' aux = randi([1 MaxEPD]); */
-  aux = b_randi();
+  aux = randi();
 
   /* 'BDCreator_func:230' auxCExD = zeros(NumTOp,1); */
   memset(&auxCExD[0], 0, 2000U * sizeof(double));
@@ -315,7 +350,7 @@ void BDCreator_func(void)
       count++;
 
       /* 'BDCreator_func:238' auxCExD(count) = randi([1 MaxEPD]); */
-      auxCExD[count] = b_randi();
+      auxCExD[count] = randi();
     } else {
       exitg1 = 1;
     }
@@ -323,26 +358,45 @@ void BDCreator_func(void)
 
   /* 'BDCreator_func:239' else */
   /* 'BDCreator_func:240' flag=0; */
-  emxInit_real_T(&CExD, 1);
-
   /* 'BDCreator_func:243' CExD = auxCExD(1:count); */
-  i0 = CExD->size[0];
-  CExD->size[0] = count + 1;
-  emxEnsureCapacity_real_T(CExD, i0);
-  for (i0 = 0; i0 <= count; i0++) {
-    CExD->data[i0] = auxCExD[i0];
+  i0 = r1->size[0];
+  r1->size[0] = (short)count + 1;
+  emxEnsureCapacity_int16_T(r1, i0);
+  k = (short)count;
+  for (i0 = 0; i0 <= k; i0++) {
+    r1->data[i0] = (short)i0;
   }
 
+  emxInit_real_T(&CExD, 1);
+  k = r1->size[0];
+  i0 = CExD->size[0];
+  CExD->size[0] = k;
+  emxEnsureCapacity_real_T(CExD, i0);
+  for (i0 = 0; i0 < k; i0++) {
+    CExD->data[i0] = auxCExD[r1->data[i0]];
+  }
+
+  emxInit_real_T(&b_auxCExD, 1);
+
   /* 'BDCreator_func:246' Exc = sum(CExD)-NumTOp; */
-  Exc = b_sum(CExD) - 2000.0;
+  k = r1->size[0];
+  i0 = b_auxCExD->size[0];
+  b_auxCExD->size[0] = k;
+  emxEnsureCapacity_real_T(b_auxCExD, i0);
+  for (i0 = 0; i0 < k; i0++) {
+    b_auxCExD->data[i0] = auxCExD[r1->data[i0]];
+  }
+
+  Exc = b_sum(b_auxCExD) - 2000.0;
 
   /*  Operaciones excedentes */
   /* 'BDCreator_func:248' CExD(1)= CExD(1)-Exc; */
-  CExD->data[0] = auxCExD[0] - Exc;
+  CExD->data[0] = auxCExD[r1->data[0]] - Exc;
 
   /* 'BDCreator_func:249' ND = size(CExD,1); */
   /*  Numero de dias de entrada */
   /* 'BDCreator_func:250' DE = zeros(NumTOp, 1); */
+  emxFree_real_T(&b_auxCExD);
   memset(&DE[0], 0, 2000U * sizeof(short));
 
   /*  Data de entrada */
@@ -354,13 +408,21 @@ void BDCreator_func(void)
   for (i = 0; i < i0; i++) {
     /* 'BDCreator_func:255' ops = CExD(i); */
     /* 'BDCreator_func:256' DE(filled+1 : filled+ops) = i; */
-    i1 = r0->size[0] * r0->size[1];
-    r0->size[0] = 1;
-    r0->size[1] = (int)floor(CExD->data[i] - 1.0) + 1;
-    emxEnsureCapacity_int16_T(r0, i1);
+    i1 = r1->size[0];
+    r1->size[0] = (int)floor(CExD->data[i] - 1.0) + 1;
+    emxEnsureCapacity_int16_T(r1, i1);
     k = (int)floor(CExD->data[i] - 1.0);
     for (i1 = 0; i1 <= k; i1++) {
-      r0->data[i1] = (short)(filled + (1.0 + (double)i1));
+      r1->data[i1] = (short)(filled + (1.0 + (double)i1));
+    }
+
+    k = r1->size[0];
+    i1 = r0->size[0] * r0->size[1];
+    r0->size[1] = k;
+    r0->size[0] = 1;
+    emxEnsureCapacity_int16_T(r0, i1);
+    for (i1 = 0; i1 < k; i1++) {
+      r0->data[i1] = r1->data[i1];
     }
 
     k = r0->size[1];
@@ -372,6 +434,7 @@ void BDCreator_func(void)
     filled += CExD->data[i];
   }
 
+  emxFree_int16_T(&r1);
   emxFree_int16_T(&r0);
   emxFree_real_T(&CExD);
 

@@ -5,7 +5,7 @@
  * File: sch.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -64,14 +64,14 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   double y;
   int k;
   emxArray_int32_T *H;
-  int Data_idx_0;
-  int i21;
+  int i29;
   int loop_ub;
   emxArray_int32_T *UltPosRecXDia;
-  int i22;
+  int b_loop_ub;
   emxArray_int32_T *EspMedOp;
   emxArray_int32_T *b_TimeUsoRec;
   emxArray_int32_T *b_PME;
+  int c_loop_ub;
   emxArray_int32_T *b_EP;
   emxArray_int32_T *DiaOp;
   emxArray_int32_T *tempUltPosRecXDia;
@@ -95,6 +95,9 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   double d8;
   double d9;
   double d10;
+  int d_loop_ub;
+  int e_loop_ub;
+  int f_loop_ub;
   int CPrOA;
   int IniCPrOA;
   int EndCPrOA;
@@ -108,15 +111,13 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   int CRA;
   int IniCRA;
   int EndCRA;
-  int NumRec_tmp;
-  int i23;
   int j;
-  int i24;
-  int i25;
-  int i26;
-  int i27;
-  int i28;
-  int i29;
+  int i30;
+  int i31;
+  int i32;
+  int i33;
+  int i34;
+  int i35;
 
   /* 'sch:7' H = zeros(size(Data,1),sum(NumRec), 'int32'); */
   y = NumRec[0];
@@ -125,15 +126,15 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   }
 
   emxInit_int32_T(&H, 2);
-  Data_idx_0 = Data->size[0];
-  i21 = H->size[0] * H->size[1];
-  H->size[0] = Data_idx_0;
+  k = Data->size[0];
+  i29 = H->size[0] * H->size[1];
   loop_ub = (int)y;
   H->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(H, i21);
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    for (i22 = 0; i22 < Data_idx_0; i22++) {
-      H->data[i22 + H->size[0] * i21] = 0;
+  H->size[0] = k;
+  emxEnsureCapacity_int32_T(H, i29);
+  for (i29 = 0; i29 < k; i29++) {
+    for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+      H->data[b_loop_ub + H->size[1] * i29] = 0;
     }
   }
 
@@ -141,14 +142,14 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
 
   /*  Schedule completo */
   /* 'sch:8' UltPosRecXDia = zeros(size(Dia,1),size(H,2), 'int32'); */
-  Data_idx_0 = Dia->size[0];
-  i21 = UltPosRecXDia->size[0] * UltPosRecXDia->size[1];
-  UltPosRecXDia->size[0] = Data_idx_0;
+  k = Dia->size[0];
+  i29 = UltPosRecXDia->size[0] * UltPosRecXDia->size[1];
   UltPosRecXDia->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(UltPosRecXDia, i21);
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    for (i22 = 0; i22 < Data_idx_0; i22++) {
-      UltPosRecXDia->data[i22 + UltPosRecXDia->size[0] * i21] = 0;
+  UltPosRecXDia->size[0] = k;
+  emxEnsureCapacity_int32_T(UltPosRecXDia, i29);
+  for (i29 = 0; i29 < k; i29++) {
+    for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+      UltPosRecXDia->data[b_loop_ub + UltPosRecXDia->size[1] * i29] = 0;
     }
   }
 
@@ -157,42 +158,40 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   /*  Ultima posicion asignado del recurso por Dia */
   /* 'sch:10' DiaOp = zeros(NumTOp,1, 'int32'); */
   /* 'sch:11' EspMedOp = zeros(NumTOp,2, 'int32'); */
-  i21 = EspMedOp->size[0] * EspMedOp->size[1];
-  EspMedOp->size[0] = NumTOp;
+  i29 = EspMedOp->size[0] * EspMedOp->size[1];
   EspMedOp->size[1] = 2;
-  emxEnsureCapacity_int32_T(EspMedOp, i21);
-  for (i21 = 0; i21 < NumTOp; i21++) {
-    EspMedOp->data[i21] = 0;
-  }
-
-  for (i21 = 0; i21 < NumTOp; i21++) {
-    EspMedOp->data[i21 + EspMedOp->size[0]] = 0;
+  EspMedOp->size[0] = NumTOp;
+  emxEnsureCapacity_int32_T(EspMedOp, i29);
+  for (i29 = 0; i29 < NumTOp; i29++) {
+    b_loop_ub = i29 << 1;
+    EspMedOp->data[b_loop_ub] = 0;
+    EspMedOp->data[1 + b_loop_ub] = 0;
   }
 
   emxInit_int32_T(&b_TimeUsoRec, 2);
 
   /* 'sch:13' TimeUsoRec=TimeUsoRec(list,:); */
-  i21 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
-  b_TimeUsoRec->size[0] = list->size[0];
+  i29 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
   b_TimeUsoRec->size[1] = 7;
-  emxEnsureCapacity_int32_T(b_TimeUsoRec, i21);
-  for (i21 = 0; i21 < 7; i21++) {
-    loop_ub = list->size[0];
-    for (i22 = 0; i22 < loop_ub; i22++) {
-      b_TimeUsoRec->data[i22 + b_TimeUsoRec->size[0] * i21] = TimeUsoRec->data
-        [(list->data[i22] + TimeUsoRec->size[0] * i21) - 1];
+  b_TimeUsoRec->size[0] = list->size[0];
+  emxEnsureCapacity_int32_T(b_TimeUsoRec, i29);
+  loop_ub = list->size[0];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    for (b_loop_ub = 0; b_loop_ub < 7; b_loop_ub++) {
+      b_TimeUsoRec->data[b_loop_ub + 7 * i29] = TimeUsoRec->data[b_loop_ub + 7 *
+        (list->data[i29] - 1)];
     }
   }
 
-  i21 = TimeUsoRec->size[0] * TimeUsoRec->size[1];
-  TimeUsoRec->size[0] = b_TimeUsoRec->size[0];
+  i29 = TimeUsoRec->size[0] * TimeUsoRec->size[1];
   TimeUsoRec->size[1] = 7;
-  emxEnsureCapacity_int32_T(TimeUsoRec, i21);
-  for (i21 = 0; i21 < 7; i21++) {
-    loop_ub = b_TimeUsoRec->size[0];
-    for (i22 = 0; i22 < loop_ub; i22++) {
-      TimeUsoRec->data[i22 + TimeUsoRec->size[0] * i21] = b_TimeUsoRec->data[i22
-        + b_TimeUsoRec->size[0] * i21];
+  TimeUsoRec->size[0] = b_TimeUsoRec->size[0];
+  emxEnsureCapacity_int32_T(TimeUsoRec, i29);
+  loop_ub = b_TimeUsoRec->size[0];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    for (b_loop_ub = 0; b_loop_ub < 7; b_loop_ub++) {
+      k = b_loop_ub + 7 * i29;
+      TimeUsoRec->data[k] = b_TimeUsoRec->data[k];
     }
   }
 
@@ -201,189 +200,190 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
 
   /* 'sch:15' PME=PME(list,:); */
   loop_ub = PME->size[1] - 1;
-  i21 = b_PME->size[0] * b_PME->size[1];
-  b_PME->size[0] = list->size[0];
+  i29 = b_PME->size[0] * b_PME->size[1];
   b_PME->size[1] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(b_PME, i21);
-  for (i21 = 0; i21 <= loop_ub; i21++) {
-    k = list->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      b_PME->data[i22 + b_PME->size[0] * i21] = PME->data[(list->data[i22] +
-        PME->size[0] * i21) - 1];
+  b_PME->size[0] = list->size[0];
+  emxEnsureCapacity_int32_T(b_PME, i29);
+  c_loop_ub = list->size[0];
+  for (i29 = 0; i29 < c_loop_ub; i29++) {
+    for (b_loop_ub = 0; b_loop_ub <= loop_ub; b_loop_ub++) {
+      b_PME->data[b_loop_ub + b_PME->size[1] * i29] = PME->data[b_loop_ub +
+        PME->size[1] * (list->data[i29] - 1)];
     }
   }
 
-  i21 = PME->size[0] * PME->size[1];
-  PME->size[0] = b_PME->size[0];
+  i29 = PME->size[0] * PME->size[1];
   PME->size[1] = b_PME->size[1];
-  emxEnsureCapacity_int32_T(PME, i21);
-  loop_ub = b_PME->size[1];
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    k = b_PME->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      PME->data[i22 + PME->size[0] * i21] = b_PME->data[i22 + b_PME->size[0] *
-        i21];
+  PME->size[0] = b_PME->size[0];
+  emxEnsureCapacity_int32_T(PME, i29);
+  loop_ub = b_PME->size[0];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    c_loop_ub = b_PME->size[1];
+    for (b_loop_ub = 0; b_loop_ub < c_loop_ub; b_loop_ub++) {
+      PME->data[b_loop_ub + PME->size[1] * i29] = b_PME->data[b_loop_ub +
+        b_PME->size[1] * i29];
     }
   }
 
   /* 'sch:16' PMA=PMA(list,:); */
   loop_ub = PMA->size[1] - 1;
-  i21 = b_PME->size[0] * b_PME->size[1];
-  b_PME->size[0] = list->size[0];
+  i29 = b_PME->size[0] * b_PME->size[1];
   b_PME->size[1] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(b_PME, i21);
-  for (i21 = 0; i21 <= loop_ub; i21++) {
-    k = list->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      b_PME->data[i22 + b_PME->size[0] * i21] = PMA->data[(list->data[i22] +
-        PMA->size[0] * i21) - 1];
+  b_PME->size[0] = list->size[0];
+  emxEnsureCapacity_int32_T(b_PME, i29);
+  c_loop_ub = list->size[0];
+  for (i29 = 0; i29 < c_loop_ub; i29++) {
+    for (b_loop_ub = 0; b_loop_ub <= loop_ub; b_loop_ub++) {
+      b_PME->data[b_loop_ub + b_PME->size[1] * i29] = PMA->data[b_loop_ub +
+        PMA->size[1] * (list->data[i29] - 1)];
     }
   }
 
-  i21 = PMA->size[0] * PMA->size[1];
-  PMA->size[0] = b_PME->size[0];
+  i29 = PMA->size[0] * PMA->size[1];
   PMA->size[1] = b_PME->size[1];
-  emxEnsureCapacity_int32_T(PMA, i21);
-  loop_ub = b_PME->size[1];
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    k = b_PME->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      PMA->data[i22 + PMA->size[0] * i21] = b_PME->data[i22 + b_PME->size[0] *
-        i21];
+  PMA->size[0] = b_PME->size[0];
+  emxEnsureCapacity_int32_T(PMA, i29);
+  loop_ub = b_PME->size[0];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    c_loop_ub = b_PME->size[1];
+    for (b_loop_ub = 0; b_loop_ub < c_loop_ub; b_loop_ub++) {
+      PMA->data[b_loop_ub + PMA->size[1] * i29] = b_PME->data[b_loop_ub +
+        b_PME->size[1] * i29];
     }
   }
 
   /* 'sch:17' PMAn=PMAn(list,:); */
   loop_ub = PMAn->size[1] - 1;
-  i21 = b_PME->size[0] * b_PME->size[1];
-  b_PME->size[0] = list->size[0];
+  i29 = b_PME->size[0] * b_PME->size[1];
   b_PME->size[1] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(b_PME, i21);
-  for (i21 = 0; i21 <= loop_ub; i21++) {
-    k = list->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      b_PME->data[i22 + b_PME->size[0] * i21] = PMAn->data[(list->data[i22] +
-        PMAn->size[0] * i21) - 1];
+  b_PME->size[0] = list->size[0];
+  emxEnsureCapacity_int32_T(b_PME, i29);
+  c_loop_ub = list->size[0];
+  for (i29 = 0; i29 < c_loop_ub; i29++) {
+    for (b_loop_ub = 0; b_loop_ub <= loop_ub; b_loop_ub++) {
+      b_PME->data[b_loop_ub + b_PME->size[1] * i29] = PMAn->data[b_loop_ub +
+        PMAn->size[1] * (list->data[i29] - 1)];
     }
   }
 
-  i21 = PMAn->size[0] * PMAn->size[1];
-  PMAn->size[0] = b_PME->size[0];
+  i29 = PMAn->size[0] * PMAn->size[1];
   PMAn->size[1] = b_PME->size[1];
-  emxEnsureCapacity_int32_T(PMAn, i21);
-  loop_ub = b_PME->size[1];
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    k = b_PME->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      PMAn->data[i22 + PMAn->size[0] * i21] = b_PME->data[i22 + b_PME->size[0] *
-        i21];
+  PMAn->size[0] = b_PME->size[0];
+  emxEnsureCapacity_int32_T(PMAn, i29);
+  loop_ub = b_PME->size[0];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    c_loop_ub = b_PME->size[1];
+    for (b_loop_ub = 0; b_loop_ub < c_loop_ub; b_loop_ub++) {
+      PMAn->data[b_loop_ub + PMAn->size[1] * i29] = b_PME->data[b_loop_ub +
+        b_PME->size[1] * i29];
     }
   }
 
   /* 'sch:19' PCPrO=PCPrO(list,:); */
   loop_ub = PCPrO->size[1] - 1;
-  i21 = b_PME->size[0] * b_PME->size[1];
-  b_PME->size[0] = list->size[0];
+  i29 = b_PME->size[0] * b_PME->size[1];
   b_PME->size[1] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(b_PME, i21);
-  for (i21 = 0; i21 <= loop_ub; i21++) {
-    k = list->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      b_PME->data[i22 + b_PME->size[0] * i21] = PCPrO->data[(list->data[i22] +
-        PCPrO->size[0] * i21) - 1];
+  b_PME->size[0] = list->size[0];
+  emxEnsureCapacity_int32_T(b_PME, i29);
+  c_loop_ub = list->size[0];
+  for (i29 = 0; i29 < c_loop_ub; i29++) {
+    for (b_loop_ub = 0; b_loop_ub <= loop_ub; b_loop_ub++) {
+      b_PME->data[b_loop_ub + b_PME->size[1] * i29] = PCPrO->data[b_loop_ub +
+        PCPrO->size[1] * (list->data[i29] - 1)];
     }
   }
 
-  i21 = PCPrO->size[0] * PCPrO->size[1];
-  PCPrO->size[0] = b_PME->size[0];
+  i29 = PCPrO->size[0] * PCPrO->size[1];
   PCPrO->size[1] = b_PME->size[1];
-  emxEnsureCapacity_int32_T(PCPrO, i21);
-  loop_ub = b_PME->size[1];
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    k = b_PME->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      PCPrO->data[i22 + PCPrO->size[0] * i21] = b_PME->data[i22 + b_PME->size[0]
-        * i21];
+  PCPrO->size[0] = b_PME->size[0];
+  emxEnsureCapacity_int32_T(PCPrO, i29);
+  loop_ub = b_PME->size[0];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    c_loop_ub = b_PME->size[1];
+    for (b_loop_ub = 0; b_loop_ub < c_loop_ub; b_loop_ub++) {
+      PCPrO->data[b_loop_ub + PCPrO->size[1] * i29] = b_PME->data[b_loop_ub +
+        b_PME->size[1] * i29];
     }
   }
 
   /* 'sch:20' PS=PS(list,:); */
   loop_ub = PS->size[1] - 1;
-  i21 = b_PME->size[0] * b_PME->size[1];
-  b_PME->size[0] = list->size[0];
+  i29 = b_PME->size[0] * b_PME->size[1];
   b_PME->size[1] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(b_PME, i21);
-  for (i21 = 0; i21 <= loop_ub; i21++) {
-    k = list->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      b_PME->data[i22 + b_PME->size[0] * i21] = PS->data[(list->data[i22] +
-        PS->size[0] * i21) - 1];
+  b_PME->size[0] = list->size[0];
+  emxEnsureCapacity_int32_T(b_PME, i29);
+  c_loop_ub = list->size[0];
+  for (i29 = 0; i29 < c_loop_ub; i29++) {
+    for (b_loop_ub = 0; b_loop_ub <= loop_ub; b_loop_ub++) {
+      b_PME->data[b_loop_ub + b_PME->size[1] * i29] = PS->data[b_loop_ub +
+        PS->size[1] * (list->data[i29] - 1)];
     }
   }
 
-  i21 = PS->size[0] * PS->size[1];
-  PS->size[0] = b_PME->size[0];
+  i29 = PS->size[0] * PS->size[1];
   PS->size[1] = b_PME->size[1];
-  emxEnsureCapacity_int32_T(PS, i21);
-  loop_ub = b_PME->size[1];
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    k = b_PME->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      PS->data[i22 + PS->size[0] * i21] = b_PME->data[i22 + b_PME->size[0] * i21];
+  PS->size[0] = b_PME->size[0];
+  emxEnsureCapacity_int32_T(PS, i29);
+  loop_ub = b_PME->size[0];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    c_loop_ub = b_PME->size[1];
+    for (b_loop_ub = 0; b_loop_ub < c_loop_ub; b_loop_ub++) {
+      PS->data[b_loop_ub + PS->size[1] * i29] = b_PME->data[b_loop_ub +
+        b_PME->size[1] * i29];
     }
   }
 
   /* 'sch:21' PCPO=PCPO(list,:); */
   loop_ub = PCPO->size[1] - 1;
-  i21 = b_PME->size[0] * b_PME->size[1];
-  b_PME->size[0] = list->size[0];
+  i29 = b_PME->size[0] * b_PME->size[1];
   b_PME->size[1] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(b_PME, i21);
-  for (i21 = 0; i21 <= loop_ub; i21++) {
-    k = list->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      b_PME->data[i22 + b_PME->size[0] * i21] = PCPO->data[(list->data[i22] +
-        PCPO->size[0] * i21) - 1];
+  b_PME->size[0] = list->size[0];
+  emxEnsureCapacity_int32_T(b_PME, i29);
+  c_loop_ub = list->size[0];
+  for (i29 = 0; i29 < c_loop_ub; i29++) {
+    for (b_loop_ub = 0; b_loop_ub <= loop_ub; b_loop_ub++) {
+      b_PME->data[b_loop_ub + b_PME->size[1] * i29] = PCPO->data[b_loop_ub +
+        PCPO->size[1] * (list->data[i29] - 1)];
     }
   }
 
-  i21 = PCPO->size[0] * PCPO->size[1];
-  PCPO->size[0] = b_PME->size[0];
+  i29 = PCPO->size[0] * PCPO->size[1];
   PCPO->size[1] = b_PME->size[1];
-  emxEnsureCapacity_int32_T(PCPO, i21);
-  loop_ub = b_PME->size[1];
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    k = b_PME->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      PCPO->data[i22 + PCPO->size[0] * i21] = b_PME->data[i22 + b_PME->size[0] *
-        i21];
+  PCPO->size[0] = b_PME->size[0];
+  emxEnsureCapacity_int32_T(PCPO, i29);
+  loop_ub = b_PME->size[0];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    c_loop_ub = b_PME->size[1];
+    for (b_loop_ub = 0; b_loop_ub < c_loop_ub; b_loop_ub++) {
+      PCPO->data[b_loop_ub + PCPO->size[1] * i29] = b_PME->data[b_loop_ub +
+        b_PME->size[1] * i29];
     }
   }
 
   /* 'sch:22' PCR=PCR(list,:); */
   loop_ub = PCR->size[1] - 1;
-  i21 = b_PME->size[0] * b_PME->size[1];
-  b_PME->size[0] = list->size[0];
+  i29 = b_PME->size[0] * b_PME->size[1];
   b_PME->size[1] = loop_ub + 1;
-  emxEnsureCapacity_int32_T(b_PME, i21);
-  for (i21 = 0; i21 <= loop_ub; i21++) {
-    k = list->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      b_PME->data[i22 + b_PME->size[0] * i21] = PCR->data[(list->data[i22] +
-        PCR->size[0] * i21) - 1];
+  b_PME->size[0] = list->size[0];
+  emxEnsureCapacity_int32_T(b_PME, i29);
+  c_loop_ub = list->size[0];
+  for (i29 = 0; i29 < c_loop_ub; i29++) {
+    for (b_loop_ub = 0; b_loop_ub <= loop_ub; b_loop_ub++) {
+      b_PME->data[b_loop_ub + b_PME->size[1] * i29] = PCR->data[b_loop_ub +
+        PCR->size[1] * (list->data[i29] - 1)];
     }
   }
 
-  i21 = PCR->size[0] * PCR->size[1];
-  PCR->size[0] = b_PME->size[0];
+  i29 = PCR->size[0] * PCR->size[1];
   PCR->size[1] = b_PME->size[1];
-  emxEnsureCapacity_int32_T(PCR, i21);
-  loop_ub = b_PME->size[1];
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    k = b_PME->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      PCR->data[i22 + PCR->size[0] * i21] = b_PME->data[i22 + b_PME->size[0] *
-        i21];
+  PCR->size[0] = b_PME->size[0];
+  emxEnsureCapacity_int32_T(PCR, i29);
+  loop_ub = b_PME->size[0];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    c_loop_ub = b_PME->size[1];
+    for (b_loop_ub = 0; b_loop_ub < c_loop_ub; b_loop_ub++) {
+      PCR->data[b_loop_ub + PCR->size[1] * i29] = b_PME->data[b_loop_ub +
+        b_PME->size[1] * i29];
     }
   }
 
@@ -391,28 +391,29 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   emxInit_int32_T(&b_EP, 1);
 
   /* 'sch:24' EP=EP(list,:); */
-  i21 = b_EP->size[0];
+  i29 = b_EP->size[0];
   b_EP->size[0] = list->size[0];
-  emxEnsureCapacity_int32_T(b_EP, i21);
+  emxEnsureCapacity_int32_T(b_EP, i29);
   loop_ub = list->size[0];
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    b_EP->data[i21] = EP->data[list->data[i21] - 1];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    b_EP->data[i29] = EP->data[list->data[i29] - 1];
   }
 
-  i21 = EP->size[0];
+  i29 = EP->size[0];
   EP->size[0] = b_EP->size[0];
-  emxEnsureCapacity_int32_T(EP, i21);
+  emxEnsureCapacity_int32_T(EP, i29);
   loop_ub = b_EP->size[0];
-  for (i21 = 0; i21 < loop_ub; i21++) {
-    EP->data[i21] = b_EP->data[i21];
+  for (i29 = 0; i29 < loop_ub; i29++) {
+    EP->data[i29] = b_EP->data[i29];
   }
 
+  emxFree_int32_T(&b_EP);
   emxInit_int32_T(&DiaOp, 1);
 
   /* 'sch:26' for i=1:NumTOp */
-  i21 = DiaOp->size[0];
+  i29 = DiaOp->size[0];
   DiaOp->size[0] = NumTOp;
-  emxEnsureCapacity_int32_T(DiaOp, i21);
+  emxEnsureCapacity_int32_T(DiaOp, i29);
   emxInit_int32_T(&tempUltPosRecXDia, 2);
   emxInit_int32_T(&DispME, 2);
   emxInit_int32_T(&EA, 2);
@@ -432,244 +433,237 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
     /* 'sch:31'         TimeUsoRec(i,1),TimeUsoRec(i,2),contDia,DispMExD); */
     contDia = 2;
     loop_ub = PCPrO->size[1];
-    i21 = b_PCPrO->size[0] * b_PCPrO->size[1];
-    b_PCPrO->size[0] = 1;
+    i29 = b_PCPrO->size[0] * b_PCPrO->size[1];
     b_PCPrO->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(b_PCPrO, i21);
-    for (i21 = 0; i21 < loop_ub; i21++) {
-      b_PCPrO->data[i21] = PCPrO->data[i + PCPrO->size[0] * i21];
+    b_PCPrO->size[0] = 1;
+    emxEnsureCapacity_int32_T(b_PCPrO, i29);
+    for (i29 = 0; i29 < loop_ub; i29++) {
+      b_PCPrO->data[i29] = PCPrO->data[i29 + PCPrO->size[1] * i];
     }
 
-    funcionDia(NumRec, b_PCPrO, Dia, UltPosRecXDia, TimeUsoRec->data[i],
-               TimeUsoRec->data[i + TimeUsoRec->size[0]], &contDia, DispMExD,
+    funcionDia(NumRec, b_PCPrO, Dia, UltPosRecXDia, TimeUsoRec->data[7 * i],
+               TimeUsoRec->data[1 + 7 * i], &contDia, DispMExD,
                tempUltPosRecXDia, DispME);
 
     /* 'sch:33' [ CPrOA,IniCPrOA, EndCPrOA,EndCPrOAxD,EA,AA,AnA,SA,IniSA,EndSA,EndRPxD,CPOA,IniCPOA,EndCPOA,CRA,IniCRA,EndCRA,contDia] = ... */
     /* 'sch:34'         funcionCPrO( NumRec,PCPrO(i,:), PME(i,:),PMA(i,:),PMAn(i,:),PS(i,:),PCPO(i,:),PCR(i,:),H,Dia, UltPosRecXDia,... */
     /* 'sch:35'         TimeUsoRec(i,1), TimeUsoRec(i,2),TimeUsoRec(i,6),TimeUsoRec(i,7),contDia,tempUltPosRecXDia,DispMExD,DispME); */
     loop_ub = PCPrO->size[1];
-    i21 = b_PCPrO->size[0] * b_PCPrO->size[1];
-    b_PCPrO->size[0] = 1;
+    c_loop_ub = PME->size[1];
+    k = PMA->size[1];
+    d_loop_ub = PMAn->size[1];
+    e_loop_ub = PS->size[1];
+    b_loop_ub = PCPO->size[1];
+    f_loop_ub = PCR->size[1];
+    i29 = b_PCPrO->size[0] * b_PCPrO->size[1];
     b_PCPrO->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(b_PCPrO, i21);
-    for (i21 = 0; i21 < loop_ub; i21++) {
-      b_PCPrO->data[i21] = PCPrO->data[i + PCPrO->size[0] * i21];
+    b_PCPrO->size[0] = 1;
+    emxEnsureCapacity_int32_T(b_PCPrO, i29);
+    for (i29 = 0; i29 < loop_ub; i29++) {
+      b_PCPrO->data[i29] = PCPrO->data[i29 + PCPrO->size[1] * i];
     }
 
-    loop_ub = PME->size[1];
-    i21 = c_PME->size[0] * c_PME->size[1];
+    i29 = c_PME->size[0] * c_PME->size[1];
+    c_PME->size[1] = c_loop_ub;
     c_PME->size[0] = 1;
-    c_PME->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(c_PME, i21);
-    for (i21 = 0; i21 < loop_ub; i21++) {
-      c_PME->data[i21] = PME->data[i + PME->size[0] * i21];
+    emxEnsureCapacity_int32_T(c_PME, i29);
+    for (i29 = 0; i29 < c_loop_ub; i29++) {
+      c_PME->data[i29] = PME->data[i29 + PME->size[1] * i];
     }
 
-    loop_ub = PMA->size[1];
-    i21 = b_PMA->size[0] * b_PMA->size[1];
+    i29 = b_PMA->size[0] * b_PMA->size[1];
+    b_PMA->size[1] = k;
     b_PMA->size[0] = 1;
-    b_PMA->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(b_PMA, i21);
-    for (i21 = 0; i21 < loop_ub; i21++) {
-      b_PMA->data[i21] = PMA->data[i + PMA->size[0] * i21];
+    emxEnsureCapacity_int32_T(b_PMA, i29);
+    for (i29 = 0; i29 < k; i29++) {
+      b_PMA->data[i29] = PMA->data[i29 + PMA->size[1] * i];
     }
 
-    loop_ub = PMAn->size[1];
-    i21 = b_PMAn->size[0] * b_PMAn->size[1];
+    i29 = b_PMAn->size[0] * b_PMAn->size[1];
+    b_PMAn->size[1] = d_loop_ub;
     b_PMAn->size[0] = 1;
-    b_PMAn->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(b_PMAn, i21);
-    for (i21 = 0; i21 < loop_ub; i21++) {
-      b_PMAn->data[i21] = PMAn->data[i + PMAn->size[0] * i21];
+    emxEnsureCapacity_int32_T(b_PMAn, i29);
+    for (i29 = 0; i29 < d_loop_ub; i29++) {
+      b_PMAn->data[i29] = PMAn->data[i29 + PMAn->size[1] * i];
     }
 
-    loop_ub = PS->size[1];
-    i21 = b_PS->size[0] * b_PS->size[1];
+    i29 = b_PS->size[0] * b_PS->size[1];
+    b_PS->size[1] = e_loop_ub;
     b_PS->size[0] = 1;
-    b_PS->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(b_PS, i21);
-    for (i21 = 0; i21 < loop_ub; i21++) {
-      b_PS->data[i21] = PS->data[i + PS->size[0] * i21];
+    emxEnsureCapacity_int32_T(b_PS, i29);
+    for (i29 = 0; i29 < e_loop_ub; i29++) {
+      b_PS->data[i29] = PS->data[i29 + PS->size[1] * i];
     }
 
-    loop_ub = PCPO->size[1];
-    i21 = b_PCPO->size[0] * b_PCPO->size[1];
+    i29 = b_PCPO->size[0] * b_PCPO->size[1];
+    b_PCPO->size[1] = b_loop_ub;
     b_PCPO->size[0] = 1;
-    b_PCPO->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(b_PCPO, i21);
-    for (i21 = 0; i21 < loop_ub; i21++) {
-      b_PCPO->data[i21] = PCPO->data[i + PCPO->size[0] * i21];
+    emxEnsureCapacity_int32_T(b_PCPO, i29);
+    for (i29 = 0; i29 < b_loop_ub; i29++) {
+      b_PCPO->data[i29] = PCPO->data[i29 + PCPO->size[1] * i];
     }
 
-    loop_ub = PCR->size[1];
-    i21 = b_PCR->size[0] * b_PCR->size[1];
+    i29 = b_PCR->size[0] * b_PCR->size[1];
+    b_PCR->size[1] = f_loop_ub;
     b_PCR->size[0] = 1;
-    b_PCR->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(b_PCR, i21);
-    for (i21 = 0; i21 < loop_ub; i21++) {
-      b_PCR->data[i21] = PCR->data[i + PCR->size[0] * i21];
+    emxEnsureCapacity_int32_T(b_PCR, i29);
+    for (i29 = 0; i29 < f_loop_ub; i29++) {
+      b_PCR->data[i29] = PCR->data[i29 + PCR->size[1] * i];
     }
 
     funcionCPrO(NumRec, b_PCPrO, c_PME, b_PMA, b_PMAn, b_PS, b_PCPO, b_PCR, H,
-                Dia, UltPosRecXDia, TimeUsoRec->data[i], TimeUsoRec->data[i +
-                TimeUsoRec->size[0]], TimeUsoRec->data[i + TimeUsoRec->size[0] *
-                5], TimeUsoRec->data[i + TimeUsoRec->size[0] * 6], &contDia,
-                tempUltPosRecXDia, DispMExD, DispME, &CPrOA, &IniCPrOA,
-                &EndCPrOA, &EndCPrOAxD, EA, AA, AnA, SA, &IniSA, &EndSA,
-                &EndRPxD, &CPOA, &IniCPOA, &EndCPOA, &CRA, &IniCRA, &EndCRA);
+                Dia, UltPosRecXDia, TimeUsoRec->data[7 * i], TimeUsoRec->data[1
+                + 7 * i], TimeUsoRec->data[5 + 7 * i], TimeUsoRec->data[6 + 7 *
+                i], &contDia, tempUltPosRecXDia, DispMExD, DispME, &CPrOA,
+                &IniCPrOA, &EndCPrOA, &EndCPrOAxD, EA, AA, AnA, SA, &IniSA,
+                &EndSA, &EndRPxD, &CPOA, &IniCPOA, &EndCPOA, &CRA, &IniCRA,
+                &EndCRA);
 
     /* 'sch:37' DiaOp(i)=contDia; */
     DiaOp->data[i] = contDia;
 
     /* 'sch:39' H(IniCPrOA:EndCPrOA,CPrOA)=i; */
     if (IniCPrOA > EndCPrOA) {
-      i21 = 0;
-      i22 = 0;
+      i29 = 0;
+      b_loop_ub = 0;
     } else {
-      i21 = IniCPrOA - 1;
-      i22 = EndCPrOA;
+      i29 = IniCPrOA - 1;
+      b_loop_ub = EndCPrOA;
     }
 
-    loop_ub = i22 - i21;
-    for (i22 = 0; i22 < loop_ub; i22++) {
-      H->data[(i21 + i22) + H->size[0] * (CPrOA - 1)] = i + 1;
+    loop_ub = b_loop_ub - i29;
+    for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+      H->data[(CPrOA + H->size[1] * (i29 + b_loop_ub)) - 1] = i + 1;
     }
 
     /* 'sch:40' UltPosRecXDia(contDia,CPrOA)=EndCPrOAxD; */
-    UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (CPrOA - 1)) - 1] =
+    UltPosRecXDia->data[(CPrOA + UltPosRecXDia->size[1] * (contDia - 1)) - 1] =
       EndCPrOAxD;
 
     /* 'sch:42' H(IniSA:EndSA,NumRec(1)+NumRec(2)+int32(SA))=i; */
     if (IniSA > EndSA) {
-      i21 = 0;
-      i22 = 0;
+      i29 = 0;
+      b_loop_ub = 0;
     } else {
-      i21 = IniSA - 1;
-      i22 = EndSA;
+      i29 = IniSA - 1;
+      b_loop_ub = EndSA;
     }
 
-    NumRec_tmp = NumRec[0] + NumRec[1];
-    i23 = b_PCPrO->size[0] * b_PCPrO->size[1];
-    b_PCPrO->size[0] = 1;
+    e_loop_ub = NumRec[0] + NumRec[1];
+    k = b_PCPrO->size[0] * b_PCPrO->size[1];
     b_PCPrO->size[1] = SA->size[1];
-    emxEnsureCapacity_int32_T(b_PCPrO, i23);
+    b_PCPrO->size[0] = 1;
+    emxEnsureCapacity_int32_T(b_PCPrO, k);
     loop_ub = SA->size[1];
-    for (i23 = 0; i23 < loop_ub; i23++) {
-      b_PCPrO->data[i23] = SA->data[i23] + NumRec_tmp;
+    for (k = 0; k < loop_ub; k++) {
+      b_PCPrO->data[k] = SA->data[k] + e_loop_ub;
     }
 
-    i23 = b_EP->size[0];
-    b_EP->size[0] = b_PCPrO->size[1];
-    emxEnsureCapacity_int32_T(b_EP, i23);
-    loop_ub = b_PCPrO->size[1];
-    for (i23 = 0; i23 < loop_ub; i23++) {
-      b_EP->data[i23] = b_PCPrO->data[i23];
-    }
-
-    Data_idx_0 = i22 - i21;
-    k = b_EP->size[0];
-    for (i22 = 0; i22 < k; i22++) {
-      for (i23 = 0; i23 < Data_idx_0; i23++) {
-        H->data[(i21 + i23) + H->size[0] * (b_EP->data[i22] - 1)] = i + 1;
+    d_loop_ub = b_PCPrO->size[1];
+    loop_ub = b_loop_ub - i29;
+    for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+      for (k = 0; k < d_loop_ub; k++) {
+        H->data[(b_PCPrO->data[k] + H->size[1] * (i29 + b_loop_ub)) - 1] = i + 1;
       }
     }
 
     /* 'sch:43' UltPosRecXDia(contDia,NumRec(1)+NumRec(2)+int32(SA))=EndRPxD; */
-    k = b_EP->size[0];
-    for (i21 = 0; i21 < k; i21++) {
-      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (b_EP->data[i21] -
-        1)) - 1] = EndRPxD;
+    k = b_PCPrO->size[1];
+    for (i29 = 0; i29 < k; i29++) {
+      UltPosRecXDia->data[(b_PCPrO->data[i29] + UltPosRecXDia->size[1] *
+                           (contDia - 1)) - 1] = EndRPxD;
     }
 
     /* 'sch:45' for j=1:size(EA,2) */
-    i21 = EA->size[1];
-    if (0 <= i21 - 1) {
+    i29 = EA->size[1];
+    if (0 <= i29 - 1) {
       if (IniSA > EndSA) {
-        i24 = 0;
-        i25 = 0;
+        i30 = 0;
+        i31 = 0;
       } else {
-        i24 = IniSA - 1;
-        i25 = EndSA;
+        i30 = IniSA - 1;
+        i31 = EndSA;
       }
     }
 
-    for (j = 0; j < i21; j++) {
+    for (j = 0; j < i29; j++) {
       /* 'sch:47' H(IniSA:EndSA,NumRec(1)+EA(j))=i; */
       k = NumRec[0] + EA->data[j];
-      loop_ub = i25 - i24;
-      for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i24 + i22) + H->size[0] * (k - 1)] = i + 1;
+      loop_ub = i31 - i30;
+      for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+        H->data[(k + H->size[1] * (i30 + b_loop_ub)) - 1] = i + 1;
       }
 
       /* 'sch:48' UltPosRecXDia(contDia,NumRec(1)+EA(j))=EndRPxD; */
-      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * ((NumRec[0] +
-        EA->data[j]) - 1)) - 1] = EndRPxD;
+      UltPosRecXDia->data[((NumRec[0] + EA->data[j]) + UltPosRecXDia->size[1] *
+                           (contDia - 1)) - 1] = EndRPxD;
 
       /* 'sch:50' EspMedOp(i,j)=PME(i,EA(j)); */
-      EspMedOp->data[i + EspMedOp->size[0] * j] = PME->data[i + PME->size[0] *
-        (EA->data[j] - 1)];
+      EspMedOp->data[j + (i << 1)] = PME->data[(EA->data[j] + PME->size[1] * i)
+        - 1];
     }
 
     /* 'sch:54' for j=1:size(AA,2) */
-    i21 = AA->size[1];
-    if (0 <= i21 - 1) {
+    i29 = AA->size[1];
+    if (0 <= i29 - 1) {
       if (IniSA > EndSA) {
-        i26 = 0;
-        i27 = 0;
+        i32 = 0;
+        i33 = 0;
       } else {
-        i26 = IniSA - 1;
-        i27 = EndSA;
+        i32 = IniSA - 1;
+        i33 = EndSA;
       }
     }
 
-    for (j = 0; j < i21; j++) {
+    for (j = 0; j < i29; j++) {
       /* 'sch:56' H(IniSA:EndSA,NumRec(1)+NumRec(2)+NumRec(3)+AA(j))=i; */
-      k = (NumRec_tmp + NumRec[2]) + AA->data[j];
-      loop_ub = i27 - i26;
-      for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i26 + i22) + H->size[0] * (k - 1)] = i + 1;
+      k = (e_loop_ub + NumRec[2]) + AA->data[j];
+      loop_ub = i33 - i32;
+      for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+        H->data[(k + H->size[1] * (i32 + b_loop_ub)) - 1] = i + 1;
       }
 
       /* 'sch:57' UltPosRecXDia(contDia,NumRec(1)+NumRec(2)+NumRec(3)+AA(j))=EndRPxD; */
-      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * ((((NumRec[0] +
-        NumRec[1]) + NumRec[2]) + AA->data[j]) - 1)) - 1] = EndRPxD;
+      UltPosRecXDia->data[((((NumRec[0] + NumRec[1]) + NumRec[2]) + AA->data[j])
+                           + UltPosRecXDia->size[1] * (contDia - 1)) - 1] =
+        EndRPxD;
     }
 
     /* 'sch:61' for j=1:size(AnA,2) */
-    i21 = AnA->size[1];
-    if (0 <= i21 - 1) {
+    i29 = AnA->size[1];
+    if (0 <= i29 - 1) {
       if (IniSA > EndSA) {
-        i28 = 0;
-        i29 = 0;
+        i34 = 0;
+        i35 = 0;
       } else {
-        i28 = IniSA - 1;
-        i29 = EndSA;
+        i34 = IniSA - 1;
+        i35 = EndSA;
       }
     }
 
-    for (j = 0; j < i21; j++) {
+    for (j = 0; j < i29; j++) {
       /* 'sch:63' H(IniSA:EndSA,NumRec(1)+NumRec(2)+NumRec(3)+NumRec(4)+AnA(j))=i; */
       k = (((NumRec[0] + NumRec[1]) + NumRec[2]) + NumRec[3]) + AnA->data[j];
-      loop_ub = i29 - i28;
-      for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i28 + i22) + H->size[0] * (k - 1)] = i + 1;
+      loop_ub = i35 - i34;
+      for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+        H->data[(k + H->size[1] * (i34 + b_loop_ub)) - 1] = i + 1;
       }
 
       /* 'sch:64' UltPosRecXDia(contDia,NumRec(1)+NumRec(2)+NumRec(3)+NumRec(4)+AnA(j))=EndRPxD; */
-      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (((((NumRec[0] +
-        NumRec[1]) + NumRec[2]) + NumRec[3]) + AnA->data[j]) - 1)) - 1] =
-        EndRPxD;
+      UltPosRecXDia->data[(((((NumRec[0] + NumRec[1]) + NumRec[2]) + NumRec[3])
+                            + AnA->data[j]) + UltPosRecXDia->size[1] * (contDia
+        - 1)) - 1] = EndRPxD;
     }
 
     /* 'sch:68' if IniCPOA == 0 */
     if (IniCPOA == 0) {
       /* 'sch:69' H(IniCRA:EndCRA,sum(NumRec(1:6))+CRA)=i; */
       if (IniCRA > EndCRA) {
-        i21 = 0;
-        i22 = 0;
+        i29 = 0;
+        b_loop_ub = 0;
       } else {
-        i21 = IniCRA - 1;
-        i22 = EndCRA;
+        i29 = IniCRA - 1;
+        b_loop_ub = EndCRA;
       }
 
       y = NumRec[0];
@@ -678,35 +672,35 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
       }
 
       k = (int)(y + (double)CRA);
-      loop_ub = i22 - i21;
-      for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i21 + i22) + H->size[0] * (k - 1)] = i + 1;
+      loop_ub = b_loop_ub - i29;
+      for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+        H->data[(k + H->size[1] * (i29 + b_loop_ub)) - 1] = i + 1;
       }
     } else {
       /* 'sch:70' else */
       /* 'sch:71' H(IniCPOA:EndCPOA,sum(NumRec(1:5))+CPOA)=i; */
       if (IniCPOA > EndCPOA) {
-        i21 = 0;
-        i22 = 0;
+        i29 = 0;
+        b_loop_ub = 0;
       } else {
-        i21 = IniCPOA - 1;
-        i22 = EndCPOA;
+        i29 = IniCPOA - 1;
+        b_loop_ub = EndCPOA;
       }
 
       k = (int)((((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2])
                   + (double)NumRec[3]) + (double)NumRec[4]) + (double)CPOA);
-      loop_ub = i22 - i21;
-      for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i21 + i22) + H->size[0] * (k - 1)] = i + 1;
+      loop_ub = b_loop_ub - i29;
+      for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+        H->data[(k + H->size[1] * (i29 + b_loop_ub)) - 1] = i + 1;
       }
 
       /* 'sch:72' H(IniCRA:EndCRA,sum(NumRec(1:6))+CRA)=i; */
       if (IniCRA > EndCRA) {
-        i21 = 0;
-        i22 = 0;
+        i29 = 0;
+        b_loop_ub = 0;
       } else {
-        i21 = IniCRA - 1;
-        i22 = EndCRA;
+        i29 = IniCRA - 1;
+        b_loop_ub = EndCRA;
       }
 
       y = NumRec[0];
@@ -715,9 +709,9 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
       }
 
       k = (int)(y + (double)CRA);
-      loop_ub = i22 - i21;
-      for (i22 = 0; i22 < loop_ub; i22++) {
-        H->data[(i21 + i22) + H->size[0] * (k - 1)] = i + 1;
+      loop_ub = b_loop_ub - i29;
+      for (b_loop_ub = 0; b_loop_ub < loop_ub; b_loop_ub++) {
+        H->data[(k + H->size[1] * (i29 + b_loop_ub)) - 1] = i + 1;
       }
     }
   }
@@ -729,7 +723,6 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   emxFree_int32_T(&b_PMA);
   emxFree_int32_T(&c_PME);
   emxFree_int32_T(&b_PCPrO);
-  emxFree_int32_T(&b_EP);
   emxFree_int32_T(&SA);
   emxFree_int32_T(&AnA);
   emxFree_int32_T(&AA);

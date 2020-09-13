@@ -5,7 +5,7 @@
  * File: Edade.c
  *
  * MATLAB Coder version            : 4.2
- * C/C++ source code generated on  : 13-Sep-2020 18:10:16
+ * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
 
 /* Include Files */
@@ -28,13 +28,14 @@
  */
 void Edade(double b_Edade[2000])
 {
-  emxArray_real_T *r1;
+  emxArray_int8_T *r2;
+  emxArray_real_T *r3;
   int i;
   double r;
   int j;
   boolean_T exitg1;
-  int k;
   int i4;
+  int k;
   boolean_T guard1 = false;
   static const double dv0[71] = { 0.0070422535211267607, 0.0072434607645875254,
     0.00744466800804829, 0.0076458752515090548, 0.0078470824949698186,
@@ -100,7 +101,8 @@ void Edade(double b_Edade[2000])
   memset(&b_Edade[0], 0, 2000U * sizeof(double));
 
   /* 'Edade:18' for i=1:Num */
-  emxInit_real_T(&r1, 2);
+  emxInit_int8_T(&r2, 1);
+  emxInit_real_T(&r3, 2);
   for (i = 0; i < 2000; i++) {
     /* 'Edade:20' r=rand; */
     r = d_rand();
@@ -110,27 +112,42 @@ void Edade(double b_Edade[2000])
     exitg1 = false;
     while ((!exitg1) && (j < 71)) {
       /* 'Edade:24' if sum(ProbXEdade(1:j),2)<=r && sum(ProbXEdade(1:j+1),2)>r */
-      k = j + 1;
-      i4 = r1->size[0] * r1->size[1];
-      r1->size[0] = 1;
-      r1->size[1] = j + 1;
-      emxEnsureCapacity_real_T(r1, i4);
+      i4 = r2->size[0];
+      r2->size[0] = j + 1;
+      emxEnsureCapacity_int8_T(r2, i4);
+      for (i4 = 0; i4 <= j; i4++) {
+        r2->data[i4] = (signed char)i4;
+      }
+
+      k = r2->size[0];
+      i4 = r3->size[0] * r3->size[1];
+      r3->size[1] = k;
+      r3->size[0] = 1;
+      emxEnsureCapacity_real_T(r3, i4);
       for (i4 = 0; i4 < k; i4++) {
-        r1->data[i4] = dv0[i4];
+        r3->data[i4] = dv0[r2->data[i4]];
       }
 
       guard1 = false;
-      if (sum(r1) <= r) {
-        k = j + 2;
-        i4 = r1->size[0] * r1->size[1];
-        r1->size[0] = 1;
-        r1->size[1] = j + 2;
-        emxEnsureCapacity_real_T(r1, i4);
-        for (i4 = 0; i4 < k; i4++) {
-          r1->data[i4] = dv0[i4];
+      if (sum(r3) <= r) {
+        i4 = r2->size[0];
+        r2->size[0] = j + 2;
+        emxEnsureCapacity_int8_T(r2, i4);
+        k = j + 1;
+        for (i4 = 0; i4 <= k; i4++) {
+          r2->data[i4] = (signed char)i4;
         }
 
-        if (sum(r1) > r) {
+        k = r2->size[0];
+        i4 = r3->size[0] * r3->size[1];
+        r3->size[1] = k;
+        r3->size[0] = 1;
+        emxEnsureCapacity_real_T(r3, i4);
+        for (i4 = 0; i4 < k; i4++) {
+          r3->data[i4] = dv0[r2->data[i4]];
+        }
+
+        if (sum(r3) > r) {
           /* 'Edade:25' Edade(i)=PEd(j+1); */
           b_Edade[i] = 5.0 + (((1.0 + (double)j) + 1.0) - 1.0);
           exitg1 = true;
@@ -166,7 +183,8 @@ void Edade(double b_Edade[2000])
     }
   }
 
-  emxFree_real_T(&r1);
+  emxFree_real_T(&r3);
+  emxFree_int8_T(&r2);
 }
 
 /*
