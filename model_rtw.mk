@@ -2,7 +2,7 @@
 ## Makefile generated for MATLAB file/project 'model'. 
 ## 
 ## Makefile     : model_rtw.mk
-## Generated on : Sun Aug 16 17:28:32 2020
+## Generated on : Sun Aug 30 22:37:19 2020
 ## MATLAB Coder version: 4.2 (R2019a)
 ## 
 ## Build Info:
@@ -187,7 +187,7 @@ DEFINES = $(DEFINES_CUSTOM) $(DEFINES_STANDARD)
 ## SOURCE FILES
 ###########################################################################
 
-SRCS = $(START_DIR)\model_rtwutil.c $(START_DIR)\model_data.c $(START_DIR)\model_initialize.c $(START_DIR)\model_terminate.c $(START_DIR)\actIQ.c $(START_DIR)\aevSPLap.c $(START_DIR)\BDCreator_func.c $(START_DIR)\Calendario.c $(START_DIR)\casorandom.c $(START_DIR)\cc.c $(START_DIR)\Codificacion_de_dias_func.c $(START_DIR)\CreaPoQunniforme.c $(START_DIR)\Edade.c $(START_DIR)\favalia.c $(START_DIR)\funcionC.c $(START_DIR)\funcionCPrO.c $(START_DIR)\funcionCR.c $(START_DIR)\funcionDia.c $(START_DIR)\funcionRP.c $(START_DIR)\main_UCI_func.c $(START_DIR)\obsIQ.c $(START_DIR)\obsIQini.c $(START_DIR)\PLOTT_func.c $(START_DIR)\sch.c $(START_DIR)\repmat.c $(START_DIR)\rem.c $(START_DIR)\rdivide_helper.c $(START_DIR)\tic.c $(START_DIR)\getTime.c $(START_DIR)\timeKeeper.c $(START_DIR)\rand.c $(START_DIR)\eml_rand_mt19937ar_stateful.c $(START_DIR)\sum.c $(START_DIR)\combineVectorElements.c $(START_DIR)\toc.c $(START_DIR)\colon.c $(START_DIR)\sortIdx.c $(START_DIR)\sort1.c $(START_DIR)\nonSingletonDim.c $(START_DIR)\std.c $(START_DIR)\randperm.c $(START_DIR)\randi.c $(START_DIR)\round.c $(START_DIR)\nullAssignment.c $(START_DIR)\model_emxutil.c $(START_DIR)\model_emxAPI.c
+SRCS = $(START_DIR)\model_rtwutil.c $(START_DIR)\model_data.c $(START_DIR)\model_initialize.c $(START_DIR)\model_terminate.c $(START_DIR)\actIQ.c $(START_DIR)\aevSPLap.c $(START_DIR)\BDCreator_func.c $(START_DIR)\Calendario.c $(START_DIR)\casorandom.c $(START_DIR)\cc.c $(START_DIR)\Codificacion_de_dias_func.c $(START_DIR)\CreaPoQunniforme.c $(START_DIR)\Edade.c $(START_DIR)\favalia.c $(START_DIR)\funcionC.c $(START_DIR)\funcionCPrO.c $(START_DIR)\funcionCR.c $(START_DIR)\funcionDia.c $(START_DIR)\funcionRP.c $(START_DIR)\main_UCI_func.c $(START_DIR)\obsIQ.c $(START_DIR)\obsIQini.c $(START_DIR)\PLOTT_func.c $(START_DIR)\sch.c $(START_DIR)\repmat.c $(START_DIR)\rem.c $(START_DIR)\rdivide_helper.c $(START_DIR)\tic.c $(START_DIR)\getTime.c $(START_DIR)\timeKeeper.c $(START_DIR)\sum.c $(START_DIR)\combineVectorElements.c $(START_DIR)\rand.c $(START_DIR)\eml_rand_mt19937ar_stateful.c $(START_DIR)\toc.c $(START_DIR)\colon.c $(START_DIR)\sortIdx.c $(START_DIR)\sort1.c $(START_DIR)\std.c $(START_DIR)\randperm.c $(START_DIR)\randi.c $(START_DIR)\nullAssignment.c $(START_DIR)\model_emxutil.c $(START_DIR)\model_emxAPI.c
 
 ALL_SRCS = $(SRCS)
 
@@ -195,7 +195,7 @@ ALL_SRCS = $(SRCS)
 ## OBJECTS
 ###########################################################################
 
-OBJS = model_rtwutil.obj model_data.obj model_initialize.obj model_terminate.obj actIQ.obj aevSPLap.obj BDCreator_func.obj Calendario.obj casorandom.obj cc.obj Codificacion_de_dias_func.obj CreaPoQunniforme.obj Edade.obj favalia.obj funcionC.obj funcionCPrO.obj funcionCR.obj funcionDia.obj funcionRP.obj main_UCI_func.obj obsIQ.obj obsIQini.obj PLOTT_func.obj sch.obj repmat.obj rem.obj rdivide_helper.obj tic.obj getTime.obj timeKeeper.obj rand.obj eml_rand_mt19937ar_stateful.obj sum.obj combineVectorElements.obj toc.obj colon.obj sortIdx.obj sort1.obj nonSingletonDim.obj std.obj randperm.obj randi.obj round.obj nullAssignment.obj model_emxutil.obj model_emxAPI.obj
+OBJS = model_rtwutil.obj model_data.obj model_initialize.obj model_terminate.obj actIQ.obj aevSPLap.obj BDCreator_func.obj Calendario.obj casorandom.obj cc.obj Codificacion_de_dias_func.obj CreaPoQunniforme.obj Edade.obj favalia.obj funcionC.obj funcionCPrO.obj funcionCR.obj funcionDia.obj funcionRP.obj main_UCI_func.obj obsIQ.obj obsIQini.obj PLOTT_func.obj sch.obj repmat.obj rem.obj rdivide_helper.obj tic.obj getTime.obj timeKeeper.obj sum.obj combineVectorElements.obj rand.obj eml_rand_mt19937ar_stateful.obj toc.obj colon.obj sortIdx.obj sort1.obj std.obj randperm.obj randi.obj nullAssignment.obj model_emxutil.obj model_emxAPI.obj
 
 ALL_OBJS = $(OBJS)
 

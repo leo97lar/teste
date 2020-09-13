@@ -31,11 +31,29 @@
 #include "obsIQini.h"
 #include "sch.h"
 #include "sum.h"
-#include "model_emxutil.h"
 #include "combineVectorElements.h"
+#include "model_emxutil.h"
 
 /* Function Definitions */
-double b_sum(const int x[7])
+double b_sum(const emxArray_real_T *x)
+{
+  double y;
+  int vlen;
+  int k;
+  vlen = x->size[1];
+  if (x->size[1] == 0) {
+    y = 0.0;
+  } else {
+    y = x->data[0];
+    for (k = 2; k <= vlen; k++) {
+      y += x->data[k - 1];
+    }
+  }
+
+  return y;
+}
+
+double c_sum(const int x[7])
 {
   double y;
   int k;
@@ -47,17 +65,17 @@ double b_sum(const int x[7])
   return y;
 }
 
-double c_sum(const int x[2])
+double d_sum(const int x[2])
 {
   return (double)x[0] + (double)x[1];
 }
 
-double d_sum(const int x[3])
+double e_sum(const int x[3])
 {
   return ((double)x[0] + (double)x[1]) + (double)x[2];
 }
 
-double e_sum(const emxArray_boolean_T *x)
+double f_sum(const emxArray_boolean_T *x)
 {
   double y;
   int vlen;
@@ -75,18 +93,18 @@ double e_sum(const emxArray_boolean_T *x)
   return y;
 }
 
-double f_sum(const int x[4])
+double g_sum(const int x[4])
 {
   return (((double)x[0] + (double)x[1]) + (double)x[2]) + (double)x[3];
 }
 
-double g_sum(const int x[5])
+double h_sum(const int x[5])
 {
   return ((((double)x[0] + (double)x[1]) + (double)x[2]) + (double)x[3]) +
     (double)x[4];
 }
 
-double h_sum(const int x[6])
+double i_sum(const int x[6])
 {
   double y;
   int k;
@@ -98,7 +116,7 @@ double h_sum(const int x[6])
   return y;
 }
 
-void i_sum(const emxArray_real_T *x, emxArray_real_T *y)
+void j_sum(const emxArray_real_T *x, emxArray_real_T *y)
 {
   int vlen;
   int npages;
@@ -133,7 +151,7 @@ void i_sum(const emxArray_real_T *x, emxArray_real_T *y)
   }
 }
 
-double j_sum(const emxArray_int32_T *x)
+double k_sum(const emxArray_int32_T *x)
 {
   double y;
   int vlen;
@@ -151,7 +169,7 @@ double j_sum(const emxArray_int32_T *x)
   return y;
 }
 
-double k_sum(const emxArray_boolean_T *x)
+double l_sum(const emxArray_boolean_T *x)
 {
   double y;
   int vlen;
@@ -169,7 +187,7 @@ double k_sum(const emxArray_boolean_T *x)
   return y;
 }
 
-double l_sum(const double x[2000])
+double m_sum(const double x[2000])
 {
   double y;
   int k;
@@ -181,31 +199,20 @@ double l_sum(const double x[2000])
   return y;
 }
 
-double m_sum(const double x_data[], const int x_size[1])
-{
-  emxArray_real_T b_x_data;
-  b_x_data.data = (double *)&x_data[0];
-  b_x_data.size = (int *)&x_size[0];
-  b_x_data.allocatedSize = -1;
-  b_x_data.numDimensions = 1;
-  b_x_data.canFreeData = false;
-  return combineVectorElements(&b_x_data);
-}
-
 void n_sum(const emxArray_int32_T *x, emxArray_real_T *y)
 {
   unsigned int sz_idx_1;
-  int i35;
+  int i44;
   int loop_ub;
   if ((x->size[0] == 0) || (x->size[1] == 0)) {
     sz_idx_1 = (unsigned int)x->size[1];
-    i35 = y->size[0] * y->size[1];
+    i44 = y->size[0] * y->size[1];
     y->size[0] = 1;
     y->size[1] = (int)sz_idx_1;
-    emxEnsureCapacity_real_T(y, i35);
+    emxEnsureCapacity_real_T(y, i44);
     loop_ub = (int)sz_idx_1;
-    for (i35 = 0; i35 < loop_ub; i35++) {
-      y->data[i35] = 0.0;
+    for (i44 = 0; i44 < loop_ub; i44++) {
+      y->data[i44] = 0.0;
     }
   } else {
     colMajorFlatIter(x, x->size[0], y);
@@ -214,16 +221,7 @@ void n_sum(const emxArray_int32_T *x, emxArray_real_T *y)
 
 double sum(const emxArray_real_T *x)
 {
-  double y;
-  int vlen;
-  int k;
-  vlen = x->size[1];
-  y = x->data[0];
-  for (k = 2; k <= vlen; k++) {
-    y += x->data[k - 1];
-  }
-
-  return y;
+  return combineVectorElements(x);
 }
 
 /* End of code generation (sum.c) */

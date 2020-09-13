@@ -43,7 +43,7 @@ void Codificacion_de_dias_func(void)
   double dias[8760];
   static double dv5[17520];
   static double dv6[17520];
-  int i36;
+  int i45;
   static double b_dias[87600];
   emxArray_real_T *Data;
   int Data_size[1];
@@ -52,56 +52,56 @@ void Codificacion_de_dias_func(void)
   int loop_ub;
 
   /*  Para creer mi Horario codificado desde el 1ro de enero del 2017 hasta el 31 de diciembre del 2018 */
-  b_repmat(dv4);
-  memcpy(&dias[0], &dv4[0], 8760U * sizeof(double));
   c_repmat(dv4);
+  memcpy(&dias[0], &dv4[0], 8760U * sizeof(double));
+  d_repmat(dv4);
 
   /*  [Dom Lun Mar Mier Jue Vier Sab] */
-  g_repmat(dv5);
-  h_repmat(dv6);
-  for (i36 = 0; i36 < 8760; i36++) {
-    b_dias[i36] = dias[i36];
-    b_dias[i36 + 8760] = dias[i36];
-    b_dias[17520 + i36] = dv4[i36];
-    b_dias[i36 + 26280] = dv4[i36];
+  h_repmat(dv5);
+  i_repmat(dv6);
+  for (i45 = 0; i45 < 8760; i45++) {
+    b_dias[i45] = dias[i45];
+    b_dias[i45 + 8760] = dias[i45];
+    b_dias[17520 + i45] = dv4[i45];
+    b_dias[i45 + 26280] = dv4[i45];
   }
 
-  for (i36 = 0; i36 < 17520; i36++) {
-    b_dias[35040 + i36] = iv0[i36];
-    b_dias[52560 + i36] = dv5[i36];
-    b_dias[70080 + i36] = dv6[i36];
+  for (i45 = 0; i45 < 17520; i45++) {
+    b_dias[35040 + i45] = iv0[i45];
+    b_dias[52560 + i45] = dv5[i45];
+    b_dias[70080 + i45] = dv6[i45];
   }
 
   emxInit_real_T(&Data, 2);
-  i36 = Data->size[0] * Data->size[1];
+  i45 = Data->size[0] * Data->size[1];
   Data->size[0] = 17520;
   Data->size[1] = 5;
-  emxEnsureCapacity_real_T(Data, i36);
-  for (i36 = 0; i36 < 87600; i36++) {
-    Data->data[i36] = b_dias[i36];
+  emxEnsureCapacity_real_T(Data, i45);
+  for (i45 = 0; i45 < 87600; i45++) {
+    Data->data[i45] = b_dias[i45];
   }
 
   Data_size[0] = 17520;
-  for (i36 = 0; i36 < 17520; i36++) {
-    Data_data[i36] = (Data->data[i36 + (Data->size[0] << 2)] == 1.0);
+  for (i45 = 0; i45 < 17520; i45++) {
+    Data_data[i45] = (Data->data[i45 + (Data->size[0] << 2)] == 1.0);
   }
 
   emxInit_real_T(&r5, 2);
   b_nullAssignment(Data, Data_data, Data_size);
-  i36 = r5->size[0] * r5->size[1];
+  i45 = r5->size[0] * r5->size[1];
   r5->size[0] = Data->size[0];
   r5->size[1] = 5;
-  emxEnsureCapacity_real_T(r5, i36);
+  emxEnsureCapacity_real_T(r5, i45);
   loop_ub = Data->size[0] * Data->size[1];
-  for (i36 = 0; i36 < loop_ub; i36++) {
-    r5->data[i36] = Data->data[i36];
+  for (i45 = 0; i45 < loop_ub; i45++) {
+    r5->data[i45] = Data->data[i45];
   }
 
   loop_ub = Data->size[0];
   Data_size[0] = loop_ub;
-  for (i36 = 0; i36 < loop_ub; i36++) {
-    Data_data[i36] = ((Data->data[i36 + (Data->size[0] << 2)] == 7.0) &&
-                      (Data->data[i36 + Data->size[0] * 3] >= 16.0));
+  for (i45 = 0; i45 < loop_ub; i45++) {
+    Data_data[i45] = ((Data->data[i45 + (Data->size[0] << 2)] == 7.0) &&
+                      (Data->data[i45 + Data->size[0] * 3] >= 16.0));
   }
 
   emxFree_real_T(&Data);

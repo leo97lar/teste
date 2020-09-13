@@ -82,8 +82,8 @@ extern void Edade(int32_T b_min, int32_T b_max, int32_T Num, emxArray_real_T
                   *b_Edade);
 extern void Edade_api(const mxArray * const prhs[3], int32_T nlhs, const mxArray
                       *plhs[1]);
-extern void PLOTT_func(emxArray_real_T *trace);
-extern void PLOTT_func_api(const mxArray * const prhs[1], int32_T nlhs);
+extern void PLOTT_func(emxArray_real_T *trace, emxArray_int32_T *bestexperimento);
+extern void PLOTT_func_api(const mxArray * const prhs[2], int32_T nlhs);
 extern void actIQ(emxArray_real_T *IQ, emxArray_int32_T *IC, real_T taxAct,
                   emxArray_real_T *IQact);
 extern void actIQ_api(const mxArray * const prhs[3], int32_T nlhs, const mxArray
@@ -98,9 +98,9 @@ extern void aevSPLap(int32_T NumTOp, int32_T numIC, int32_T numIQ, real_T taxC,
                      real_T ProbXEst[5], real_T fitnessB[6], int32_T generations,
                      int32_T genToWidth, emxArray_int32_T *DispMExD,
                      emxArray_real_T *EP, real_T k0, real_T k1, real_T k2,
-                     real_T k3, emxArray_int32_T *bestexperimento,
-                     emxArray_real_T *trace);
-extern void aevSPLap_api(const mxArray * const prhs[27], int32_T nlhs, const
+                     real_T k3, boolean_T keeppriority, emxArray_int32_T
+                     *bestexperimento, emxArray_real_T *trace);
+extern void aevSPLap_api(const mxArray * const prhs[28], int32_T nlhs, const
   mxArray *plhs[2]);
 extern void casorandom(int32_T NumTOp, emxArray_int32_T *H, int32_T NumRec[7],
   emxArray_int32_T *PCPrO, emxArray_int32_T *PME, emxArray_int32_T *PMA,
@@ -176,8 +176,17 @@ extern void funcionRP(emxArray_int32_T *CPrOA, int32_T *IniCPrOA, int32_T
                       *EndRPxD);
 extern void funcionRP_api(const mxArray *prhs[32], int32_T nlhs, const mxArray
   *plhs[18]);
-extern void main_UCI_func(void);
-extern void main_UCI_func_api(int32_T nlhs);
+extern void main_UCI_func(emxArray_int32_T *CP, emxArray_int32_T *RO,
+  emxArray_int32_T *CPO, emxArray_int32_T *CPrO, emxArray_int32_T *CR,
+  emxArray_int32_T *Data, emxArray_int32_T *Dia, emxArray_int32_T *DispMExD,
+  emxArray_int32_T *MA, emxArray_int32_T *MAn, emxArray_int32_T *ME,
+  emxArray_int32_T *S, int32_T TipoOp, int32_T NumEsp, int32_T NumTOp, int32_T
+  NumSalOp, int32_T NumCPO, int32_T NumCPrO, int32_T NumCR, int32_T NumMedEsp,
+  int32_T NumEspxE, int32_T NumAsist, int32_T NumAnest, real_T k0, real_T k1,
+  real_T k2, real_T k3, int32_T numIQ, int32_T numIC, real_T taxC, real_T taxE,
+  real_T taxEQ, emxArray_real_T *ProbXEst, int32_T genToWidth, int32_T
+  generations, boolean_T keeppriority);
+extern void main_UCI_func_api(const mxArray * const prhs[36], int32_T nlhs);
 extern void model_atexit(void);
 extern void model_initialize(void);
 extern void model_terminate(void);
@@ -188,7 +197,7 @@ extern void obsIQ(emxArray_real_T *IQ, int32_T numIQ, int32_T numObsIQ,
 extern void obsIQ_api(const mxArray * const prhs[3], int32_T nlhs, const mxArray
                       *plhs[1]);
 extern void obsIQini(emxArray_real_T *IQ, int32_T numIQ, int32_T numObsIQ,
-                     real_T ProbXEst[5], emxArray_real_T *newIC);
+                     real_T ProbXEst[5], emxArray_int32_T *newIC);
 extern void obsIQini_api(const mxArray * const prhs[4], int32_T nlhs, const
   mxArray *plhs[1]);
 extern void sch(int32_T NumTOp, emxArray_int32_T *list, int32_T NumRec[7],

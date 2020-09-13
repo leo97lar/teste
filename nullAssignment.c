@@ -97,13 +97,13 @@ void nullAssignment(emxArray_int32_T *x, const emxArray_boolean_T *idx)
 {
   int nxin;
   int k0;
-  int i75;
+  int i83;
   int k;
   int nxout;
   nxin = x->size[0];
   k0 = 0;
-  i75 = idx->size[0];
-  for (k = 0; k < i75; k++) {
+  i83 = idx->size[0];
+  for (k = 0; k < i83; k++) {
     k0 += idx->data[k];
   }
 
@@ -119,9 +119,9 @@ void nullAssignment(emxArray_int32_T *x, const emxArray_boolean_T *idx)
   if (1 > nxout) {
     x->size[0] = 0;
   } else {
-    i75 = x->size[0];
+    i83 = x->size[0];
     x->size[0] = nxout;
-    emxEnsureCapacity_int32_T(x, i75);
+    emxEnsureCapacity_int32_T(x, i83);
   }
 }
 

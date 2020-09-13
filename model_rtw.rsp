@@ -25,7 +25,6 @@ model_emxutil.obj
 model_initialize.obj
 model_rtwutil.obj
 model_terminate.obj
-nonSingletonDim.obj
 nullAssignment.obj
 obsIQ.obj
 obsIQini.obj
@@ -35,7 +34,6 @@ randperm.obj
 rdivide_helper.obj
 rem.obj
 repmat.obj
-round.obj
 sch.obj
 sort1.obj
 sortIdx.obj

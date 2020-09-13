@@ -67,27 +67,6 @@ typedef struct emxArray_boolean_T emxArray_boolean_T;
 
 #endif                                 /*typedef_emxArray_boolean_T*/
 
-#ifndef struct_emxArray_int16_T
-#define struct_emxArray_int16_T
-
-struct emxArray_int16_T
-{
-  short *data;
-  int *size;
-  int allocatedSize;
-  int numDimensions;
-  boolean_T canFreeData;
-};
-
-#endif                                 /*struct_emxArray_int16_T*/
-
-#ifndef typedef_emxArray_int16_T
-#define typedef_emxArray_int16_T
-
-typedef struct emxArray_int16_T emxArray_int16_T;
-
-#endif                                 /*typedef_emxArray_int16_T*/
-
 #ifndef struct_emxArray_int8_T
 #define struct_emxArray_int8_T
 

@@ -36,14 +36,14 @@
 /* Function Definitions */
 void b_rdivide_helper(const emxArray_real_T *y, emxArray_real_T *z)
 {
-  int i6;
+  int i8;
   int loop_ub;
-  i6 = z->size[0];
+  i8 = z->size[0];
   z->size[0] = y->size[0];
-  emxEnsureCapacity_real_T(z, i6);
+  emxEnsureCapacity_real_T(z, i8);
   loop_ub = y->size[0];
-  for (i6 = 0; i6 < loop_ub; i6++) {
-    z->data[i6] = 1.0 / y->data[i6];
+  for (i8 = 0; i8 < loop_ub; i8++) {
+    z->data[i8] = 1.0 / y->data[i8];
   }
 }
 

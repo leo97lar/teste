@@ -146,14 +146,14 @@ double b_rand(void)
 
 void c_rand(int varargin_2, emxArray_real_T *r)
 {
-  int i17;
+  int i24;
   int k;
-  i17 = r->size[0] * r->size[1];
+  i24 = r->size[0] * r->size[1];
   r->size[0] = 1;
   r->size[1] = varargin_2;
-  emxEnsureCapacity_real_T(r, i17);
-  i17 = r->size[1];
-  for (k = 0; k < i17; k++) {
+  emxEnsureCapacity_real_T(r, i24);
+  i24 = r->size[1];
+  for (k = 0; k < i24; k++) {
     r->data[k] = eml_rand_mt19937ar(state);
   }
 }
@@ -166,13 +166,13 @@ void d_rand(double r[2])
 
 void e_rand(int varargin_1, emxArray_real_T *r)
 {
-  int i20;
+  int i29;
   int k;
-  i20 = r->size[0];
+  i29 = r->size[0];
   r->size[0] = varargin_1;
-  emxEnsureCapacity_real_T(r, i20);
-  i20 = r->size[0];
-  for (k = 0; k < i20; k++) {
+  emxEnsureCapacity_real_T(r, i29);
+  i29 = r->size[0];
+  for (k = 0; k < i29; k++) {
     r->data[k] = eml_rand_mt19937ar(state);
   }
 }

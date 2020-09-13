@@ -21,6 +21,8 @@
 /* Function Declarations */
 extern void actIQ(const emxArray_real_T *IQ, const emxArray_int32_T *IC, double
                   taxAct, emxArray_real_T *IQact);
+extern void b_actIQ(const emxArray_real_T *IQ, const emxArray_int32_T *IC,
+                    emxArray_real_T *IQact);
 
 #endif
 

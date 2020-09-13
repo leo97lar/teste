@@ -20,7 +20,6 @@
 
 /* Function Declarations */
 extern double b_std(const emxArray_real_T *x);
-extern double c_std(const double x[20]);
 
 #endif
 

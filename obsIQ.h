@@ -19,7 +19,6 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void b_obsIQ(const emxArray_real_T *IQ, emxArray_int32_T *newIC);
 extern void obsIQ(const emxArray_real_T *IQ, int numIQ, int numObsIQ,
                   emxArray_int32_T *newIC);
 

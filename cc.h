@@ -19,7 +19,6 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void b_cc(const emxArray_int32_T *IC, emxArray_int32_T *newIC);
 extern void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
                emxArray_int32_T *newIC);
 

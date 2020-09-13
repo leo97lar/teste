@@ -40,7 +40,7 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
                double *NOFP, double *TmNOFP, double *NOE2, double *NOE3)
 {
   emxArray_boolean_T *x;
-  int i16;
+  int i23;
   int jj;
   int nx;
   emxArray_boolean_T *v;
@@ -55,13 +55,13 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
   unsigned int EspMedOp_idx_0;
   emxArray_int32_T *d_ii;
   emxInit_boolean_T(&x, 2);
-  i16 = x->size[0] * x->size[1];
+  i23 = x->size[0] * x->size[1];
   x->size[0] = schedule->size[0];
   x->size[1] = schedule->size[1];
-  emxEnsureCapacity_boolean_T(x, i16);
+  emxEnsureCapacity_boolean_T(x, i23);
   jj = schedule->size[0] * schedule->size[1];
-  for (i16 = 0; i16 < jj; i16++) {
-    x->data[i16] = (schedule->data[i16] != 0.0);
+  for (i23 = 0; i23 < jj; i23++) {
+    x->data[i23] = (schedule->data[i23] != 0.0);
   }
 
   nx = x->size[0] * x->size[1];
@@ -72,9 +72,9 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
     ii->size[0] = 0;
   } else {
     idx = 0;
-    i16 = ii->size[0];
+    i23 = ii->size[0];
     ii->size[0] = nx;
-    emxEnsureCapacity_int32_T(ii, i16);
+    emxEnsureCapacity_int32_T(ii, i23);
     c_ii = 1;
     jj = 1;
     exitg1 = false;
@@ -106,25 +106,25 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
         ii->size[0] = 0;
       }
     } else {
-      i16 = ii->size[0];
+      i23 = ii->size[0];
       if (1 > idx) {
         ii->size[0] = 0;
       } else {
         ii->size[0] = idx;
       }
 
-      emxEnsureCapacity_int32_T(ii, i16);
+      emxEnsureCapacity_int32_T(ii, i23);
     }
   }
 
   emxFree_boolean_T(&x);
   emxInit_real_T(&minEsp, 1);
-  i16 = minEsp->size[0];
+  i23 = minEsp->size[0];
   minEsp->size[0] = ii->size[0];
-  emxEnsureCapacity_real_T(minEsp, i16);
+  emxEnsureCapacity_real_T(minEsp, i23);
   jj = ii->size[0];
-  for (i16 = 0; i16 < jj; i16++) {
-    minEsp->data[i16] = ii->data[i16];
+  for (i23 = 0; i23 < jj; i23++) {
+    minEsp->data[i23] = ii->data[i23];
   }
 
   c_ii = minEsp->size[0];
@@ -156,9 +156,9 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
   }
 
   emxInit_int32_T(&DifT, 1);
-  i16 = DifT->size[0];
+  i23 = DifT->size[0];
   DifT->size[0] = nx;
-  emxEnsureCapacity_int32_T(DifT, i16);
+  emxEnsureCapacity_int32_T(DifT, i23);
   c_ii = 0;
   for (idx = 0; idx <= jj; idx++) {
     if (EspMedOp->data[idx] == 0.0) {
@@ -168,16 +168,16 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
   }
 
   jj = DifT->size[0] - 1;
-  for (i16 = 0; i16 <= jj; i16++) {
-    EspMedOp->data[DifT->data[i16] - 1] = 5.0;
+  for (i23 = 0; i23 <= jj; i23++) {
+    EspMedOp->data[DifT->data[i23] - 1] = 5.0;
   }
 
   /*  Sustituyo el 0 (caso en que solo era necesario un medico) por un valor mayor para que a la hora de buscar el min no afecte el resultado. */
   c_ii = EspMedOp->size[0] - 1;
   EspMedOp_idx_0 = (unsigned int)EspMedOp->size[0];
-  i16 = minEsp->size[0];
+  i23 = minEsp->size[0];
   minEsp->size[0] = (int)EspMedOp_idx_0;
-  emxEnsureCapacity_real_T(minEsp, i16);
+  emxEnsureCapacity_real_T(minEsp, i23);
   if (EspMedOp->size[0] >= 1) {
     for (idx = 0; idx <= c_ii; idx++) {
       minEsp->data[idx] = EspMedOp->data[idx];
@@ -190,19 +190,19 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
     }
   }
 
-  i16 = v->size[0];
+  i23 = v->size[0];
   v->size[0] = minEsp->size[0];
-  emxEnsureCapacity_boolean_T(v, i16);
+  emxEnsureCapacity_boolean_T(v, i23);
   jj = minEsp->size[0];
-  for (i16 = 0; i16 < jj; i16++) {
-    v->data[i16] = (minEsp->data[i16] == 2.0);
+  for (i23 = 0; i23 < jj; i23++) {
+    v->data[i23] = (minEsp->data[i23] == 2.0);
   }
 
   nx = v->size[0];
   idx = 0;
-  i16 = ii->size[0];
+  i23 = ii->size[0];
   ii->size[0] = v->size[0];
-  emxEnsureCapacity_int32_T(ii, i16);
+  emxEnsureCapacity_int32_T(ii, i23);
   c_ii = 0;
   exitg1 = false;
   while ((!exitg1) && (c_ii <= nx - 1)) {
@@ -224,30 +224,30 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
       ii->size[0] = 0;
     }
   } else {
-    i16 = ii->size[0];
+    i23 = ii->size[0];
     if (1 > idx) {
       ii->size[0] = 0;
     } else {
       ii->size[0] = idx;
     }
 
-    emxEnsureCapacity_int32_T(ii, i16);
+    emxEnsureCapacity_int32_T(ii, i23);
   }
 
   *NOE2 = ii->size[0];
-  i16 = v->size[0];
+  i23 = v->size[0];
   v->size[0] = minEsp->size[0];
-  emxEnsureCapacity_boolean_T(v, i16);
+  emxEnsureCapacity_boolean_T(v, i23);
   jj = minEsp->size[0];
-  for (i16 = 0; i16 < jj; i16++) {
-    v->data[i16] = (minEsp->data[i16] == 3.0);
+  for (i23 = 0; i23 < jj; i23++) {
+    v->data[i23] = (minEsp->data[i23] == 3.0);
   }
 
   nx = v->size[0];
   idx = 0;
-  i16 = b_ii->size[0];
+  i23 = b_ii->size[0];
   b_ii->size[0] = v->size[0];
-  emxEnsureCapacity_int32_T(b_ii, i16);
+  emxEnsureCapacity_int32_T(b_ii, i23);
   c_ii = 0;
   exitg1 = false;
   while ((!exitg1) && (c_ii <= nx - 1)) {
@@ -269,24 +269,24 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
       b_ii->size[0] = 0;
     }
   } else {
-    i16 = b_ii->size[0];
+    i23 = b_ii->size[0];
     if (1 > idx) {
       b_ii->size[0] = 0;
     } else {
       b_ii->size[0] = idx;
     }
 
-    emxEnsureCapacity_int32_T(b_ii, i16);
+    emxEnsureCapacity_int32_T(b_ii, i23);
   }
 
   *NOE3 = b_ii->size[0];
-  i16 = DifT->size[0];
+  i23 = DifT->size[0];
   DifT->size[0] = DiaOp->size[0];
-  emxEnsureCapacity_int32_T(DifT, i16);
+  emxEnsureCapacity_int32_T(DifT, i23);
   jj = DiaOp->size[0];
-  for (i16 = 0; i16 < jj; i16++) {
-    nx = DiaOp->data[i16];
-    c_ii = EP->data[i16];
+  for (i23 = 0; i23 < jj; i23++) {
+    nx = DiaOp->data[i23];
+    c_ii = EP->data[i23];
     if ((nx >= 0) && (c_ii < nx - MAX_int32_T)) {
       c_ii = MAX_int32_T;
     } else if ((nx < 0) && (c_ii > nx - MIN_int32_T)) {
@@ -295,23 +295,23 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
       c_ii = nx - c_ii;
     }
 
-    DifT->data[i16] = c_ii;
+    DifT->data[i23] = c_ii;
   }
 
-  i16 = v->size[0];
+  i23 = v->size[0];
   v->size[0] = DifT->size[0];
-  emxEnsureCapacity_boolean_T(v, i16);
+  emxEnsureCapacity_boolean_T(v, i23);
   jj = DifT->size[0];
-  for (i16 = 0; i16 < jj; i16++) {
-    v->data[i16] = (DifT->data[i16] > 0);
+  for (i23 = 0; i23 < jj; i23++) {
+    v->data[i23] = (DifT->data[i23] > 0);
   }
 
   emxInit_int32_T(&d_ii, 1);
   nx = v->size[0];
   idx = 0;
-  i16 = d_ii->size[0];
+  i23 = d_ii->size[0];
   d_ii->size[0] = v->size[0];
-  emxEnsureCapacity_int32_T(d_ii, i16);
+  emxEnsureCapacity_int32_T(d_ii, i23);
   c_ii = 0;
   exitg1 = false;
   while ((!exitg1) && (c_ii <= nx - 1)) {
@@ -333,36 +333,36 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
       d_ii->size[0] = 0;
     }
   } else {
-    i16 = d_ii->size[0];
+    i23 = d_ii->size[0];
     if (1 > idx) {
       d_ii->size[0] = 0;
     } else {
       d_ii->size[0] = idx;
     }
 
-    emxEnsureCapacity_int32_T(d_ii, i16);
+    emxEnsureCapacity_int32_T(d_ii, i23);
   }
 
   emxFree_boolean_T(&v);
-  i16 = minEsp->size[0];
+  i23 = minEsp->size[0];
   minEsp->size[0] = d_ii->size[0];
-  emxEnsureCapacity_real_T(minEsp, i16);
+  emxEnsureCapacity_real_T(minEsp, i23);
   jj = d_ii->size[0];
-  for (i16 = 0; i16 < jj; i16++) {
-    minEsp->data[i16] = d_ii->data[i16];
+  for (i23 = 0; i23 < jj; i23++) {
+    minEsp->data[i23] = d_ii->data[i23];
   }
 
   *NOFP = minEsp->size[0];
-  i16 = d_ii->size[0];
+  i23 = d_ii->size[0];
   d_ii->size[0] = minEsp->size[0];
-  emxEnsureCapacity_int32_T(d_ii, i16);
+  emxEnsureCapacity_int32_T(d_ii, i23);
   jj = minEsp->size[0];
-  for (i16 = 0; i16 < jj; i16++) {
-    d_ii->data[i16] = DifT->data[(int)minEsp->data[i16] - 1];
+  for (i23 = 0; i23 < jj; i23++) {
+    d_ii->data[i23] = DifT->data[(int)minEsp->data[i23] - 1];
   }
 
   emxFree_int32_T(&DifT);
-  *TmNOFP = j_sum(d_ii) / (double)minEsp->size[0];
+  *TmNOFP = k_sum(d_ii) / (double)minEsp->size[0];
   *fitness = (((*Tt + k0 * (double)minEsp->size[0]) + k1 * *TmNOFP) + k2 *
               (double)ii->size[0]) + k3 * (double)b_ii->size[0];
   emxFree_int32_T(&d_ii);
@@ -371,269 +371,13 @@ void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T *DiaOp,
   emxFree_real_T(&minEsp);
 }
 
-void c_favalia(const emxArray_int32_T *schedule, const int DiaOp_data[], const
-               int EP_data[], int EspMedOp_data[], double *fitness, double *Tt,
-               double *NOFP, double *TmNOFP, double *NOE2, double *NOE3)
-{
-  emxArray_boolean_T *x;
-  int jj;
-  int ii;
-  int nx;
-  emxArray_boolean_T *v;
-  emxArray_int32_T *b_ii;
-  int idx;
-  boolean_T exitg1;
-  boolean_T guard1 = false;
-  int DifT_data[2000];
-  int DifT_size[1];
-  emxArray_int32_T b_DifT_data;
-  int c_DifT_data[2000];
-  emxInit_boolean_T(&x, 2);
-  jj = x->size[0] * x->size[1];
-  x->size[0] = 17520;
-  x->size[1] = schedule->size[1];
-  emxEnsureCapacity_boolean_T(x, jj);
-  ii = schedule->size[0] * schedule->size[1];
-  for (jj = 0; jj < ii; jj++) {
-    x->data[jj] = (schedule->data[jj] != 0);
-  }
-
-  nx = 17520 * x->size[1];
-  emxInit_boolean_T(&v, 1);
-  emxInit_int32_T(&b_ii, 1);
-  if (nx == 0) {
-    b_ii->size[0] = 0;
-  } else {
-    idx = 0;
-    jj = b_ii->size[0];
-    b_ii->size[0] = nx;
-    emxEnsureCapacity_int32_T(b_ii, jj);
-    ii = 1;
-    jj = 1;
-    exitg1 = false;
-    while ((!exitg1) && (jj <= x->size[1])) {
-      guard1 = false;
-      if (x->data[(ii + x->size[0] * (jj - 1)) - 1]) {
-        idx++;
-        b_ii->data[idx - 1] = ii;
-        if (idx >= nx) {
-          exitg1 = true;
-        } else {
-          guard1 = true;
-        }
-      } else {
-        guard1 = true;
-      }
-
-      if (guard1) {
-        ii++;
-        if (ii > 17520) {
-          ii = 1;
-          jj++;
-        }
-      }
-    }
-
-    if (nx == 1) {
-      if (idx == 0) {
-        b_ii->size[0] = 0;
-      }
-    } else {
-      jj = b_ii->size[0];
-      if (1 > idx) {
-        b_ii->size[0] = 0;
-      } else {
-        b_ii->size[0] = idx;
-      }
-
-      emxEnsureCapacity_int32_T(b_ii, jj);
-    }
-  }
-
-  emxFree_boolean_T(&x);
-  ii = b_ii->size[0];
-  if (b_ii->size[0] <= 2) {
-    if (b_ii->size[0] == 1) {
-      *Tt = b_ii->data[0];
-    } else if (b_ii->data[0] < b_ii->data[1]) {
-      *Tt = b_ii->data[1];
-    } else {
-      *Tt = b_ii->data[0];
-    }
-  } else {
-    jj = b_ii->data[0];
-    for (nx = 2; nx <= ii; nx++) {
-      if (jj < b_ii->data[nx - 1]) {
-        jj = b_ii->data[nx - 1];
-      }
-    }
-
-    *Tt = jj;
-  }
-
-  for (ii = 0; ii < 4000; ii++) {
-    if (EspMedOp_data[ii] == 0) {
-      EspMedOp_data[ii] = 5;
-    }
-  }
-
-  /*  Sustituyo el 0 (caso en que solo era necesario un medico) por un valor mayor para que a la hora de buscar el min no afecte el resultado. */
-  jj = b_ii->size[0];
-  b_ii->size[0] = 2000;
-  emxEnsureCapacity_int32_T(b_ii, jj);
-  for (ii = 0; ii < 2000; ii++) {
-    b_ii->data[ii] = EspMedOp_data[ii];
-  }
-
-  for (ii = 0; ii < 2000; ii++) {
-    jj = EspMedOp_data[ii + 2000];
-    if (b_ii->data[ii] > jj) {
-      b_ii->data[ii] = jj;
-    }
-  }
-
-  ii = b_ii->size[0];
-  for (jj = 0; jj < ii; jj++) {
-    DifT_data[jj] = b_ii->data[jj];
-  }
-
-  jj = v->size[0];
-  v->size[0] = 2000;
-  emxEnsureCapacity_boolean_T(v, jj);
-  for (jj = 0; jj < 2000; jj++) {
-    v->data[jj] = (DifT_data[jj] == 2);
-  }
-
-  idx = 0;
-  ii = 0;
-  exitg1 = false;
-  while ((!exitg1) && (ii <= 1999)) {
-    if (v->data[ii]) {
-      idx++;
-      if (idx >= 2000) {
-        exitg1 = true;
-      } else {
-        ii++;
-      }
-    } else {
-      ii++;
-    }
-  }
-
-  jj = b_ii->size[0];
-  if (1 > idx) {
-    b_ii->size[0] = 0;
-  } else {
-    b_ii->size[0] = idx;
-  }
-
-  emxEnsureCapacity_int32_T(b_ii, jj);
-  *NOE2 = b_ii->size[0];
-  jj = v->size[0];
-  v->size[0] = 2000;
-  emxEnsureCapacity_boolean_T(v, jj);
-  for (jj = 0; jj < 2000; jj++) {
-    v->data[jj] = (DifT_data[jj] == 3);
-  }
-
-  idx = 0;
-  ii = 0;
-  exitg1 = false;
-  while ((!exitg1) && (ii <= 1999)) {
-    if (v->data[ii]) {
-      idx++;
-      if (idx >= 2000) {
-        exitg1 = true;
-      } else {
-        ii++;
-      }
-    } else {
-      ii++;
-    }
-  }
-
-  jj = b_ii->size[0];
-  if (1 > idx) {
-    b_ii->size[0] = 0;
-  } else {
-    b_ii->size[0] = idx;
-  }
-
-  emxEnsureCapacity_int32_T(b_ii, jj);
-  *NOE3 = b_ii->size[0];
-  for (jj = 0; jj < 2000; jj++) {
-    if ((DiaOp_data[jj] >= 0) && (EP_data[jj] < DiaOp_data[jj] - MAX_int32_T)) {
-      ii = MAX_int32_T;
-    } else if ((DiaOp_data[jj] < 0) && (EP_data[jj] > DiaOp_data[jj] -
-                MIN_int32_T)) {
-      ii = MIN_int32_T;
-    } else {
-      ii = DiaOp_data[jj] - EP_data[jj];
-    }
-
-    DifT_data[jj] = ii;
-  }
-
-  jj = v->size[0];
-  v->size[0] = 2000;
-  emxEnsureCapacity_boolean_T(v, jj);
-  for (jj = 0; jj < 2000; jj++) {
-    v->data[jj] = (DifT_data[jj] > 0);
-  }
-
-  idx = 0;
-  jj = b_ii->size[0];
-  b_ii->size[0] = 2000;
-  emxEnsureCapacity_int32_T(b_ii, jj);
-  ii = 0;
-  exitg1 = false;
-  while ((!exitg1) && (ii <= 1999)) {
-    if (v->data[ii]) {
-      idx++;
-      b_ii->data[idx - 1] = ii + 1;
-      if (idx >= 2000) {
-        exitg1 = true;
-      } else {
-        ii++;
-      }
-    } else {
-      ii++;
-    }
-  }
-
-  emxFree_boolean_T(&v);
-  jj = b_ii->size[0];
-  if (1 > idx) {
-    b_ii->size[0] = 0;
-  } else {
-    b_ii->size[0] = idx;
-  }
-
-  emxEnsureCapacity_int32_T(b_ii, jj);
-  *NOFP = b_ii->size[0];
-  DifT_size[0] = b_ii->size[0];
-  ii = b_ii->size[0];
-  for (jj = 0; jj < ii; jj++) {
-    c_DifT_data[jj] = DifT_data[b_ii->data[jj] - 1];
-  }
-
-  b_DifT_data.data = &c_DifT_data[0];
-  b_DifT_data.size = &DifT_size[0];
-  b_DifT_data.allocatedSize = 2000;
-  b_DifT_data.numDimensions = 1;
-  b_DifT_data.canFreeData = false;
-  *TmNOFP = j_sum(&b_DifT_data) / (double)b_ii->size[0];
-  *fitness = *Tt;
-  emxFree_int32_T(&b_ii);
-}
-
 void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
              const emxArray_int32_T *EP, emxArray_int32_T *EspMedOp, double k0,
              double k1, double k2, double k3, double *fitness, double *Tt,
              double *NOFP, double *TmNOFP, double *NOE2, double *NOE3)
 {
   emxArray_boolean_T *x;
-  int i39;
+  int i48;
   int jj;
   int nx;
   emxArray_int32_T *minEsp;
@@ -648,13 +392,13 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
   unsigned int EspMedOp_idx_0;
   emxArray_int32_T *c_ii;
   emxInit_boolean_T(&x, 2);
-  i39 = x->size[0] * x->size[1];
+  i48 = x->size[0] * x->size[1];
   x->size[0] = schedule->size[0];
   x->size[1] = schedule->size[1];
-  emxEnsureCapacity_boolean_T(x, i39);
+  emxEnsureCapacity_boolean_T(x, i48);
   jj = schedule->size[0] * schedule->size[1];
-  for (i39 = 0; i39 < jj; i39++) {
-    x->data[i39] = (schedule->data[i39] != 0);
+  for (i48 = 0; i48 < jj; i48++) {
+    x->data[i48] = (schedule->data[i48] != 0);
   }
 
   nx = x->size[0] * x->size[1];
@@ -665,9 +409,9 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
     minEsp->size[0] = 0;
   } else {
     idx = 0;
-    i39 = minEsp->size[0];
+    i48 = minEsp->size[0];
     minEsp->size[0] = nx;
-    emxEnsureCapacity_int32_T(minEsp, i39);
+    emxEnsureCapacity_int32_T(minEsp, i48);
     ii = 1;
     jj = 1;
     exitg1 = false;
@@ -699,25 +443,25 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
         minEsp->size[0] = 0;
       }
     } else {
-      i39 = minEsp->size[0];
+      i48 = minEsp->size[0];
       if (1 > idx) {
         minEsp->size[0] = 0;
       } else {
         minEsp->size[0] = idx;
       }
 
-      emxEnsureCapacity_int32_T(minEsp, i39);
+      emxEnsureCapacity_int32_T(minEsp, i48);
     }
   }
 
   emxFree_boolean_T(&x);
   emxInit_int32_T(&aux, 1);
-  i39 = aux->size[0];
+  i48 = aux->size[0];
   aux->size[0] = minEsp->size[0];
-  emxEnsureCapacity_int32_T(aux, i39);
+  emxEnsureCapacity_int32_T(aux, i48);
   jj = minEsp->size[0];
-  for (i39 = 0; i39 < jj; i39++) {
-    aux->data[i39] = minEsp->data[i39];
+  for (i48 = 0; i48 < jj; i48++) {
+    aux->data[i48] = minEsp->data[i48];
   }
 
   ii = aux->size[0];
@@ -749,9 +493,9 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
   }
 
   emxInit_int32_T(&b_ii, 1);
-  i39 = b_ii->size[0];
+  i48 = b_ii->size[0];
   b_ii->size[0] = nx;
-  emxEnsureCapacity_int32_T(b_ii, i39);
+  emxEnsureCapacity_int32_T(b_ii, i48);
   ii = 0;
   for (idx = 0; idx <= jj; idx++) {
     if (EspMedOp->data[idx] == 0) {
@@ -761,16 +505,16 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
   }
 
   jj = b_ii->size[0] - 1;
-  for (i39 = 0; i39 <= jj; i39++) {
-    EspMedOp->data[b_ii->data[i39] - 1] = 5;
+  for (i48 = 0; i48 <= jj; i48++) {
+    EspMedOp->data[b_ii->data[i48] - 1] = 5;
   }
 
   /*  Sustituyo el 0 (caso en que solo era necesario un medico) por un valor mayor para que a la hora de buscar el min no afecte el resultado. */
   ii = EspMedOp->size[0] - 1;
   EspMedOp_idx_0 = (unsigned int)EspMedOp->size[0];
-  i39 = minEsp->size[0];
+  i48 = minEsp->size[0];
   minEsp->size[0] = (int)EspMedOp_idx_0;
-  emxEnsureCapacity_int32_T(minEsp, i39);
+  emxEnsureCapacity_int32_T(minEsp, i48);
   if (EspMedOp->size[0] >= 1) {
     for (idx = 0; idx <= ii; idx++) {
       minEsp->data[idx] = EspMedOp->data[idx];
@@ -783,20 +527,20 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
     }
   }
 
-  i39 = v->size[0];
+  i48 = v->size[0];
   v->size[0] = minEsp->size[0];
-  emxEnsureCapacity_boolean_T(v, i39);
+  emxEnsureCapacity_boolean_T(v, i48);
   jj = minEsp->size[0];
-  for (i39 = 0; i39 < jj; i39++) {
-    v->data[i39] = (minEsp->data[i39] == 2);
+  for (i48 = 0; i48 < jj; i48++) {
+    v->data[i48] = (minEsp->data[i48] == 2);
   }
 
   emxInit_int32_T(&c_ii, 1);
   nx = v->size[0];
   idx = 0;
-  i39 = c_ii->size[0];
+  i48 = c_ii->size[0];
   c_ii->size[0] = v->size[0];
-  emxEnsureCapacity_int32_T(c_ii, i39);
+  emxEnsureCapacity_int32_T(c_ii, i48);
   ii = 0;
   exitg1 = false;
   while ((!exitg1) && (ii <= nx - 1)) {
@@ -818,30 +562,30 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
       c_ii->size[0] = 0;
     }
   } else {
-    i39 = c_ii->size[0];
+    i48 = c_ii->size[0];
     if (1 > idx) {
       c_ii->size[0] = 0;
     } else {
       c_ii->size[0] = idx;
     }
 
-    emxEnsureCapacity_int32_T(c_ii, i39);
+    emxEnsureCapacity_int32_T(c_ii, i48);
   }
 
   *NOE2 = c_ii->size[0];
-  i39 = v->size[0];
+  i48 = v->size[0];
   v->size[0] = minEsp->size[0];
-  emxEnsureCapacity_boolean_T(v, i39);
+  emxEnsureCapacity_boolean_T(v, i48);
   jj = minEsp->size[0];
-  for (i39 = 0; i39 < jj; i39++) {
-    v->data[i39] = (minEsp->data[i39] == 3);
+  for (i48 = 0; i48 < jj; i48++) {
+    v->data[i48] = (minEsp->data[i48] == 3);
   }
 
   nx = v->size[0];
   idx = 0;
-  i39 = minEsp->size[0];
+  i48 = minEsp->size[0];
   minEsp->size[0] = v->size[0];
-  emxEnsureCapacity_int32_T(minEsp, i39);
+  emxEnsureCapacity_int32_T(minEsp, i48);
   ii = 0;
   exitg1 = false;
   while ((!exitg1) && (ii <= nx - 1)) {
@@ -863,24 +607,24 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
       minEsp->size[0] = 0;
     }
   } else {
-    i39 = minEsp->size[0];
+    i48 = minEsp->size[0];
     if (1 > idx) {
       minEsp->size[0] = 0;
     } else {
       minEsp->size[0] = idx;
     }
 
-    emxEnsureCapacity_int32_T(minEsp, i39);
+    emxEnsureCapacity_int32_T(minEsp, i48);
   }
 
   *NOE3 = minEsp->size[0];
-  i39 = DifT->size[0];
+  i48 = DifT->size[0];
   DifT->size[0] = DiaOp->size[0];
-  emxEnsureCapacity_int32_T(DifT, i39);
+  emxEnsureCapacity_int32_T(DifT, i48);
   jj = DiaOp->size[0];
-  for (i39 = 0; i39 < jj; i39++) {
-    nx = DiaOp->data[i39];
-    ii = EP->data[i39];
+  for (i48 = 0; i48 < jj; i48++) {
+    nx = DiaOp->data[i48];
+    ii = EP->data[i48];
     if ((nx >= 0) && (ii < nx - MAX_int32_T)) {
       ii = MAX_int32_T;
     } else if ((nx < 0) && (ii > nx - MIN_int32_T)) {
@@ -889,22 +633,22 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
       ii = nx - ii;
     }
 
-    DifT->data[i39] = ii;
+    DifT->data[i48] = ii;
   }
 
-  i39 = v->size[0];
+  i48 = v->size[0];
   v->size[0] = DifT->size[0];
-  emxEnsureCapacity_boolean_T(v, i39);
+  emxEnsureCapacity_boolean_T(v, i48);
   jj = DifT->size[0];
-  for (i39 = 0; i39 < jj; i39++) {
-    v->data[i39] = (DifT->data[i39] > 0);
+  for (i48 = 0; i48 < jj; i48++) {
+    v->data[i48] = (DifT->data[i48] > 0);
   }
 
   nx = v->size[0];
   idx = 0;
-  i39 = b_ii->size[0];
+  i48 = b_ii->size[0];
   b_ii->size[0] = v->size[0];
-  emxEnsureCapacity_int32_T(b_ii, i39);
+  emxEnsureCapacity_int32_T(b_ii, i48);
   ii = 0;
   exitg1 = false;
   while ((!exitg1) && (ii <= nx - 1)) {
@@ -926,36 +670,36 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
       b_ii->size[0] = 0;
     }
   } else {
-    i39 = b_ii->size[0];
+    i48 = b_ii->size[0];
     if (1 > idx) {
       b_ii->size[0] = 0;
     } else {
       b_ii->size[0] = idx;
     }
 
-    emxEnsureCapacity_int32_T(b_ii, i39);
+    emxEnsureCapacity_int32_T(b_ii, i48);
   }
 
   emxFree_boolean_T(&v);
-  i39 = aux->size[0];
+  i48 = aux->size[0];
   aux->size[0] = b_ii->size[0];
-  emxEnsureCapacity_int32_T(aux, i39);
+  emxEnsureCapacity_int32_T(aux, i48);
   jj = b_ii->size[0];
-  for (i39 = 0; i39 < jj; i39++) {
-    aux->data[i39] = b_ii->data[i39];
+  for (i48 = 0; i48 < jj; i48++) {
+    aux->data[i48] = b_ii->data[i48];
   }
 
   *NOFP = aux->size[0];
-  i39 = b_ii->size[0];
+  i48 = b_ii->size[0];
   b_ii->size[0] = aux->size[0];
-  emxEnsureCapacity_int32_T(b_ii, i39);
+  emxEnsureCapacity_int32_T(b_ii, i48);
   jj = aux->size[0];
-  for (i39 = 0; i39 < jj; i39++) {
-    b_ii->data[i39] = DifT->data[aux->data[i39] - 1];
+  for (i48 = 0; i48 < jj; i48++) {
+    b_ii->data[i48] = DifT->data[aux->data[i48] - 1];
   }
 
   emxFree_int32_T(&DifT);
-  *TmNOFP = j_sum(b_ii) / (double)aux->size[0];
+  *TmNOFP = k_sum(b_ii) / (double)aux->size[0];
   *fitness = (((*Tt + k0 * (double)aux->size[0]) + k1 * *TmNOFP) + k2 * (double)
               c_ii->size[0]) + k3 * (double)minEsp->size[0];
   emxFree_int32_T(&b_ii);

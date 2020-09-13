@@ -55,10 +55,11 @@ void BDCreator_func(void)
   double CExD_data[2000];
   int auxCExD_size[1];
   double auxCExD_data[2000];
+  emxArray_real_T b_auxCExD_data;
   short DE[2000];
   int i;
   int loop_ub_tmp;
-  int i21;
+  int i30;
   short tmp_data[2030];
   short b_DE[2000];
   int g_unusedExpr[2000];
@@ -100,7 +101,7 @@ void BDCreator_func(void)
   /*  % 10  5 12  5 15 10  8  5  5   2   3  10   5   3  2 */
   /*  Vector con el porciento de tipos operaciones por especialidad */
   /*  Operaciones por especialidad */
-  randperm(unusedExpr);
+  b_randperm(unusedExpr);
 
   /*     %% Complejidad de la operacion */
   /*  1___Alta (30%) */
@@ -108,7 +109,7 @@ void BDCreator_func(void)
   /*  3___Baja (20%) */
   /*  Vector con el porciento de operaciones por su complejidad */
   /*  Complejidad de la operacion */
-  randperm(b_unusedExpr);
+  b_randperm(b_unusedExpr);
 
   /*     %% Tiempo de Duracion de la operacion */
   /*  1 0,5h (15%) */
@@ -118,7 +119,7 @@ void BDCreator_func(void)
   /*  5 2,5h (15%) */
   /*  Vector con el porciento de operaciones por horas de duracion */
   /*  Tiempo de operacion */
-  randperm(c_unusedExpr);
+  b_randperm(c_unusedExpr);
 
   /*     %% Recursos necesarios */
   /*  Especialistas */
@@ -142,7 +143,7 @@ void BDCreator_func(void)
   /*  E  1  Si el retraso NO afectara el progreso de la enfermedad ni hay dolor */
   /*  Posibles estados. */
   /*  Porciento por estado del paciente */
-  b_randperm(f_unusedExpr);
+  c_randperm(f_unusedExpr);
 
   /*  Tiempos de uso de salas */
   /*  Tiempo de Preoperatorio. Caso promedio dos horas. */
@@ -158,7 +159,7 @@ void BDCreator_func(void)
 
   /*  Cantidad de entradas por dia */
   count = 1;
-  while (l_sum(auxCExD) < 2000.0) {
+  while (m_sum(auxCExD) < 2000.0) {
     count++;
     aux = b_rand();
     auxCExD[count] = 1.0 + floor(aux * 30.0);
@@ -175,8 +176,15 @@ void BDCreator_func(void)
             sizeof(double)));
   }
 
+  b_auxCExD_data.data = &auxCExD_data[0];
+  b_auxCExD_data.size = &auxCExD_size[0];
+  b_auxCExD_data.allocatedSize = 2000;
+  b_auxCExD_data.numDimensions = 1;
+  b_auxCExD_data.canFreeData = false;
+  aux = sum(&b_auxCExD_data) - 2000.0;
+
   /*  Operaciones excedentes */
-  CExD_data[0] = auxCExD[0] - (m_sum(auxCExD_data, auxCExD_size) - 2000.0);
+  CExD_data[0] = auxCExD[0] - aux;
 
   /*  Numero de dias de entrada */
   memset(&DE[0], 0, 2000U * sizeof(short));
@@ -185,28 +193,28 @@ void BDCreator_func(void)
   aux = 0.0;
   for (i = 0; i <= count; i++) {
     loop_ub_tmp = (int)floor(CExD_data[i] - 1.0);
-    for (i21 = 0; i21 <= loop_ub_tmp; i21++) {
-      tmp_data[i21] = (short)(int)(aux + (1.0 + (double)i21));
+    for (i30 = 0; i30 <= loop_ub_tmp; i30++) {
+      tmp_data[i30] = (short)(int)(aux + (1.0 + (double)i30));
     }
 
     loop_ub_tmp++;
-    for (i21 = 0; i21 < loop_ub_tmp; i21++) {
-      DE[tmp_data[i21] - 1] = (short)(1 + i);
+    for (i30 = 0; i30 < loop_ub_tmp; i30++) {
+      DE[tmp_data[i30] - 1] = (short)(1 + i);
     }
 
     aux += CExD_data[i];
   }
 
-  b_randperm(CExD_data);
-  for (i21 = 0; i21 < 2000; i21++) {
-    auxCExD[i21] = CExD_data[i21];
-    b_DE[i21] = DE[(int)auxCExD[i21] - 1];
+  c_randperm(CExD_data);
+  for (i30 = 0; i30 < 2000; i30++) {
+    auxCExD[i30] = CExD_data[i30];
+    b_DE[i30] = DE[(int)auxCExD[i30] - 1];
   }
 
   /*     %% Tabla con las caracteristicas de los pacientes por Operacion (Tabla2) */
   /*  Fecha de Entrada, Estado del Paciente, Tipo de Operacion, Edad, Tiempo preOperatorio, Tiempo PostOperatorio, Tiempo Recuperacion. */
-  for (i21 = 0; i21 < 2000; i21++) {
-    auxCExD[i21] = b_DE[i21];
+  for (i30 = 0; i30 < 2000; i30++) {
+    auxCExD[i30] = b_DE[i30];
   }
 
   c_sort(auxCExD, g_unusedExpr);

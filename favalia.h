@@ -24,10 +24,6 @@ extern void b_favalia(const emxArray_real_T *schedule, const emxArray_int32_T
                       *EspMedOp, double k0, double k1, double k2, double k3,
                       double *fitness, double *Tt, double *NOFP, double *TmNOFP,
                       double *NOE2, double *NOE3);
-extern void c_favalia(const emxArray_int32_T *schedule, const int DiaOp_data[],
-                      const int EP_data[], int EspMedOp_data[], double *fitness,
-                      double *Tt, double *NOFP, double *TmNOFP, double *NOE2,
-                      double *NOE3);
 extern void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T
                     *DiaOp, const emxArray_int32_T *EP, emxArray_int32_T
                     *EspMedOp, double k0, double k1, double k2, double k3,

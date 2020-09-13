@@ -30,9 +30,11 @@
 #include "obsIQ.h"
 #include "obsIQini.h"
 #include "sch.h"
+#include <stdio.h>
 
 /* Function Definitions */
-void PLOTT_func(const emxArray_real_T *trace)
+void PLOTT_func(const emxArray_real_T *trace, const emxArray_int32_T
+                *bestexperimento)
 {
   (void)trace;
 
@@ -40,6 +42,8 @@ void PLOTT_func(const emxArray_real_T *trace)
   /* hold on */
   /* plot(1:100,trace(:,3),'O') */
   /* errorbar(1:100,trace(:,3),trace(:,4),'.') */
+  printf("ignore: %2d, %2d", bestexperimento->data[2], bestexperimento->data[4]);
+  fflush(stdout);
 }
 
 /* End of code generation (PLOTT_func.c) */

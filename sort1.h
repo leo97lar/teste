@@ -22,8 +22,7 @@
 extern void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx);
 extern void c_sort(double x[2000], int idx[2000]);
 extern void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx);
-extern void e_sort(int x_data[], int x_size[1], int idx_data[], int idx_size[1]);
-extern void f_sort(double x[21], int idx[21]);
+extern void e_sort(emxArray_int32_T *x, emxArray_int32_T *idx);
 extern void sort(emxArray_real_T *x, emxArray_int32_T *idx);
 
 #endif

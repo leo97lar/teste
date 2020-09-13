@@ -47,12 +47,12 @@ void Calendario(double Data[87600], double Dia[2920])
   /*  Genero el calendario con las fechas y los horarios desde el 1 de enero */
   /*  del 2017 hasta el 31 de diciembre del 2018. Luego elimino los domingos y */
   /*  las horas que no se trabajan los sabados. */
-  b_repmat(mes);
-  memcpy(&dias[0], &mes[0], 8760U * sizeof(double));
   c_repmat(mes);
+  memcpy(&dias[0], &mes[0], 8760U * sizeof(double));
+  d_repmat(mes);
 
   /*  [Dom Lun Mar Mier Jue Vier Sab] */
-  e_repmat(dv1);
+  f_repmat(dv1);
   for (i = 0; i < 730; i++) {
     Dia[i] = 1.0 + (double)i;
     Dia[730 + i] = dv1[i];
@@ -62,8 +62,8 @@ void Calendario(double Data[87600], double Dia[2920])
   memset(&Dia[2190], 0, 730U * sizeof(double));
   Dia[1461] = 32.0;
   Dia[2191] = 43.0;
-  d_repmat(dv2);
-  f_repmat(dv3);
+  e_repmat(dv2);
+  g_repmat(dv3);
   for (i = 0; i < 8760; i++) {
     Data[i] = dias[i];
     Data[i + 8760] = dias[i];

@@ -43,9 +43,9 @@ void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade)
 {
   emxArray_int32_T *PEd;
   int qY;
-  long long i37;
+  long long i46;
   int CtdadXStep;
-  int i38;
+  int i47;
   double delta1;
   int pIni;
   emxArray_real_T *ProbXEdade;
@@ -74,45 +74,45 @@ void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade)
     qY++;
   }
 
-  i37 = (long long)(qY - 1) * qY;
-  if (i37 > 2147483647LL) {
-    i37 = 2147483647LL;
+  i46 = (long long)(qY - 1) * qY;
+  if (i46 > 2147483647LL) {
+    i46 = 2147483647LL;
   } else {
-    if (i37 < -2147483648LL) {
-      i37 = -2147483648LL;
+    if (i46 < -2147483648LL) {
+      i46 = -2147483648LL;
     }
   }
 
-  CtdadXStep = (int)rt_roundd((double)(int)i37 / 2.0);
+  CtdadXStep = (int)rt_roundd((double)(int)i46 / 2.0);
   if (CtdadXStep > 1073741823) {
-    i38 = MAX_int32_T;
+    i47 = MAX_int32_T;
   } else if (CtdadXStep <= -1073741824) {
-    i38 = MIN_int32_T;
+    i47 = MIN_int32_T;
   } else {
-    i38 = CtdadXStep << 1;
+    i47 = CtdadXStep << 1;
   }
 
-  delta1 = rt_roundd(1.0 / (double)i38);
+  delta1 = rt_roundd(1.0 / (double)i47);
   if (delta1 < 2.147483648E+9) {
     if (delta1 >= -2.147483648E+9) {
-      i38 = (int)delta1;
+      i47 = (int)delta1;
     } else {
-      i38 = MIN_int32_T;
+      i47 = MIN_int32_T;
     }
   } else {
-    i38 = MAX_int32_T;
+    i47 = MAX_int32_T;
   }
 
-  i37 = (long long)CtdadXStep * i38;
-  if (i37 > 2147483647LL) {
-    i37 = 2147483647LL;
+  i46 = (long long)CtdadXStep * i47;
+  if (i46 > 2147483647LL) {
+    i46 = 2147483647LL;
   } else {
-    if (i37 < -2147483648LL) {
-      i37 = -2147483648LL;
+    if (i46 < -2147483648LL) {
+      i46 = -2147483648LL;
     }
   }
 
-  CtdadXStep = (int)i37;
+  CtdadXStep = (int)i46;
   if (CtdadXStep < -2147483646) {
     CtdadXStep = MAX_int32_T;
   } else {
@@ -128,16 +128,16 @@ void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade)
     CtdadXStep = b_max - b_min;
   }
 
-  i37 = (long long)i38 * CtdadXStep;
-  if (i37 > 2147483647LL) {
-    i37 = 2147483647LL;
+  i46 = (long long)i47 * CtdadXStep;
+  if (i46 > 2147483647LL) {
+    i46 = 2147483647LL;
   } else {
-    if (i37 < -2147483648LL) {
-      i37 = -2147483648LL;
+    if (i46 < -2147483648LL) {
+      i46 = -2147483648LL;
     }
   }
 
-  CtdadXStep = (int)i37;
+  CtdadXStep = (int)i46;
   if ((pIni < 0) && (CtdadXStep < MIN_int32_T - pIni)) {
     CtdadXStep = MIN_int32_T;
   } else if ((pIni > 0) && (CtdadXStep > MAX_int32_T - pIni)) {
@@ -151,10 +151,10 @@ void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade)
   }
 
   emxInit_real_T(&ProbXEdade, 2);
-  i38 = ProbXEdade->size[0] * ProbXEdade->size[1];
+  i47 = ProbXEdade->size[0] * ProbXEdade->size[1];
   ProbXEdade->size[0] = 1;
   ProbXEdade->size[1] = qY;
-  emxEnsureCapacity_real_T(ProbXEdade, i38);
+  emxEnsureCapacity_real_T(ProbXEdade, i47);
   if (ProbXEdade->size[1] >= 1) {
     ProbXEdade->data[ProbXEdade->size[1] - 1] = CtdadXStep;
     if (ProbXEdade->size[1] >= 2) {
@@ -162,8 +162,8 @@ void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade)
       if (ProbXEdade->size[1] >= 3) {
         delta1 = ((double)CtdadXStep - (double)pIni) / ((double)ProbXEdade->
           size[1] - 1.0);
-        i38 = ProbXEdade->size[1];
-        for (CtdadXStep = 0; CtdadXStep <= i38 - 3; CtdadXStep++) {
+        i47 = ProbXEdade->size[1];
+        for (CtdadXStep = 0; CtdadXStep <= i47 - 3; CtdadXStep++) {
           ProbXEdade->data[1 + CtdadXStep] = (double)pIni + (1.0 + (double)
             CtdadXStep) * delta1;
         }
@@ -171,11 +171,11 @@ void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade)
     }
   }
 
-  i38 = c_Edade->size[0];
+  i47 = c_Edade->size[0];
   c_Edade->size[0] = Num;
-  emxEnsureCapacity_real_T(c_Edade, i38);
-  for (i38 = 0; i38 < Num; i38++) {
-    c_Edade->data[i38] = 0.0;
+  emxEnsureCapacity_real_T(c_Edade, i47);
+  for (i47 = 0; i47 < Num; i47++) {
+    c_Edade->data[i47] = 0.0;
   }
 
   emxInit_boolean_T(&x, 2);
@@ -185,25 +185,25 @@ void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade)
     pIni = 1;
     exitg1 = false;
     while ((!exitg1) && (pIni - 1 <= ProbXEdade->size[1] - 1)) {
-      i38 = b_ProbXEdade->size[0] * b_ProbXEdade->size[1];
+      i47 = b_ProbXEdade->size[0] * b_ProbXEdade->size[1];
       b_ProbXEdade->size[0] = 1;
       b_ProbXEdade->size[1] = pIni;
-      emxEnsureCapacity_real_T(b_ProbXEdade, i38);
-      for (i38 = 0; i38 < pIni; i38++) {
-        b_ProbXEdade->data[i38] = ProbXEdade->data[i38];
+      emxEnsureCapacity_real_T(b_ProbXEdade, i47);
+      for (i47 = 0; i47 < pIni; i47++) {
+        b_ProbXEdade->data[i47] = ProbXEdade->data[i47];
       }
 
       guard1 = false;
-      if (sum(b_ProbXEdade) <= delta1) {
-        i38 = b_ProbXEdade->size[0] * b_ProbXEdade->size[1];
+      if (b_sum(b_ProbXEdade) <= delta1) {
+        i47 = b_ProbXEdade->size[0] * b_ProbXEdade->size[1];
         b_ProbXEdade->size[0] = 1;
         b_ProbXEdade->size[1] = pIni + 1;
-        emxEnsureCapacity_real_T(b_ProbXEdade, i38);
-        for (i38 = 0; i38 <= pIni; i38++) {
-          b_ProbXEdade->data[i38] = ProbXEdade->data[i38];
+        emxEnsureCapacity_real_T(b_ProbXEdade, i47);
+        for (i47 = 0; i47 <= pIni; i47++) {
+          b_ProbXEdade->data[i47] = ProbXEdade->data[i47];
         }
 
-        if (sum(b_ProbXEdade) > delta1) {
+        if (b_sum(b_ProbXEdade) > delta1) {
           c_Edade->data[qY] = PEd->data[pIni];
           exitg1 = true;
         } else {
@@ -214,13 +214,13 @@ void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade)
       }
 
       if (guard1) {
-        i38 = x->size[0] * x->size[1];
+        i47 = x->size[0] * x->size[1];
         x->size[0] = 1;
         x->size[1] = ProbXEdade->size[1];
-        emxEnsureCapacity_boolean_T(x, i38);
+        emxEnsureCapacity_boolean_T(x, i47);
         CtdadXStep = ProbXEdade->size[0] * ProbXEdade->size[1];
-        for (i38 = 0; i38 < CtdadXStep; i38++) {
-          x->data[i38] = (ProbXEdade->data[i38] > delta1);
+        for (i47 = 0; i47 < CtdadXStep; i47++) {
+          x->data[i47] = (ProbXEdade->data[i47] > delta1);
         }
 
         y = (x->size[1] != 0);
@@ -335,7 +335,7 @@ void b_Edade(double c_Edade[2000])
       b_tmp_data.numDimensions = 2;
       b_tmp_data.canFreeData = false;
       guard1 = false;
-      if (sum(&b_tmp_data) <= r) {
+      if (b_sum(&b_tmp_data) <= r) {
         tmp_size[0] = 1;
         tmp_size[1] = j + 2;
         memcpy(&tmp_data[0], &dv0[0], (unsigned int)((j + 2) * (int)sizeof
@@ -345,7 +345,7 @@ void b_Edade(double c_Edade[2000])
         c_tmp_data.allocatedSize = 71;
         c_tmp_data.numDimensions = 2;
         c_tmp_data.canFreeData = false;
-        if (sum(&c_tmp_data) > r) {
+        if (b_sum(&c_tmp_data) > r) {
           c_Edade[i] = 5.0 + (((1.0 + (double)j) + 1.0) - 1.0);
           exitg1 = true;
         } else {

@@ -71,7 +71,9 @@ static emxArray_int32_T *argInit_Unboundedx2_int32_T(void);
 static emxArray_int32_T *argInit_Unboundedx4_int32_T(void);
 static emxArray_int32_T *argInit_Unboundedx5_int32_T(void);
 static emxArray_int32_T *argInit_Unboundedx7_int32_T(void);
+static emxArray_int32_T *argInit_Unboundedx8_int32_T(void);
 static emxArray_real_T *argInit_Unboundedx9_real_T(void);
+static boolean_T argInit_boolean_T(void);
 static int argInit_int32_T(void);
 static double argInit_real_T(void);
 static emxArray_int32_T *c_argInit_UnboundedxUnbounded_i(void);
@@ -178,13 +180,13 @@ static emxArray_int32_T *argInit_6xUnbounded_int32_T(void)
 static emxArray_int32_T *argInit_Unboundedx1_int32_T(void)
 {
   emxArray_int32_T *result;
-  static int iv16[1] = { 2 };
+  static int iv6[1] = { 2 };
 
   int idx0;
 
   /* Set the size of the array.
      Change this size to the value that the application requires. */
-  result = emxCreateND_int32_T(1, iv16);
+  result = emxCreateND_int32_T(1, iv6);
 
   /* Loop over the array to initialize each element. */
   for (idx0 = 0; idx0 < result->size[0U]; idx0++) {
@@ -199,13 +201,13 @@ static emxArray_int32_T *argInit_Unboundedx1_int32_T(void)
 static emxArray_real_T *argInit_Unboundedx1_real_T(void)
 {
   emxArray_real_T *result;
-  static int iv15[1] = { 2 };
+  static int iv5[1] = { 2 };
 
   int idx0;
 
   /* Set the size of the array.
      Change this size to the value that the application requires. */
-  result = emxCreateND_real_T(1, iv15);
+  result = emxCreateND_real_T(1, iv5);
 
   /* Loop over the array to initialize each element. */
   for (idx0 = 0; idx0 < result->size[0U]; idx0++) {
@@ -221,7 +223,7 @@ static emxArray_int32_T *argInit_Unboundedx2_int32_T(void)
 {
   emxArray_int32_T *result;
   int idx0;
-  int i68;
+  int i76;
 
   /* Set the size of the array.
      Change this size to the value that the application requires. */
@@ -231,12 +233,12 @@ static emxArray_int32_T *argInit_Unboundedx2_int32_T(void)
   for (idx0 = 0; idx0 < result->size[0U]; idx0++) {
     /* Set the value of the array element.
        Change this value to the value that the application requires. */
-    i68 = argInit_int32_T();
-    result->data[idx0] = i68;
+    i76 = argInit_int32_T();
+    result->data[idx0] = i76;
 
     /* Set the value of the array element.
        Change this value to the value that the application requires. */
-    result->data[idx0 + result->size[0]] = i68;
+    result->data[idx0 + result->size[0]] = i76;
   }
 
   return result;
@@ -246,7 +248,7 @@ static emxArray_int32_T *argInit_Unboundedx4_int32_T(void)
 {
   emxArray_int32_T *result;
   int idx0;
-  int i67;
+  int i75;
 
   /* Set the size of the array.
      Change this size to the value that the application requires. */
@@ -256,12 +258,12 @@ static emxArray_int32_T *argInit_Unboundedx4_int32_T(void)
   for (idx0 = 0; idx0 < result->size[0U]; idx0++) {
     /* Set the value of the array element.
        Change this value to the value that the application requires. */
-    i67 = argInit_int32_T();
-    result->data[idx0] = i67;
+    i75 = argInit_int32_T();
+    result->data[idx0] = i75;
 
     /* Set the value of the array element.
        Change this value to the value that the application requires. */
-    result->data[idx0 + result->size[0]] = i67;
+    result->data[idx0 + result->size[0]] = i75;
 
     /* Set the value of the array element.
        Change this value to the value that the application requires. */
@@ -319,6 +321,28 @@ static emxArray_int32_T *argInit_Unboundedx7_int32_T(void)
   return result;
 }
 
+static emxArray_int32_T *argInit_Unboundedx8_int32_T(void)
+{
+  emxArray_int32_T *result;
+  int idx0;
+  int idx1;
+
+  /* Set the size of the array.
+     Change this size to the value that the application requires. */
+  result = emxCreate_int32_T(2, 8);
+
+  /* Loop over the array to initialize each element. */
+  for (idx0 = 0; idx0 < result->size[0U]; idx0++) {
+    for (idx1 = 0; idx1 < 8; idx1++) {
+      /* Set the value of the array element.
+         Change this value to the value that the application requires. */
+      result->data[idx0 + result->size[0] * idx1] = argInit_int32_T();
+    }
+  }
+
+  return result;
+}
+
 static emxArray_real_T *argInit_Unboundedx9_real_T(void)
 {
   emxArray_real_T *result;
@@ -339,6 +363,11 @@ static emxArray_real_T *argInit_Unboundedx9_real_T(void)
   }
 
   return result;
+}
+
+static boolean_T argInit_boolean_T(void)
+{
+  return false;
 }
 
 static int argInit_int32_T(void)
@@ -441,13 +470,18 @@ static void main_Edade(void)
 static void main_PLOTT_func(void)
 {
   emxArray_real_T *trace;
+  emxArray_int32_T *bestexperimento;
 
   /* Initialize function 'PLOTT_func' input arguments. */
   /* Initialize function input argument 'trace'. */
   trace = argInit_Unboundedx9_real_T();
 
+  /* Initialize function input argument 'bestexperimento'. */
+  bestexperimento = argInit_Unboundedx1_int32_T();
+
   /* Call the entry-point 'PLOTT_func'. */
-  PLOTT_func(trace);
+  PLOTT_func(trace, bestexperimento);
+  emxDestroyArray_int32_T(bestexperimento);
   emxDestroyArray_real_T(trace);
 }
 
@@ -557,8 +591,8 @@ static void main_aevSPLap(void)
   aevSPLap(NumTOp_tmp, NumTOp_tmp, numIQ, taxC_tmp, taxC_tmp, taxEQ, NumRec,
            PCPrO, PME, PMA, PMAn, PS, PCPO, PCR, Dia, Data, TimeUsoRec, ProbXEst,
            fitnessB, generations, genToWidth, DispMExD, EP, argInit_real_T(),
-           argInit_real_T(), argInit_real_T(), argInit_real_T(), bestexperimento,
-           trace);
+           argInit_real_T(), argInit_real_T(), argInit_real_T(),
+           argInit_boolean_T(), bestexperimento, trace);
   emxDestroyArray_real_T(trace);
   emxDestroyArray_int32_T(bestexperimento);
   emxDestroyArray_real_T(EP);
@@ -1155,8 +1189,115 @@ static void main_funcionRP(void)
 
 static void main_main_UCI_func(void)
 {
+  emxArray_int32_T *CP;
+  emxArray_int32_T *RO;
+  emxArray_int32_T *CPO;
+  emxArray_int32_T *CPrO;
+  emxArray_int32_T *CR;
+  emxArray_int32_T *Data;
+  emxArray_int32_T *Dia;
+  emxArray_int32_T *DispMExD;
+  emxArray_int32_T *MA;
+  emxArray_int32_T *MAn;
+  emxArray_int32_T *ME;
+  emxArray_int32_T *S;
+  int TipoOp_tmp;
+  int NumTOp;
+  int NumSalOp;
+  int NumCPO;
+  int NumCPrO;
+  int NumCR;
+  int NumMedEsp;
+  int NumEspxE;
+  int NumAsist;
+  int NumAnest;
+  double k0_tmp;
+  double k2;
+  double k3;
+  int numIQ;
+  int numIC;
+  double taxC;
+  double taxE;
+  double taxEQ;
+  emxArray_real_T *ProbXEst;
+
+  /* Initialize function 'main_UCI_func' input arguments. */
+  /* Initialize function input argument 'CP'. */
+  CP = argInit_Unboundedx8_int32_T();
+
+  /* Initialize function input argument 'RO'. */
+  RO = argInit_Unboundedx7_int32_T();
+
+  /* Initialize function input argument 'CPO'. */
+  CPO = c_argInit_UnboundedxUnbounded_i();
+
+  /* Initialize function input argument 'CPrO'. */
+  CPrO = c_argInit_UnboundedxUnbounded_i();
+
+  /* Initialize function input argument 'CR'. */
+  CR = c_argInit_UnboundedxUnbounded_i();
+
+  /* Initialize function input argument 'Data'. */
+  Data = argInit_Unboundedx5_int32_T();
+
+  /* Initialize function input argument 'Dia'. */
+  Dia = argInit_Unboundedx4_int32_T();
+
+  /* Initialize function input argument 'DispMExD'. */
+  DispMExD = argInit_6xUnbounded_int32_T();
+
+  /* Initialize function input argument 'MA'. */
+  MA = c_argInit_UnboundedxUnbounded_i();
+
+  /* Initialize function input argument 'MAn'. */
+  MAn = c_argInit_UnboundedxUnbounded_i();
+
+  /* Initialize function input argument 'ME'. */
+  ME = c_argInit_UnboundedxUnbounded_i();
+
+  /* Initialize function input argument 'S'. */
+  S = c_argInit_UnboundedxUnbounded_i();
+  TipoOp_tmp = argInit_int32_T();
+  NumTOp = argInit_int32_T();
+  NumSalOp = argInit_int32_T();
+  NumCPO = argInit_int32_T();
+  NumCPrO = argInit_int32_T();
+  NumCR = argInit_int32_T();
+  NumMedEsp = argInit_int32_T();
+  NumEspxE = argInit_int32_T();
+  NumAsist = argInit_int32_T();
+  NumAnest = argInit_int32_T();
+  k0_tmp = argInit_real_T();
+  k2 = argInit_real_T();
+  k3 = argInit_real_T();
+  numIQ = argInit_int32_T();
+  numIC = argInit_int32_T();
+  taxC = argInit_real_T();
+  taxE = argInit_real_T();
+  taxEQ = argInit_real_T();
+
+  /* Initialize function input argument 'ProbXEst'. */
+  ProbXEst = argInit_Unboundedx1_real_T();
+
   /* Call the entry-point 'main_UCI_func'. */
-  main_UCI_func();
+  main_UCI_func(CP, RO, CPO, CPrO, CR, Data, Dia, DispMExD, MA, MAn, ME, S,
+                TipoOp_tmp, TipoOp_tmp, NumTOp, NumSalOp, NumCPO, NumCPrO, NumCR,
+                NumMedEsp, NumEspxE, NumAsist, NumAnest, k0_tmp, k0_tmp, k2, k3,
+                numIQ, numIC, taxC, taxE, taxEQ, ProbXEst, argInit_int32_T(),
+                argInit_int32_T(), argInit_boolean_T());
+  emxDestroyArray_real_T(ProbXEst);
+  emxDestroyArray_int32_T(S);
+  emxDestroyArray_int32_T(ME);
+  emxDestroyArray_int32_T(MAn);
+  emxDestroyArray_int32_T(MA);
+  emxDestroyArray_int32_T(DispMExD);
+  emxDestroyArray_int32_T(Dia);
+  emxDestroyArray_int32_T(Data);
+  emxDestroyArray_int32_T(CR);
+  emxDestroyArray_int32_T(CPrO);
+  emxDestroyArray_int32_T(CPO);
+  emxDestroyArray_int32_T(RO);
+  emxDestroyArray_int32_T(CP);
 }
 
 static void main_obsIQ(void)
@@ -1177,10 +1318,10 @@ static void main_obsIQ(void)
 
 static void main_obsIQini(void)
 {
-  emxArray_real_T *newIC;
+  emxArray_int32_T *newIC;
   emxArray_real_T *IQ;
   double dv7[5];
-  emxInitArray_real_T(&newIC, 2);
+  emxInitArray_int32_T(&newIC, 2);
 
   /* Initialize function 'obsIQini' input arguments. */
   /* Initialize function input argument 'IQ'. */
@@ -1190,7 +1331,7 @@ static void main_obsIQini(void)
   /* Call the entry-point 'obsIQini'. */
   argInit_5x1_real_T(dv7);
   obsIQini(IQ, argInit_int32_T(), argInit_int32_T(), dv7, newIC);
-  emxDestroyArray_real_T(newIC);
+  emxDestroyArray_int32_T(newIC);
   emxDestroyArray_real_T(IQ);
 }
 
@@ -1294,26 +1435,26 @@ int main(int argc, const char * const argv[])
 
   /* Invoke the entry-point functions.
      You can call entry-point functions multiple times. */
-  //main_actIQ();
-  //main_aevSPLap();
-  //main_BDCreator_func();
-  //main_Calendario();
-  //main_casorandom();
-  //main_cc();
-  //main_Codificacion_de_dias_func();
-  //main_CreaPoQunniforme();
-  //main_Edade();
-  //main_favalia();
-  //main_funcionC();
-  //main_funcionCPrO();
-  //main_funcionCR();
-  //main_funcionDia();
-  //main_funcionRP();
+  main_actIQ();
+  main_aevSPLap();
+  main_BDCreator_func();
+  main_Calendario();
+  main_casorandom();
+  main_cc();
+  main_Codificacion_de_dias_func();
+  main_CreaPoQunniforme();
+  main_Edade();
+  main_favalia();
+  main_funcionC();
+  main_funcionCPrO();
+  main_funcionCR();
+  main_funcionDia();
+  main_funcionRP();
   main_main_UCI_func();
-  //main_obsIQ();
-  //main_obsIQini();
-  //main_PLOTT_func();
-  //main_sch();
+  main_obsIQ();
+  main_obsIQini();
+  main_PLOTT_func();
+  main_sch();
 
   /* Terminate the application.
      You do not need to do this more than one time. */

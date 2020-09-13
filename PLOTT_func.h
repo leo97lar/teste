@@ -19,7 +19,8 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void PLOTT_func(const emxArray_real_T *trace);
+extern void PLOTT_func(const emxArray_real_T *trace, const emxArray_int32_T
+  *bestexperimento);
 
 #endif
 

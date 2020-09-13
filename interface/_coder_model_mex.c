@@ -28,11 +28,11 @@ static void CreaPoQunniforme_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T
 static void Edade_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
   const mxArray *prhs[3]);
 static void PLOTT_func_mexFunction(int32_T nlhs, int32_T nrhs, const mxArray
-  *prhs[1]);
+  *prhs[2]);
 static void actIQ_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
   const mxArray *prhs[3]);
 static void aevSPLap_mexFunction(int32_T nlhs, mxArray *plhs[2], int32_T nrhs,
-  const mxArray *prhs[27]);
+  const mxArray *prhs[28]);
 static void c_Codificacion_de_dias_func_mex(int32_T nlhs, int32_T nrhs);
 static void casorandom_mexFunction(int32_T nlhs, mxArray *plhs[3], int32_T nrhs,
   const mxArray *prhs[14]);
@@ -49,7 +49,8 @@ static void funcionDia_mexFunction(int32_T nlhs, mxArray *plhs[3], int32_T nrhs,
   const mxArray *prhs[8]);
 static void funcionRP_mexFunction(int32_T nlhs, mxArray *plhs[18], int32_T nrhs,
   const mxArray *prhs[32]);
-static void main_UCI_func_mexFunction(int32_T nlhs, int32_T nrhs);
+static void main_UCI_func_mexFunction(int32_T nlhs, int32_T nrhs, const mxArray *
+  prhs[36]);
 static void obsIQ_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
   const mxArray *prhs[3]);
 static void obsIQini_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
@@ -176,7 +177,7 @@ static void Edade_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
 }
 
 static void PLOTT_func_mexFunction(int32_T nlhs, int32_T nrhs, const mxArray
-  *prhs[1])
+  *prhs[2])
 {
   emlrtStack st = { NULL,              /* site */
     NULL,                              /* tls */
@@ -186,8 +187,8 @@ static void PLOTT_func_mexFunction(int32_T nlhs, int32_T nrhs, const mxArray
   st.tls = emlrtRootTLSGlobal;
 
   /* Check for proper number of arguments. */
-  if (nrhs != 1) {
-    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 1, 4,
+  if (nrhs != 2) {
+    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 2, 4,
                         10, "PLOTT_func");
   }
 
@@ -230,7 +231,7 @@ static void actIQ_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
 }
 
 static void aevSPLap_mexFunction(int32_T nlhs, mxArray *plhs[2], int32_T nrhs,
-  const mxArray *prhs[27])
+  const mxArray *prhs[28])
 {
   const mxArray *outputs[2];
   int32_T b_nlhs;
@@ -242,8 +243,8 @@ static void aevSPLap_mexFunction(int32_T nlhs, mxArray *plhs[2], int32_T nrhs,
   st.tls = emlrtRootTLSGlobal;
 
   /* Check for proper number of arguments. */
-  if (nrhs != 27) {
-    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 27, 4,
+  if (nrhs != 28) {
+    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 28, 4,
                         8, "aevSPLap");
   }
 
@@ -558,7 +559,8 @@ static void funcionRP_mexFunction(int32_T nlhs, mxArray *plhs[18], int32_T nrhs,
   emlrtReturnArrays(b_nlhs, plhs, outputs);
 }
 
-static void main_UCI_func_mexFunction(int32_T nlhs, int32_T nrhs)
+static void main_UCI_func_mexFunction(int32_T nlhs, int32_T nrhs, const mxArray *
+  prhs[36])
 {
   emlrtStack st = { NULL,              /* site */
     NULL,                              /* tls */
@@ -568,8 +570,8 @@ static void main_UCI_func_mexFunction(int32_T nlhs, int32_T nrhs)
   st.tls = emlrtRootTLSGlobal;
 
   /* Check for proper number of arguments. */
-  if (nrhs != 0) {
-    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 0, 4,
+  if (nrhs != 36) {
+    emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:WrongNumberOfInputs", 5, 12, 36, 4,
                         13, "main_UCI_func");
   }
 
@@ -579,7 +581,7 @@ static void main_UCI_func_mexFunction(int32_T nlhs, int32_T nrhs)
   }
 
   /* Call the function. */
-  main_UCI_func_api(nlhs);
+  main_UCI_func_api(prhs, nlhs);
 }
 
 static void obsIQ_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T nrhs,
@@ -698,7 +700,7 @@ void mexFunction(int32_T nlhs, mxArray *plhs[], int32_T nrhs, const mxArray
     break;
 
    case 1:
-    aevSPLap_mexFunction(nlhs, plhs, nrhs - 1, *(const mxArray *(*)[27])&prhs[1]);
+    aevSPLap_mexFunction(nlhs, plhs, nrhs - 1, *(const mxArray *(*)[28])&prhs[1]);
     break;
 
    case 2:
@@ -757,7 +759,7 @@ void mexFunction(int32_T nlhs, mxArray *plhs[], int32_T nrhs, const mxArray
     break;
 
    case 15:
-    main_UCI_func_mexFunction(nlhs, nrhs - 1);
+    main_UCI_func_mexFunction(nlhs, nrhs - 1, *(const mxArray *(*)[36])&prhs[1]);
     break;
 
    case 16:
@@ -769,7 +771,7 @@ void mexFunction(int32_T nlhs, mxArray *plhs[], int32_T nrhs, const mxArray
     break;
 
    case 18:
-    PLOTT_func_mexFunction(nlhs, nrhs - 1, *(const mxArray *(*)[1])&prhs[1]);
+    PLOTT_func_mexFunction(nlhs, nrhs - 1, *(const mxArray *(*)[2])&prhs[1]);
     break;
 
    case 19:

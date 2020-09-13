@@ -88,37 +88,4 @@ double b_std(const emxArray_real_T *x)
   return y;
 }
 
-double c_std(const double x[20])
-{
-  double y;
-  double xbar;
-  int k;
-  double scale;
-  double d17;
-  double t;
-  xbar = x[0];
-  for (k = 0; k < 19; k++) {
-    xbar += x[k + 1];
-  }
-
-  xbar /= 20.0;
-  y = 0.0;
-  scale = 3.3121686421112381E-170;
-  for (k = 0; k < 20; k++) {
-    d17 = fabs(x[k] - xbar);
-    if (d17 > scale) {
-      t = scale / d17;
-      y = 1.0 + y * t * t;
-      scale = d17;
-    } else {
-      t = d17 / scale;
-      y += t * t;
-    }
-  }
-
-  y = scale * sqrt(y);
-  y /= 4.358898943540674;
-  return y;
-}
-
 /* End of code generation (std.c) */

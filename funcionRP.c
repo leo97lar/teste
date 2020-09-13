@@ -50,7 +50,7 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
                emxArray_int32_T *EA, emxArray_int32_T *AA, emxArray_int32_T *AnA,
                int *EndRPxD)
 {
-  int i88;
+  int i96;
   emxArray_int32_T *sortA;
   emxArray_int32_T *AnDisp;
   emxArray_int32_T *allAn;
@@ -60,10 +60,10 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
   emxArray_int32_T *iidx;
   emxArray_int32_T *b_DispME;
   double y;
-  double d30;
+  double d34;
   int exitg1;
   int loop_ub;
-  int i89;
+  int i97;
   int idx;
   int jj;
   boolean_T exitg2;
@@ -72,15 +72,15 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
 
   /*  funcionRP: Funcion recursos paralelos. */
   /*  Asigna los recursos paralelos a utilizar en la Operacion (ME,MA,MAN,S). */
-  i88 = EA->size[0] * EA->size[1];
+  i96 = EA->size[0] * EA->size[1];
   EA->size[0] = 1;
   EA->size[1] = 1;
-  emxEnsureCapacity_int32_T(EA, i88);
+  emxEnsureCapacity_int32_T(EA, i96);
   EA->data[0] = 0;
-  i88 = SA->size[0] * SA->size[1];
+  i96 = SA->size[0] * SA->size[1];
   SA->size[0] = 1;
   SA->size[1] = 1;
-  emxEnsureCapacity_int32_T(SA, i88);
+  emxEnsureCapacity_int32_T(SA, i96);
   SA->data[0] = 0;
   emxInit_int32_T(&sortA, 2);
   emxInit_int32_T(&AnDisp, 2);
@@ -90,12 +90,12 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
   emxInit_int32_T(&j, 2);
   emxInit_int32_T(&iidx, 2);
   emxInit_int32_T(&b_DispME, 2);
-  y = d_sum(*(int (*)[3])&NumRec[0]) + 1.0;
-  d30 = f_sum(*(int (*)[4])&NumRec[0]);
-  if (y > d30) {
-    i88 = -1;
+  y = e_sum(*(int (*)[3])&NumRec[0]) + 1.0;
+  d34 = g_sum(*(int (*)[4])&NumRec[0]);
+  if (y > d34) {
+    i96 = -1;
   } else {
-    i88 = (int)y - 2;
+    i96 = (int)y - 2;
   }
 
   do {
@@ -108,12 +108,12 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
       loop_ub = PMA->size[1] - 1;
     }
 
-    i89 = x->size[0] * x->size[1];
+    i97 = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = loop_ub;
-    emxEnsureCapacity_boolean_T(x, i89);
-    for (i89 = 0; i89 < loop_ub; i89++) {
-      x->data[i89] = (PMA->data[i89] != 0);
+    emxEnsureCapacity_boolean_T(x, i97);
+    for (i97 = 0; i97 < loop_ub; i97++) {
+      x->data[i97] = (PMA->data[i97] != 0);
     }
 
     if (x->size[1] == 0) {
@@ -121,10 +121,10 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
       j->size[1] = 0;
     } else {
       idx = 0;
-      i89 = j->size[0] * j->size[1];
+      i97 = j->size[0] * j->size[1];
       j->size[0] = 1;
       j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i89);
+      emxEnsureCapacity_int32_T(j, i97);
       jj = 1;
       exitg2 = false;
       while ((!exitg2) && (jj <= x->size[1])) {
@@ -149,30 +149,30 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
       } else if (1 > idx) {
         j->size[1] = 0;
       } else {
-        i89 = j->size[0] * j->size[1];
+        i97 = j->size[0] * j->size[1];
         j->size[1] = idx;
-        emxEnsureCapacity_int32_T(j, i89);
+        emxEnsureCapacity_int32_T(j, i97);
       }
     }
 
-    i89 = sortA->size[0] * sortA->size[1];
+    i97 = sortA->size[0] * sortA->size[1];
     sortA->size[0] = 1;
     sortA->size[1] = j->size[1];
-    emxEnsureCapacity_int32_T(sortA, i89);
+    emxEnsureCapacity_int32_T(sortA, i97);
     loop_ub = j->size[0] * j->size[1];
-    for (i89 = 0; i89 < loop_ub; i89++) {
-      sortA->data[i89] = j->data[i89];
+    for (i97 = 0; i97 < loop_ub; i97++) {
+      sortA->data[i97] = j->data[i97];
     }
 
     /*  Busco los posibles Asistentes a usar. */
-    i89 = x->size[0] * x->size[1];
+    i97 = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = sortA->size[1];
-    emxEnsureCapacity_boolean_T(x, i89);
+    emxEnsureCapacity_boolean_T(x, i97);
     loop_ub = sortA->size[1];
-    for (i89 = 0; i89 < loop_ub; i89++) {
-      x->data[i89] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0] *
-        (i88 + sortA->data[i89])) - 1] <= *EndCPrOAxD);
+    for (i97 = 0; i97 < loop_ub; i97++) {
+      x->data[i97] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0] *
+        (i96 + sortA->data[i97])) - 1] <= *EndCPrOAxD);
     }
 
     if (x->size[1] == 0) {
@@ -180,10 +180,10 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
       j->size[1] = 0;
     } else {
       idx = 0;
-      i89 = j->size[0] * j->size[1];
+      i97 = j->size[0] * j->size[1];
       j->size[0] = 1;
       j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i89);
+      emxEnsureCapacity_int32_T(j, i97);
       jj = 1;
       exitg2 = false;
       while ((!exitg2) && (jj <= x->size[1])) {
@@ -208,19 +208,19 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
       } else if (1 > idx) {
         j->size[1] = 0;
       } else {
-        i89 = j->size[0] * j->size[1];
+        i97 = j->size[0] * j->size[1];
         j->size[1] = idx;
-        emxEnsureCapacity_int32_T(j, i89);
+        emxEnsureCapacity_int32_T(j, i97);
       }
     }
 
-    i89 = AnDisp->size[0] * AnDisp->size[1];
+    i97 = AnDisp->size[0] * AnDisp->size[1];
     AnDisp->size[0] = 1;
     AnDisp->size[1] = j->size[1];
-    emxEnsureCapacity_int32_T(AnDisp, i89);
+    emxEnsureCapacity_int32_T(AnDisp, i97);
     loop_ub = j->size[0] * j->size[1];
-    for (i89 = 0; i89 < loop_ub; i89++) {
-      AnDisp->data[i89] = j->data[i89];
+    for (i97 = 0; i97 < loop_ub; i97++) {
+      AnDisp->data[i97] = j->data[i97];
     }
 
     /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
@@ -228,9 +228,9 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
       NumRec[3];
     if (y + 1.0 > ((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2])
                    + (double)NumRec[3]) + (double)NumRec[4]) {
-      i89 = -1;
+      i97 = -1;
     } else {
-      i89 = (int)(y + 1.0) - 2;
+      i97 = (int)(y + 1.0) - 2;
     }
 
     /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los An. */
@@ -304,7 +304,7 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
     loop_ub = allAn->size[1];
     for (b_CRA = 0; b_CRA < loop_ub; b_CRA++) {
       x->data[b_CRA] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0] *
-        (i89 + allAn->data[b_CRA])) - 1] <= *EndCPrOAxD);
+        (i97 + allAn->data[b_CRA])) - 1] <= *EndCPrOAxD);
     }
 
     if (x->size[1] == 0) {
@@ -358,22 +358,22 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
     /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
     if ((AnDisp->size[1] < PMA->data[PMA->size[1] - 1]) || (An->size[1] <
          PMAn->data[PMAn->size[1] - 1])) {
-      i89 = iidx->size[0] * iidx->size[1];
+      i97 = iidx->size[0] * iidx->size[1];
       iidx->size[0] = 1;
       iidx->size[1] = tempUltPosRecXDia->size[1];
-      emxEnsureCapacity_int32_T(iidx, i89);
+      emxEnsureCapacity_int32_T(iidx, i97);
       loop_ub = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
-      for (i89 = 0; i89 < loop_ub; i89++) {
-        iidx->data[i89] = tempUltPosRecXDia->data[i89];
+      for (i97 = 0; i97 < loop_ub; i97++) {
+        iidx->data[i97] = tempUltPosRecXDia->data[i97];
       }
 
-      i89 = b_DispME->size[0] * b_DispME->size[1];
+      i97 = b_DispME->size[0] * b_DispME->size[1];
       b_DispME->size[0] = 1;
       b_DispME->size[1] = DispME->size[1];
-      emxEnsureCapacity_int32_T(b_DispME, i89);
+      emxEnsureCapacity_int32_T(b_DispME, i97);
       loop_ub = DispME->size[0] * DispME->size[1];
-      for (i89 = 0; i89 < loop_ub; i89++) {
-        b_DispME->data[i89] = DispME->data[i89];
+      for (i97 = 0; i97 < loop_ub; i97++) {
+        b_DispME->data[i97] = DispME->data[i97];
       }
 
       d_funcionCPrO(NumRec, PCPrO, PME, PMA, PMAn, PS, PCPO, PCR, H, Dia,
@@ -381,20 +381,20 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
                     contDia, iidx, DispMExD, b_DispME, &idx, IniCPrOA, EndCPrOA,
                     EndCPrOAxD, EA, AA, AnA, SA, IniSA, EndSA, &jj, &loop_ub,
                     IniCPOA, EndCPOA, &b_CRA, IniCRA, EndCRA);
-      i89 = CPrOA->size[0] * CPrOA->size[1];
+      i97 = CPrOA->size[0] * CPrOA->size[1];
       CPrOA->size[0] = 1;
       CPrOA->size[1] = 1;
-      emxEnsureCapacity_int32_T(CPrOA, i89);
+      emxEnsureCapacity_int32_T(CPrOA, i97);
       CPrOA->data[0] = idx;
-      i89 = CPOA->size[0] * CPOA->size[1];
+      i97 = CPOA->size[0] * CPOA->size[1];
       CPOA->size[0] = 1;
       CPOA->size[1] = 1;
-      emxEnsureCapacity_int32_T(CPOA, i89);
+      emxEnsureCapacity_int32_T(CPOA, i97);
       CPOA->data[0] = loop_ub;
-      i89 = CRA->size[0] * CRA->size[1];
+      i97 = CRA->size[0] * CRA->size[1];
       CRA->size[0] = 1;
       CRA->size[1] = 1;
-      emxEnsureCapacity_int32_T(CRA, i89);
+      emxEnsureCapacity_int32_T(CRA, i97);
       CRA->data[0] = b_CRA;
     } else {
       exitg1 = 1;
@@ -420,7 +420,7 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
   loop_ub = ADisp->size[1];
   for (b_CRA = 0; b_CRA < loop_ub; b_CRA++) {
     jj = *EndCPrOAxD;
-    idx = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0] * (i88 +
+    idx = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0] * (i96 +
       ADisp->data[b_CRA])) - 1];
     if ((jj >= 0) && (idx < jj - MAX_int32_T)) {
       jj = MAX_int32_T;
@@ -434,13 +434,13 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
   }
 
   d_sort(j, iidx);
-  i88 = sortA->size[0] * sortA->size[1];
+  i96 = sortA->size[0] * sortA->size[1];
   sortA->size[0] = 1;
   sortA->size[1] = iidx->size[1];
-  emxEnsureCapacity_int32_T(sortA, i88);
+  emxEnsureCapacity_int32_T(sortA, i96);
   loop_ub = iidx->size[0] * iidx->size[1];
-  for (i88 = 0; i88 < loop_ub; i88++) {
-    sortA->data[i88] = ADisp->data[iidx->data[i88] - 1];
+  for (i96 = 0; i96 < loop_ub; i96++) {
+    sortA->data[i96] = ADisp->data[iidx->data[i96] - 1];
   }
 
   emxFree_int32_T(&ADisp);
@@ -450,34 +450,34 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
     loop_ub = PMA->data[PMA->size[1] - 1];
   }
 
-  i88 = AA->size[0] * AA->size[1];
+  i96 = AA->size[0] * AA->size[1];
   AA->size[0] = 1;
   AA->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(AA, i88);
-  for (i88 = 0; i88 < loop_ub; i88++) {
-    AA->data[i88] = sortA->data[i88];
+  emxEnsureCapacity_int32_T(AA, i96);
+  for (i96 = 0; i96 < loop_ub; i96++) {
+    AA->data[i96] = sortA->data[i96];
   }
 
-  i88 = AnDisp->size[0] * AnDisp->size[1];
+  i96 = AnDisp->size[0] * AnDisp->size[1];
   AnDisp->size[0] = 1;
   AnDisp->size[1] = An->size[1];
-  emxEnsureCapacity_int32_T(AnDisp, i88);
+  emxEnsureCapacity_int32_T(AnDisp, i96);
   loop_ub = An->size[0] * An->size[1];
-  for (i88 = 0; i88 < loop_ub; i88++) {
-    AnDisp->data[i88] = allAn->data[An->data[i88] - 1];
+  for (i96 = 0; i96 < loop_ub; i96++) {
+    AnDisp->data[i96] = allAn->data[An->data[i96] - 1];
   }
 
   emxFree_int32_T(&An);
   emxFree_int32_T(&allAn);
-  i88 = j->size[0] * j->size[1];
+  i96 = j->size[0] * j->size[1];
   j->size[0] = 1;
   j->size[1] = AnDisp->size[1];
-  emxEnsureCapacity_int32_T(j, i88);
+  emxEnsureCapacity_int32_T(j, i96);
   loop_ub = AnDisp->size[1];
-  for (i88 = 0; i88 < loop_ub; i88++) {
+  for (i96 = 0; i96 < loop_ub; i96++) {
     jj = *EndCPrOAxD;
-    idx = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0] * (i89 +
-      AnDisp->data[i88])) - 1];
+    idx = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0] * (i97 +
+      AnDisp->data[i96])) - 1];
     if ((jj >= 0) && (idx < jj - MAX_int32_T)) {
       jj = MAX_int32_T;
     } else if ((jj < 0) && (idx > jj - MIN_int32_T)) {
@@ -486,18 +486,18 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
       jj -= idx;
     }
 
-    j->data[i88] = jj;
+    j->data[i96] = jj;
   }
 
   d_sort(j, iidx);
-  i88 = sortA->size[0] * sortA->size[1];
+  i96 = sortA->size[0] * sortA->size[1];
   sortA->size[0] = 1;
   sortA->size[1] = iidx->size[1];
-  emxEnsureCapacity_int32_T(sortA, i88);
+  emxEnsureCapacity_int32_T(sortA, i96);
   loop_ub = iidx->size[0] * iidx->size[1];
   emxFree_int32_T(&j);
-  for (i88 = 0; i88 < loop_ub; i88++) {
-    sortA->data[i88] = AnDisp->data[iidx->data[i88] - 1];
+  for (i96 = 0; i96 < loop_ub; i96++) {
+    sortA->data[i96] = AnDisp->data[iidx->data[i96] - 1];
   }
 
   emxFree_int32_T(&iidx);
@@ -508,12 +508,12 @@ void funcionRP(emxArray_int32_T *CPrOA, int *IniCPrOA, int *EndCPrOA, int
     loop_ub = PME->data[PME->size[1] - 1];
   }
 
-  i88 = AnA->size[0] * AnA->size[1];
+  i96 = AnA->size[0] * AnA->size[1];
   AnA->size[0] = 1;
   AnA->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(AnA, i88);
-  for (i88 = 0; i88 < loop_ub; i88++) {
-    AnA->data[i88] = sortA->data[i88];
+  emxEnsureCapacity_int32_T(AnA, i96);
+  for (i96 = 0; i96 < loop_ub; i96++) {
+    AnA->data[i96] = sortA->data[i96];
   }
 
   emxFree_int32_T(&sortA);

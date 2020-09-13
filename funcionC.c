@@ -57,12 +57,12 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
   emxArray_real_T *auxR;
   emxArray_boolean_T *x;
   emxArray_int32_T *j;
-  int i83;
+  int i91;
   int loop_ub;
   int idx;
   int jj;
   boolean_T exitg1;
-  int i84;
+  int i92;
   double y;
   (void)PME;
   (void)PMA;
@@ -97,13 +97,13 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
   emxInit_boolean_T(&x, 2);
   emxInit_int32_T(&j, 2);
   do {
-    i83 = x->size[0] * x->size[1];
+    i91 = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = PCPO->size[1];
-    emxEnsureCapacity_boolean_T(x, i83);
+    emxEnsureCapacity_boolean_T(x, i91);
     loop_ub = PCPO->size[0] * PCPO->size[1];
-    for (i83 = 0; i83 < loop_ub; i83++) {
-      x->data[i83] = (PCPO->data[i83] != 0);
+    for (i91 = 0; i91 < loop_ub; i91++) {
+      x->data[i91] = (PCPO->data[i91] != 0);
     }
 
     if (x->size[1] == 0) {
@@ -111,10 +111,10 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
       j->size[1] = 0;
     } else {
       idx = 0;
-      i83 = j->size[0] * j->size[1];
+      i91 = j->size[0] * j->size[1];
       j->size[0] = 1;
       j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i83);
+      emxEnsureCapacity_int32_T(j, i91);
       jj = 1;
       exitg1 = false;
       while ((!exitg1) && (jj <= x->size[1])) {
@@ -139,19 +139,19 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
       } else if (1 > idx) {
         j->size[1] = 0;
       } else {
-        i83 = j->size[0] * j->size[1];
+        i91 = j->size[0] * j->size[1];
         j->size[1] = idx;
-        emxEnsureCapacity_int32_T(j, i83);
+        emxEnsureCapacity_int32_T(j, i91);
       }
     }
 
-    i83 = C->size[0] * C->size[1];
+    i91 = C->size[0] * C->size[1];
     C->size[0] = 1;
     C->size[1] = j->size[1];
-    emxEnsureCapacity_int32_T(C, i83);
+    emxEnsureCapacity_int32_T(C, i91);
     loop_ub = j->size[0] * j->size[1];
-    for (i83 = 0; i83 < loop_ub; i83++) {
-      C->data[i83] = j->data[i83];
+    for (i91 = 0; i91 < loop_ub; i91++) {
+      C->data[i91] = j->data[i91];
     }
 
     /*  Posibles camas a usar */
@@ -171,36 +171,36 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
     }
 
     if (*IniCPO > *EndCPO) {
-      i83 = 1;
-      i84 = 0;
+      i91 = 1;
+      i92 = 0;
     } else {
-      i83 = *IniCPO;
-      i84 = *EndCPO;
+      i91 = *IniCPO;
+      i92 = *EndCPO;
     }
 
     y = ((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) + (double)
          NumRec[3]) + (double)NumRec[4];
     jj = auxH->size[0] * auxH->size[1];
-    loop_ub = i84 - i83;
+    loop_ub = i92 - i91;
     auxH->size[0] = loop_ub + 1;
     auxH->size[1] = C->size[1];
     emxEnsureCapacity_int32_T(auxH, jj);
     idx = C->size[1];
-    for (i84 = 0; i84 < idx; i84++) {
+    for (i92 = 0; i92 < idx; i92++) {
       for (jj = 0; jj <= loop_ub; jj++) {
-        auxH->data[jj + auxH->size[0] * i84] = H->data[((i83 + jj) + H->size[0] *
-          ((int)(y + (double)C->data[i84]) - 1)) - 1];
+        auxH->data[jj + auxH->size[0] * i92] = H->data[((i91 + jj) + H->size[0] *
+          ((int)(y + (double)C->data[i92]) - 1)) - 1];
       }
     }
 
     n_sum(auxH, auxR);
-    i83 = x->size[0] * x->size[1];
+    i91 = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = auxR->size[1];
-    emxEnsureCapacity_boolean_T(x, i83);
+    emxEnsureCapacity_boolean_T(x, i91);
     loop_ub = auxR->size[0] * auxR->size[1];
-    for (i83 = 0; i83 < loop_ub; i83++) {
-      x->data[i83] = (auxR->data[i83] == 0.0);
+    for (i91 = 0; i91 < loop_ub; i91++) {
+      x->data[i91] = (auxR->data[i91] == 0.0);
     }
 
     if (x->size[1] == 0) {
@@ -208,10 +208,10 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
       j->size[1] = 0;
     } else {
       idx = 0;
-      i83 = j->size[0] * j->size[1];
+      i91 = j->size[0] * j->size[1];
       j->size[0] = 1;
       j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i83);
+      emxEnsureCapacity_int32_T(j, i91);
       jj = 1;
       exitg1 = false;
       while ((!exitg1) && (jj <= x->size[1])) {
@@ -236,28 +236,28 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
       } else if (1 > idx) {
         j->size[1] = 0;
       } else {
-        i83 = j->size[0] * j->size[1];
+        i91 = j->size[0] * j->size[1];
         j->size[1] = idx;
-        emxEnsureCapacity_int32_T(j, i83);
+        emxEnsureCapacity_int32_T(j, i91);
       }
     }
 
-    i83 = auxC->size[0] * auxC->size[1];
+    i91 = auxC->size[0] * auxC->size[1];
     auxC->size[0] = 1;
     auxC->size[1] = j->size[1];
-    emxEnsureCapacity_int32_T(auxC, i83);
+    emxEnsureCapacity_int32_T(auxC, i91);
     loop_ub = j->size[0] * j->size[1];
-    for (i83 = 0; i83 < loop_ub; i83++) {
-      auxC->data[i83] = j->data[i83];
+    for (i91 = 0; i91 < loop_ub; i91++) {
+      auxC->data[i91] = j->data[i91];
     }
 
-    i83 = x->size[0] * x->size[1];
+    i91 = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = PCR->size[1];
-    emxEnsureCapacity_boolean_T(x, i83);
+    emxEnsureCapacity_boolean_T(x, i91);
     loop_ub = PCR->size[0] * PCR->size[1];
-    for (i83 = 0; i83 < loop_ub; i83++) {
-      x->data[i83] = (PCR->data[i83] != 0);
+    for (i91 = 0; i91 < loop_ub; i91++) {
+      x->data[i91] = (PCR->data[i91] != 0);
     }
 
     if (x->size[1] == 0) {
@@ -265,10 +265,10 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
       j->size[1] = 0;
     } else {
       idx = 0;
-      i83 = j->size[0] * j->size[1];
+      i91 = j->size[0] * j->size[1];
       j->size[0] = 1;
       j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i83);
+      emxEnsureCapacity_int32_T(j, i91);
       jj = 1;
       exitg1 = false;
       while ((!exitg1) && (jj <= x->size[1])) {
@@ -293,19 +293,19 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
       } else if (1 > idx) {
         j->size[1] = 0;
       } else {
-        i83 = j->size[0] * j->size[1];
+        i91 = j->size[0] * j->size[1];
         j->size[1] = idx;
-        emxEnsureCapacity_int32_T(j, i83);
+        emxEnsureCapacity_int32_T(j, i91);
       }
     }
 
-    i83 = R->size[0] * R->size[1];
+    i91 = R->size[0] * R->size[1];
     R->size[0] = 1;
     R->size[1] = j->size[1];
-    emxEnsureCapacity_int32_T(R, i83);
+    emxEnsureCapacity_int32_T(R, i91);
     loop_ub = j->size[0] * j->size[1];
-    for (i83 = 0; i83 < loop_ub; i83++) {
-      R->data[i83] = j->data[i83];
+    for (i91 = 0; i91 < loop_ub; i91++) {
+      R->data[i91] = j->data[i91];
     }
 
     /*  Posibles camas a usar */
@@ -314,14 +314,14 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
       y += (double)NumRec[jj + 1];
     }
 
-    i83 = auxH->size[0] * auxH->size[1];
+    i91 = auxH->size[0] * auxH->size[1];
     auxH->size[0] = TimeUsoCR;
     auxH->size[1] = R->size[1];
-    emxEnsureCapacity_int32_T(auxH, i83);
+    emxEnsureCapacity_int32_T(auxH, i91);
     loop_ub = R->size[1];
-    for (i83 = 0; i83 < loop_ub; i83++) {
-      for (i84 = 0; i84 < TimeUsoCR; i84++) {
-        jj = 1 + i84;
+    for (i91 = 0; i91 < loop_ub; i91++) {
+      for (i92 = 0; i92 < TimeUsoCR; i92++) {
+        jj = 1 + i92;
         if ((*EndCPO < 0) && (jj < MIN_int32_T - *EndCPO)) {
           jj = MIN_int32_T;
         } else if ((*EndCPO > 0) && (jj > MAX_int32_T - *EndCPO)) {
@@ -330,19 +330,19 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
           jj += *EndCPO;
         }
 
-        auxH->data[i84 + auxH->size[0] * i83] = H->data[(jj + H->size[0] * ((int)
-          (y + (double)R->data[i83]) - 1)) - 1];
+        auxH->data[i92 + auxH->size[0] * i91] = H->data[(jj + H->size[0] * ((int)
+          (y + (double)R->data[i91]) - 1)) - 1];
       }
     }
 
     n_sum(auxH, auxR);
-    i83 = x->size[0] * x->size[1];
+    i91 = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = auxR->size[1];
-    emxEnsureCapacity_boolean_T(x, i83);
+    emxEnsureCapacity_boolean_T(x, i91);
     loop_ub = auxR->size[0] * auxR->size[1];
-    for (i83 = 0; i83 < loop_ub; i83++) {
-      x->data[i83] = (auxR->data[i83] == 0.0);
+    for (i91 = 0; i91 < loop_ub; i91++) {
+      x->data[i91] = (auxR->data[i91] == 0.0);
     }
 
     if (x->size[1] == 0) {
@@ -350,10 +350,10 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
       j->size[1] = 0;
     } else {
       idx = 0;
-      i83 = j->size[0] * j->size[1];
+      i91 = j->size[0] * j->size[1];
       j->size[0] = 1;
       j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i83);
+      emxEnsureCapacity_int32_T(j, i91);
       jj = 1;
       exitg1 = false;
       while ((!exitg1) && (jj <= x->size[1])) {
@@ -378,19 +378,19 @@ void funcionC(const emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
       } else if (1 > idx) {
         j->size[1] = 0;
       } else {
-        i83 = j->size[0] * j->size[1];
+        i91 = j->size[0] * j->size[1];
         j->size[1] = idx;
-        emxEnsureCapacity_int32_T(j, i83);
+        emxEnsureCapacity_int32_T(j, i91);
       }
     }
 
-    i83 = auxR->size[0] * auxR->size[1];
+    i91 = auxR->size[0] * auxR->size[1];
     auxR->size[0] = 1;
     auxR->size[1] = j->size[1];
-    emxEnsureCapacity_real_T(auxR, i83);
+    emxEnsureCapacity_real_T(auxR, i91);
     loop_ub = j->size[0] * j->size[1];
-    for (i83 = 0; i83 < loop_ub; i83++) {
-      auxR->data[i83] = j->data[i83];
+    for (i91 = 0; i91 < loop_ub; i91++) {
+      auxR->data[i91] = j->data[i91];
     }
 
     /*             [ CPrOA,IniCPrOA, EndCPrOA,EndCPrOAxD,EA,AA,AnA,SA,IniSA,EndSA,EndRPxD,CPOA,IniCPOA,EndCPOA,CRA,IniCRA,EndCRA,contDia ] = ... */

@@ -34,7 +34,29 @@
 #include "model_emxutil.h"
 
 /* Function Definitions */
-void b_repmat(double b[8760])
+void b_repmat(const emxArray_real_T *a, double varargin_2, emxArray_real_T *b)
+{
+  int outsize_idx_0;
+  int jtilecol;
+  int i14;
+  int ibtile;
+  int k;
+  outsize_idx_0 = a->size[0];
+  jtilecol = b->size[0] * b->size[1];
+  b->size[0] = outsize_idx_0;
+  i14 = (int)varargin_2;
+  b->size[1] = i14;
+  emxEnsureCapacity_real_T(b, jtilecol);
+  outsize_idx_0 = a->size[0];
+  for (jtilecol = 0; jtilecol < i14; jtilecol++) {
+    ibtile = jtilecol * outsize_idx_0;
+    for (k = 0; k < outsize_idx_0; k++) {
+      b->data[ibtile + k] = a->data[k];
+    }
+  }
+}
+
+void c_repmat(double b[8760])
 {
   int jcol;
   int ibmat;
@@ -67,7 +89,7 @@ void b_repmat(double b[8760])
   }
 }
 
-void c_repmat(double b[8760])
+void d_repmat(double b[8760])
 {
   int jcol;
   int ibmat;
@@ -97,7 +119,7 @@ void c_repmat(double b[8760])
   }
 }
 
-void d_repmat(double b[17520])
+void e_repmat(double b[17520])
 {
   int jtilecol;
   int ibtile;
@@ -110,7 +132,7 @@ void d_repmat(double b[17520])
   }
 }
 
-void e_repmat(double b[735])
+void f_repmat(double b[735])
 {
   int jtilecol;
   int ibtile;
@@ -123,7 +145,7 @@ void e_repmat(double b[735])
   }
 }
 
-void f_repmat(double b[17520])
+void g_repmat(double b[17520])
 {
   int jcol;
   int ibmat;
@@ -136,7 +158,7 @@ void f_repmat(double b[17520])
   }
 }
 
-void g_repmat(double b[17520])
+void h_repmat(double b[17520])
 {
   int jtilecol;
   int ibtile;
@@ -149,7 +171,7 @@ void g_repmat(double b[17520])
   }
 }
 
-void h_repmat(double b[17520])
+void i_repmat(double b[17520])
 {
   int jcol;
   int ibmat;
@@ -192,24 +214,30 @@ void h_repmat(double b[17520])
   }
 }
 
-void repmat(const emxArray_real_T *a, double varargin_2, emxArray_real_T *b)
+void repmat(const emxArray_real_T *a, int varargin_2, emxArray_real_T *b)
 {
   int outsize_idx_0;
+  int outsize_idx_1;
   int jtilecol;
-  int i7;
   int ibtile;
+  int jcol;
+  int ibmat;
   int k;
   outsize_idx_0 = a->size[0];
+  outsize_idx_1 = a->size[1] * varargin_2;
   jtilecol = b->size[0] * b->size[1];
   b->size[0] = outsize_idx_0;
-  i7 = (int)varargin_2;
-  b->size[1] = i7;
+  b->size[1] = outsize_idx_1;
   emxEnsureCapacity_real_T(b, jtilecol);
   outsize_idx_0 = a->size[0];
-  for (jtilecol = 0; jtilecol < i7; jtilecol++) {
-    ibtile = jtilecol * outsize_idx_0;
-    for (k = 0; k < outsize_idx_0; k++) {
-      b->data[ibtile + k] = a->data[k];
+  outsize_idx_1 = a->size[1];
+  for (jtilecol = 0; jtilecol < varargin_2; jtilecol++) {
+    ibtile = jtilecol * (outsize_idx_0 * outsize_idx_1);
+    for (jcol = 0; jcol < outsize_idx_1; jcol++) {
+      ibmat = ibtile + jcol * outsize_idx_0;
+      for (k = 0; k < outsize_idx_0; k++) {
+        b->data[ibmat + k] = 0.0;
+      }
     }
   }
 }
