@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: CreaPoQunniforme.c
  *
- * CreaPoQunniforme.c
- *
- * Code generation for function 'CreaPoQunniforme'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "CreaPoQunniforme.h"
@@ -19,6 +18,12 @@
 
 /*
  * function [ IQ ] = CreaPoQunniforme( NumTOp,ctdadIQ )
+ * UNTITLED3 Summary of this function goes here
+ *    Detailed explanation goes here
+ * Arguments    : int NumTOp
+ *                int ctdadIQ
+ *                emxArray_real_T *IQ
+ * Return Type  : void
  */
 void CreaPoQunniforme(int NumTOp, int ctdadIQ, emxArray_real_T *IQ)
 {
@@ -32,8 +37,6 @@ void CreaPoQunniforme(int NumTOp, int ctdadIQ, emxArray_real_T *IQ)
   int k;
   emxInit_real_T(&a, 2);
 
-  /* UNTITLED3 Summary of this function goes here */
-  /*    Detailed explanation goes here */
   /* 'CreaPoQunniforme:5' Qini = ones(NumTOp,NumTOp)/double(NumTOp); */
   i14 = a->size[0] * a->size[1];
   a->size[0] = NumTOp;
@@ -70,4 +73,8 @@ void CreaPoQunniforme(int NumTOp, int ctdadIQ, emxArray_real_T *IQ)
   emxFree_real_T(&a);
 }
 
-/* End of code generation (CreaPoQunniforme.c) */
+/*
+ * File trailer for CreaPoQunniforme.c
+ *
+ * [EOF]
+ */

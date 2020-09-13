@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: main_UCI_func.h
  *
- * main_UCI_func.h
- *
- * Code generation for function 'main_UCI_func'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef MAIN_UCI_FUNC_H
 #define MAIN_UCI_FUNC_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -32,4 +31,8 @@ extern void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO
 
 #endif
 
-/* End of code generation (main_UCI_func.h) */
+/*
+ * File trailer for main_UCI_func.h
+ *
+ * [EOF]
+ */

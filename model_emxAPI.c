@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: model_emxAPI.c
  *
- * model_emxAPI.c
- *
- * Code generation for function 'model_emxAPI'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include <stdlib.h>
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
@@ -17,6 +16,12 @@
 #include "model_emxutil.h"
 
 /* Function Definitions */
+
+/*
+ * Arguments    : int numDimensions
+ *                int *size
+ * Return Type  : emxArray_int32_T *
+ */
 emxArray_int32_T *emxCreateND_int32_T(int numDimensions, int *size)
 {
   emxArray_int32_T *emx;
@@ -35,6 +40,11 @@ emxArray_int32_T *emxCreateND_int32_T(int numDimensions, int *size)
   return emx;
 }
 
+/*
+ * Arguments    : int numDimensions
+ *                int *size
+ * Return Type  : emxArray_real_T *
+ */
 emxArray_real_T *emxCreateND_real_T(int numDimensions, int *size)
 {
   emxArray_real_T *emx;
@@ -53,6 +63,12 @@ emxArray_real_T *emxCreateND_real_T(int numDimensions, int *size)
   return emx;
 }
 
+/*
+ * Arguments    : int *data
+ *                int numDimensions
+ *                int *size
+ * Return Type  : emxArray_int32_T *
+ */
 emxArray_int32_T *emxCreateWrapperND_int32_T(int *data, int numDimensions, int
   *size)
 {
@@ -73,6 +89,12 @@ emxArray_int32_T *emxCreateWrapperND_int32_T(int *data, int numDimensions, int
   return emx;
 }
 
+/*
+ * Arguments    : double *data
+ *                int numDimensions
+ *                int *size
+ * Return Type  : emxArray_real_T *
+ */
 emxArray_real_T *emxCreateWrapperND_real_T(double *data, int numDimensions, int *
   size)
 {
@@ -93,6 +115,12 @@ emxArray_real_T *emxCreateWrapperND_real_T(double *data, int numDimensions, int 
   return emx;
 }
 
+/*
+ * Arguments    : int *data
+ *                int rows
+ *                int cols
+ * Return Type  : emxArray_int32_T *
+ */
 emxArray_int32_T *emxCreateWrapper_int32_T(int *data, int rows, int cols)
 {
   emxArray_int32_T *emx;
@@ -106,6 +134,12 @@ emxArray_int32_T *emxCreateWrapper_int32_T(int *data, int rows, int cols)
   return emx;
 }
 
+/*
+ * Arguments    : double *data
+ *                int rows
+ *                int cols
+ * Return Type  : emxArray_real_T *
+ */
 emxArray_real_T *emxCreateWrapper_real_T(double *data, int rows, int cols)
 {
   emxArray_real_T *emx;
@@ -119,6 +153,11 @@ emxArray_real_T *emxCreateWrapper_real_T(double *data, int rows, int cols)
   return emx;
 }
 
+/*
+ * Arguments    : int rows
+ *                int cols
+ * Return Type  : emxArray_int32_T *
+ */
 emxArray_int32_T *emxCreate_int32_T(int rows, int cols)
 {
   emxArray_int32_T *emx;
@@ -133,6 +172,11 @@ emxArray_int32_T *emxCreate_int32_T(int rows, int cols)
   return emx;
 }
 
+/*
+ * Arguments    : int rows
+ *                int cols
+ * Return Type  : emxArray_real_T *
+ */
 emxArray_real_T *emxCreate_real_T(int rows, int cols)
 {
   emxArray_real_T *emx;
@@ -147,24 +191,46 @@ emxArray_real_T *emxCreate_real_T(int rows, int cols)
   return emx;
 }
 
+/*
+ * Arguments    : emxArray_int32_T *emxArray
+ * Return Type  : void
+ */
 void emxDestroyArray_int32_T(emxArray_int32_T *emxArray)
 {
   emxFree_int32_T(&emxArray);
 }
 
+/*
+ * Arguments    : emxArray_real_T *emxArray
+ * Return Type  : void
+ */
 void emxDestroyArray_real_T(emxArray_real_T *emxArray)
 {
   emxFree_real_T(&emxArray);
 }
 
+/*
+ * Arguments    : emxArray_int32_T **pEmxArray
+ *                int numDimensions
+ * Return Type  : void
+ */
 void emxInitArray_int32_T(emxArray_int32_T **pEmxArray, int numDimensions)
 {
   emxInit_int32_T(pEmxArray, numDimensions);
 }
 
+/*
+ * Arguments    : emxArray_real_T **pEmxArray
+ *                int numDimensions
+ * Return Type  : void
+ */
 void emxInitArray_real_T(emxArray_real_T **pEmxArray, int numDimensions)
 {
   emxInit_real_T(pEmxArray, numDimensions);
 }
 
-/* End of code generation (model_emxAPI.c) */
+/*
+ * File trailer for model_emxAPI.c
+ *
+ * [EOF]
+ */

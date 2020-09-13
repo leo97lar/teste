@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: randi.c
  *
- * randi.c
- *
- * Code generation for function 'randi'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include <math.h>
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
@@ -19,7 +18,8 @@
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : void
+ * Return Type  : double
  */
 double b_randi(void)
 {
@@ -29,7 +29,8 @@ double b_randi(void)
 }
 
 /*
- *
+ * Arguments    : double r[2000]
+ * Return Type  : void
  */
 void randi(double r[2000])
 {
@@ -40,4 +41,8 @@ void randi(double r[2000])
   }
 }
 
-/* End of code generation (randi.c) */
+/*
+ * File trailer for randi.c
+ *
+ * [EOF]
+ */

@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: cc.c
  *
- * cc.c
- *
- * Code generation for function 'cc'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include <math.h>
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
@@ -26,6 +25,12 @@
 
 /*
  * function [ newIC ] = cc( IC,numIC,taxC,NumTOp)
+ * Arguments    : const emxArray_int32_T *IC
+ *                int numIC
+ *                double taxC
+ *                int NumTOp
+ *                emxArray_int32_T *newIC
+ * Return Type  : void
  */
 void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
         emxArray_int32_T *newIC)
@@ -469,4 +474,8 @@ void cc(const emxArray_int32_T *IC, int numIC, double taxC, int NumTOp,
   emxFree_int32_T(&escolhido_1);
 }
 
-/* End of code generation (cc.c) */
+/*
+ * File trailer for cc.c
+ *
+ * [EOF]
+ */

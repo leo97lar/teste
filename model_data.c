@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: model_data.c
  *
- * model_data.c
- *
- * Code generation for function 'model_data'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "model_data.h"
@@ -20,4 +19,8 @@ unsigned int state;
 unsigned int b_state[2];
 boolean_T state_not_empty;
 
-/* End of code generation (model_data.c) */
+/*
+ * File trailer for model_data.c
+ *
+ * [EOF]
+ */

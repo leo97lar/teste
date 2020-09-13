@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: Edade.c
  *
- * Edade.c
- *
- * Code generation for function 'Edade'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include <string.h>
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
@@ -22,6 +21,10 @@
 
 /*
  * function [ Edade ] = Edade( min,max,Num )
+ * UNTITLED3 Summary of this function goes here
+ *    Detailed explanation goes here
+ * Arguments    : double b_Edade[2000]
+ * Return Type  : void
  */
 void Edade(double b_Edade[2000])
 {
@@ -86,8 +89,6 @@ void Edade(double b_Edade[2000])
     0.020523138832997986, 0.02072434607645875, 0.020925553319919514,
     0.021126760563380281 };
 
-  /* UNTITLED3 Summary of this function goes here */
-  /*    Detailed explanation goes here */
   /* 'Edade:4' PEd= min:1:max; */
   /* 'Edade:6' CtdPtos = max-min+1; */
   /* 'Edade:8' CtdadXStep= ((CtdPtos-1)*CtdPtos)/2; */
@@ -168,4 +169,8 @@ void Edade(double b_Edade[2000])
   emxFree_real_T(&r1);
 }
 
-/* End of code generation (Edade.c) */
+/*
+ * File trailer for Edade.c
+ *
+ * [EOF]
+ */

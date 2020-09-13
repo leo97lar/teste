@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: obsIQini.c
  *
- * obsIQini.c
- *
- * Code generation for function 'obsIQini'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "obsIQini.h"
@@ -24,6 +23,14 @@
 
 /*
  * function [ newIC ] = obsIQini( IQ,numIQ,numObsIQ,ProbXEst)
+ * UNTITLED7 Summary of this function goes here
+ *    Detailed explanation goes here,
+ * Arguments    : const emxArray_real_T *IQ
+ *                int numIQ
+ *                int numObsIQ
+ *                const emxArray_real_T *ProbXEst
+ *                emxArray_int32_T *newIC
+ * Return Type  : void
  */
 void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
               emxArray_real_T *ProbXEst, emxArray_int32_T *newIC)
@@ -64,8 +71,6 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
   int j;
   emxInit_int32_T(&Lim, 2);
 
-  /* UNTITLED7 Summary of this function goes here */
-  /*    Detailed explanation goes here, */
   /* 'obsIQini:4' numGen=size(IQ,1)/numIQ; */
   numGen = (int)rt_roundd((double)IQ->size[0] / (double)numIQ);
 
@@ -965,4 +970,8 @@ void obsIQini(const emxArray_real_T *IQ, int numIQ, int numObsIQ, const
   emxFree_int32_T(&Lim);
 }
 
-/* End of code generation (obsIQini.c) */
+/*
+ * File trailer for obsIQini.c
+ *
+ * [EOF]
+ */

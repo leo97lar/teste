@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: sortIdx.c
  *
- * sortIdx.c
- *
- * Code generation for function 'sortIdx'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "sortIdx.h"
@@ -34,7 +33,14 @@ static void merge(int idx[2000], double x[2000], int offset, int np, int nq, int
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : emxArray_int32_T *idx
+ *                emxArray_int32_T *x
+ *                int offset
+ *                int np
+ *                int nq
+ *                emxArray_int32_T *iwork
+ *                emxArray_int32_T *xwork
+ * Return Type  : void
  */
 static void b_merge(emxArray_int32_T *idx, emxArray_int32_T *x, int offset, int
                     np, int nq, emxArray_int32_T *iwork, emxArray_int32_T *xwork)
@@ -89,7 +95,14 @@ static void b_merge(emxArray_int32_T *idx, emxArray_int32_T *x, int offset, int
 }
 
 /*
- *
+ * Arguments    : emxArray_int32_T *idx
+ *                emxArray_int32_T *x
+ *                int offset
+ *                int n
+ *                int preSortLevel
+ *                emxArray_int32_T *iwork
+ *                emxArray_int32_T *xwork
+ * Return Type  : void
  */
 static void b_merge_block(emxArray_int32_T *idx, emxArray_int32_T *x, int offset,
   int n, int preSortLevel, emxArray_int32_T *iwork, emxArray_int32_T *xwork)
@@ -125,7 +138,14 @@ static void b_merge_block(emxArray_int32_T *idx, emxArray_int32_T *x, int offset
 }
 
 /*
- *
+ * Arguments    : emxArray_int32_T *idx
+ *                emxArray_real_T *x
+ *                int offset
+ *                int np
+ *                int nq
+ *                emxArray_int32_T *iwork
+ *                emxArray_real_T *xwork
+ * Return Type  : void
  */
 static void c_merge(emxArray_int32_T *idx, emxArray_real_T *x, int offset, int
                     np, int nq, emxArray_int32_T *iwork, emxArray_real_T *xwork)
@@ -180,7 +200,14 @@ static void c_merge(emxArray_int32_T *idx, emxArray_real_T *x, int offset, int
 }
 
 /*
- *
+ * Arguments    : emxArray_int32_T *idx
+ *                emxArray_real_T *x
+ *                int offset
+ *                int n
+ *                int preSortLevel
+ *                emxArray_int32_T *iwork
+ *                emxArray_real_T *xwork
+ * Return Type  : void
  */
 static void c_merge_block(emxArray_int32_T *idx, emxArray_real_T *x, int offset,
   int n, int preSortLevel, emxArray_int32_T *iwork, emxArray_real_T *xwork)
@@ -216,7 +243,14 @@ static void c_merge_block(emxArray_int32_T *idx, emxArray_real_T *x, int offset,
 }
 
 /*
- *
+ * Arguments    : emxArray_int32_T *idx
+ *                emxArray_int32_T *x
+ *                int offset
+ *                int np
+ *                int nq
+ *                emxArray_int32_T *iwork
+ *                emxArray_int32_T *xwork
+ * Return Type  : void
  */
 static void d_merge(emxArray_int32_T *idx, emxArray_int32_T *x, int offset, int
                     np, int nq, emxArray_int32_T *iwork, emxArray_int32_T *xwork)
@@ -271,7 +305,14 @@ static void d_merge(emxArray_int32_T *idx, emxArray_int32_T *x, int offset, int
 }
 
 /*
- *
+ * Arguments    : emxArray_int32_T *idx
+ *                emxArray_int32_T *x
+ *                int offset
+ *                int n
+ *                int preSortLevel
+ *                emxArray_int32_T *iwork
+ *                emxArray_int32_T *xwork
+ * Return Type  : void
  */
 static void d_merge_block(emxArray_int32_T *idx, emxArray_int32_T *x, int offset,
   int n, int preSortLevel, emxArray_int32_T *iwork, emxArray_int32_T *xwork)
@@ -307,7 +348,14 @@ static void d_merge_block(emxArray_int32_T *idx, emxArray_int32_T *x, int offset
 }
 
 /*
- *
+ * Arguments    : int idx[2000]
+ *                double x[2000]
+ *                int offset
+ *                int np
+ *                int nq
+ *                int iwork[2000]
+ *                double xwork[2000]
+ * Return Type  : void
  */
 static void merge(int idx[2000], double x[2000], int offset, int np, int nq, int
                   iwork[2000], double xwork[2000])
@@ -362,7 +410,9 @@ static void merge(int idx[2000], double x[2000], int offset, int np, int nq, int
 }
 
 /*
- *
+ * Arguments    : emxArray_int32_T *x
+ *                emxArray_int32_T *idx
+ * Return Type  : void
  */
 void b_sortIdx(emxArray_int32_T *x, emxArray_int32_T *idx)
 {
@@ -672,7 +722,9 @@ void b_sortIdx(emxArray_int32_T *x, emxArray_int32_T *idx)
 }
 
 /*
- *
+ * Arguments    : emxArray_real_T *x
+ *                emxArray_int32_T *idx
+ * Return Type  : void
  */
 void c_sortIdx(emxArray_real_T *x, emxArray_int32_T *idx)
 {
@@ -971,7 +1023,9 @@ void c_sortIdx(emxArray_real_T *x, emxArray_int32_T *idx)
 }
 
 /*
- *
+ * Arguments    : emxArray_int32_T *x
+ *                emxArray_int32_T *idx
+ * Return Type  : void
  */
 void d_sortIdx(emxArray_int32_T *x, emxArray_int32_T *idx)
 {
@@ -1281,7 +1335,14 @@ void d_sortIdx(emxArray_int32_T *x, emxArray_int32_T *idx)
 }
 
 /*
- *
+ * Arguments    : int idx[2000]
+ *                double x[2000]
+ *                int offset
+ *                int n
+ *                int preSortLevel
+ *                int iwork[2000]
+ *                double xwork[2000]
+ * Return Type  : void
  */
 void merge_block(int idx[2000], double x[2000], int offset, int n, int
                  preSortLevel, int iwork[2000], double xwork[2000])
@@ -1317,7 +1378,9 @@ void merge_block(int idx[2000], double x[2000], int offset, int n, int
 }
 
 /*
- *
+ * Arguments    : const double x[2000]
+ *                int idx[2000]
+ * Return Type  : void
  */
 void sortIdx(const double x[2000], int idx[2000])
 {
@@ -1396,4 +1459,8 @@ void sortIdx(const double x[2000], int idx[2000])
   }
 }
 
-/* End of code generation (sortIdx.c) */
+/*
+ * File trailer for sortIdx.c
+ *
+ * [EOF]
+ */

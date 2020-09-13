@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: model_emxutil.c
  *
- * model_emxutil.c
- *
- * Code generation for function 'model_emxutil'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include <stdlib.h>
 #include <string.h>
 #include "BDCreator_func.h"
@@ -17,6 +16,12 @@
 #include "model_emxutil.h"
 
 /* Function Definitions */
+
+/*
+ * Arguments    : emxArray_boolean_T *emxArray
+ *                int oldNumel
+ * Return Type  : void
+ */
 void emxEnsureCapacity_boolean_T(emxArray_boolean_T *emxArray, int oldNumel)
 {
   int newNumel;
@@ -59,6 +64,11 @@ void emxEnsureCapacity_boolean_T(emxArray_boolean_T *emxArray, int oldNumel)
   }
 }
 
+/*
+ * Arguments    : emxArray_int16_T *emxArray
+ *                int oldNumel
+ * Return Type  : void
+ */
 void emxEnsureCapacity_int16_T(emxArray_int16_T *emxArray, int oldNumel)
 {
   int newNumel;
@@ -101,6 +111,11 @@ void emxEnsureCapacity_int16_T(emxArray_int16_T *emxArray, int oldNumel)
   }
 }
 
+/*
+ * Arguments    : emxArray_int32_T *emxArray
+ *                int oldNumel
+ * Return Type  : void
+ */
 void emxEnsureCapacity_int32_T(emxArray_int32_T *emxArray, int oldNumel)
 {
   int newNumel;
@@ -143,6 +158,11 @@ void emxEnsureCapacity_int32_T(emxArray_int32_T *emxArray, int oldNumel)
   }
 }
 
+/*
+ * Arguments    : emxArray_int8_T *emxArray
+ *                int oldNumel
+ * Return Type  : void
+ */
 void emxEnsureCapacity_int8_T(emxArray_int8_T *emxArray, int oldNumel)
 {
   int newNumel;
@@ -185,6 +205,11 @@ void emxEnsureCapacity_int8_T(emxArray_int8_T *emxArray, int oldNumel)
   }
 }
 
+/*
+ * Arguments    : emxArray_real_T *emxArray
+ *                int oldNumel
+ * Return Type  : void
+ */
 void emxEnsureCapacity_real_T(emxArray_real_T *emxArray, int oldNumel)
 {
   int newNumel;
@@ -227,6 +252,11 @@ void emxEnsureCapacity_real_T(emxArray_real_T *emxArray, int oldNumel)
   }
 }
 
+/*
+ * Arguments    : emxArray_uint32_T *emxArray
+ *                int oldNumel
+ * Return Type  : void
+ */
 void emxEnsureCapacity_uint32_T(emxArray_uint32_T *emxArray, int oldNumel)
 {
   int newNumel;
@@ -269,6 +299,10 @@ void emxEnsureCapacity_uint32_T(emxArray_uint32_T *emxArray, int oldNumel)
   }
 }
 
+/*
+ * Arguments    : emxArray_boolean_T **pEmxArray
+ * Return Type  : void
+ */
 void emxFree_boolean_T(emxArray_boolean_T **pEmxArray)
 {
   if (*pEmxArray != (emxArray_boolean_T *)NULL) {
@@ -283,6 +317,10 @@ void emxFree_boolean_T(emxArray_boolean_T **pEmxArray)
   }
 }
 
+/*
+ * Arguments    : emxArray_int16_T **pEmxArray
+ * Return Type  : void
+ */
 void emxFree_int16_T(emxArray_int16_T **pEmxArray)
 {
   if (*pEmxArray != (emxArray_int16_T *)NULL) {
@@ -296,6 +334,10 @@ void emxFree_int16_T(emxArray_int16_T **pEmxArray)
   }
 }
 
+/*
+ * Arguments    : emxArray_int32_T **pEmxArray
+ * Return Type  : void
+ */
 void emxFree_int32_T(emxArray_int32_T **pEmxArray)
 {
   if (*pEmxArray != (emxArray_int32_T *)NULL) {
@@ -309,6 +351,10 @@ void emxFree_int32_T(emxArray_int32_T **pEmxArray)
   }
 }
 
+/*
+ * Arguments    : emxArray_int8_T **pEmxArray
+ * Return Type  : void
+ */
 void emxFree_int8_T(emxArray_int8_T **pEmxArray)
 {
   if (*pEmxArray != (emxArray_int8_T *)NULL) {
@@ -323,6 +369,10 @@ void emxFree_int8_T(emxArray_int8_T **pEmxArray)
   }
 }
 
+/*
+ * Arguments    : emxArray_real_T **pEmxArray
+ * Return Type  : void
+ */
 void emxFree_real_T(emxArray_real_T **pEmxArray)
 {
   if (*pEmxArray != (emxArray_real_T *)NULL) {
@@ -336,6 +386,10 @@ void emxFree_real_T(emxArray_real_T **pEmxArray)
   }
 }
 
+/*
+ * Arguments    : emxArray_uint32_T **pEmxArray
+ * Return Type  : void
+ */
 void emxFree_uint32_T(emxArray_uint32_T **pEmxArray)
 {
   if (*pEmxArray != (emxArray_uint32_T *)NULL) {
@@ -350,6 +404,11 @@ void emxFree_uint32_T(emxArray_uint32_T **pEmxArray)
   }
 }
 
+/*
+ * Arguments    : emxArray_boolean_T **pEmxArray
+ *                int numDimensions
+ * Return Type  : void
+ */
 void emxInit_boolean_T(emxArray_boolean_T **pEmxArray, int numDimensions)
 {
   emxArray_boolean_T *emxArray;
@@ -366,6 +425,11 @@ void emxInit_boolean_T(emxArray_boolean_T **pEmxArray, int numDimensions)
   }
 }
 
+/*
+ * Arguments    : emxArray_int16_T **pEmxArray
+ *                int numDimensions
+ * Return Type  : void
+ */
 void emxInit_int16_T(emxArray_int16_T **pEmxArray, int numDimensions)
 {
   emxArray_int16_T *emxArray;
@@ -382,6 +446,11 @@ void emxInit_int16_T(emxArray_int16_T **pEmxArray, int numDimensions)
   }
 }
 
+/*
+ * Arguments    : emxArray_int32_T **pEmxArray
+ *                int numDimensions
+ * Return Type  : void
+ */
 void emxInit_int32_T(emxArray_int32_T **pEmxArray, int numDimensions)
 {
   emxArray_int32_T *emxArray;
@@ -398,6 +467,11 @@ void emxInit_int32_T(emxArray_int32_T **pEmxArray, int numDimensions)
   }
 }
 
+/*
+ * Arguments    : emxArray_int8_T **pEmxArray
+ *                int numDimensions
+ * Return Type  : void
+ */
 void emxInit_int8_T(emxArray_int8_T **pEmxArray, int numDimensions)
 {
   emxArray_int8_T *emxArray;
@@ -414,6 +488,11 @@ void emxInit_int8_T(emxArray_int8_T **pEmxArray, int numDimensions)
   }
 }
 
+/*
+ * Arguments    : emxArray_real_T **pEmxArray
+ *                int numDimensions
+ * Return Type  : void
+ */
 void emxInit_real_T(emxArray_real_T **pEmxArray, int numDimensions)
 {
   emxArray_real_T *emxArray;
@@ -430,6 +509,11 @@ void emxInit_real_T(emxArray_real_T **pEmxArray, int numDimensions)
   }
 }
 
+/*
+ * Arguments    : emxArray_uint32_T **pEmxArray
+ *                int numDimensions
+ * Return Type  : void
+ */
 void emxInit_uint32_T(emxArray_uint32_T **pEmxArray, int numDimensions)
 {
   emxArray_uint32_T *emxArray;
@@ -446,4 +530,8 @@ void emxInit_uint32_T(emxArray_uint32_T **pEmxArray, int numDimensions)
   }
 }
 
-/* End of code generation (model_emxutil.c) */
+/*
+ * File trailer for model_emxutil.c
+ *
+ * [EOF]
+ */

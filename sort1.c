@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: sort1.c
  *
- * sort1.c
- *
- * Code generation for function 'sort1'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include <string.h>
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
@@ -20,7 +19,9 @@
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : emxArray_int32_T *x
+ *                emxArray_int32_T *idx
+ * Return Type  : void
  */
 void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 {
@@ -78,7 +79,9 @@ void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 }
 
 /*
- *
+ * Arguments    : emxArray_real_T *x
+ *                emxArray_int32_T *idx
+ * Return Type  : void
  */
 void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
 {
@@ -136,7 +139,9 @@ void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
 }
 
 /*
- *
+ * Arguments    : emxArray_int32_T *x
+ *                emxArray_int32_T *idx
+ * Return Type  : void
  */
 void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 {
@@ -194,7 +199,9 @@ void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 }
 
 /*
- *
+ * Arguments    : double x[2000]
+ *                int idx[2000]
+ * Return Type  : void
  */
 void sort(double x[2000], int idx[2000])
 {
@@ -413,4 +420,8 @@ void sort(double x[2000], int idx[2000])
   merge_block(idx, x, 0, 2000, 8, iwork, xwork);
 }
 
-/* End of code generation (sort1.c) */
+/*
+ * File trailer for sort1.c
+ *
+ * [EOF]
+ */

@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: rand.c
  *
- * rand.c
- *
- * Code generation for function 'rand'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "rand.h"
@@ -27,7 +26,8 @@ static void eml_rand_mt19937ar(unsigned int d_state[625]);
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : unsigned int d_state[625]
+ * Return Type  : double
  */
 static double b_eml_rand_mt19937ar(unsigned int d_state[625])
 {
@@ -131,7 +131,8 @@ static double b_eml_rand_mt19937ar(unsigned int d_state[625])
 }
 
 /*
- *
+ * Arguments    : unsigned int *d_state
+ * Return Type  : double
  */
 static double eml_rand_mcg16807(unsigned int *d_state)
 {
@@ -151,7 +152,8 @@ static double eml_rand_mcg16807(unsigned int *d_state)
 }
 
 /*
- *
+ * Arguments    : unsigned int d_state[625]
+ * Return Type  : void
  */
 static void eml_rand_mt19937ar(unsigned int d_state[625])
 {
@@ -168,7 +170,8 @@ static void eml_rand_mt19937ar(unsigned int d_state[625])
 }
 
 /*
- *
+ * Arguments    : double r[200]
+ * Return Type  : void
  */
 void b_rand(double r[200])
 {
@@ -202,7 +205,8 @@ void b_rand(double r[200])
 }
 
 /*
- *
+ * Arguments    : double r[2000]
+ * Return Type  : void
  */
 void c_rand(double r[2000])
 {
@@ -236,7 +240,8 @@ void c_rand(double r[2000])
 }
 
 /*
- *
+ * Arguments    : void
+ * Return Type  : double
  */
 double d_rand(void)
 {
@@ -266,7 +271,8 @@ double d_rand(void)
 }
 
 /*
- *
+ * Arguments    : double r[15][10]
+ * Return Type  : void
  */
 void e_rand(double r[15][10])
 {
@@ -300,7 +306,8 @@ void e_rand(double r[15][10])
 }
 
 /*
- *
+ * Arguments    : double r[15][15]
+ * Return Type  : void
  */
 void f_rand(double r[15][15])
 {
@@ -334,7 +341,8 @@ void f_rand(double r[15][15])
 }
 
 /*
- *
+ * Arguments    : double r[15][25]
+ * Return Type  : void
  */
 void g_rand(double r[15][25])
 {
@@ -368,7 +376,8 @@ void g_rand(double r[15][25])
 }
 
 /*
- *
+ * Arguments    : double r[15][30]
+ * Return Type  : void
  */
 void h_rand(double r[15][30])
 {
@@ -402,7 +411,9 @@ void h_rand(double r[15][30])
 }
 
 /*
- *
+ * Arguments    : int varargin_2
+ *                emxArray_real_T *r
+ * Return Type  : void
  */
 void i_rand(int varargin_2, emxArray_real_T *r)
 {
@@ -452,7 +463,8 @@ void i_rand(int varargin_2, emxArray_real_T *r)
 }
 
 /*
- *
+ * Arguments    : double r[2]
+ * Return Type  : void
  */
 void j_rand(double r[2])
 {
@@ -488,7 +500,9 @@ void j_rand(double r[2])
 }
 
 /*
- *
+ * Arguments    : int varargin_1
+ *                emxArray_real_T *r
+ * Return Type  : void
  */
 void k_rand(int varargin_1, emxArray_real_T *r)
 {
@@ -534,4 +548,8 @@ void k_rand(int varargin_1, emxArray_real_T *r)
   }
 }
 
-/* End of code generation (rand.c) */
+/*
+ * File trailer for rand.c
+ *
+ * [EOF]
+ */

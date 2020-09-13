@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: model_rtwutil.h
  *
- * model_rtwutil.h
- *
- * Code generation for function 'model_rtwutil'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef MODEL_RTWUTIL_H
 #define MODEL_RTWUTIL_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -24,4 +23,8 @@ extern double rt_roundd(double u);
 
 #endif
 
-/* End of code generation (model_rtwutil.h) */
+/*
+ * File trailer for model_rtwutil.h
+ *
+ * [EOF]
+ */

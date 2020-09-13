@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: repmat.c
  *
- * repmat.c
- *
- * Code generation for function 'repmat'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "repmat.h"
@@ -18,7 +17,10 @@
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : const emxArray_int32_T *a
+ *                int varargin_2
+ *                emxArray_int32_T *b
+ * Return Type  : void
  */
 void b_repmat(const emxArray_int32_T *a, int varargin_2, emxArray_int32_T *b)
 {
@@ -52,7 +54,10 @@ void b_repmat(const emxArray_int32_T *a, int varargin_2, emxArray_int32_T *b)
 }
 
 /*
- *
+ * Arguments    : const emxArray_real_T *a
+ *                double varargin_2
+ *                emxArray_real_T *b
+ * Return Type  : void
  */
 void c_repmat(const emxArray_real_T *a, double varargin_2, emxArray_real_T *b)
 {
@@ -78,7 +83,10 @@ void c_repmat(const emxArray_real_T *a, double varargin_2, emxArray_real_T *b)
 }
 
 /*
- *
+ * Arguments    : const emxArray_real_T *a
+ *                int varargin_2
+ *                emxArray_real_T *b
+ * Return Type  : void
  */
 void repmat(const emxArray_real_T *a, int varargin_2, emxArray_real_T *b)
 {
@@ -111,4 +119,8 @@ void repmat(const emxArray_real_T *a, int varargin_2, emxArray_real_T *b)
   }
 }
 
-/* End of code generation (repmat.c) */
+/*
+ * File trailer for repmat.c
+ *
+ * [EOF]
+ */

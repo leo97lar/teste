@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: nullAssignment.c
  *
- * nullAssignment.c
- *
- * Code generation for function 'nullAssignment'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "nullAssignment.h"
@@ -18,7 +17,9 @@
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : emxArray_int32_T *x
+ *                const emxArray_boolean_T *idx
+ * Return Type  : void
  */
 void nullAssignment(emxArray_int32_T *x, const emxArray_boolean_T *idx)
 {
@@ -66,4 +67,8 @@ void nullAssignment(emxArray_int32_T *x, const emxArray_boolean_T *idx)
   emxFree_int32_T(&b_x);
 }
 
-/* End of code generation (nullAssignment.c) */
+/*
+ * File trailer for nullAssignment.c
+ *
+ * [EOF]
+ */

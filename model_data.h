@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: model_data.h
  *
- * model_data.h
- *
- * Code generation for function 'model_data'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef MODEL_DATA_H
 #define MODEL_DATA_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -26,4 +25,8 @@ extern boolean_T state_not_empty;
 
 #endif
 
-/* End of code generation (model_data.h) */
+/*
+ * File trailer for model_data.h
+ *
+ * [EOF]
+ */

@@ -2,18 +2,23 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: model_rtwutil.c
  *
- * model_rtwutil.c
- *
- * Code generation for function 'model_rtwutil'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include <math.h>
 #include "model_rtwutil.h"
 
 /* Function Definitions */
+
+/*
+ * Arguments    : int numerator
+ *                int denominator
+ * Return Type  : int
+ */
 int div_s32(int numerator, int denominator)
 {
   int quotient;
@@ -50,6 +55,10 @@ int div_s32(int numerator, int denominator)
   return quotient;
 }
 
+/*
+ * Arguments    : double u
+ * Return Type  : double
+ */
 double rt_roundd(double u)
 {
   double y;
@@ -68,4 +77,8 @@ double rt_roundd(double u)
   return y;
 }
 
-/* End of code generation (model_rtwutil.c) */
+/*
+ * File trailer for model_rtwutil.c
+ *
+ * [EOF]
+ */

@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: BDCreator_func.c
  *
- * BDCreator_func.c
- *
- * Code generation for function 'BDCreator_func'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include <math.h>
 #include <string.h>
 #include "BDCreator_func.h"
@@ -28,6 +27,14 @@
 
 /*
  * function BDCreator_func
+ * %% Generar Base de Datos
+ *  Vamos a tener 15 especialidades con diferentes operaciones quirurgicas
+ *  (200 en total) que requieren diferentes tipos de especialistas y
+ *  recursos. Algunas mas complejas que otras. 25 cirujanos especializados en
+ *  una especialidad y con conocimientos suficientes para realizar cirujias
+ *  de otra especialidad. 25 anestesistas y 25 asistentes.
+ * Arguments    : void
+ * Return Type  : void
  */
 void BDCreator_func(void)
 {
@@ -72,12 +79,6 @@ void BDCreator_func(void)
   double l_unusedExpr[15][30];
   double m_unusedExpr[15][10];
 
-  /*     %% Generar Base de Datos */
-  /*  Vamos a tener 15 especialidades con diferentes operaciones quirurgicas */
-  /*  (200 en total) que requieren diferentes tipos de especialistas y */
-  /*  recursos. Algunas mas complejas que otras. 25 cirujanos especializados en */
-  /*  una especialidad y con conocimientos suficientes para realizar cirujias */
-  /*  de otra especialidad. 25 anestesistas y 25 asistentes. */
   /* 'BDCreator_func:9' tic; */
   tic();
 
@@ -440,4 +441,8 @@ void BDCreator_func(void)
   toc();
 }
 
-/* End of code generation (BDCreator_func.c) */
+/*
+ * File trailer for BDCreator_func.c
+ *
+ * [EOF]
+ */

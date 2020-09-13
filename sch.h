@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: sch.h
  *
- * sch.h
- *
- * Code generation for function 'sch'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef SCH_H
 #define SCH_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -31,4 +30,8 @@ extern void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
 
 #endif
 
-/* End of code generation (sch.h) */
+/*
+ * File trailer for sch.h
+ *
+ * [EOF]
+ */

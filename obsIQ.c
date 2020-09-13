@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: obsIQ.c
  *
- * obsIQ.c
- *
- * Code generation for function 'obsIQ'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "obsIQ.h"
@@ -25,6 +24,13 @@
 
 /*
  * function [ newIC ] = obsIQ( IQ,numIQ,numObsIQ )
+ * UNTITLED7 Summary of this function goes here
+ *    Detailed explanation goes here,
+ * Arguments    : const emxArray_real_T *IQ
+ *                int numIQ
+ *                int numObsIQ
+ *                emxArray_int32_T *newIC
+ * Return Type  : void
  */
 void obsIQ(const emxArray_real_T *IQ, int numIQ, int numObsIQ, emxArray_int32_T *
            newIC)
@@ -63,8 +69,6 @@ void obsIQ(const emxArray_real_T *IQ, int numIQ, int numObsIQ, emxArray_int32_T 
   int exitg2;
   emxInit_int32_T(&List, 2);
 
-  /* UNTITLED7 Summary of this function goes here */
-  /*    Detailed explanation goes here, */
   /* 'obsIQ:4' numGen=size(IQ,1)/numIQ; */
   numGen = (int)rt_roundd((double)IQ->size[0] / (double)numIQ);
 
@@ -497,4 +501,8 @@ void obsIQ(const emxArray_real_T *IQ, int numIQ, int numObsIQ, emxArray_int32_T 
   emxFree_int32_T(&List);
 }
 
-/* End of code generation (obsIQ.c) */
+/*
+ * File trailer for obsIQ.c
+ *
+ * [EOF]
+ */

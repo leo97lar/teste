@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: favalia.c
  *
- * favalia.c
- *
- * Code generation for function 'favalia'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "favalia.h"
@@ -19,6 +18,21 @@
 
 /*
  * function [ fitness,Tt,NOFP,TmNOFP,NOE2,NOE3] = favalia( schedule,DiaOp,EP,EspMedOp,k0,k1,k2,k3 )
+ * Arguments    : const emxArray_int32_T *schedule
+ *                const emxArray_int32_T *DiaOp
+ *                const emxArray_int32_T *EP
+ *                emxArray_int32_T *EspMedOp
+ *                double k0
+ *                double k1
+ *                double k2
+ *                double k3
+ *                double *fitness
+ *                double *Tt
+ *                double *NOFP
+ *                double *TmNOFP
+ *                double *NOE2
+ *                double *NOE3
+ * Return Type  : void
  */
 void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
              const emxArray_int32_T *EP, emxArray_int32_T *EspMedOp, double k0,
@@ -372,4 +386,8 @@ void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T *DiaOp,
   emxFree_uint32_T(&aux);
 }
 
-/* End of code generation (favalia.c) */
+/*
+ * File trailer for favalia.c
+ *
+ * [EOF]
+ */

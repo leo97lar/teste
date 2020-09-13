@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: favalia.h
  *
- * favalia.h
- *
- * Code generation for function 'favalia'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef FAVALIA_H
 #define FAVALIA_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -27,4 +26,8 @@ extern void favalia(const emxArray_int32_T *schedule, const emxArray_int32_T
 
 #endif
 
-/* End of code generation (favalia.h) */
+/*
+ * File trailer for favalia.h
+ *
+ * [EOF]
+ */

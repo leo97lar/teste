@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: model_types.h
  *
- * model_types.h
- *
- * Code generation for function 'BDCreator_func'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef MODEL_TYPES_H
 #define MODEL_TYPES_H
 
-/* Include files */
+/* Include Files */
 #include "rtwtypes.h"
 
 /* Type Definitions */
@@ -144,4 +143,8 @@ typedef struct emxArray_uint32_T emxArray_uint32_T;
 #endif                                 /*typedef_emxArray_uint32_T*/
 #endif
 
-/* End of code generation (model_types.h) */
+/*
+ * File trailer for model_types.h
+ *
+ * [EOF]
+ */

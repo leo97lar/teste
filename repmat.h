@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: repmat.h
  *
- * repmat.h
- *
- * Code generation for function 'repmat'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef REPMAT_H
 #define REPMAT_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -27,4 +26,8 @@ extern void repmat(const emxArray_real_T *a, int varargin_2, emxArray_real_T *b)
 
 #endif
 
-/* End of code generation (repmat.h) */
+/*
+ * File trailer for repmat.h
+ *
+ * [EOF]
+ */

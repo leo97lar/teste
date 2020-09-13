@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: rem.c
  *
- * rem.c
- *
- * Code generation for function 'rem'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "rem.h"
@@ -19,7 +18,9 @@
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : int x
+ *                int y
+ * Return Type  : int
  */
 int b_rem(int x, int y)
 {
@@ -33,4 +34,8 @@ int b_rem(int x, int y)
   return r;
 }
 
-/* End of code generation (rem.c) */
+/*
+ * File trailer for rem.c
+ *
+ * [EOF]
+ */

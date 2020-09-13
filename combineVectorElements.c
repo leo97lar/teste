@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: combineVectorElements.c
  *
- * combineVectorElements.c
- *
- * Code generation for function 'combineVectorElements'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "combineVectorElements.h"
@@ -17,7 +16,9 @@
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : const emxArray_real_T *x
+ *                int vlen
+ * Return Type  : double
  */
 double nestedIter(const emxArray_real_T *x, int vlen)
 {
@@ -33,4 +34,8 @@ double nestedIter(const emxArray_real_T *x, int vlen)
   return y;
 }
 
-/* End of code generation (combineVectorElements.c) */
+/*
+ * File trailer for combineVectorElements.c
+ *
+ * [EOF]
+ */

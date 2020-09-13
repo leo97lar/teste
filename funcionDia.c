@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: funcionDia.c
  *
- * funcionDia.c
- *
- * Code generation for function 'funcionDia'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "funcionDia.h"
@@ -19,6 +18,24 @@
 
 /*
  * function [contDia,tempUltPosRecXDia,DispME] = funcionDia( NumRec,PCPrO, Dia,UltPosRecXDia, TimeUsoCPrO, TimeUsoS,contDia,DispMExD)
+ * NumCPrO: Numero de camas PreOperatorias.
+ *  PCPrO: Posibles camas PreOperatorias para esa operacion.
+ *  Dia: Matriz con el cosecutivo de dias y el dia de la semana. Ademas tiene
+ *  los indices donde empieza y termina cada dia de la matriz Data(Ver main_UCI).
+ *  UltPosRecXDia: Ultima posicion asignado del recurso por Dia.
+ *  Time: El tiempo de uso de la Cama PrO mas el tiempo de operacion.
+ *  contDia: Contador de dia.
+ * Arguments    : const int NumRec[7]
+ *                const emxArray_int32_T *PCPrO
+ *                const emxArray_int32_T *Dia
+ *                const emxArray_int32_T *UltPosRecXDia
+ *                int TimeUsoCPrO
+ *                int TimeUsoS
+ *                int *contDia
+ *                const emxArray_int32_T *DispMExD
+ *                emxArray_int32_T *tempUltPosRecXDia
+ *                emxArray_int32_T *DispME
+ * Return Type  : void
  */
 void funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
                 emxArray_int32_T *Dia, const emxArray_int32_T *UltPosRecXDia,
@@ -41,13 +58,6 @@ void funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
   int i46;
   boolean_T exitg2;
 
-  /*  NumCPrO: Numero de camas PreOperatorias. */
-  /*  PCPrO: Posibles camas PreOperatorias para esa operacion. */
-  /*  Dia: Matriz con el cosecutivo de dias y el dia de la semana. Ademas tiene */
-  /*  los indices donde empieza y termina cada dia de la matriz Data(Ver main_UCI). */
-  /*  UltPosRecXDia: Ultima posicion asignado del recurso por Dia. */
-  /*  Time: El tiempo de uso de la Cama PrO mas el tiempo de operacion. */
-  /*  contDia: Contador de dia. */
   /* 'funcionDia:10' tempUltPosRecXDia = zeros(1,NumRec(1), 'int32'); */
   i45 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
   tempUltPosRecXDia->size[0] = 1;
@@ -322,4 +332,8 @@ void funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
   }
 }
 
-/* End of code generation (funcionDia.c) */
+/*
+ * File trailer for funcionDia.c
+ *
+ * [EOF]
+ */

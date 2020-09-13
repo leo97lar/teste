@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: tic.h
  *
- * tic.h
- *
- * Code generation for function 'tic'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef TIC_H
 #define TIC_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -23,4 +22,8 @@ extern void tic(void);
 
 #endif
 
-/* End of code generation (tic.h) */
+/*
+ * File trailer for tic.h
+ *
+ * [EOF]
+ */

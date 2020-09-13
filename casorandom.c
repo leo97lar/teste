@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: casorandom.c
  *
- * casorandom.c
- *
- * Code generation for function 'casorandom'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "casorandom.h"
@@ -21,6 +20,27 @@
 
 /*
  * function [ schedule,DiaOp,EspMedOp ] = casorandom(NumTOp,H,NumRec,PCPrO,PME,PMA,PMAn,PS,PCPO,PCR,Dia,UltPosRecXDia,TimeUsoRec,DispMExD)
+ * UNTITLED4 Summary of this function goes here
+ *    Detailed explanation goes here
+ *     NCPrO  |    NME    |     NS    |     NA    |     NAn    |    NCPO     |   NCR
+ *   Col 1-20 | Col 21-50 | Col 51-62 | Col 63-87 | Col 88-112 | Col 113-132 | Col 133-172
+ * Arguments    : int NumTOp
+ *                emxArray_int32_T *H
+ *                const int NumRec[7]
+ *                const emxArray_int32_T *PCPrO
+ *                const emxArray_int32_T *PME
+ *                const emxArray_int32_T *PMA
+ *                const emxArray_int32_T *PMAn
+ *                const emxArray_int32_T *PS
+ *                const emxArray_int32_T *PCPO
+ *                const emxArray_int32_T *PCR
+ *                const emxArray_int32_T *Dia
+ *                emxArray_int32_T *UltPosRecXDia
+ *                const emxArray_int32_T *TimeUsoRec
+ *                const emxArray_int32_T *DispMExD
+ *                emxArray_int32_T *DiaOp
+ *                emxArray_int32_T *EspMedOp
+ * Return Type  : void
  */
 void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
                 emxArray_int32_T *PCPrO, const emxArray_int32_T *PME, const
@@ -75,10 +95,6 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
   int i44;
   double y;
 
-  /* UNTITLED4 Summary of this function goes here */
-  /*    Detailed explanation goes here */
-  /*     NCPrO  |    NME    |     NS    |     NA    |     NAn    |    NCPO     |   NCR */
-  /*   Col 1-20 | Col 21-50 | Col 51-62 | Col 63-87 | Col 88-112 | Col 113-132 | Col 133-172 */
   /* 'casorandom:7' DiaOp = zeros(NumTOp,1, 'int32'); */
   /* 'casorandom:8' EspMedOp = zeros(NumTOp,2, 'int32'); */
   i36 = EspMedOp->size[0] * EspMedOp->size[1];
@@ -425,4 +441,8 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
   /* 'casorandom:62' schedule=H; */
 }
 
-/* End of code generation (casorandom.c) */
+/*
+ * File trailer for casorandom.c
+ *
+ * [EOF]
+ */

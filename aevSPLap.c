@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: aevSPLap.c
  *
- * aevSPLap.c
- *
- * Code generation for function 'aevSPLap'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "aevSPLap.h"
@@ -35,6 +34,37 @@
 /*
  * function [bestexperimento, trace] = aevSPLap(NumTOp,numIC,numIQ,taxC,taxE,taxEQ,NumRec,PCPrO,PME,PMA,PMAn,PS,PCPO,PCR,Dia,Data,...
  *     TimeUsoRec,ProbXEst,fitnessB,generations,genToWidth,DispMExD,EP,k0,k1,k2,k3,keeppriority)
+ * INICIALIZA POPULAÇÃO QUANTICA.
+ * Arguments    : int NumTOp
+ *                int numIC
+ *                int numIQ
+ *                double taxC
+ *                double taxE
+ *                const int NumRec[7]
+ *                const emxArray_int32_T *PCPrO
+ *                const emxArray_int32_T *PME
+ *                const emxArray_int32_T *PMA
+ *                const emxArray_int32_T *PMAn
+ *                const emxArray_int32_T *PS
+ *                const emxArray_int32_T *PCPO
+ *                const emxArray_int32_T *PCR
+ *                const emxArray_int32_T *Dia
+ *                const emxArray_int32_T *Data
+ *                const emxArray_int32_T *TimeUsoRec
+ *                const emxArray_real_T *ProbXEst
+ *                const double fitnessB[6]
+ *                int generations
+ *                int genToWidth
+ *                const emxArray_int32_T *DispMExD
+ *                const emxArray_int32_T *EP
+ *                double k0
+ *                double k1
+ *                double k2
+ *                double k3
+ *                boolean_T keeppriority
+ *                emxArray_int32_T *bestexperimento
+ *                emxArray_real_T *trace
+ * Return Type  : void
  */
 void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
               int NumRec[7], const emxArray_int32_T *PCPrO, const
@@ -99,7 +129,6 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   int i;
   emxInit_real_T(&IQ, 2);
 
-  /*  INICIALIZA POPULAÇÃO QUANTICA.  */
   /* 'aevSPLap:7' [ IQ ] = CreaPoQunniforme(NumTOp,numIQ); */
   CreaPoQunniforme(NumTOp, numIQ, IQ);
 
@@ -1011,4 +1040,8 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
   emxFree_real_T(&IQ);
 }
 
-/* End of code generation (aevSPLap.c) */
+/*
+ * File trailer for aevSPLap.c
+ *
+ * [EOF]
+ */

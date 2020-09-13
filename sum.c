@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: sum.c
  *
- * sum.c
- *
- * Code generation for function 'sum'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "sum.h"
@@ -19,7 +18,8 @@
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : const emxArray_real_T *x
+ * Return Type  : double
  */
 double b_sum(const emxArray_real_T *x)
 {
@@ -34,7 +34,9 @@ double b_sum(const emxArray_real_T *x)
 }
 
 /*
- *
+ * Arguments    : const emxArray_int32_T *x
+ *                emxArray_real_T *y
+ * Return Type  : void
  */
 void c_sum(const emxArray_int32_T *x, emxArray_real_T *y)
 {
@@ -73,7 +75,8 @@ void c_sum(const emxArray_int32_T *x, emxArray_real_T *y)
 }
 
 /*
- *
+ * Arguments    : const emxArray_boolean_T *x
+ * Return Type  : double
  */
 double d_sum(const emxArray_boolean_T *x)
 {
@@ -96,7 +99,8 @@ double d_sum(const emxArray_boolean_T *x)
 }
 
 /*
- *
+ * Arguments    : const emxArray_real_T *x
+ * Return Type  : double
  */
 double sum(const emxArray_real_T *x)
 {
@@ -118,4 +122,8 @@ double sum(const emxArray_real_T *x)
   return y;
 }
 
-/* End of code generation (sum.c) */
+/*
+ * File trailer for sum.c
+ *
+ * [EOF]
+ */

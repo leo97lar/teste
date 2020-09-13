@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: sch.c
  *
- * sch.c
- *
- * Code generation for function 'sch'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "sch.h"
@@ -22,6 +21,36 @@
 
 /*
  * function [ fitness,Tt,NOFP,TmNOFP,NOE2,NOE3 ] = sch(NumTOp,list,NumRec,PCPrO,PME,PMA,PMAn,PS,PCPO,PCR,Dia,Data,TimeUsoRec,DispMExD,EP,k0,k1,k2,k3)
+ * UNTITLED4 Summary of this function goes here
+ *    Detailed explanation goes here
+ *     NCPrO  |    NME    |     NS    |     NA    |     NAn    |    NCPO     |   NCR
+ *   Col 1-20 | Col 21-50 | Col 51-62 | Col 63-87 | Col 88-112 | Col 113-132 | Col 133-152
+ * Arguments    : int NumTOp
+ *                const emxArray_int32_T *list
+ *                const int NumRec[7]
+ *                emxArray_int32_T *PCPrO
+ *                emxArray_int32_T *PME
+ *                emxArray_int32_T *PMA
+ *                emxArray_int32_T *PMAn
+ *                emxArray_int32_T *PS
+ *                emxArray_int32_T *PCPO
+ *                emxArray_int32_T *PCR
+ *                const emxArray_int32_T *Dia
+ *                const emxArray_int32_T *Data
+ *                emxArray_int32_T *TimeUsoRec
+ *                const emxArray_int32_T *DispMExD
+ *                emxArray_int32_T *EP
+ *                double k0
+ *                double k1
+ *                double k2
+ *                double k3
+ *                double *fitness
+ *                double *Tt
+ *                double *NOFP
+ *                double *TmNOFP
+ *                double *NOE2
+ *                double *NOE3
+ * Return Type  : void
  */
 void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
          emxArray_int32_T *PCPrO, emxArray_int32_T *PME, emxArray_int32_T *PMA,
@@ -89,10 +118,6 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   int i28;
   int i29;
 
-  /* UNTITLED4 Summary of this function goes here */
-  /*    Detailed explanation goes here */
-  /*     NCPrO  |    NME    |     NS    |     NA    |     NAn    |    NCPO     |   NCR */
-  /*   Col 1-20 | Col 21-50 | Col 51-62 | Col 63-87 | Col 88-112 | Col 113-132 | Col 133-152 */
   /* 'sch:7' H = zeros(size(Data,1),sum(NumRec), 'int32'); */
   y = NumRec[0];
   for (k = 0; k < 6; k++) {
@@ -727,4 +752,8 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   emxFree_int32_T(&H);
 }
 
-/* End of code generation (sch.c) */
+/*
+ * File trailer for sch.c
+ *
+ * [EOF]
+ */

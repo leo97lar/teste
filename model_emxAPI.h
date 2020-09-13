@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: model_emxAPI.h
  *
- * model_emxAPI.h
- *
- * Code generation for function 'model_emxAPI'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef MODEL_EMXAPI_H
 #define MODEL_EMXAPI_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -36,4 +35,8 @@ extern void emxInitArray_real_T(emxArray_real_T **pEmxArray, int numDimensions);
 
 #endif
 
-/* End of code generation (model_emxAPI.h) */
+/*
+ * File trailer for model_emxAPI.h
+ *
+ * [EOF]
+ */

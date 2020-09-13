@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: funcionDia.h
  *
- * funcionDia.h
- *
- * Code generation for function 'funcionDia'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef FUNCIONDIA_H
 #define FUNCIONDIA_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -26,4 +25,8 @@ extern void funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
 
 #endif
 
-/* End of code generation (funcionDia.h) */
+/*
+ * File trailer for funcionDia.h
+ *
+ * [EOF]
+ */

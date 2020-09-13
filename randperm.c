@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: randperm.c
  *
- * randperm.c
- *
- * Code generation for function 'randperm'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "randperm.h"
@@ -20,7 +19,8 @@
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : double p[2000]
+ * Return Type  : void
  */
 void b_randperm(double p[2000])
 {
@@ -34,7 +34,9 @@ void b_randperm(double p[2000])
 }
 
 /*
- *
+ * Arguments    : int n
+ *                emxArray_real_T *p
+ * Return Type  : void
  */
 void c_randperm(int n, emxArray_real_T *p)
 {
@@ -149,7 +151,8 @@ void c_randperm(int n, emxArray_real_T *p)
 }
 
 /*
- *
+ * Arguments    : double p[200]
+ * Return Type  : void
  */
 void randperm(double p[200])
 {
@@ -234,4 +237,8 @@ void randperm(double p[200])
   }
 }
 
-/* End of code generation (randperm.c) */
+/*
+ * File trailer for randperm.c
+ *
+ * [EOF]
+ */

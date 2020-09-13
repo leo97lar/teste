@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: timeKeeper.c
  *
- * timeKeeper.c
- *
- * Code generation for function 'timeKeeper'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "timeKeeper.h"
@@ -33,7 +32,9 @@ static boolean_T savedTime_not_empty;
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : double *outTime_tv_sec
+ *                double *outTime_tv_nsec
+ * Return Type  : void
  */
 void b_timeKeeper(double *outTime_tv_sec, double *outTime_tv_nsec)
 {
@@ -41,13 +42,19 @@ void b_timeKeeper(double *outTime_tv_sec, double *outTime_tv_nsec)
   *outTime_tv_nsec = savedTime.tv_nsec;
 }
 
+/*
+ * Arguments    : void
+ * Return Type  : void
+ */
 void savedTime_not_empty_init(void)
 {
   savedTime_not_empty = false;
 }
 
 /*
- *
+ * Arguments    : double newTime_tv_sec
+ *                double newTime_tv_nsec
+ * Return Type  : void
  */
 void timeKeeper(double newTime_tv_sec, double newTime_tv_nsec)
 {
@@ -60,4 +67,8 @@ void timeKeeper(double newTime_tv_sec, double newTime_tv_nsec)
   savedTime.tv_nsec = newTime_tv_nsec;
 }
 
-/* End of code generation (timeKeeper.c) */
+/*
+ * File trailer for timeKeeper.c
+ *
+ * [EOF]
+ */

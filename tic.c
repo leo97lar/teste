@@ -2,14 +2,13 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: tic.c
  *
- * tic.c
- *
- * Code generation for function 'tic'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
-/* Include files */
+/* Include Files */
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "tic.h"
@@ -19,7 +18,8 @@
 /* Function Definitions */
 
 /*
- *
+ * Arguments    : void
+ * Return Type  : void
  */
 void tic(void)
 {
@@ -29,4 +29,8 @@ void tic(void)
   timeKeeper(t0_tv_sec, t0_tv_nsec);
 }
 
-/* End of code generation (tic.c) */
+/*
+ * File trailer for tic.c
+ *
+ * [EOF]
+ */

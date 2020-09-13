@@ -2,17 +2,16 @@
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
+ * File: aevSPLap.h
  *
- * aevSPLap.h
- *
- * Code generation for function 'aevSPLap'
- *
+ * MATLAB Coder version            : 4.2
+ * C/C++ source code generated on  : 13-Sep-2020 18:10:16
  */
 
 #ifndef AEVSPLAP_H
 #define AEVSPLAP_H
 
-/* Include files */
+/* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
 #include "rtwtypes.h"
@@ -34,4 +33,8 @@ extern void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE,
 
 #endif
 
-/* End of code generation (aevSPLap.h) */
+/*
+ * File trailer for aevSPLap.h
+ *
+ * [EOF]
+ */
