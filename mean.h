@@ -3,14 +3,14 @@
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
  *
- * colon.h
+ * mean.h
  *
- * Code generation for function 'colon'
+ * Code generation for function 'mean'
  *
  */
 
-#ifndef COLON_H
-#define COLON_H
+#ifndef MEAN_H
+#define MEAN_H
 
 /* Include files */
 #include <stddef.h>
@@ -19,8 +19,8 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void eml_signed_integer_colon(int a, int b, emxArray_int32_T *y);
+extern double mean(const emxArray_real_T *x);
 
 #endif
 
-/* End of code generation (colon.h) */
+/* End of code generation (mean.h) */

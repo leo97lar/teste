@@ -20,10 +20,9 @@
 
 /* Function Declarations */
 extern void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx);
-extern void c_sort(double x[2000], int idx[2000]);
+extern void c_sort(emxArray_real_T *x, emxArray_int32_T *idx);
 extern void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx);
-extern void e_sort(emxArray_int32_T *x, emxArray_int32_T *idx);
-extern void sort(emxArray_real_T *x, emxArray_int32_T *idx);
+extern void sort(double x[2000], int idx[2000]);
 
 #endif
 

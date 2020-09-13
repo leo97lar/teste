@@ -21,13 +21,6 @@
 /* Function Declarations */
 extern void b_repmat(const emxArray_real_T *a, double varargin_2,
                      emxArray_real_T *b);
-extern void c_repmat(double b[8760]);
-extern void d_repmat(double b[8760]);
-extern void e_repmat(double b[17520]);
-extern void f_repmat(double b[735]);
-extern void g_repmat(double b[17520]);
-extern void h_repmat(double b[17520]);
-extern void i_repmat(double b[17520]);
 extern void repmat(const emxArray_real_T *a, int varargin_2, emxArray_real_T *b);
 
 #endif

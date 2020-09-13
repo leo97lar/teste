@@ -3,27 +3,22 @@
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
  *
- * randi.c
+ * mean.c
  *
- * Code generation for function 'randi'
+ * Code generation for function 'mean'
  *
  */
 
 /* Include files */
-#include <math.h>
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
-#include "randi.h"
-#include "rand.h"
+#include "mean.h"
+#include "combineVectorElements.h"
 
 /* Function Definitions */
-void randi(double r[2000])
+double mean(const emxArray_real_T *x)
 {
-  int k;
-  c_rand(r);
-  for (k = 0; k < 2000; k++) {
-    r[k] = 1.0 + floor(r[k] * 200.0);
-  }
+  return combineVectorElements(x) / (double)x->size[0];
 }
 
-/* End of code generation (randi.c) */
+/* End of code generation (mean.c) */

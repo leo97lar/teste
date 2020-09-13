@@ -19,8 +19,6 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void b_nullAssignment(emxArray_real_T *x, const boolean_T idx_data[],
-  const int idx_size[1]);
 extern void nullAssignment(emxArray_int32_T *x, const emxArray_boolean_T *idx);
 
 #endif

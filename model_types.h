@@ -5,7 +5,7 @@
  *
  * model_types.h
  *
- * Code generation for function 'actIQ'
+ * Code generation for function 'BDCreator_func'
  *
  */
 

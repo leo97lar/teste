@@ -12,248 +12,13 @@
 /* Include files */
 #include <string.h>
 #include "BDCreator_func.h"
-#include "Calendario.h"
-#include "Codificacion_de_dias_func.h"
-#include "CreaPoQunniforme.h"
-#include "Edade.h"
-#include "PLOTT_func.h"
-#include "actIQ.h"
-#include "aevSPLap.h"
-#include "casorandom.h"
-#include "cc.h"
-#include "favalia.h"
-#include "funcionC.h"
-#include "funcionCPrO.h"
-#include "funcionCR.h"
-#include "funcionDia.h"
-#include "funcionRP.h"
 #include "main_UCI_func.h"
-#include "obsIQ.h"
-#include "obsIQini.h"
-#include "sch.h"
+#include "Edade.h"
 #include "sum.h"
 #include "rand.h"
-#include "model_emxutil.h"
-#include "rdivide_helper.h"
-#include "colon.h"
-#include "model_rtwutil.h"
 
 /* Function Definitions */
-void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade)
-{
-  emxArray_int32_T *PEd;
-  int qY;
-  long long i46;
-  int CtdadXStep;
-  int i47;
-  double delta1;
-  int pIni;
-  emxArray_real_T *ProbXEdade;
-  emxArray_boolean_T *x;
-  emxArray_real_T *b_ProbXEdade;
-  boolean_T exitg1;
-  boolean_T guard1 = false;
-  boolean_T y;
-  boolean_T exitg2;
-  emxInit_int32_T(&PEd, 2);
-
-  /* UNTITLED3 Summary of this function goes here */
-  /*    Detailed explanation goes here */
-  eml_signed_integer_colon(b_min, b_max, PEd);
-  if ((b_max >= 0) && (b_min < b_max - MAX_int32_T)) {
-    qY = MAX_int32_T;
-  } else if ((b_max < 0) && (b_min > b_max - MIN_int32_T)) {
-    qY = MIN_int32_T;
-  } else {
-    qY = b_max - b_min;
-  }
-
-  if (qY > 2147483646) {
-    qY = MAX_int32_T;
-  } else {
-    qY++;
-  }
-
-  i46 = (long long)(qY - 1) * qY;
-  if (i46 > 2147483647LL) {
-    i46 = 2147483647LL;
-  } else {
-    if (i46 < -2147483648LL) {
-      i46 = -2147483648LL;
-    }
-  }
-
-  CtdadXStep = (int)rt_roundd((double)(int)i46 / 2.0);
-  if (CtdadXStep > 1073741823) {
-    i47 = MAX_int32_T;
-  } else if (CtdadXStep <= -1073741824) {
-    i47 = MIN_int32_T;
-  } else {
-    i47 = CtdadXStep << 1;
-  }
-
-  delta1 = rt_roundd(1.0 / (double)i47);
-  if (delta1 < 2.147483648E+9) {
-    if (delta1 >= -2.147483648E+9) {
-      i47 = (int)delta1;
-    } else {
-      i47 = MIN_int32_T;
-    }
-  } else {
-    i47 = MAX_int32_T;
-  }
-
-  i46 = (long long)CtdadXStep * i47;
-  if (i46 > 2147483647LL) {
-    i46 = 2147483647LL;
-  } else {
-    if (i46 < -2147483648LL) {
-      i46 = -2147483648LL;
-    }
-  }
-
-  CtdadXStep = (int)i46;
-  if (CtdadXStep < -2147483646) {
-    CtdadXStep = MAX_int32_T;
-  } else {
-    CtdadXStep = 1 - CtdadXStep;
-  }
-
-  pIni = rdivide_helper(CtdadXStep, qY);
-  if ((b_max >= 0) && (b_min < b_max - MAX_int32_T)) {
-    CtdadXStep = MAX_int32_T;
-  } else if ((b_max < 0) && (b_min > b_max - MIN_int32_T)) {
-    CtdadXStep = MIN_int32_T;
-  } else {
-    CtdadXStep = b_max - b_min;
-  }
-
-  i46 = (long long)i47 * CtdadXStep;
-  if (i46 > 2147483647LL) {
-    i46 = 2147483647LL;
-  } else {
-    if (i46 < -2147483648LL) {
-      i46 = -2147483648LL;
-    }
-  }
-
-  CtdadXStep = (int)i46;
-  if ((pIni < 0) && (CtdadXStep < MIN_int32_T - pIni)) {
-    CtdadXStep = MIN_int32_T;
-  } else if ((pIni > 0) && (CtdadXStep > MAX_int32_T - pIni)) {
-    CtdadXStep = MAX_int32_T;
-  } else {
-    CtdadXStep += pIni;
-  }
-
-  if (qY < 0) {
-    qY = 0;
-  }
-
-  emxInit_real_T(&ProbXEdade, 2);
-  i47 = ProbXEdade->size[0] * ProbXEdade->size[1];
-  ProbXEdade->size[0] = 1;
-  ProbXEdade->size[1] = qY;
-  emxEnsureCapacity_real_T(ProbXEdade, i47);
-  if (ProbXEdade->size[1] >= 1) {
-    ProbXEdade->data[ProbXEdade->size[1] - 1] = CtdadXStep;
-    if (ProbXEdade->size[1] >= 2) {
-      ProbXEdade->data[0] = pIni;
-      if (ProbXEdade->size[1] >= 3) {
-        delta1 = ((double)CtdadXStep - (double)pIni) / ((double)ProbXEdade->
-          size[1] - 1.0);
-        i47 = ProbXEdade->size[1];
-        for (CtdadXStep = 0; CtdadXStep <= i47 - 3; CtdadXStep++) {
-          ProbXEdade->data[1 + CtdadXStep] = (double)pIni + (1.0 + (double)
-            CtdadXStep) * delta1;
-        }
-      }
-    }
-  }
-
-  i47 = c_Edade->size[0];
-  c_Edade->size[0] = Num;
-  emxEnsureCapacity_real_T(c_Edade, i47);
-  for (i47 = 0; i47 < Num; i47++) {
-    c_Edade->data[i47] = 0.0;
-  }
-
-  emxInit_boolean_T(&x, 2);
-  emxInit_real_T(&b_ProbXEdade, 2);
-  for (qY = 0; qY < Num; qY++) {
-    delta1 = b_rand();
-    pIni = 1;
-    exitg1 = false;
-    while ((!exitg1) && (pIni - 1 <= ProbXEdade->size[1] - 1)) {
-      i47 = b_ProbXEdade->size[0] * b_ProbXEdade->size[1];
-      b_ProbXEdade->size[0] = 1;
-      b_ProbXEdade->size[1] = pIni;
-      emxEnsureCapacity_real_T(b_ProbXEdade, i47);
-      for (i47 = 0; i47 < pIni; i47++) {
-        b_ProbXEdade->data[i47] = ProbXEdade->data[i47];
-      }
-
-      guard1 = false;
-      if (b_sum(b_ProbXEdade) <= delta1) {
-        i47 = b_ProbXEdade->size[0] * b_ProbXEdade->size[1];
-        b_ProbXEdade->size[0] = 1;
-        b_ProbXEdade->size[1] = pIni + 1;
-        emxEnsureCapacity_real_T(b_ProbXEdade, i47);
-        for (i47 = 0; i47 <= pIni; i47++) {
-          b_ProbXEdade->data[i47] = ProbXEdade->data[i47];
-        }
-
-        if (b_sum(b_ProbXEdade) > delta1) {
-          c_Edade->data[qY] = PEd->data[pIni];
-          exitg1 = true;
-        } else {
-          guard1 = true;
-        }
-      } else {
-        guard1 = true;
-      }
-
-      if (guard1) {
-        i47 = x->size[0] * x->size[1];
-        x->size[0] = 1;
-        x->size[1] = ProbXEdade->size[1];
-        emxEnsureCapacity_boolean_T(x, i47);
-        CtdadXStep = ProbXEdade->size[0] * ProbXEdade->size[1];
-        for (i47 = 0; i47 < CtdadXStep; i47++) {
-          x->data[i47] = (ProbXEdade->data[i47] > delta1);
-        }
-
-        y = (x->size[1] != 0);
-        if (y) {
-          CtdadXStep = 0;
-          exitg2 = false;
-          while ((!exitg2) && (CtdadXStep <= x->size[1] - 1)) {
-            if (!x->data[CtdadXStep]) {
-              y = false;
-              exitg2 = true;
-            } else {
-              CtdadXStep++;
-            }
-          }
-        }
-
-        if (y) {
-          c_Edade->data[qY] = PEd->data[pIni - 1];
-          exitg1 = true;
-        } else {
-          pIni++;
-        }
-      }
-    }
-  }
-
-  emxFree_real_T(&b_ProbXEdade);
-  emxFree_boolean_T(&x);
-  emxFree_real_T(&ProbXEdade);
-  emxFree_int32_T(&PEd);
-}
-
-void b_Edade(double c_Edade[2000])
+void Edade(double b_Edade[2000])
 {
   int i;
   double r;
@@ -320,9 +85,9 @@ void b_Edade(double c_Edade[2000])
 
   /* UNTITLED3 Summary of this function goes here */
   /*    Detailed explanation goes here */
-  memset(&c_Edade[0], 0, 2000U * sizeof(double));
+  memset(&b_Edade[0], 0, 2000U * sizeof(double));
   for (i = 0; i < 2000; i++) {
-    r = b_rand();
+    r = d_rand();
     j = 0;
     exitg1 = false;
     while ((!exitg1) && (j < 71)) {
@@ -335,7 +100,7 @@ void b_Edade(double c_Edade[2000])
       b_tmp_data.numDimensions = 2;
       b_tmp_data.canFreeData = false;
       guard1 = false;
-      if (b_sum(&b_tmp_data) <= r) {
+      if (sum(&b_tmp_data) <= r) {
         tmp_size[0] = 1;
         tmp_size[1] = j + 2;
         memcpy(&tmp_data[0], &dv0[0], (unsigned int)((j + 2) * (int)sizeof
@@ -345,8 +110,8 @@ void b_Edade(double c_Edade[2000])
         c_tmp_data.allocatedSize = 71;
         c_tmp_data.numDimensions = 2;
         c_tmp_data.canFreeData = false;
-        if (b_sum(&c_tmp_data) > r) {
-          c_Edade[i] = 5.0 + (((1.0 + (double)j) + 1.0) - 1.0);
+        if (sum(&c_tmp_data) > r) {
+          b_Edade[i] = 5.0 + (((1.0 + (double)j) + 1.0) - 1.0);
           exitg1 = true;
         } else {
           guard1 = true;
@@ -369,7 +134,7 @@ void b_Edade(double c_Edade[2000])
         }
 
         if (y) {
-          c_Edade[i] = 5.0 + (double)j;
+          b_Edade[i] = 5.0 + (double)j;
           exitg1 = true;
         } else {
           j++;

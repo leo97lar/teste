@@ -13,30 +13,13 @@
 #include <math.h>
 #include <string.h>
 #include "BDCreator_func.h"
-#include "Calendario.h"
-#include "Codificacion_de_dias_func.h"
-#include "CreaPoQunniforme.h"
-#include "Edade.h"
-#include "PLOTT_func.h"
-#include "actIQ.h"
-#include "aevSPLap.h"
-#include "casorandom.h"
-#include "cc.h"
-#include "favalia.h"
-#include "funcionC.h"
-#include "funcionCPrO.h"
-#include "funcionCR.h"
-#include "funcionDia.h"
-#include "funcionRP.h"
 #include "main_UCI_func.h"
-#include "obsIQ.h"
-#include "obsIQini.h"
-#include "sch.h"
 #include "rand.h"
 #include "toc.h"
 #include "sort1.h"
 #include "randperm.h"
 #include "sum.h"
+#include "Edade.h"
 #include "randi.h"
 #include "tic.h"
 
@@ -59,7 +42,7 @@ void BDCreator_func(void)
   short DE[2000];
   int i;
   int loop_ub_tmp;
-  int i30;
+  int i0;
   short tmp_data[2030];
   short b_DE[2000];
   int g_unusedExpr[2000];
@@ -69,8 +52,6 @@ void BDCreator_func(void)
   double k_unusedExpr[375];
   double l_unusedExpr[450];
   double m_unusedExpr[150];
-  static double Data[87600];
-  double Dia[2920];
 
   /*     %% Generar Base de Datos */
   /*  Vamos a tener 15 especialidades con diferentes operaciones quirurgicas */
@@ -101,7 +82,7 @@ void BDCreator_func(void)
   /*  % 10  5 12  5 15 10  8  5  5   2   3  10   5   3  2 */
   /*  Vector con el porciento de tipos operaciones por especialidad */
   /*  Operaciones por especialidad */
-  b_randperm(unusedExpr);
+  randperm(unusedExpr);
 
   /*     %% Complejidad de la operacion */
   /*  1___Alta (30%) */
@@ -109,7 +90,7 @@ void BDCreator_func(void)
   /*  3___Baja (20%) */
   /*  Vector con el porciento de operaciones por su complejidad */
   /*  Complejidad de la operacion */
-  b_randperm(b_unusedExpr);
+  randperm(b_unusedExpr);
 
   /*     %% Tiempo de Duracion de la operacion */
   /*  1 0,5h (15%) */
@@ -119,7 +100,7 @@ void BDCreator_func(void)
   /*  5 2,5h (15%) */
   /*  Vector con el porciento de operaciones por horas de duracion */
   /*  Tiempo de operacion */
-  b_randperm(c_unusedExpr);
+  randperm(c_unusedExpr);
 
   /*     %% Recursos necesarios */
   /*  Especialistas */
@@ -132,7 +113,7 @@ void BDCreator_func(void)
   randi(d_unusedExpr);
 
   /*  Tipo de operacion por paciente */
-  b_Edade(e_unusedExpr);
+  Edade(e_unusedExpr);
 
   /*  Edad por paciente */
   /*  Estado del paciente */
@@ -143,7 +124,7 @@ void BDCreator_func(void)
   /*  E  1  Si el retraso NO afectara el progreso de la enfermedad ni hay dolor */
   /*  Posibles estados. */
   /*  Porciento por estado del paciente */
-  c_randperm(f_unusedExpr);
+  b_randperm(f_unusedExpr);
 
   /*  Tiempos de uso de salas */
   /*  Tiempo de Preoperatorio. Caso promedio dos horas. */
@@ -152,16 +133,16 @@ void BDCreator_func(void)
   /*  Datas de entrada */
   /*  Maximo numero de entradas por dia */
   /*  Cantidad de entradas en el 1er dia */
-  aux = b_rand();
+  aux = d_rand();
   memset(&auxCExD[0], 0, 2000U * sizeof(double));
   auxCExD[0] = 30.0;
   auxCExD[1] = 1.0 + floor(aux * 30.0);
 
   /*  Cantidad de entradas por dia */
   count = 1;
-  while (m_sum(auxCExD) < 2000.0) {
+  while (b_sum(auxCExD) < 2000.0) {
     count++;
-    aux = b_rand();
+    aux = d_rand();
     auxCExD[count] = 1.0 + floor(aux * 30.0);
   }
 
@@ -181,7 +162,7 @@ void BDCreator_func(void)
   b_auxCExD_data.allocatedSize = 2000;
   b_auxCExD_data.numDimensions = 1;
   b_auxCExD_data.canFreeData = false;
-  aux = sum(&b_auxCExD_data) - 2000.0;
+  aux = c_sum(&b_auxCExD_data) - 2000.0;
 
   /*  Operaciones excedentes */
   CExD_data[0] = auxCExD[0] - aux;
@@ -193,54 +174,53 @@ void BDCreator_func(void)
   aux = 0.0;
   for (i = 0; i <= count; i++) {
     loop_ub_tmp = (int)floor(CExD_data[i] - 1.0);
-    for (i30 = 0; i30 <= loop_ub_tmp; i30++) {
-      tmp_data[i30] = (short)(int)(aux + (1.0 + (double)i30));
+    for (i0 = 0; i0 <= loop_ub_tmp; i0++) {
+      tmp_data[i0] = (short)(int)(aux + (1.0 + (double)i0));
     }
 
     loop_ub_tmp++;
-    for (i30 = 0; i30 < loop_ub_tmp; i30++) {
-      DE[tmp_data[i30] - 1] = (short)(1 + i);
+    for (i0 = 0; i0 < loop_ub_tmp; i0++) {
+      DE[tmp_data[i0] - 1] = (short)(1 + i);
     }
 
     aux += CExD_data[i];
   }
 
-  c_randperm(CExD_data);
-  for (i30 = 0; i30 < 2000; i30++) {
-    auxCExD[i30] = CExD_data[i30];
-    b_DE[i30] = DE[(int)auxCExD[i30] - 1];
+  b_randperm(CExD_data);
+  for (i0 = 0; i0 < 2000; i0++) {
+    auxCExD[i0] = CExD_data[i0];
+    b_DE[i0] = DE[(int)auxCExD[i0] - 1];
   }
 
   /*     %% Tabla con las caracteristicas de los pacientes por Operacion (Tabla2) */
   /*  Fecha de Entrada, Estado del Paciente, Tipo de Operacion, Edad, Tiempo preOperatorio, Tiempo PostOperatorio, Tiempo Recuperacion. */
-  for (i30 = 0; i30 < 2000; i30++) {
-    auxCExD[i30] = b_DE[i30];
+  for (i0 = 0; i0 < 2000; i0++) {
+    auxCExD[i0] = b_DE[i0];
   }
 
-  c_sort(auxCExD, g_unusedExpr);
+  sort(auxCExD, g_unusedExpr);
 
   /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
   /*     %% Recursos Disponibles */
   /*  Materiales */
-  h_rand(h_unusedExpr);
+  e_rand(h_unusedExpr);
 
   /*  Salas X Especialidad. "1" Habilitado para especialidad. */
-  i_rand(i_unusedExpr);
+  f_rand(i_unusedExpr);
 
   /*  Cama Post-Operacion X Especialidad. "1" Habilitado para especialidad. */
-  h_rand(j_unusedExpr);
+  e_rand(j_unusedExpr);
 
   /*  Cama Pre-Operacion X Especialidad. "1" Habilitado para especialidad. */
-  j_rand(k_unusedExpr);
+  g_rand(k_unusedExpr);
 
   /*  Cama Recuperacion X Especialidad. "1" Habilitado para especialidad. */
   /*  Humano */
-  k_rand(l_unusedExpr);
+  h_rand(l_unusedExpr);
 
   /*  Disponibiidad de medico especialista por dia de a semana. No todos los medicos */
   /* trabajan todos los dias. */
-  h_rand(m_unusedExpr);
-  Calendario(Data, Dia);
+  e_rand(m_unusedExpr);
 
   /* save('RRR.mat','CP','RO','CPrO','S','CPO','CR','ME','MA','MAn','Data','Dia','DispMExD') */
   toc();

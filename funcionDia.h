@@ -23,14 +23,6 @@ extern void b_funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO,
   const emxArray_int32_T *Dia, const emxArray_real_T *UltPosRecXDia, int
   TimeUsoCPrO, int TimeUsoS, int *contDia, const emxArray_int32_T *DispMExD,
   emxArray_int32_T *tempUltPosRecXDia, emxArray_int32_T *DispME);
-extern void c_funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO,
-  const emxArray_int32_T *Dia, const emxArray_int32_T *UltPosRecXDia, int
-  TimeUsoCPrO, int TimeUsoS, int *contDia, const emxArray_int32_T *DispMExD,
-  emxArray_int32_T *tempUltPosRecXDia, emxArray_int32_T *DispME);
-extern void d_funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO,
-  const emxArray_int32_T *Dia, const emxArray_real_T *UltPosRecXDia, int
-  TimeUsoCPrO, int TimeUsoS, int *contDia, const emxArray_int32_T *DispMExD,
-  emxArray_int32_T *tempUltPosRecXDia, int *DispME);
 extern void funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
   emxArray_int32_T *Dia, const emxArray_int32_T *UltPosRecXDia, int TimeUsoCPrO,
   int TimeUsoS, int *contDia, const emxArray_int32_T *DispMExD, emxArray_int32_T

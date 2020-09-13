@@ -19,8 +19,6 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void colMajorFlatIter(const emxArray_int32_T *x, int vlen,
-  emxArray_real_T *y);
 extern double combineVectorElements(const emxArray_real_T *x);
 
 #endif

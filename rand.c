@@ -11,25 +11,7 @@
 
 /* Include files */
 #include "BDCreator_func.h"
-#include "Calendario.h"
-#include "Codificacion_de_dias_func.h"
-#include "CreaPoQunniforme.h"
-#include "Edade.h"
-#include "PLOTT_func.h"
-#include "actIQ.h"
-#include "aevSPLap.h"
-#include "casorandom.h"
-#include "cc.h"
-#include "favalia.h"
-#include "funcionC.h"
-#include "funcionCPrO.h"
-#include "funcionCR.h"
-#include "funcionDia.h"
-#include "funcionRP.h"
 #include "main_UCI_func.h"
-#include "obsIQ.h"
-#include "obsIQini.h"
-#include "sch.h"
 #include "rand.h"
 #include "model_emxutil.h"
 #include "model_data.h"
@@ -139,45 +121,7 @@ static double eml_rand_mt19937ar(unsigned int b_state[625])
   return r;
 }
 
-double b_rand(void)
-{
-  return eml_rand_mt19937ar(state);
-}
-
-void c_rand(int varargin_2, emxArray_real_T *r)
-{
-  int i24;
-  int k;
-  i24 = r->size[0] * r->size[1];
-  r->size[0] = 1;
-  r->size[1] = varargin_2;
-  emxEnsureCapacity_real_T(r, i24);
-  i24 = r->size[1];
-  for (k = 0; k < i24; k++) {
-    r->data[k] = eml_rand_mt19937ar(state);
-  }
-}
-
-void d_rand(double r[2])
-{
-  r[0] = eml_rand_mt19937ar(state);
-  r[1] = eml_rand_mt19937ar(state);
-}
-
-void e_rand(int varargin_1, emxArray_real_T *r)
-{
-  int i29;
-  int k;
-  i29 = r->size[0];
-  r->size[0] = varargin_1;
-  emxEnsureCapacity_real_T(r, i29);
-  i29 = r->size[0];
-  for (k = 0; k < i29; k++) {
-    r->data[k] = eml_rand_mt19937ar(state);
-  }
-}
-
-void f_rand(double r[200])
+void b_rand(double r[200])
 {
   int k;
   for (k = 0; k < 200; k++) {
@@ -185,7 +129,7 @@ void f_rand(double r[200])
   }
 }
 
-void g_rand(double r[2000])
+void c_rand(double r[2000])
 {
   int k;
   for (k = 0; k < 2000; k++) {
@@ -193,7 +137,12 @@ void g_rand(double r[2000])
   }
 }
 
-void h_rand(double r[150])
+double d_rand(void)
+{
+  return eml_rand_mt19937ar(state);
+}
+
+void e_rand(double r[150])
 {
   int k;
   for (k = 0; k < 150; k++) {
@@ -201,7 +150,7 @@ void h_rand(double r[150])
   }
 }
 
-void i_rand(double r[225])
+void f_rand(double r[225])
 {
   int k;
   for (k = 0; k < 225; k++) {
@@ -209,7 +158,7 @@ void i_rand(double r[225])
   }
 }
 
-void j_rand(double r[375])
+void g_rand(double r[375])
 {
   int k;
   for (k = 0; k < 375; k++) {
@@ -217,11 +166,44 @@ void j_rand(double r[375])
   }
 }
 
-void k_rand(double r[450])
+void h_rand(double r[450])
 {
   int k;
   for (k = 0; k < 450; k++) {
     r[k] = eml_rand_mt19937ar(state);
+  }
+}
+
+void i_rand(int varargin_2, emxArray_real_T *r)
+{
+  int i31;
+  int k;
+  i31 = r->size[0] * r->size[1];
+  r->size[0] = 1;
+  r->size[1] = varargin_2;
+  emxEnsureCapacity_real_T(r, i31);
+  i31 = r->size[1];
+  for (k = 0; k < i31; k++) {
+    r->data[k] = eml_rand_mt19937ar(state);
+  }
+}
+
+void j_rand(double r[2])
+{
+  r[0] = eml_rand_mt19937ar(state);
+  r[1] = eml_rand_mt19937ar(state);
+}
+
+void k_rand(int varargin_1, emxArray_real_T *r)
+{
+  int i35;
+  int k;
+  i35 = r->size[0];
+  r->size[0] = varargin_1;
+  emxEnsureCapacity_real_T(r, i35);
+  i35 = r->size[0];
+  for (k = 0; k < i35; k++) {
+    r->data[k] = eml_rand_mt19937ar(state);
   }
 }
 

@@ -11,74 +11,63 @@
 
 /* Include files */
 #include "BDCreator_func.h"
-#include "Calendario.h"
-#include "Codificacion_de_dias_func.h"
-#include "CreaPoQunniforme.h"
-#include "Edade.h"
-#include "PLOTT_func.h"
-#include "actIQ.h"
-#include "aevSPLap.h"
-#include "casorandom.h"
-#include "cc.h"
-#include "favalia.h"
-#include "funcionC.h"
-#include "funcionCPrO.h"
-#include "funcionCR.h"
-#include "funcionDia.h"
-#include "funcionRP.h"
 #include "main_UCI_func.h"
-#include "obsIQ.h"
-#include "obsIQini.h"
-#include "sch.h"
+#include "aevSPLap.h"
 #include "model_emxutil.h"
-#include "randperm.h"
-#include "combineVectorElements.h"
+#include "obsIQini.h"
+#include "obsIQ.h"
+#include "rand.h"
+#include "cc.h"
 #include "std.h"
+#include "mean.h"
 #include "sort1.h"
+#include "sch.h"
 #include "toc.h"
 #include "tic.h"
 #include "rdivide_helper.h"
 #include "rem.h"
+#include "CreaPoQunniforme.h"
 #include "model_rtwutil.h"
 #include <stdio.h>
 
 /* Function Definitions */
-void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, double
-              taxEQ, const int NumRec[7], const emxArray_int32_T *PCPrO, const
+void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
+              int NumRec[7], const emxArray_int32_T *PCPrO, const
               emxArray_int32_T *PME, const emxArray_int32_T *PMA, const
               emxArray_int32_T *PMAn, const emxArray_int32_T *PS, const
               emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
               emxArray_int32_T *Dia, const emxArray_int32_T *Data, const
-              emxArray_int32_T *TimeUsoRec, const double ProbXEst[5], const
-              double fitnessB[6], int generations, int genToWidth, const
-              emxArray_int32_T *DispMExD, const emxArray_real_T *EP, double k0,
+              emxArray_int32_T *TimeUsoRec, const emxArray_real_T *ProbXEst,
+              const double fitnessB[6], int generations, int genToWidth, const
+              emxArray_int32_T *DispMExD, const emxArray_int32_T *EP, double k0,
               double k1, double k2, double k3, boolean_T keeppriority,
               emxArray_int32_T *bestexperimento, emxArray_real_T *trace)
 {
   emxArray_real_T *IQ;
   int numObsIQ;
   emxArray_int32_T *IC;
-  int loop_ub;
-  int i1;
+  int kEnd;
+  int i9;
   emxArray_int32_T *rank_classic;
   emxArray_real_T *bestFitness;
   int n;
-  emxArray_int32_T *y;
+  emxArray_int32_T *idx;
   int yk;
   int k;
   emxArray_real_T *fitness;
   emxArray_int32_T *aux_classic_2;
   emxArray_real_T *aux_fitness_2;
   emxArray_real_T *tmpColumn;
-  emxArray_real_T *IQtemp;
   cell_wrap_0 reshapes[2];
   emxArray_real_T *x;
   cell_wrap_0 b_reshapes[2];
+  emxArray_int32_T *iwork;
   emxArray_int32_T *b_IC;
+  emxArray_int8_T *num2bin;
   emxArray_int32_T *b_rank_classic;
-  emxArray_real_T *b_IQ;
-  emxArray_int32_T *c_rank_classic;
   emxArray_real_T *b_fitness;
+  emxArray_real_T *r3;
+  emxArray_real_T *c_fitness;
   emxArray_int32_T *b_PCPrO;
   emxArray_int32_T *b_PME;
   emxArray_int32_T *b_PMA;
@@ -87,19 +76,22 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, double
   emxArray_int32_T *b_PCPO;
   emxArray_int32_T *b_PCR;
   emxArray_int32_T *b_TimeUsoRec;
-  emxArray_real_T *b_EP;
+  emxArray_int32_T *b_EP;
   int g;
-  double varargin_5;
+  int j;
+  double varargin_4;
+  int pEnd;
   boolean_T empty_non_axis_sizes;
   signed char input_sizes_idx_1;
-  int b_loop_ub;
-  int i2;
+  int q;
+  int qEnd;
+  int p;
   double d0;
+  double varargin_5;
   double d1;
   double d2;
   double d3;
-  double d4;
-  (void)taxEQ;
+  int i;
   emxInit_real_T(&IQ, 2);
 
   /*  INICIALIZA POPULAÇÃO QUANTICA.  */
@@ -126,32 +118,32 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, double
   toc();
 
   /*  PARÂMETROS DE INTERESSE */
-  loop_ub = IC->size[0];
-  i1 = bestexperimento->size[0];
-  bestexperimento->size[0] = loop_ub;
-  emxEnsureCapacity_int32_T(bestexperimento, i1);
-  for (i1 = 0; i1 < loop_ub; i1++) {
-    bestexperimento->data[i1] = IC->data[i1];
+  kEnd = IC->size[0];
+  i9 = bestexperimento->size[0];
+  bestexperimento->size[0] = kEnd;
+  emxEnsureCapacity_int32_T(bestexperimento, i9);
+  for (i9 = 0; i9 < kEnd; i9++) {
+    bestexperimento->data[i9] = IC->data[i9];
   }
 
   emxInit_int32_T(&rank_classic, 2);
-  i1 = rank_classic->size[0] * rank_classic->size[1];
+  i9 = rank_classic->size[0] * rank_classic->size[1];
   rank_classic->size[0] = NumTOp;
   rank_classic->size[1] = numIC;
-  emxEnsureCapacity_int32_T(rank_classic, i1);
-  loop_ub = NumTOp * numIC;
-  for (i1 = 0; i1 < loop_ub; i1++) {
-    rank_classic->data[i1] = 0;
+  emxEnsureCapacity_int32_T(rank_classic, i9);
+  kEnd = NumTOp * numIC;
+  for (i9 = 0; i9 < kEnd; i9++) {
+    rank_classic->data[i9] = 0;
   }
 
   emxInit_real_T(&bestFitness, 2);
-  i1 = bestFitness->size[0] * bestFitness->size[1];
+  i9 = bestFitness->size[0] * bestFitness->size[1];
   bestFitness->size[0] = numIC;
   bestFitness->size[1] = 6;
-  emxEnsureCapacity_real_T(bestFitness, i1);
-  loop_ub = numIC * 6;
-  for (i1 = 0; i1 < loop_ub; i1++) {
-    bestFitness->data[i1] = 0.0;
+  emxEnsureCapacity_real_T(bestFitness, i9);
+  kEnd = numIC * 6;
+  for (i9 = 0; i9 < kEnd; i9++) {
+    bestFitness->data[i9] = 0.0;
   }
 
   if (NumTOp < 1) {
@@ -160,1035 +152,47 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, double
     n = NumTOp;
   }
 
-  emxInit_int32_T(&y, 2);
-  i1 = y->size[0] * y->size[1];
-  y->size[0] = 1;
-  y->size[1] = n;
-  emxEnsureCapacity_int32_T(y, i1);
+  emxInit_int32_T(&idx, 2);
+  i9 = idx->size[0] * idx->size[1];
+  idx->size[0] = 1;
+  idx->size[1] = n;
+  emxEnsureCapacity_int32_T(idx, i9);
   if (n > 0) {
-    y->data[0] = 1;
+    idx->data[0] = 1;
     yk = 1;
     for (k = 2; k <= n; k++) {
       yk++;
-      y->data[k - 1] = yk;
+      idx->data[k - 1] = yk;
     }
   }
 
-  loop_ub = y->size[1];
-  for (i1 = 0; i1 < loop_ub; i1++) {
-    rank_classic->data[i1] = y->data[i1];
+  kEnd = idx->size[1];
+  for (i9 = 0; i9 < kEnd; i9++) {
+    rank_classic->data[i9] = idx->data[i9];
   }
 
-  emxFree_int32_T(&y);
-  for (i1 = 0; i1 < 6; i1++) {
-    bestFitness->data[bestFitness->size[0] * i1] = fitnessB[i1];
+  for (i9 = 0; i9 < 6; i9++) {
+    bestFitness->data[bestFitness->size[0] * i9] = fitnessB[i9];
   }
 
   /*  INICIALIZA LOOPING */
-  i1 = trace->size[0] * trace->size[1];
+  i9 = trace->size[0] * trace->size[1];
   trace->size[0] = generations;
   trace->size[1] = 9;
-  emxEnsureCapacity_real_T(trace, i1);
+  emxEnsureCapacity_real_T(trace, i9);
   emxInit_real_T(&fitness, 2);
   emxInit_int32_T(&aux_classic_2, 2);
   emxInit_real_T(&aux_fitness_2, 2);
   emxInit_real_T(&tmpColumn, 2);
-  emxInit_real_T(&IQtemp, 2);
   emxInitMatrix_cell_wrap_0(reshapes);
   emxInit_real_T(&x, 1);
   emxInitMatrix_cell_wrap_0(b_reshapes);
-  emxInit_int32_T(&b_IC, 1);
-  emxInit_int32_T(&b_rank_classic, 2);
-  emxInit_real_T(&b_IQ, 2);
-  emxInit_int32_T(&c_rank_classic, 2);
-  emxInit_real_T(&b_fitness, 2);
-  emxInit_int32_T(&b_PCPrO, 2);
-  emxInit_int32_T(&b_PME, 2);
-  emxInit_int32_T(&b_PMA, 2);
-  emxInit_int32_T(&b_PMAn, 2);
-  emxInit_int32_T(&b_PS, 2);
-  emxInit_int32_T(&b_PCPO, 2);
-  emxInit_int32_T(&b_PCR, 2);
-  emxInit_int32_T(&b_TimeUsoRec, 2);
-  emxInit_real_T(&b_EP, 1);
-  for (g = 0; g < generations; g++) {
-    i1 = fitness->size[0] * fitness->size[1];
-    fitness->size[0] = numIC;
-    fitness->size[1] = 6;
-    emxEnsureCapacity_real_T(fitness, i1);
-    loop_ub = numIC * 6;
-    for (i1 = 0; i1 < loop_ub; i1++) {
-      fitness->data[i1] = 0.0;
-    }
-
-    /*  [fitness,NOFP,TmNOFP,NOE2,NOE3] */
-    for (yk = 0; yk < numIC; yk++) {
-      loop_ub = IC->size[0];
-      i1 = b_IC->size[0];
-      b_IC->size[0] = loop_ub;
-      emxEnsureCapacity_int32_T(b_IC, i1);
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_IC->data[i1] = IC->data[i1 + IC->size[0] * yk];
-      }
-
-      i1 = b_PCPrO->size[0] * b_PCPrO->size[1];
-      b_PCPrO->size[0] = PCPrO->size[0];
-      b_PCPrO->size[1] = PCPrO->size[1];
-      emxEnsureCapacity_int32_T(b_PCPrO, i1);
-      loop_ub = PCPrO->size[0] * PCPrO->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_PCPrO->data[i1] = PCPrO->data[i1];
-      }
-
-      i1 = b_PME->size[0] * b_PME->size[1];
-      b_PME->size[0] = PME->size[0];
-      b_PME->size[1] = PME->size[1];
-      emxEnsureCapacity_int32_T(b_PME, i1);
-      loop_ub = PME->size[0] * PME->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_PME->data[i1] = PME->data[i1];
-      }
-
-      i1 = b_PMA->size[0] * b_PMA->size[1];
-      b_PMA->size[0] = PMA->size[0];
-      b_PMA->size[1] = PMA->size[1];
-      emxEnsureCapacity_int32_T(b_PMA, i1);
-      loop_ub = PMA->size[0] * PMA->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_PMA->data[i1] = PMA->data[i1];
-      }
-
-      i1 = b_PMAn->size[0] * b_PMAn->size[1];
-      b_PMAn->size[0] = PMAn->size[0];
-      b_PMAn->size[1] = PMAn->size[1];
-      emxEnsureCapacity_int32_T(b_PMAn, i1);
-      loop_ub = PMAn->size[0] * PMAn->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_PMAn->data[i1] = PMAn->data[i1];
-      }
-
-      i1 = b_PS->size[0] * b_PS->size[1];
-      b_PS->size[0] = PS->size[0];
-      b_PS->size[1] = PS->size[1];
-      emxEnsureCapacity_int32_T(b_PS, i1);
-      loop_ub = PS->size[0] * PS->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_PS->data[i1] = PS->data[i1];
-      }
-
-      i1 = b_PCPO->size[0] * b_PCPO->size[1];
-      b_PCPO->size[0] = PCPO->size[0];
-      b_PCPO->size[1] = PCPO->size[1];
-      emxEnsureCapacity_int32_T(b_PCPO, i1);
-      loop_ub = PCPO->size[0] * PCPO->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_PCPO->data[i1] = PCPO->data[i1];
-      }
-
-      i1 = b_PCR->size[0] * b_PCR->size[1];
-      b_PCR->size[0] = PCR->size[0];
-      b_PCR->size[1] = PCR->size[1];
-      emxEnsureCapacity_int32_T(b_PCR, i1);
-      loop_ub = PCR->size[0] * PCR->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_PCR->data[i1] = PCR->data[i1];
-      }
-
-      i1 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
-      b_TimeUsoRec->size[0] = TimeUsoRec->size[0];
-      b_TimeUsoRec->size[1] = 7;
-      emxEnsureCapacity_int32_T(b_TimeUsoRec, i1);
-      loop_ub = TimeUsoRec->size[0] * TimeUsoRec->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_TimeUsoRec->data[i1] = TimeUsoRec->data[i1];
-      }
-
-      i1 = b_EP->size[0];
-      b_EP->size[0] = EP->size[0];
-      emxEnsureCapacity_real_T(b_EP, i1);
-      loop_ub = EP->size[0];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_EP->data[i1] = EP->data[i1];
-      }
-
-      b_sch(NumTOp, b_IC, NumRec, b_PCPrO, b_PME, b_PMA, b_PMAn, b_PS, b_PCPO,
-            b_PCR, Dia, Data, b_TimeUsoRec, DispMExD, b_EP, k0, k1, k2, k3, &d0,
-            &varargin_5, &d1, &d2, &d3, &d4);
-      fitness->data[yk] = d0;
-      fitness->data[yk + fitness->size[0]] = varargin_5;
-      fitness->data[yk + (fitness->size[0] << 1)] = d1;
-      fitness->data[yk + fitness->size[0] * 3] = d2;
-      fitness->data[yk + (fitness->size[0] << 2)] = d3;
-      fitness->data[yk + fitness->size[0] * 5] = d4;
-    }
-
-    /*     save(strcat('fitness_', int2str(g),'.mat'),'fitness'); */
-    /*     file = load(strcat('fitness_', int2str(g),'.mat')); */
-    /*     fitness = file.fitness; */
-    /* ATUALIZA POPULAÇÃO B(T) */
-    if (1 + g == 1) {
-      i1 = rank_classic->size[0];
-      if (i1 != 0) {
-        k = rank_classic->size[0];
-      } else if ((IC->size[0] != 0) && (IC->size[1] != 0)) {
-        k = IC->size[0];
-      } else {
-        i1 = rank_classic->size[0];
-        if (i1 > 0) {
-          k = rank_classic->size[0];
-        } else {
-          k = 0;
-        }
-
-        if (IC->size[0] > k) {
-          k = IC->size[0];
-        }
-      }
-
-      empty_non_axis_sizes = (k == 0);
-      if (empty_non_axis_sizes) {
-        input_sizes_idx_1 = 1;
-      } else {
-        i1 = rank_classic->size[0];
-        if (i1 != 0) {
-          input_sizes_idx_1 = 1;
-        } else {
-          input_sizes_idx_1 = 0;
-        }
-      }
-
-      loop_ub = rank_classic->size[0];
-      i1 = b_IC->size[0];
-      b_IC->size[0] = loop_ub;
-      emxEnsureCapacity_int32_T(b_IC, i1);
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_IC->data[i1] = rank_classic->data[i1];
-      }
-
-      i1 = b_reshapes[0].f1->size[0] * b_reshapes[0].f1->size[1];
-      b_reshapes[0].f1->size[0] = k;
-      b_reshapes[0].f1->size[1] = input_sizes_idx_1;
-      emxEnsureCapacity_int32_T(b_reshapes[0].f1, i1);
-      loop_ub = k * input_sizes_idx_1;
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_reshapes[0].f1->data[i1] = b_IC->data[i1];
-      }
-
-      if (empty_non_axis_sizes || ((IC->size[0] != 0) && (IC->size[1] != 0))) {
-        loop_ub = IC->size[1];
-      } else {
-        loop_ub = 0;
-      }
-
-      i1 = aux_classic_2->size[0] * aux_classic_2->size[1];
-      aux_classic_2->size[0] = b_reshapes[0].f1->size[0];
-      aux_classic_2->size[1] = b_reshapes[0].f1->size[1] + loop_ub;
-      emxEnsureCapacity_int32_T(aux_classic_2, i1);
-      b_loop_ub = b_reshapes[0].f1->size[1];
-      for (i1 = 0; i1 < b_loop_ub; i1++) {
-        n = b_reshapes[0].f1->size[0];
-        for (i2 = 0; i2 < n; i2++) {
-          aux_classic_2->data[i2 + aux_classic_2->size[0] * i1] = b_reshapes[0].
-            f1->data[i2 + b_reshapes[0].f1->size[0] * i1];
-        }
-      }
-
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        for (i2 = 0; i2 < k; i2++) {
-          aux_classic_2->data[i2 + aux_classic_2->size[0] * (i1 + b_reshapes[0].
-            f1->size[1])] = IC->data[i2 + k * i1];
-        }
-      }
-
-      i1 = aux_fitness_2->size[0] * aux_fitness_2->size[1];
-      aux_fitness_2->size[0] = 1 + fitness->size[0];
-      aux_fitness_2->size[1] = 6;
-      emxEnsureCapacity_real_T(aux_fitness_2, i1);
-      for (i1 = 0; i1 < 6; i1++) {
-        aux_fitness_2->data[aux_fitness_2->size[0] * i1] = bestFitness->
-          data[bestFitness->size[0] * i1];
-      }
-
-      for (i1 = 0; i1 < 6; i1++) {
-        loop_ub = fitness->size[0];
-        for (i2 = 0; i2 < loop_ub; i2++) {
-          aux_fitness_2->data[(i2 + aux_fitness_2->size[0] * i1) + 1] =
-            fitness->data[i2 + fitness->size[0] * i1];
-        }
-      }
-
-      loop_ub = aux_fitness_2->size[0];
-      i1 = x->size[0];
-      x->size[0] = loop_ub;
-      emxEnsureCapacity_real_T(x, i1);
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        x->data[i1] = aux_fitness_2->data[i1];
-      }
-
-      sort(x, b_IC);
-      i1 = x->size[0];
-      x->size[0] = b_IC->size[0];
-      emxEnsureCapacity_real_T(x, i1);
-      loop_ub = b_IC->size[0];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        x->data[i1] = b_IC->data[i1];
-      }
-
-      if (1 > numIC) {
-        loop_ub = 0;
-      } else {
-        loop_ub = numIC;
-      }
-
-      i1 = fitness->size[0] * fitness->size[1];
-      fitness->size[0] = x->size[0];
-      fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i1);
-      for (i1 = 0; i1 < 6; i1++) {
-        b_loop_ub = x->size[0];
-        for (i2 = 0; i2 < b_loop_ub; i2++) {
-          fitness->data[i2 + fitness->size[0] * i1] = aux_fitness_2->data[((int)
-            x->data[i2] + aux_fitness_2->size[0] * i1) - 1];
-        }
-      }
-
-      i1 = b_fitness->size[0] * b_fitness->size[1];
-      b_fitness->size[0] = loop_ub;
-      b_fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(b_fitness, i1);
-      for (i1 = 0; i1 < 6; i1++) {
-        for (i2 = 0; i2 < loop_ub; i2++) {
-          b_fitness->data[i2 + b_fitness->size[0] * i1] = fitness->data[i2 +
-            fitness->size[0] * i1];
-        }
-      }
-
-      i1 = fitness->size[0] * fitness->size[1];
-      fitness->size[0] = b_fitness->size[0];
-      fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i1);
-      for (i1 = 0; i1 < 6; i1++) {
-        loop_ub = b_fitness->size[0];
-        for (i2 = 0; i2 < loop_ub; i2++) {
-          fitness->data[i2 + fitness->size[0] * i1] = b_fitness->data[i2 +
-            b_fitness->size[0] * i1];
-        }
-      }
-
-      if (1 > numIC) {
-        loop_ub = 0;
-      } else {
-        loop_ub = numIC;
-      }
-
-      b_loop_ub = aux_classic_2->size[0] - 1;
-      n = aux_classic_2->size[0];
-      i1 = rank_classic->size[0] * rank_classic->size[1];
-      rank_classic->size[0] = n;
-      rank_classic->size[1] = x->size[0];
-      emxEnsureCapacity_int32_T(rank_classic, i1);
-      yk = x->size[0];
-      for (i1 = 0; i1 < yk; i1++) {
-        for (i2 = 0; i2 < n; i2++) {
-          rank_classic->data[i2 + rank_classic->size[0] * i1] =
-            aux_classic_2->data[i2 + aux_classic_2->size[0] * ((int)x->data[i1]
-            - 1)];
-        }
-      }
-
-      i1 = IC->size[0] * IC->size[1];
-      IC->size[0] = b_loop_ub + 1;
-      IC->size[1] = loop_ub;
-      emxEnsureCapacity_int32_T(IC, i1);
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        for (i2 = 0; i2 <= b_loop_ub; i2++) {
-          IC->data[i2 + IC->size[0] * i1] = rank_classic->data[i2 +
-            rank_classic->size[0] * i1];
-        }
-      }
-
-      i1 = rank_classic->size[0] * rank_classic->size[1];
-      rank_classic->size[0] = IC->size[0];
-      rank_classic->size[1] = IC->size[1];
-      emxEnsureCapacity_int32_T(rank_classic, i1);
-      loop_ub = IC->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_loop_ub = IC->size[0];
-        for (i2 = 0; i2 < b_loop_ub; i2++) {
-          rank_classic->data[i2 + rank_classic->size[0] * i1] = IC->data[i2 +
-            IC->size[0] * i1];
-        }
-      }
-    } else {
-      varargin_5 = rt_roundd((double)numIC * taxE);
-      if (varargin_5 < 2.147483648E+9) {
-        if (varargin_5 >= -2.147483648E+9) {
-          i1 = (int)varargin_5;
-        } else {
-          i1 = MIN_int32_T;
-        }
-      } else {
-        i1 = MAX_int32_T;
-      }
-
-      i1 = (int)rt_roundd((double)i1 / 100.0);
-      if (1 > i1) {
-        loop_ub = 0;
-      } else {
-        loop_ub = i1;
-      }
-
-      i1 = rank_classic->size[0];
-      if ((i1 != 0) && (loop_ub != 0)) {
-        k = rank_classic->size[0];
-      } else if ((IC->size[0] != 0) && (IC->size[1] != 0)) {
-        k = IC->size[0];
-      } else {
-        i1 = rank_classic->size[0];
-        if (i1 > 0) {
-          k = rank_classic->size[0];
-        } else {
-          k = 0;
-        }
-
-        if (IC->size[0] > k) {
-          k = IC->size[0];
-        }
-      }
-
-      empty_non_axis_sizes = (k == 0);
-      if (empty_non_axis_sizes) {
-        yk = loop_ub;
-      } else {
-        i1 = rank_classic->size[0];
-        if ((i1 != 0) && (loop_ub != 0)) {
-          yk = loop_ub;
-        } else {
-          yk = 0;
-        }
-      }
-
-      b_loop_ub = rank_classic->size[0];
-      i1 = b_rank_classic->size[0] * b_rank_classic->size[1];
-      b_rank_classic->size[0] = b_loop_ub;
-      b_rank_classic->size[1] = loop_ub;
-      emxEnsureCapacity_int32_T(b_rank_classic, i1);
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        for (i2 = 0; i2 < b_loop_ub; i2++) {
-          b_rank_classic->data[i2 + b_rank_classic->size[0] * i1] =
-            rank_classic->data[i2 + rank_classic->size[0] * i1];
-        }
-      }
-
-      i1 = reshapes[0].f1->size[0] * reshapes[0].f1->size[1];
-      reshapes[0].f1->size[0] = k;
-      reshapes[0].f1->size[1] = yk;
-      emxEnsureCapacity_int32_T(reshapes[0].f1, i1);
-      loop_ub = k * yk;
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        reshapes[0].f1->data[i1] = b_rank_classic->data[i1];
-      }
-
-      if (empty_non_axis_sizes || ((IC->size[0] != 0) && (IC->size[1] != 0))) {
-        loop_ub = IC->size[1];
-      } else {
-        loop_ub = 0;
-      }
-
-      i1 = aux_classic_2->size[0] * aux_classic_2->size[1];
-      aux_classic_2->size[0] = reshapes[0].f1->size[0];
-      aux_classic_2->size[1] = reshapes[0].f1->size[1] + loop_ub;
-      emxEnsureCapacity_int32_T(aux_classic_2, i1);
-      b_loop_ub = reshapes[0].f1->size[1];
-      for (i1 = 0; i1 < b_loop_ub; i1++) {
-        n = reshapes[0].f1->size[0];
-        for (i2 = 0; i2 < n; i2++) {
-          aux_classic_2->data[i2 + aux_classic_2->size[0] * i1] = reshapes[0].
-            f1->data[i2 + reshapes[0].f1->size[0] * i1];
-        }
-      }
-
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        for (i2 = 0; i2 < k; i2++) {
-          aux_classic_2->data[i2 + aux_classic_2->size[0] * (i1 + reshapes[0].
-            f1->size[1])] = IC->data[i2 + k * i1];
-        }
-      }
-
-      if (varargin_5 < 2.147483648E+9) {
-        if (varargin_5 >= -2.147483648E+9) {
-          i1 = (int)varargin_5;
-        } else {
-          i1 = MIN_int32_T;
-        }
-      } else {
-        i1 = MAX_int32_T;
-      }
-
-      i1 = (int)rt_roundd((double)i1 / 100.0);
-      if (1 > i1) {
-        loop_ub = 0;
-      } else {
-        loop_ub = i1;
-      }
-
-      i1 = aux_fitness_2->size[0] * aux_fitness_2->size[1];
-      aux_fitness_2->size[0] = loop_ub + fitness->size[0];
-      aux_fitness_2->size[1] = 6;
-      emxEnsureCapacity_real_T(aux_fitness_2, i1);
-      for (i1 = 0; i1 < 6; i1++) {
-        for (i2 = 0; i2 < loop_ub; i2++) {
-          aux_fitness_2->data[i2 + aux_fitness_2->size[0] * i1] =
-            bestFitness->data[i2 + bestFitness->size[0] * i1];
-        }
-      }
-
-      for (i1 = 0; i1 < 6; i1++) {
-        b_loop_ub = fitness->size[0];
-        for (i2 = 0; i2 < b_loop_ub; i2++) {
-          aux_fitness_2->data[(i2 + loop_ub) + aux_fitness_2->size[0] * i1] =
-            fitness->data[i2 + fitness->size[0] * i1];
-        }
-      }
-
-      loop_ub = aux_fitness_2->size[0];
-      i1 = x->size[0];
-      x->size[0] = loop_ub;
-      emxEnsureCapacity_real_T(x, i1);
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        x->data[i1] = aux_fitness_2->data[i1];
-      }
-
-      sort(x, b_IC);
-      i1 = x->size[0];
-      x->size[0] = b_IC->size[0];
-      emxEnsureCapacity_real_T(x, i1);
-      loop_ub = b_IC->size[0];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        x->data[i1] = b_IC->data[i1];
-      }
-
-      if (1 > numIC) {
-        loop_ub = 0;
-      } else {
-        loop_ub = numIC;
-      }
-
-      i1 = fitness->size[0] * fitness->size[1];
-      fitness->size[0] = x->size[0];
-      fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i1);
-      for (i1 = 0; i1 < 6; i1++) {
-        b_loop_ub = x->size[0];
-        for (i2 = 0; i2 < b_loop_ub; i2++) {
-          fitness->data[i2 + fitness->size[0] * i1] = aux_fitness_2->data[((int)
-            x->data[i2] + aux_fitness_2->size[0] * i1) - 1];
-        }
-      }
-
-      i1 = b_fitness->size[0] * b_fitness->size[1];
-      b_fitness->size[0] = loop_ub;
-      b_fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(b_fitness, i1);
-      for (i1 = 0; i1 < 6; i1++) {
-        for (i2 = 0; i2 < loop_ub; i2++) {
-          b_fitness->data[i2 + b_fitness->size[0] * i1] = fitness->data[i2 +
-            fitness->size[0] * i1];
-        }
-      }
-
-      i1 = fitness->size[0] * fitness->size[1];
-      fitness->size[0] = b_fitness->size[0];
-      fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i1);
-      for (i1 = 0; i1 < 6; i1++) {
-        loop_ub = b_fitness->size[0];
-        for (i2 = 0; i2 < loop_ub; i2++) {
-          fitness->data[i2 + fitness->size[0] * i1] = b_fitness->data[i2 +
-            b_fitness->size[0] * i1];
-        }
-      }
-
-      if (1 > numIC) {
-        loop_ub = 0;
-      } else {
-        loop_ub = numIC;
-      }
-
-      b_loop_ub = aux_classic_2->size[0] - 1;
-      n = aux_classic_2->size[0];
-      i1 = rank_classic->size[0] * rank_classic->size[1];
-      rank_classic->size[0] = n;
-      rank_classic->size[1] = x->size[0];
-      emxEnsureCapacity_int32_T(rank_classic, i1);
-      yk = x->size[0];
-      for (i1 = 0; i1 < yk; i1++) {
-        for (i2 = 0; i2 < n; i2++) {
-          rank_classic->data[i2 + rank_classic->size[0] * i1] =
-            aux_classic_2->data[i2 + aux_classic_2->size[0] * ((int)x->data[i1]
-            - 1)];
-        }
-      }
-
-      i1 = IC->size[0] * IC->size[1];
-      IC->size[0] = b_loop_ub + 1;
-      IC->size[1] = loop_ub;
-      emxEnsureCapacity_int32_T(IC, i1);
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        for (i2 = 0; i2 <= b_loop_ub; i2++) {
-          IC->data[i2 + IC->size[0] * i1] = rank_classic->data[i2 +
-            rank_classic->size[0] * i1];
-        }
-      }
-
-      i1 = rank_classic->size[0] * rank_classic->size[1];
-      rank_classic->size[0] = IC->size[0];
-      rank_classic->size[1] = IC->size[1];
-      emxEnsureCapacity_int32_T(rank_classic, i1);
-      loop_ub = IC->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_loop_ub = IC->size[0];
-        for (i2 = 0; i2 < b_loop_ub; i2++) {
-          rank_classic->data[i2 + rank_classic->size[0] * i1] = IC->data[i2 +
-            IC->size[0] * i1];
-        }
-      }
-    }
-
-    /* REMOVE INDIVÍDUOS MAIS FRACOS (EXCEDENTES) */
-    i1 = bestFitness->size[0] * bestFitness->size[1];
-    bestFitness->size[0] = fitness->size[0];
-    bestFitness->size[1] = 6;
-    emxEnsureCapacity_real_T(bestFitness, i1);
-    loop_ub = fitness->size[0] * fitness->size[1];
-    for (i1 = 0; i1 < loop_ub; i1++) {
-      bestFitness->data[i1] = fitness->data[i1];
-    }
-
-    /*  GUARDA MELHOR INDIVÍDUO */
-    loop_ub = rank_classic->size[0];
-    i1 = bestexperimento->size[0];
-    bestexperimento->size[0] = loop_ub;
-    emxEnsureCapacity_int32_T(bestexperimento, i1);
-    for (i1 = 0; i1 < loop_ub; i1++) {
-      bestexperimento->data[i1] = rank_classic->data[i1];
-    }
-
-    /*  SALVA A GERAÇÃO, FITNESS do Melhor ind., a MÉDIA DO FITNESS e a STD DO FITNESS  */
-    i1 = fitness->size[0];
-    loop_ub = fitness->size[0];
-    i2 = x->size[0];
-    x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i2);
-    for (i2 = 0; i2 < loop_ub; i2++) {
-      x->data[i2] = fitness->data[i2];
-    }
-
-    loop_ub = fitness->size[0];
-    i2 = b_EP->size[0];
-    b_EP->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(b_EP, i2);
-    for (i2 = 0; i2 < loop_ub; i2++) {
-      b_EP->data[i2] = fitness->data[i2];
-    }
-
-    varargin_5 = combineVectorElements(x);
-    d1 = b_std(b_EP);
-    trace->data[g] = 1 + g;
-    d2 = rt_roundd(fitness->data[0]);
-    if (d2 < 2.147483648E+9) {
-      if (d2 >= -2.147483648E+9) {
-        i2 = (int)d2;
-      } else {
-        i2 = MIN_int32_T;
-      }
-    } else {
-      i2 = MAX_int32_T;
-    }
-
-    trace->data[g + trace->size[0]] = i2;
-    varargin_5 = rt_roundd(varargin_5 / (double)i1);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i1 = (int)varargin_5;
-      } else {
-        i1 = MIN_int32_T;
-      }
-    } else {
-      i1 = MAX_int32_T;
-    }
-
-    trace->data[g + (trace->size[0] << 1)] = i1;
-    varargin_5 = rt_roundd(d1);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i1 = (int)varargin_5;
-      } else {
-        i1 = MIN_int32_T;
-      }
-    } else {
-      i1 = MAX_int32_T;
-    }
-
-    trace->data[g + trace->size[0] * 3] = i1;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0]]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i1 = (int)varargin_5;
-      } else {
-        i1 = MIN_int32_T;
-      }
-    } else {
-      i1 = MAX_int32_T;
-    }
-
-    trace->data[g + (trace->size[0] << 2)] = i1;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0] << 1]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i1 = (int)varargin_5;
-      } else {
-        i1 = MIN_int32_T;
-      }
-    } else {
-      i1 = MAX_int32_T;
-    }
-
-    trace->data[g + trace->size[0] * 5] = i1;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0] * 3]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i1 = (int)varargin_5;
-      } else {
-        i1 = MIN_int32_T;
-      }
-    } else {
-      i1 = MAX_int32_T;
-    }
-
-    trace->data[g + trace->size[0] * 6] = i1;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0] << 2]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i1 = (int)varargin_5;
-      } else {
-        i1 = MIN_int32_T;
-      }
-    } else {
-      i1 = MAX_int32_T;
-    }
-
-    trace->data[g + trace->size[0] * 7] = i1;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0] * 5]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i1 = (int)varargin_5;
-      } else {
-        i1 = MIN_int32_T;
-      }
-    } else {
-      i1 = MAX_int32_T;
-    }
-
-    trace->data[g + (trace->size[0] << 3)] = i1;
-
-    /*  IMPRIME STATUS DA EVOLUÇÃO */
-    loop_ub = fitness->size[0];
-    i1 = x->size[0];
-    x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i1);
-    for (i1 = 0; i1 < loop_ub; i1++) {
-      x->data[i1] = fitness->data[i1];
-    }
-
-    varargin_5 = b_std(x);
-    i1 = fitness->size[0];
-    loop_ub = fitness->size[0];
-    i2 = x->size[0];
-    x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i2);
-    for (i2 = 0; i2 < loop_ub; i2++) {
-      x->data[i2] = fitness->data[i2];
-    }
-
-    printf("Ger: %d - \t Ini: %10.5f - \t Best: %10.5f - \t Mean: %10.5f - \t STD: %10.5f - \t Tt: %10.5f - \t NOFP: %10.5f - \t TmOFP: %10.5f - \t "
-           "NOE2: %10.5f - \t NOE3: %10.5f \n", 1 + g, fitnessB[0],
-           fitness->data[0], combineVectorElements(x) / (double)i1, varargin_5,
-           fitness->data[fitness->size[0]], fitness->data[fitness->size[0] << 1],
-           fitness->data[fitness->size[0] * 3], fitness->data[fitness->size[0] <<
-           2], fitness->data[fitness->size[0] * 5]);
-    fflush(stdout);
-
-    /*  REPOSICIONA PULSOS DE ACORDO COM MELHORES INDIVÍDUOS */
-    if (genToWidth == 0) {
-      yk = 0;
-    } else {
-      yk = (g - genToWidth * div_s32(1 + g, genToWidth)) + 1;
-    }
-
-    if (yk == 0) {
-      /*  QUANTUM UPDATE */
-      if (numIQ < -2147483647) {
-        yk = MIN_int32_T;
-      } else {
-        yk = numIQ - 1;
-      }
-
-      randperm(yk, tmpColumn);
-
-      /* %%%%%%%%%%%%% MODIFICADO %%%%%%%%%%%%%%%%% */
-      /*          maximo=0.02; */
-      /*          minimo=0.002; */
-      /*          taxAct = rand; */
-      /*          taxAct = (maximo-minimo)*taxAct+minimo; */
-      i1 = IQ->size[0] - NumTOp;
-      if (1 > i1) {
-        loop_ub = 0;
-      } else {
-        loop_ub = i1;
-      }
-
-      b_loop_ub = IQ->size[1];
-      i1 = b_IQ->size[0] * b_IQ->size[1];
-      b_IQ->size[0] = loop_ub;
-      b_IQ->size[1] = b_loop_ub;
-      emxEnsureCapacity_real_T(b_IQ, i1);
-      for (i1 = 0; i1 < b_loop_ub; i1++) {
-        for (i2 = 0; i2 < loop_ub; i2++) {
-          b_IQ->data[i2 + b_IQ->size[0] * i1] = IQ->data[i2 + IQ->size[0] * i1];
-        }
-      }
-
-      loop_ub = rank_classic->size[0];
-      i1 = c_rank_classic->size[0] * c_rank_classic->size[1];
-      c_rank_classic->size[0] = loop_ub;
-      c_rank_classic->size[1] = tmpColumn->size[1];
-      emxEnsureCapacity_int32_T(c_rank_classic, i1);
-      b_loop_ub = tmpColumn->size[1];
-      for (i1 = 0; i1 < b_loop_ub; i1++) {
-        for (i2 = 0; i2 < loop_ub; i2++) {
-          c_rank_classic->data[i2 + c_rank_classic->size[0] * i1] =
-            rank_classic->data[i2 + rank_classic->size[0] * ((int)
-            tmpColumn->data[i1] - 1)];
-        }
-      }
-
-      b_actIQ(b_IQ, c_rank_classic, IQtemp);
-
-      /* %%%%%%%%%%%%% MODIFICADO %%%%%%%%%%%%%%%%% */
-      loop_ub = IQtemp->size[1];
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        b_loop_ub = IQtemp->size[0];
-        for (i2 = 0; i2 < b_loop_ub; i2++) {
-          IQ->data[i2 + IQ->size[0] * i1] = IQtemp->data[i2 + IQtemp->size[0] *
-            i1];
-        }
-      }
-
-      /* %%%%%%%%%%%%% MODIFICADO %%%%%%%%%%%%%%%%% */
-      /*  NEW CLASSIC POPULATION */
-      if (keeppriority) {
-        obsIQini(IQ, numIQ, numObsIQ, ProbXEst, IC);
-
-        /*  Observaciones de los IQ garantizando que se mantengan en el rango Prioridad             */
-      } else {
-        obsIQ(IQ, numIQ, numObsIQ, IC);
-
-        /*  Observaciones de los IQ */
-      }
-    } else {
-      /*  Crossover clasico          */
-      cc(rank_classic, numIC, taxC, NumTOp, IC);
-    }
-  }
-
-  emxFree_real_T(&b_EP);
-  emxFree_int32_T(&b_TimeUsoRec);
-  emxFree_int32_T(&b_PCR);
-  emxFree_int32_T(&b_PCPO);
-  emxFree_int32_T(&b_PS);
-  emxFree_int32_T(&b_PMAn);
-  emxFree_int32_T(&b_PMA);
-  emxFree_int32_T(&b_PME);
-  emxFree_int32_T(&b_PCPrO);
-  emxFree_real_T(&b_fitness);
-  emxFree_int32_T(&c_rank_classic);
-  emxFree_real_T(&b_IQ);
-  emxFree_int32_T(&b_rank_classic);
-  emxFree_int32_T(&b_IC);
-  emxFreeMatrix_cell_wrap_0(b_reshapes);
-  emxFree_real_T(&x);
-  emxFreeMatrix_cell_wrap_0(reshapes);
-  emxFree_real_T(&IQtemp);
-  emxFree_real_T(&tmpColumn);
-  emxFree_real_T(&aux_fitness_2);
-  emxFree_int32_T(&aux_classic_2);
-  emxFree_int32_T(&rank_classic);
-  emxFree_real_T(&fitness);
-  emxFree_real_T(&bestFitness);
-  emxFree_int32_T(&IC);
-  emxFree_real_T(&IQ);
-}
-
-void b_aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE,
-                const int NumRec[7], const emxArray_int32_T *PCPrO, const
-                emxArray_int32_T *PME, const emxArray_int32_T *PMA, const
-                emxArray_int32_T *PMAn, const emxArray_int32_T *PS, const
-                emxArray_int32_T *PCPO, const emxArray_int32_T *PCR, const
-                emxArray_int32_T *Dia, const emxArray_int32_T *Data, const
-                emxArray_int32_T *TimeUsoRec, const emxArray_real_T *ProbXEst,
-                const double fitnessB[6], int generations, int genToWidth, const
-                emxArray_int32_T *DispMExD, const emxArray_int32_T *EP, double
-                k0, double k1, double k2, double k3, boolean_T keeppriority,
-                emxArray_int32_T *bestexperimento, emxArray_real_T *trace)
-{
-  emxArray_real_T *IQ;
-  int numObsIQ;
-  emxArray_int32_T *IC;
-  int loop_ub;
-  int i52;
-  emxArray_int32_T *rank_classic;
-  emxArray_real_T *bestFitness;
-  int n;
-  emxArray_int32_T *y;
-  int yk;
-  int k;
-  emxArray_real_T *fitness;
-  emxArray_int32_T *aux_classic_2;
-  emxArray_real_T *aux_fitness_2;
-  emxArray_real_T *tmpColumn;
-  emxArray_real_T *IQtemp;
-  cell_wrap_0 reshapes[2];
-  emxArray_real_T *x;
-  cell_wrap_0 b_reshapes[2];
-  emxArray_int32_T *b_IC;
-  emxArray_int32_T *b_rank_classic;
-  emxArray_real_T *b_fitness;
-  emxArray_real_T *b_IQ;
-  emxArray_int32_T *c_rank_classic;
-  emxArray_real_T *c_fitness;
-  emxArray_int32_T *b_PCPrO;
-  emxArray_int32_T *b_PME;
-  emxArray_int32_T *b_PMA;
-  emxArray_int32_T *b_PMAn;
-  emxArray_int32_T *b_PS;
-  emxArray_int32_T *b_PCPO;
-  emxArray_int32_T *b_PCR;
-  emxArray_int32_T *b_TimeUsoRec;
-  emxArray_int32_T *b_EP;
-  int g;
-  double varargin_5;
-  boolean_T empty_non_axis_sizes;
-  signed char input_sizes_idx_1;
-  int b_loop_ub;
-  int i53;
-  double d11;
-  double d12;
-  double d13;
-  double d14;
-  double d15;
-  emxInit_real_T(&IQ, 2);
-
-  /*  INICIALIZA POPULAÇÃO QUANTICA.  */
-  CreaPoQunniforme(NumTOp, numIQ, IQ);
-
-  /*  IQ uniforme */
-  /*  INICIALIZA POPULAÇÃO CLÁSSICA. */
-  if (b_rem(numIC, numIQ) == 0) {
-    numObsIQ = rdivide_helper(numIC, numIQ);
-  }
-
-  tic();
-  emxInit_int32_T(&IC, 2);
-  if (keeppriority) {
-    b_obsIQini(IQ, numIQ, numObsIQ, ProbXEst, IC);
-
-    /*  Observaciones de los IQ garantizando que se mantengan en el rango Prioridad             */
-  } else {
-    obsIQ(IQ, numIQ, numObsIQ, IC);
-
-    /*  Observaciones de los IQ */
-  }
-
-  toc();
-
-  /*  PARÂMETROS DE INTERESSE */
-  loop_ub = IC->size[0];
-  i52 = bestexperimento->size[0];
-  bestexperimento->size[0] = loop_ub;
-  emxEnsureCapacity_int32_T(bestexperimento, i52);
-  for (i52 = 0; i52 < loop_ub; i52++) {
-    bestexperimento->data[i52] = IC->data[i52];
-  }
-
-  emxInit_int32_T(&rank_classic, 2);
-  i52 = rank_classic->size[0] * rank_classic->size[1];
-  rank_classic->size[0] = NumTOp;
-  rank_classic->size[1] = numIC;
-  emxEnsureCapacity_int32_T(rank_classic, i52);
-  loop_ub = NumTOp * numIC;
-  for (i52 = 0; i52 < loop_ub; i52++) {
-    rank_classic->data[i52] = 0;
-  }
-
-  emxInit_real_T(&bestFitness, 2);
-  i52 = bestFitness->size[0] * bestFitness->size[1];
-  bestFitness->size[0] = numIC;
-  bestFitness->size[1] = 6;
-  emxEnsureCapacity_real_T(bestFitness, i52);
-  loop_ub = numIC * 6;
-  for (i52 = 0; i52 < loop_ub; i52++) {
-    bestFitness->data[i52] = 0.0;
-  }
-
-  if (NumTOp < 1) {
-    n = 0;
-  } else {
-    n = NumTOp;
-  }
-
-  emxInit_int32_T(&y, 2);
-  i52 = y->size[0] * y->size[1];
-  y->size[0] = 1;
-  y->size[1] = n;
-  emxEnsureCapacity_int32_T(y, i52);
-  if (n > 0) {
-    y->data[0] = 1;
-    yk = 1;
-    for (k = 2; k <= n; k++) {
-      yk++;
-      y->data[k - 1] = yk;
-    }
-  }
-
-  loop_ub = y->size[1];
-  for (i52 = 0; i52 < loop_ub; i52++) {
-    rank_classic->data[i52] = y->data[i52];
-  }
-
-  emxFree_int32_T(&y);
-  for (i52 = 0; i52 < 6; i52++) {
-    bestFitness->data[bestFitness->size[0] * i52] = fitnessB[i52];
-  }
-
-  /*  INICIALIZA LOOPING */
-  i52 = trace->size[0] * trace->size[1];
-  trace->size[0] = generations;
-  trace->size[1] = 9;
-  emxEnsureCapacity_real_T(trace, i52);
-  emxInit_real_T(&fitness, 2);
-  emxInit_int32_T(&aux_classic_2, 2);
-  emxInit_real_T(&aux_fitness_2, 2);
-  emxInit_real_T(&tmpColumn, 2);
-  emxInit_real_T(&IQtemp, 2);
-  emxInitMatrix_cell_wrap_0(reshapes);
-  emxInit_real_T(&x, 1);
-  emxInitMatrix_cell_wrap_0(b_reshapes);
-  emxInit_int32_T(&b_IC, 1);
+  emxInit_int32_T(&iwork, 1);
+  emxInit_int32_T(&b_IC, 2);
+  emxInit_int8_T(&num2bin, 2);
   emxInit_int32_T(&b_rank_classic, 2);
   emxInit_real_T(&b_fitness, 1);
-  emxInit_real_T(&b_IQ, 2);
-  emxInit_int32_T(&c_rank_classic, 2);
+  emxInit_real_T(&r3, 2);
   emxInit_real_T(&c_fitness, 2);
   emxInit_int32_T(&b_PCPrO, 2);
   emxInit_int32_T(&b_PME, 2);
@@ -1200,114 +204,114 @@ void b_aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE,
   emxInit_int32_T(&b_TimeUsoRec, 2);
   emxInit_int32_T(&b_EP, 1);
   for (g = 0; g < generations; g++) {
-    i52 = fitness->size[0] * fitness->size[1];
+    i9 = fitness->size[0] * fitness->size[1];
     fitness->size[0] = numIC;
     fitness->size[1] = 6;
-    emxEnsureCapacity_real_T(fitness, i52);
-    loop_ub = numIC * 6;
-    for (i52 = 0; i52 < loop_ub; i52++) {
-      fitness->data[i52] = 0.0;
+    emxEnsureCapacity_real_T(fitness, i9);
+    kEnd = numIC * 6;
+    for (i9 = 0; i9 < kEnd; i9++) {
+      fitness->data[i9] = 0.0;
     }
 
     /*  [fitness,NOFP,TmNOFP,NOE2,NOE3] */
-    for (yk = 0; yk < numIC; yk++) {
-      loop_ub = IC->size[0];
-      i52 = b_IC->size[0];
-      b_IC->size[0] = loop_ub;
-      emxEnsureCapacity_int32_T(b_IC, i52);
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_IC->data[i52] = IC->data[i52 + IC->size[0] * yk];
+    for (j = 0; j < numIC; j++) {
+      kEnd = IC->size[0];
+      i9 = iwork->size[0];
+      iwork->size[0] = kEnd;
+      emxEnsureCapacity_int32_T(iwork, i9);
+      for (i9 = 0; i9 < kEnd; i9++) {
+        iwork->data[i9] = IC->data[i9 + IC->size[0] * j];
       }
 
-      i52 = b_PCPrO->size[0] * b_PCPrO->size[1];
+      i9 = b_PCPrO->size[0] * b_PCPrO->size[1];
       b_PCPrO->size[0] = PCPrO->size[0];
       b_PCPrO->size[1] = PCPrO->size[1];
-      emxEnsureCapacity_int32_T(b_PCPrO, i52);
-      loop_ub = PCPrO->size[0] * PCPrO->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_PCPrO->data[i52] = PCPrO->data[i52];
+      emxEnsureCapacity_int32_T(b_PCPrO, i9);
+      kEnd = PCPrO->size[0] * PCPrO->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_PCPrO->data[i9] = PCPrO->data[i9];
       }
 
-      i52 = b_PME->size[0] * b_PME->size[1];
+      i9 = b_PME->size[0] * b_PME->size[1];
       b_PME->size[0] = PME->size[0];
       b_PME->size[1] = PME->size[1];
-      emxEnsureCapacity_int32_T(b_PME, i52);
-      loop_ub = PME->size[0] * PME->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_PME->data[i52] = PME->data[i52];
+      emxEnsureCapacity_int32_T(b_PME, i9);
+      kEnd = PME->size[0] * PME->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_PME->data[i9] = PME->data[i9];
       }
 
-      i52 = b_PMA->size[0] * b_PMA->size[1];
+      i9 = b_PMA->size[0] * b_PMA->size[1];
       b_PMA->size[0] = PMA->size[0];
       b_PMA->size[1] = PMA->size[1];
-      emxEnsureCapacity_int32_T(b_PMA, i52);
-      loop_ub = PMA->size[0] * PMA->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_PMA->data[i52] = PMA->data[i52];
+      emxEnsureCapacity_int32_T(b_PMA, i9);
+      kEnd = PMA->size[0] * PMA->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_PMA->data[i9] = PMA->data[i9];
       }
 
-      i52 = b_PMAn->size[0] * b_PMAn->size[1];
+      i9 = b_PMAn->size[0] * b_PMAn->size[1];
       b_PMAn->size[0] = PMAn->size[0];
       b_PMAn->size[1] = PMAn->size[1];
-      emxEnsureCapacity_int32_T(b_PMAn, i52);
-      loop_ub = PMAn->size[0] * PMAn->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_PMAn->data[i52] = PMAn->data[i52];
+      emxEnsureCapacity_int32_T(b_PMAn, i9);
+      kEnd = PMAn->size[0] * PMAn->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_PMAn->data[i9] = PMAn->data[i9];
       }
 
-      i52 = b_PS->size[0] * b_PS->size[1];
+      i9 = b_PS->size[0] * b_PS->size[1];
       b_PS->size[0] = PS->size[0];
       b_PS->size[1] = PS->size[1];
-      emxEnsureCapacity_int32_T(b_PS, i52);
-      loop_ub = PS->size[0] * PS->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_PS->data[i52] = PS->data[i52];
+      emxEnsureCapacity_int32_T(b_PS, i9);
+      kEnd = PS->size[0] * PS->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_PS->data[i9] = PS->data[i9];
       }
 
-      i52 = b_PCPO->size[0] * b_PCPO->size[1];
+      i9 = b_PCPO->size[0] * b_PCPO->size[1];
       b_PCPO->size[0] = PCPO->size[0];
       b_PCPO->size[1] = PCPO->size[1];
-      emxEnsureCapacity_int32_T(b_PCPO, i52);
-      loop_ub = PCPO->size[0] * PCPO->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_PCPO->data[i52] = PCPO->data[i52];
+      emxEnsureCapacity_int32_T(b_PCPO, i9);
+      kEnd = PCPO->size[0] * PCPO->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_PCPO->data[i9] = PCPO->data[i9];
       }
 
-      i52 = b_PCR->size[0] * b_PCR->size[1];
+      i9 = b_PCR->size[0] * b_PCR->size[1];
       b_PCR->size[0] = PCR->size[0];
       b_PCR->size[1] = PCR->size[1];
-      emxEnsureCapacity_int32_T(b_PCR, i52);
-      loop_ub = PCR->size[0] * PCR->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_PCR->data[i52] = PCR->data[i52];
+      emxEnsureCapacity_int32_T(b_PCR, i9);
+      kEnd = PCR->size[0] * PCR->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_PCR->data[i9] = PCR->data[i9];
       }
 
-      i52 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
+      i9 = b_TimeUsoRec->size[0] * b_TimeUsoRec->size[1];
       b_TimeUsoRec->size[0] = TimeUsoRec->size[0];
       b_TimeUsoRec->size[1] = 7;
-      emxEnsureCapacity_int32_T(b_TimeUsoRec, i52);
-      loop_ub = TimeUsoRec->size[0] * TimeUsoRec->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_TimeUsoRec->data[i52] = TimeUsoRec->data[i52];
+      emxEnsureCapacity_int32_T(b_TimeUsoRec, i9);
+      kEnd = TimeUsoRec->size[0] * TimeUsoRec->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_TimeUsoRec->data[i9] = TimeUsoRec->data[i9];
       }
 
-      i52 = b_EP->size[0];
+      i9 = b_EP->size[0];
       b_EP->size[0] = EP->size[0];
-      emxEnsureCapacity_int32_T(b_EP, i52);
-      loop_ub = EP->size[0];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_EP->data[i52] = EP->data[i52];
+      emxEnsureCapacity_int32_T(b_EP, i9);
+      kEnd = EP->size[0];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_EP->data[i9] = EP->data[i9];
       }
 
-      c_sch(NumTOp, b_IC, NumRec, b_PCPrO, b_PME, b_PMA, b_PMAn, b_PS, b_PCPO,
-            b_PCR, Dia, Data, b_TimeUsoRec, DispMExD, b_EP, k0, k1, k2, k3, &d11,
-            &varargin_5, &d12, &d13, &d14, &d15);
-      fitness->data[yk] = d11;
-      fitness->data[yk + fitness->size[0]] = varargin_5;
-      fitness->data[yk + (fitness->size[0] << 1)] = d12;
-      fitness->data[yk + fitness->size[0] * 3] = d13;
-      fitness->data[yk + (fitness->size[0] << 2)] = d14;
-      fitness->data[yk + fitness->size[0] * 5] = d15;
+      sch(NumTOp, iwork, NumRec, b_PCPrO, b_PME, b_PMA, b_PMAn, b_PS, b_PCPO,
+          b_PCR, Dia, Data, b_TimeUsoRec, DispMExD, b_EP, k0, k1, k2, k3, &d0,
+          &varargin_4, &varargin_5, &d1, &d2, &d3);
+      fitness->data[j] = d0;
+      fitness->data[j + fitness->size[0]] = varargin_4;
+      fitness->data[j + (fitness->size[0] << 1)] = varargin_5;
+      fitness->data[j + fitness->size[0] * 3] = d1;
+      fitness->data[j + (fitness->size[0] << 2)] = d2;
+      fitness->data[j + fitness->size[0] * 5] = d3;
     }
 
     /*     save(strcat('fitness_', int2str(g),'.mat'),'fitness'); */
@@ -1315,596 +319,595 @@ void b_aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE,
     /*     fitness = file.fitness; */
     /* ATUALIZA POPULAÇÃO B(T) */
     if (1 + g == 1) {
-      i52 = rank_classic->size[0];
-      if (i52 != 0) {
-        k = rank_classic->size[0];
+      i9 = rank_classic->size[0];
+      if (i9 != 0) {
+        pEnd = rank_classic->size[0];
       } else if ((IC->size[0] != 0) && (IC->size[1] != 0)) {
-        k = IC->size[0];
+        pEnd = IC->size[0];
       } else {
-        i52 = rank_classic->size[0];
-        if (i52 > 0) {
-          k = rank_classic->size[0];
+        i9 = rank_classic->size[0];
+        if (i9 > 0) {
+          pEnd = rank_classic->size[0];
         } else {
-          k = 0;
+          pEnd = 0;
         }
 
-        if (IC->size[0] > k) {
-          k = IC->size[0];
+        if (IC->size[0] > pEnd) {
+          pEnd = IC->size[0];
         }
       }
 
-      empty_non_axis_sizes = (k == 0);
+      empty_non_axis_sizes = (pEnd == 0);
       if (empty_non_axis_sizes) {
         input_sizes_idx_1 = 1;
       } else {
-        i52 = rank_classic->size[0];
-        if (i52 != 0) {
+        i9 = rank_classic->size[0];
+        if (i9 != 0) {
           input_sizes_idx_1 = 1;
         } else {
           input_sizes_idx_1 = 0;
         }
       }
 
-      loop_ub = rank_classic->size[0];
-      i52 = b_IC->size[0];
-      b_IC->size[0] = loop_ub;
-      emxEnsureCapacity_int32_T(b_IC, i52);
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_IC->data[i52] = rank_classic->data[i52];
+      kEnd = rank_classic->size[0];
+      i9 = iwork->size[0];
+      iwork->size[0] = kEnd;
+      emxEnsureCapacity_int32_T(iwork, i9);
+      for (i9 = 0; i9 < kEnd; i9++) {
+        iwork->data[i9] = rank_classic->data[i9];
       }
 
-      i52 = b_reshapes[0].f1->size[0] * b_reshapes[0].f1->size[1];
-      b_reshapes[0].f1->size[0] = k;
+      i9 = b_reshapes[0].f1->size[0] * b_reshapes[0].f1->size[1];
+      b_reshapes[0].f1->size[0] = pEnd;
       b_reshapes[0].f1->size[1] = input_sizes_idx_1;
-      emxEnsureCapacity_int32_T(b_reshapes[0].f1, i52);
-      loop_ub = k * input_sizes_idx_1;
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_reshapes[0].f1->data[i52] = b_IC->data[i52];
+      emxEnsureCapacity_int32_T(b_reshapes[0].f1, i9);
+      kEnd = pEnd * input_sizes_idx_1;
+      for (i9 = 0; i9 < kEnd; i9++) {
+        b_reshapes[0].f1->data[i9] = iwork->data[i9];
       }
 
       if (empty_non_axis_sizes || ((IC->size[0] != 0) && (IC->size[1] != 0))) {
-        loop_ub = IC->size[1];
+        kEnd = IC->size[1];
       } else {
-        loop_ub = 0;
+        kEnd = 0;
       }
 
-      i52 = aux_classic_2->size[0] * aux_classic_2->size[1];
+      i9 = aux_classic_2->size[0] * aux_classic_2->size[1];
       aux_classic_2->size[0] = b_reshapes[0].f1->size[0];
-      aux_classic_2->size[1] = b_reshapes[0].f1->size[1] + loop_ub;
-      emxEnsureCapacity_int32_T(aux_classic_2, i52);
-      b_loop_ub = b_reshapes[0].f1->size[1];
-      for (i52 = 0; i52 < b_loop_ub; i52++) {
-        n = b_reshapes[0].f1->size[0];
-        for (i53 = 0; i53 < n; i53++) {
-          aux_classic_2->data[i53 + aux_classic_2->size[0] * i52] = b_reshapes[0]
-            .f1->data[i53 + b_reshapes[0].f1->size[0] * i52];
+      aux_classic_2->size[1] = b_reshapes[0].f1->size[1] + kEnd;
+      emxEnsureCapacity_int32_T(aux_classic_2, i9);
+      q = b_reshapes[0].f1->size[1];
+      for (i9 = 0; i9 < q; i9++) {
+        p = b_reshapes[0].f1->size[0];
+        for (qEnd = 0; qEnd < p; qEnd++) {
+          aux_classic_2->data[qEnd + aux_classic_2->size[0] * i9] = b_reshapes[0]
+            .f1->data[qEnd + b_reshapes[0].f1->size[0] * i9];
         }
       }
 
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        for (i53 = 0; i53 < k; i53++) {
-          aux_classic_2->data[i53 + aux_classic_2->size[0] * (i52 + b_reshapes[0]
-            .f1->size[1])] = IC->data[i53 + k * i52];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        for (qEnd = 0; qEnd < pEnd; qEnd++) {
+          aux_classic_2->data[qEnd + aux_classic_2->size[0] * (i9 + b_reshapes[0]
+            .f1->size[1])] = IC->data[qEnd + pEnd * i9];
         }
       }
 
-      i52 = aux_fitness_2->size[0] * aux_fitness_2->size[1];
+      i9 = aux_fitness_2->size[0] * aux_fitness_2->size[1];
       aux_fitness_2->size[0] = 1 + fitness->size[0];
       aux_fitness_2->size[1] = 6;
-      emxEnsureCapacity_real_T(aux_fitness_2, i52);
-      for (i52 = 0; i52 < 6; i52++) {
-        aux_fitness_2->data[aux_fitness_2->size[0] * i52] = bestFitness->
-          data[bestFitness->size[0] * i52];
+      emxEnsureCapacity_real_T(aux_fitness_2, i9);
+      for (i9 = 0; i9 < 6; i9++) {
+        aux_fitness_2->data[aux_fitness_2->size[0] * i9] = bestFitness->
+          data[bestFitness->size[0] * i9];
       }
 
-      for (i52 = 0; i52 < 6; i52++) {
-        loop_ub = fitness->size[0];
-        for (i53 = 0; i53 < loop_ub; i53++) {
-          aux_fitness_2->data[(i53 + aux_fitness_2->size[0] * i52) + 1] =
-            fitness->data[i53 + fitness->size[0] * i52];
+      for (i9 = 0; i9 < 6; i9++) {
+        kEnd = fitness->size[0];
+        for (qEnd = 0; qEnd < kEnd; qEnd++) {
+          aux_fitness_2->data[(qEnd + aux_fitness_2->size[0] * i9) + 1] =
+            fitness->data[qEnd + fitness->size[0] * i9];
         }
       }
 
-      loop_ub = aux_fitness_2->size[0];
-      i52 = x->size[0];
-      x->size[0] = loop_ub;
-      emxEnsureCapacity_real_T(x, i52);
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        x->data[i52] = aux_fitness_2->data[i52];
+      kEnd = aux_fitness_2->size[0];
+      i9 = x->size[0];
+      x->size[0] = kEnd;
+      emxEnsureCapacity_real_T(x, i9);
+      for (i9 = 0; i9 < kEnd; i9++) {
+        x->data[i9] = aux_fitness_2->data[i9];
       }
 
-      sort(x, b_IC);
-      i52 = x->size[0];
-      x->size[0] = b_IC->size[0];
-      emxEnsureCapacity_real_T(x, i52);
-      loop_ub = b_IC->size[0];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        x->data[i52] = b_IC->data[i52];
+      c_sort(x, iwork);
+      i9 = x->size[0];
+      x->size[0] = iwork->size[0];
+      emxEnsureCapacity_real_T(x, i9);
+      kEnd = iwork->size[0];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        x->data[i9] = iwork->data[i9];
       }
 
       if (1 > numIC) {
-        loop_ub = 0;
+        kEnd = 0;
       } else {
-        loop_ub = numIC;
+        kEnd = numIC;
       }
 
-      i52 = fitness->size[0] * fitness->size[1];
+      i9 = fitness->size[0] * fitness->size[1];
       fitness->size[0] = x->size[0];
       fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i52);
-      for (i52 = 0; i52 < 6; i52++) {
-        b_loop_ub = x->size[0];
-        for (i53 = 0; i53 < b_loop_ub; i53++) {
-          fitness->data[i53 + fitness->size[0] * i52] = aux_fitness_2->data
-            [((int)x->data[i53] + aux_fitness_2->size[0] * i52) - 1];
+      emxEnsureCapacity_real_T(fitness, i9);
+      for (i9 = 0; i9 < 6; i9++) {
+        q = x->size[0];
+        for (qEnd = 0; qEnd < q; qEnd++) {
+          fitness->data[qEnd + fitness->size[0] * i9] = aux_fitness_2->data
+            [((int)x->data[qEnd] + aux_fitness_2->size[0] * i9) - 1];
         }
       }
 
-      i52 = c_fitness->size[0] * c_fitness->size[1];
-      c_fitness->size[0] = loop_ub;
+      i9 = c_fitness->size[0] * c_fitness->size[1];
+      c_fitness->size[0] = kEnd;
       c_fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(c_fitness, i52);
-      for (i52 = 0; i52 < 6; i52++) {
-        for (i53 = 0; i53 < loop_ub; i53++) {
-          c_fitness->data[i53 + c_fitness->size[0] * i52] = fitness->data[i53 +
-            fitness->size[0] * i52];
+      emxEnsureCapacity_real_T(c_fitness, i9);
+      for (i9 = 0; i9 < 6; i9++) {
+        for (qEnd = 0; qEnd < kEnd; qEnd++) {
+          c_fitness->data[qEnd + c_fitness->size[0] * i9] = fitness->data[qEnd +
+            fitness->size[0] * i9];
         }
       }
 
-      i52 = fitness->size[0] * fitness->size[1];
+      i9 = fitness->size[0] * fitness->size[1];
       fitness->size[0] = c_fitness->size[0];
       fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i52);
-      for (i52 = 0; i52 < 6; i52++) {
-        loop_ub = c_fitness->size[0];
-        for (i53 = 0; i53 < loop_ub; i53++) {
-          fitness->data[i53 + fitness->size[0] * i52] = c_fitness->data[i53 +
-            c_fitness->size[0] * i52];
+      emxEnsureCapacity_real_T(fitness, i9);
+      for (i9 = 0; i9 < 6; i9++) {
+        kEnd = c_fitness->size[0];
+        for (qEnd = 0; qEnd < kEnd; qEnd++) {
+          fitness->data[qEnd + fitness->size[0] * i9] = c_fitness->data[qEnd +
+            c_fitness->size[0] * i9];
         }
       }
 
       if (1 > numIC) {
-        loop_ub = 0;
+        kEnd = 0;
       } else {
-        loop_ub = numIC;
+        kEnd = numIC;
       }
 
-      b_loop_ub = aux_classic_2->size[0] - 1;
-      n = aux_classic_2->size[0];
-      i52 = rank_classic->size[0] * rank_classic->size[1];
-      rank_classic->size[0] = n;
+      q = aux_classic_2->size[0] - 1;
+      p = aux_classic_2->size[0];
+      i9 = rank_classic->size[0] * rank_classic->size[1];
+      rank_classic->size[0] = p;
       rank_classic->size[1] = x->size[0];
-      emxEnsureCapacity_int32_T(rank_classic, i52);
+      emxEnsureCapacity_int32_T(rank_classic, i9);
       yk = x->size[0];
-      for (i52 = 0; i52 < yk; i52++) {
-        for (i53 = 0; i53 < n; i53++) {
-          rank_classic->data[i53 + rank_classic->size[0] * i52] =
-            aux_classic_2->data[i53 + aux_classic_2->size[0] * ((int)x->data[i52]
+      for (i9 = 0; i9 < yk; i9++) {
+        for (qEnd = 0; qEnd < p; qEnd++) {
+          rank_classic->data[qEnd + rank_classic->size[0] * i9] =
+            aux_classic_2->data[qEnd + aux_classic_2->size[0] * ((int)x->data[i9]
             - 1)];
         }
       }
 
-      i52 = IC->size[0] * IC->size[1];
-      IC->size[0] = b_loop_ub + 1;
-      IC->size[1] = loop_ub;
-      emxEnsureCapacity_int32_T(IC, i52);
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        for (i53 = 0; i53 <= b_loop_ub; i53++) {
-          IC->data[i53 + IC->size[0] * i52] = rank_classic->data[i53 +
-            rank_classic->size[0] * i52];
+      i9 = IC->size[0] * IC->size[1];
+      IC->size[0] = q + 1;
+      IC->size[1] = kEnd;
+      emxEnsureCapacity_int32_T(IC, i9);
+      for (i9 = 0; i9 < kEnd; i9++) {
+        for (qEnd = 0; qEnd <= q; qEnd++) {
+          IC->data[qEnd + IC->size[0] * i9] = rank_classic->data[qEnd +
+            rank_classic->size[0] * i9];
         }
       }
 
-      i52 = rank_classic->size[0] * rank_classic->size[1];
+      i9 = rank_classic->size[0] * rank_classic->size[1];
       rank_classic->size[0] = IC->size[0];
       rank_classic->size[1] = IC->size[1];
-      emxEnsureCapacity_int32_T(rank_classic, i52);
-      loop_ub = IC->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_loop_ub = IC->size[0];
-        for (i53 = 0; i53 < b_loop_ub; i53++) {
-          rank_classic->data[i53 + rank_classic->size[0] * i52] = IC->data[i53 +
-            IC->size[0] * i52];
+      emxEnsureCapacity_int32_T(rank_classic, i9);
+      kEnd = IC->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        q = IC->size[0];
+        for (qEnd = 0; qEnd < q; qEnd++) {
+          rank_classic->data[qEnd + rank_classic->size[0] * i9] = IC->data[qEnd
+            + IC->size[0] * i9];
         }
       }
     } else {
-      varargin_5 = rt_roundd((double)numIC * taxE);
-      if (varargin_5 < 2.147483648E+9) {
-        if (varargin_5 >= -2.147483648E+9) {
-          i52 = (int)varargin_5;
+      varargin_4 = rt_roundd((double)numIC * taxE);
+      if (varargin_4 < 2.147483648E+9) {
+        if (varargin_4 >= -2.147483648E+9) {
+          i9 = (int)varargin_4;
         } else {
-          i52 = MIN_int32_T;
+          i9 = MIN_int32_T;
         }
       } else {
-        i52 = MAX_int32_T;
+        i9 = MAX_int32_T;
       }
 
-      i52 = (int)rt_roundd((double)i52 / 100.0);
-      if (1 > i52) {
-        loop_ub = 0;
+      i9 = (int)rt_roundd((double)i9 / 100.0);
+      if (1 > i9) {
+        kEnd = 0;
       } else {
-        loop_ub = i52;
+        kEnd = i9;
       }
 
-      i52 = rank_classic->size[0];
-      if ((i52 != 0) && (loop_ub != 0)) {
-        k = rank_classic->size[0];
+      i9 = rank_classic->size[0];
+      if ((i9 != 0) && (kEnd != 0)) {
+        pEnd = rank_classic->size[0];
       } else if ((IC->size[0] != 0) && (IC->size[1] != 0)) {
-        k = IC->size[0];
+        pEnd = IC->size[0];
       } else {
-        i52 = rank_classic->size[0];
-        if (i52 > 0) {
-          k = rank_classic->size[0];
+        i9 = rank_classic->size[0];
+        if (i9 > 0) {
+          pEnd = rank_classic->size[0];
         } else {
-          k = 0;
+          pEnd = 0;
         }
 
-        if (IC->size[0] > k) {
-          k = IC->size[0];
+        if (IC->size[0] > pEnd) {
+          pEnd = IC->size[0];
         }
       }
 
-      empty_non_axis_sizes = (k == 0);
+      empty_non_axis_sizes = (pEnd == 0);
       if (empty_non_axis_sizes) {
-        yk = loop_ub;
+        yk = kEnd;
       } else {
-        i52 = rank_classic->size[0];
-        if ((i52 != 0) && (loop_ub != 0)) {
-          yk = loop_ub;
+        i9 = rank_classic->size[0];
+        if ((i9 != 0) && (kEnd != 0)) {
+          yk = kEnd;
         } else {
           yk = 0;
         }
       }
 
-      b_loop_ub = rank_classic->size[0];
-      i52 = b_rank_classic->size[0] * b_rank_classic->size[1];
-      b_rank_classic->size[0] = b_loop_ub;
-      b_rank_classic->size[1] = loop_ub;
-      emxEnsureCapacity_int32_T(b_rank_classic, i52);
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        for (i53 = 0; i53 < b_loop_ub; i53++) {
-          b_rank_classic->data[i53 + b_rank_classic->size[0] * i52] =
-            rank_classic->data[i53 + rank_classic->size[0] * i52];
+      q = rank_classic->size[0];
+      i9 = b_rank_classic->size[0] * b_rank_classic->size[1];
+      b_rank_classic->size[0] = q;
+      b_rank_classic->size[1] = kEnd;
+      emxEnsureCapacity_int32_T(b_rank_classic, i9);
+      for (i9 = 0; i9 < kEnd; i9++) {
+        for (qEnd = 0; qEnd < q; qEnd++) {
+          b_rank_classic->data[qEnd + b_rank_classic->size[0] * i9] =
+            rank_classic->data[qEnd + rank_classic->size[0] * i9];
         }
       }
 
-      i52 = reshapes[0].f1->size[0] * reshapes[0].f1->size[1];
-      reshapes[0].f1->size[0] = k;
+      i9 = reshapes[0].f1->size[0] * reshapes[0].f1->size[1];
+      reshapes[0].f1->size[0] = pEnd;
       reshapes[0].f1->size[1] = yk;
-      emxEnsureCapacity_int32_T(reshapes[0].f1, i52);
-      loop_ub = k * yk;
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        reshapes[0].f1->data[i52] = b_rank_classic->data[i52];
+      emxEnsureCapacity_int32_T(reshapes[0].f1, i9);
+      kEnd = pEnd * yk;
+      for (i9 = 0; i9 < kEnd; i9++) {
+        reshapes[0].f1->data[i9] = b_rank_classic->data[i9];
       }
 
       if (empty_non_axis_sizes || ((IC->size[0] != 0) && (IC->size[1] != 0))) {
-        loop_ub = IC->size[1];
+        kEnd = IC->size[1];
       } else {
-        loop_ub = 0;
+        kEnd = 0;
       }
 
-      i52 = aux_classic_2->size[0] * aux_classic_2->size[1];
+      i9 = aux_classic_2->size[0] * aux_classic_2->size[1];
       aux_classic_2->size[0] = reshapes[0].f1->size[0];
-      aux_classic_2->size[1] = reshapes[0].f1->size[1] + loop_ub;
-      emxEnsureCapacity_int32_T(aux_classic_2, i52);
-      b_loop_ub = reshapes[0].f1->size[1];
-      for (i52 = 0; i52 < b_loop_ub; i52++) {
-        n = reshapes[0].f1->size[0];
-        for (i53 = 0; i53 < n; i53++) {
-          aux_classic_2->data[i53 + aux_classic_2->size[0] * i52] = reshapes[0].
-            f1->data[i53 + reshapes[0].f1->size[0] * i52];
+      aux_classic_2->size[1] = reshapes[0].f1->size[1] + kEnd;
+      emxEnsureCapacity_int32_T(aux_classic_2, i9);
+      q = reshapes[0].f1->size[1];
+      for (i9 = 0; i9 < q; i9++) {
+        p = reshapes[0].f1->size[0];
+        for (qEnd = 0; qEnd < p; qEnd++) {
+          aux_classic_2->data[qEnd + aux_classic_2->size[0] * i9] = reshapes[0].
+            f1->data[qEnd + reshapes[0].f1->size[0] * i9];
         }
       }
 
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        for (i53 = 0; i53 < k; i53++) {
-          aux_classic_2->data[i53 + aux_classic_2->size[0] * (i52 + reshapes[0].
-            f1->size[1])] = IC->data[i53 + k * i52];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        for (qEnd = 0; qEnd < pEnd; qEnd++) {
+          aux_classic_2->data[qEnd + aux_classic_2->size[0] * (i9 + reshapes[0].
+            f1->size[1])] = IC->data[qEnd + pEnd * i9];
         }
       }
 
-      if (varargin_5 < 2.147483648E+9) {
-        if (varargin_5 >= -2.147483648E+9) {
-          i52 = (int)varargin_5;
+      if (varargin_4 < 2.147483648E+9) {
+        if (varargin_4 >= -2.147483648E+9) {
+          i9 = (int)varargin_4;
         } else {
-          i52 = MIN_int32_T;
+          i9 = MIN_int32_T;
         }
       } else {
-        i52 = MAX_int32_T;
+        i9 = MAX_int32_T;
       }
 
-      i52 = (int)rt_roundd((double)i52 / 100.0);
-      if (1 > i52) {
-        loop_ub = 0;
+      i9 = (int)rt_roundd((double)i9 / 100.0);
+      if (1 > i9) {
+        kEnd = 0;
       } else {
-        loop_ub = i52;
+        kEnd = i9;
       }
 
-      i52 = aux_fitness_2->size[0] * aux_fitness_2->size[1];
-      aux_fitness_2->size[0] = loop_ub + fitness->size[0];
+      i9 = aux_fitness_2->size[0] * aux_fitness_2->size[1];
+      aux_fitness_2->size[0] = kEnd + fitness->size[0];
       aux_fitness_2->size[1] = 6;
-      emxEnsureCapacity_real_T(aux_fitness_2, i52);
-      for (i52 = 0; i52 < 6; i52++) {
-        for (i53 = 0; i53 < loop_ub; i53++) {
-          aux_fitness_2->data[i53 + aux_fitness_2->size[0] * i52] =
-            bestFitness->data[i53 + bestFitness->size[0] * i52];
+      emxEnsureCapacity_real_T(aux_fitness_2, i9);
+      for (i9 = 0; i9 < 6; i9++) {
+        for (qEnd = 0; qEnd < kEnd; qEnd++) {
+          aux_fitness_2->data[qEnd + aux_fitness_2->size[0] * i9] =
+            bestFitness->data[qEnd + bestFitness->size[0] * i9];
         }
       }
 
-      for (i52 = 0; i52 < 6; i52++) {
-        b_loop_ub = fitness->size[0];
-        for (i53 = 0; i53 < b_loop_ub; i53++) {
-          aux_fitness_2->data[(i53 + loop_ub) + aux_fitness_2->size[0] * i52] =
-            fitness->data[i53 + fitness->size[0] * i52];
+      for (i9 = 0; i9 < 6; i9++) {
+        q = fitness->size[0];
+        for (qEnd = 0; qEnd < q; qEnd++) {
+          aux_fitness_2->data[(qEnd + kEnd) + aux_fitness_2->size[0] * i9] =
+            fitness->data[qEnd + fitness->size[0] * i9];
         }
       }
 
-      loop_ub = aux_fitness_2->size[0];
-      i52 = x->size[0];
-      x->size[0] = loop_ub;
-      emxEnsureCapacity_real_T(x, i52);
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        x->data[i52] = aux_fitness_2->data[i52];
+      kEnd = aux_fitness_2->size[0];
+      i9 = x->size[0];
+      x->size[0] = kEnd;
+      emxEnsureCapacity_real_T(x, i9);
+      for (i9 = 0; i9 < kEnd; i9++) {
+        x->data[i9] = aux_fitness_2->data[i9];
       }
 
-      sort(x, b_IC);
-      i52 = x->size[0];
-      x->size[0] = b_IC->size[0];
-      emxEnsureCapacity_real_T(x, i52);
-      loop_ub = b_IC->size[0];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        x->data[i52] = b_IC->data[i52];
+      c_sort(x, iwork);
+      i9 = x->size[0];
+      x->size[0] = iwork->size[0];
+      emxEnsureCapacity_real_T(x, i9);
+      kEnd = iwork->size[0];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        x->data[i9] = iwork->data[i9];
       }
 
       if (1 > numIC) {
-        loop_ub = 0;
+        kEnd = 0;
       } else {
-        loop_ub = numIC;
+        kEnd = numIC;
       }
 
-      i52 = fitness->size[0] * fitness->size[1];
+      i9 = fitness->size[0] * fitness->size[1];
       fitness->size[0] = x->size[0];
       fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i52);
-      for (i52 = 0; i52 < 6; i52++) {
-        b_loop_ub = x->size[0];
-        for (i53 = 0; i53 < b_loop_ub; i53++) {
-          fitness->data[i53 + fitness->size[0] * i52] = aux_fitness_2->data
-            [((int)x->data[i53] + aux_fitness_2->size[0] * i52) - 1];
+      emxEnsureCapacity_real_T(fitness, i9);
+      for (i9 = 0; i9 < 6; i9++) {
+        q = x->size[0];
+        for (qEnd = 0; qEnd < q; qEnd++) {
+          fitness->data[qEnd + fitness->size[0] * i9] = aux_fitness_2->data
+            [((int)x->data[qEnd] + aux_fitness_2->size[0] * i9) - 1];
         }
       }
 
-      i52 = c_fitness->size[0] * c_fitness->size[1];
-      c_fitness->size[0] = loop_ub;
+      i9 = c_fitness->size[0] * c_fitness->size[1];
+      c_fitness->size[0] = kEnd;
       c_fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(c_fitness, i52);
-      for (i52 = 0; i52 < 6; i52++) {
-        for (i53 = 0; i53 < loop_ub; i53++) {
-          c_fitness->data[i53 + c_fitness->size[0] * i52] = fitness->data[i53 +
-            fitness->size[0] * i52];
+      emxEnsureCapacity_real_T(c_fitness, i9);
+      for (i9 = 0; i9 < 6; i9++) {
+        for (qEnd = 0; qEnd < kEnd; qEnd++) {
+          c_fitness->data[qEnd + c_fitness->size[0] * i9] = fitness->data[qEnd +
+            fitness->size[0] * i9];
         }
       }
 
-      i52 = fitness->size[0] * fitness->size[1];
+      i9 = fitness->size[0] * fitness->size[1];
       fitness->size[0] = c_fitness->size[0];
       fitness->size[1] = 6;
-      emxEnsureCapacity_real_T(fitness, i52);
-      for (i52 = 0; i52 < 6; i52++) {
-        loop_ub = c_fitness->size[0];
-        for (i53 = 0; i53 < loop_ub; i53++) {
-          fitness->data[i53 + fitness->size[0] * i52] = c_fitness->data[i53 +
-            c_fitness->size[0] * i52];
+      emxEnsureCapacity_real_T(fitness, i9);
+      for (i9 = 0; i9 < 6; i9++) {
+        kEnd = c_fitness->size[0];
+        for (qEnd = 0; qEnd < kEnd; qEnd++) {
+          fitness->data[qEnd + fitness->size[0] * i9] = c_fitness->data[qEnd +
+            c_fitness->size[0] * i9];
         }
       }
 
       if (1 > numIC) {
-        loop_ub = 0;
+        kEnd = 0;
       } else {
-        loop_ub = numIC;
+        kEnd = numIC;
       }
 
-      b_loop_ub = aux_classic_2->size[0] - 1;
-      n = aux_classic_2->size[0];
-      i52 = rank_classic->size[0] * rank_classic->size[1];
-      rank_classic->size[0] = n;
+      q = aux_classic_2->size[0] - 1;
+      p = aux_classic_2->size[0];
+      i9 = rank_classic->size[0] * rank_classic->size[1];
+      rank_classic->size[0] = p;
       rank_classic->size[1] = x->size[0];
-      emxEnsureCapacity_int32_T(rank_classic, i52);
+      emxEnsureCapacity_int32_T(rank_classic, i9);
       yk = x->size[0];
-      for (i52 = 0; i52 < yk; i52++) {
-        for (i53 = 0; i53 < n; i53++) {
-          rank_classic->data[i53 + rank_classic->size[0] * i52] =
-            aux_classic_2->data[i53 + aux_classic_2->size[0] * ((int)x->data[i52]
+      for (i9 = 0; i9 < yk; i9++) {
+        for (qEnd = 0; qEnd < p; qEnd++) {
+          rank_classic->data[qEnd + rank_classic->size[0] * i9] =
+            aux_classic_2->data[qEnd + aux_classic_2->size[0] * ((int)x->data[i9]
             - 1)];
         }
       }
 
-      i52 = IC->size[0] * IC->size[1];
-      IC->size[0] = b_loop_ub + 1;
-      IC->size[1] = loop_ub;
-      emxEnsureCapacity_int32_T(IC, i52);
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        for (i53 = 0; i53 <= b_loop_ub; i53++) {
-          IC->data[i53 + IC->size[0] * i52] = rank_classic->data[i53 +
-            rank_classic->size[0] * i52];
+      i9 = IC->size[0] * IC->size[1];
+      IC->size[0] = q + 1;
+      IC->size[1] = kEnd;
+      emxEnsureCapacity_int32_T(IC, i9);
+      for (i9 = 0; i9 < kEnd; i9++) {
+        for (qEnd = 0; qEnd <= q; qEnd++) {
+          IC->data[qEnd + IC->size[0] * i9] = rank_classic->data[qEnd +
+            rank_classic->size[0] * i9];
         }
       }
 
-      i52 = rank_classic->size[0] * rank_classic->size[1];
+      i9 = rank_classic->size[0] * rank_classic->size[1];
       rank_classic->size[0] = IC->size[0];
       rank_classic->size[1] = IC->size[1];
-      emxEnsureCapacity_int32_T(rank_classic, i52);
-      loop_ub = IC->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_loop_ub = IC->size[0];
-        for (i53 = 0; i53 < b_loop_ub; i53++) {
-          rank_classic->data[i53 + rank_classic->size[0] * i52] = IC->data[i53 +
-            IC->size[0] * i52];
+      emxEnsureCapacity_int32_T(rank_classic, i9);
+      kEnd = IC->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        q = IC->size[0];
+        for (qEnd = 0; qEnd < q; qEnd++) {
+          rank_classic->data[qEnd + rank_classic->size[0] * i9] = IC->data[qEnd
+            + IC->size[0] * i9];
         }
       }
     }
 
     /* REMOVE INDIVÍDUOS MAIS FRACOS (EXCEDENTES) */
-    i52 = bestFitness->size[0] * bestFitness->size[1];
+    i9 = bestFitness->size[0] * bestFitness->size[1];
     bestFitness->size[0] = fitness->size[0];
     bestFitness->size[1] = 6;
-    emxEnsureCapacity_real_T(bestFitness, i52);
-    loop_ub = fitness->size[0] * fitness->size[1];
-    for (i52 = 0; i52 < loop_ub; i52++) {
-      bestFitness->data[i52] = fitness->data[i52];
+    emxEnsureCapacity_real_T(bestFitness, i9);
+    kEnd = fitness->size[0] * fitness->size[1];
+    for (i9 = 0; i9 < kEnd; i9++) {
+      bestFitness->data[i9] = fitness->data[i9];
     }
 
     /*  GUARDA MELHOR INDIVÍDUO */
-    loop_ub = rank_classic->size[0];
-    i52 = bestexperimento->size[0];
-    bestexperimento->size[0] = loop_ub;
-    emxEnsureCapacity_int32_T(bestexperimento, i52);
-    for (i52 = 0; i52 < loop_ub; i52++) {
-      bestexperimento->data[i52] = rank_classic->data[i52];
+    kEnd = rank_classic->size[0];
+    i9 = bestexperimento->size[0];
+    bestexperimento->size[0] = kEnd;
+    emxEnsureCapacity_int32_T(bestexperimento, i9);
+    for (i9 = 0; i9 < kEnd; i9++) {
+      bestexperimento->data[i9] = rank_classic->data[i9];
     }
 
     /*  SALVA A GERAÇÃO, FITNESS do Melhor ind., a MÉDIA DO FITNESS e a STD DO FITNESS  */
-    i52 = fitness->size[0];
-    loop_ub = fitness->size[0];
-    i53 = x->size[0];
-    x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i53);
-    for (i53 = 0; i53 < loop_ub; i53++) {
-      x->data[i53] = fitness->data[i53];
+    kEnd = fitness->size[0];
+    i9 = x->size[0];
+    x->size[0] = kEnd;
+    emxEnsureCapacity_real_T(x, i9);
+    for (i9 = 0; i9 < kEnd; i9++) {
+      x->data[i9] = fitness->data[i9];
     }
 
-    loop_ub = fitness->size[0];
-    i53 = b_fitness->size[0];
-    b_fitness->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(b_fitness, i53);
-    for (i53 = 0; i53 < loop_ub; i53++) {
-      b_fitness->data[i53] = fitness->data[i53];
+    kEnd = fitness->size[0];
+    i9 = b_fitness->size[0];
+    b_fitness->size[0] = kEnd;
+    emxEnsureCapacity_real_T(b_fitness, i9);
+    for (i9 = 0; i9 < kEnd; i9++) {
+      b_fitness->data[i9] = fitness->data[i9];
     }
 
-    varargin_5 = combineVectorElements(x);
-    d12 = b_std(b_fitness);
+    varargin_4 = mean(x);
+    varargin_5 = b_std(b_fitness);
     trace->data[g] = 1 + g;
-    d13 = rt_roundd(fitness->data[0]);
-    if (d13 < 2.147483648E+9) {
-      if (d13 >= -2.147483648E+9) {
-        i53 = (int)d13;
+    d1 = rt_roundd(fitness->data[0]);
+    if (d1 < 2.147483648E+9) {
+      if (d1 >= -2.147483648E+9) {
+        i9 = (int)d1;
       } else {
-        i53 = MIN_int32_T;
+        i9 = MIN_int32_T;
       }
     } else {
-      i53 = MAX_int32_T;
+      i9 = MAX_int32_T;
     }
 
-    trace->data[g + trace->size[0]] = i53;
-    varargin_5 = rt_roundd(varargin_5 / (double)i52);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i52 = (int)varargin_5;
+    trace->data[g + trace->size[0]] = i9;
+    varargin_4 = rt_roundd(varargin_4);
+    if (varargin_4 < 2.147483648E+9) {
+      if (varargin_4 >= -2.147483648E+9) {
+        i9 = (int)varargin_4;
       } else {
-        i52 = MIN_int32_T;
+        i9 = MIN_int32_T;
       }
     } else {
-      i52 = MAX_int32_T;
+      i9 = MAX_int32_T;
     }
 
-    trace->data[g + (trace->size[0] << 1)] = i52;
-    varargin_5 = rt_roundd(d12);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i52 = (int)varargin_5;
+    trace->data[g + (trace->size[0] << 1)] = i9;
+    varargin_4 = rt_roundd(varargin_5);
+    if (varargin_4 < 2.147483648E+9) {
+      if (varargin_4 >= -2.147483648E+9) {
+        i9 = (int)varargin_4;
       } else {
-        i52 = MIN_int32_T;
+        i9 = MIN_int32_T;
       }
     } else {
-      i52 = MAX_int32_T;
+      i9 = MAX_int32_T;
     }
 
-    trace->data[g + trace->size[0] * 3] = i52;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0]]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i52 = (int)varargin_5;
+    trace->data[g + trace->size[0] * 3] = i9;
+    varargin_4 = rt_roundd(fitness->data[fitness->size[0]]);
+    if (varargin_4 < 2.147483648E+9) {
+      if (varargin_4 >= -2.147483648E+9) {
+        i9 = (int)varargin_4;
       } else {
-        i52 = MIN_int32_T;
+        i9 = MIN_int32_T;
       }
     } else {
-      i52 = MAX_int32_T;
+      i9 = MAX_int32_T;
     }
 
-    trace->data[g + (trace->size[0] << 2)] = i52;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0] << 1]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i52 = (int)varargin_5;
+    trace->data[g + (trace->size[0] << 2)] = i9;
+    varargin_4 = rt_roundd(fitness->data[fitness->size[0] << 1]);
+    if (varargin_4 < 2.147483648E+9) {
+      if (varargin_4 >= -2.147483648E+9) {
+        i9 = (int)varargin_4;
       } else {
-        i52 = MIN_int32_T;
+        i9 = MIN_int32_T;
       }
     } else {
-      i52 = MAX_int32_T;
+      i9 = MAX_int32_T;
     }
 
-    trace->data[g + trace->size[0] * 5] = i52;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0] * 3]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i52 = (int)varargin_5;
+    trace->data[g + trace->size[0] * 5] = i9;
+    varargin_4 = rt_roundd(fitness->data[fitness->size[0] * 3]);
+    if (varargin_4 < 2.147483648E+9) {
+      if (varargin_4 >= -2.147483648E+9) {
+        i9 = (int)varargin_4;
       } else {
-        i52 = MIN_int32_T;
+        i9 = MIN_int32_T;
       }
     } else {
-      i52 = MAX_int32_T;
+      i9 = MAX_int32_T;
     }
 
-    trace->data[g + trace->size[0] * 6] = i52;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0] << 2]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i52 = (int)varargin_5;
+    trace->data[g + trace->size[0] * 6] = i9;
+    varargin_4 = rt_roundd(fitness->data[fitness->size[0] << 2]);
+    if (varargin_4 < 2.147483648E+9) {
+      if (varargin_4 >= -2.147483648E+9) {
+        i9 = (int)varargin_4;
       } else {
-        i52 = MIN_int32_T;
+        i9 = MIN_int32_T;
       }
     } else {
-      i52 = MAX_int32_T;
+      i9 = MAX_int32_T;
     }
 
-    trace->data[g + trace->size[0] * 7] = i52;
-    varargin_5 = rt_roundd(fitness->data[fitness->size[0] * 5]);
-    if (varargin_5 < 2.147483648E+9) {
-      if (varargin_5 >= -2.147483648E+9) {
-        i52 = (int)varargin_5;
+    trace->data[g + trace->size[0] * 7] = i9;
+    varargin_4 = rt_roundd(fitness->data[fitness->size[0] * 5]);
+    if (varargin_4 < 2.147483648E+9) {
+      if (varargin_4 >= -2.147483648E+9) {
+        i9 = (int)varargin_4;
       } else {
-        i52 = MIN_int32_T;
+        i9 = MIN_int32_T;
       }
     } else {
-      i52 = MAX_int32_T;
+      i9 = MAX_int32_T;
     }
 
-    trace->data[g + (trace->size[0] << 3)] = i52;
+    trace->data[g + (trace->size[0] << 3)] = i9;
 
     /*  IMPRIME STATUS DA EVOLUÇÃO */
-    loop_ub = fitness->size[0];
-    i52 = x->size[0];
-    x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i52);
-    for (i52 = 0; i52 < loop_ub; i52++) {
-      x->data[i52] = fitness->data[i52];
+    kEnd = fitness->size[0];
+    i9 = x->size[0];
+    x->size[0] = kEnd;
+    emxEnsureCapacity_real_T(x, i9);
+    for (i9 = 0; i9 < kEnd; i9++) {
+      x->data[i9] = fitness->data[i9];
+    }
+
+    varargin_4 = mean(x);
+    kEnd = fitness->size[0];
+    i9 = x->size[0];
+    x->size[0] = kEnd;
+    emxEnsureCapacity_real_T(x, i9);
+    for (i9 = 0; i9 < kEnd; i9++) {
+      x->data[i9] = fitness->data[i9];
     }
 
     varargin_5 = b_std(x);
-    i52 = fitness->size[0];
-    loop_ub = fitness->size[0];
-    i53 = x->size[0];
-    x->size[0] = loop_ub;
-    emxEnsureCapacity_real_T(x, i53);
-    for (i53 = 0; i53 < loop_ub; i53++) {
-      x->data[i53] = fitness->data[i53];
-    }
-
     printf("Ger: %d - \t Ini: %10.5f - \t Best: %10.5f - \t Mean: %10.5f - \t STD: %10.5f - \t Tt: %10.5f - \t NOFP: %10.5f - \t TmOFP: %10.5f - \t "
            "NOE2: %10.5f - \t NOE3: %10.5f \n", 1 + g, fitnessB[0],
-           fitness->data[0], combineVectorElements(x) / (double)i52, varargin_5,
-           fitness->data[fitness->size[0]], fitness->data[fitness->size[0] << 1],
-           fitness->data[fitness->size[0] * 3], fitness->data[fitness->size[0] <<
-           2], fitness->data[fitness->size[0] * 5]);
+           fitness->data[0], varargin_4, varargin_5, fitness->data[fitness->
+           size[0]], fitness->data[fitness->size[0] << 1], fitness->data
+           [fitness->size[0] * 3], fitness->data[fitness->size[0] << 2],
+           fitness->data[fitness->size[0] * 5]);
     fflush(stdout);
 
     /*  REPOSICIONA PULSOS DE ACORDO COM MELHORES INDIVÍDUOS */
@@ -1922,72 +925,204 @@ void b_aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE,
         yk = numIQ - 1;
       }
 
-      randperm(yk, tmpColumn);
+      i_rand(yk, tmpColumn);
+      n = tmpColumn->size[1] + 1;
+      i9 = idx->size[0] * idx->size[1];
+      idx->size[0] = 1;
+      idx->size[1] = tmpColumn->size[1];
+      emxEnsureCapacity_int32_T(idx, i9);
+      kEnd = tmpColumn->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        idx->data[i9] = 0;
+      }
+
+      if (tmpColumn->size[1] != 0) {
+        i9 = iwork->size[0];
+        iwork->size[0] = tmpColumn->size[1];
+        emxEnsureCapacity_int32_T(iwork, i9);
+        i9 = tmpColumn->size[1] - 1;
+        for (k = 1; k <= i9; k += 2) {
+          if (tmpColumn->data[k - 1] <= tmpColumn->data[k]) {
+            idx->data[k - 1] = k;
+            idx->data[k] = k + 1;
+          } else {
+            idx->data[k - 1] = k + 1;
+            idx->data[k] = k;
+          }
+        }
+
+        if ((tmpColumn->size[1] & 1) != 0) {
+          idx->data[tmpColumn->size[1] - 1] = tmpColumn->size[1];
+        }
+
+        i = 2;
+        while (i < n - 1) {
+          yk = i << 1;
+          j = 1;
+          for (pEnd = 1 + i; pEnd < n; pEnd = qEnd + i) {
+            p = j;
+            q = pEnd;
+            qEnd = j + yk;
+            if (qEnd > n) {
+              qEnd = n;
+            }
+
+            k = 0;
+            kEnd = qEnd - j;
+            while (k + 1 <= kEnd) {
+              if (tmpColumn->data[idx->data[p - 1] - 1] <= tmpColumn->data
+                  [idx->data[q - 1] - 1]) {
+                iwork->data[k] = idx->data[p - 1];
+                p++;
+                if (p == pEnd) {
+                  while (q < qEnd) {
+                    k++;
+                    iwork->data[k] = idx->data[q - 1];
+                    q++;
+                  }
+                }
+              } else {
+                iwork->data[k] = idx->data[q - 1];
+                q++;
+                if (q == qEnd) {
+                  while (p < pEnd) {
+                    k++;
+                    iwork->data[k] = idx->data[p - 1];
+                    p++;
+                  }
+                }
+              }
+
+              k++;
+            }
+
+            for (k = 0; k < kEnd; k++) {
+              idx->data[(j + k) - 1] = iwork->data[k];
+            }
+
+            j = qEnd;
+          }
+
+          i = yk;
+        }
+      }
+
+      yk = tmpColumn->size[0];
+      pEnd = tmpColumn->size[1];
+      i9 = tmpColumn->size[0] * tmpColumn->size[1];
+      tmpColumn->size[0] = 1;
+      tmpColumn->size[1] = pEnd;
+      emxEnsureCapacity_real_T(tmpColumn, i9);
+      kEnd = yk * pEnd;
+      for (i9 = 0; i9 < kEnd; i9++) {
+        tmpColumn->data[i9] = idx->data[i9];
+      }
 
       /* %%%%%%%%%%%%% MODIFICADO %%%%%%%%%%%%%%%%% */
       /*          maximo=0.02; */
       /*          minimo=0.002; */
       /*          taxAct = rand; */
       /*          taxAct = (maximo-minimo)*taxAct+minimo; */
-      varargin_5 = (double)IQ->size[0] - (double)NumTOp;
-      if (varargin_5 < 2.147483648E+9) {
-        if (varargin_5 >= -2.147483648E+9) {
-          i52 = (int)varargin_5;
+      varargin_4 = (double)IQ->size[0] - (double)NumTOp;
+      if (varargin_4 < 2.147483648E+9) {
+        if (varargin_4 >= -2.147483648E+9) {
+          i9 = (int)varargin_4;
         } else {
-          i52 = MIN_int32_T;
+          i9 = MIN_int32_T;
         }
       } else {
-        i52 = MAX_int32_T;
+        i9 = MAX_int32_T;
       }
 
-      if (1 > i52) {
-        loop_ub = 0;
+      if (1 > i9) {
+        kEnd = 0;
       } else {
-        loop_ub = i52;
+        kEnd = i9;
       }
 
-      b_loop_ub = IQ->size[1];
-      i52 = b_IQ->size[0] * b_IQ->size[1];
-      b_IQ->size[0] = loop_ub;
-      b_IQ->size[1] = b_loop_ub;
-      emxEnsureCapacity_real_T(b_IQ, i52);
-      for (i52 = 0; i52 < b_loop_ub; i52++) {
-        for (i53 = 0; i53 < loop_ub; i53++) {
-          b_IQ->data[i53 + b_IQ->size[0] * i52] = IQ->data[i53 + IQ->size[0] *
-            i52];
+      q = rank_classic->size[0];
+      i9 = b_IC->size[0] * b_IC->size[1];
+      b_IC->size[0] = q;
+      b_IC->size[1] = tmpColumn->size[1];
+      emxEnsureCapacity_int32_T(b_IC, i9);
+      p = tmpColumn->size[1];
+      for (i9 = 0; i9 < p; i9++) {
+        for (qEnd = 0; qEnd < q; qEnd++) {
+          b_IC->data[qEnd + b_IC->size[0] * i9] = rank_classic->data[qEnd +
+            rank_classic->size[0] * ((int)tmpColumn->data[i9] - 1)];
         }
       }
 
-      loop_ub = rank_classic->size[0];
-      i52 = c_rank_classic->size[0] * c_rank_classic->size[1];
-      c_rank_classic->size[0] = loop_ub;
-      c_rank_classic->size[1] = tmpColumn->size[1];
-      emxEnsureCapacity_int32_T(c_rank_classic, i52);
-      b_loop_ub = tmpColumn->size[1];
-      for (i52 = 0; i52 < b_loop_ub; i52++) {
-        for (i53 = 0; i53 < loop_ub; i53++) {
-          c_rank_classic->data[i53 + c_rank_classic->size[0] * i52] =
-            rank_classic->data[i53 + rank_classic->size[0] * ((int)
-            tmpColumn->data[i52] - 1)];
-        }
+      /* UNTITLED5 Summary of this function goes here */
+      /*    Detailed explanation goes here */
+      /* Convertir de numerico a representacion binaria. */
+      i9 = rank_classic->size[0];
+      qEnd = rank_classic->size[0];
+      yk = iwork->size[0];
+      iwork->size[0] = tmpColumn->size[1];
+      emxEnsureCapacity_int32_T(iwork, yk);
+      q = tmpColumn->size[1];
+      for (yk = 0; yk < q; yk++) {
+        iwork->data[yk] = (int)tmpColumn->data[yk];
       }
 
-      b_actIQ(b_IQ, c_rank_classic, IQtemp);
+      yk = num2bin->size[0] * num2bin->size[1];
+      num2bin->size[0] = (int)((double)i9 * (double)iwork->size[0]);
+      num2bin->size[1] = qEnd;
+      emxEnsureCapacity_int8_T(num2bin, yk);
+      yk = iwork->size[0];
+      iwork->size[0] = tmpColumn->size[1];
+      emxEnsureCapacity_int32_T(iwork, yk);
+      q = tmpColumn->size[1];
+      for (yk = 0; yk < q; yk++) {
+        iwork->data[yk] = (int)tmpColumn->data[yk];
+      }
+
+      q = (int)((double)i9 * (double)iwork->size[0]) * qEnd;
+      for (i9 = 0; i9 < q; i9++) {
+        num2bin->data[i9] = 0;
+      }
+
+      i9 = rank_classic->size[0];
+      qEnd = iwork->size[0];
+      iwork->size[0] = tmpColumn->size[1];
+      emxEnsureCapacity_int32_T(iwork, qEnd);
+      q = tmpColumn->size[1];
+      for (qEnd = 0; qEnd < q; qEnd++) {
+        iwork->data[qEnd] = (int)tmpColumn->data[qEnd];
+      }
+
+      i9 = (int)((double)i9 * (double)iwork->size[0]);
+      for (i = 0; i < i9; i++) {
+        num2bin->data[i + num2bin->size[0] * (b_IC->data[i] - 1)] = 1;
+      }
 
       /* %%%%%%%%%%%%% MODIFICADO %%%%%%%%%%%%%%%%% */
-      loop_ub = IQtemp->size[1];
-      for (i52 = 0; i52 < loop_ub; i52++) {
-        b_loop_ub = IQtemp->size[0];
-        for (i53 = 0; i53 < b_loop_ub; i53++) {
-          IQ->data[i53 + IQ->size[0] * i52] = IQtemp->data[i53 + IQtemp->size[0]
-            * i52];
+      q = IQ->size[1] - 1;
+      i9 = r3->size[0] * r3->size[1];
+      r3->size[0] = kEnd;
+      r3->size[1] = q + 1;
+      emxEnsureCapacity_real_T(r3, i9);
+      for (i9 = 0; i9 <= q; i9++) {
+        for (qEnd = 0; qEnd < kEnd; qEnd++) {
+          r3->data[qEnd + r3->size[0] * i9] = 0.99999 * IQ->data[qEnd + IQ->
+            size[0] * i9] + 1.0E-5 * (double)num2bin->data[qEnd + num2bin->size
+            [0] * i9];
+        }
+      }
+
+      kEnd = r3->size[1];
+      for (i9 = 0; i9 < kEnd; i9++) {
+        q = r3->size[0];
+        for (qEnd = 0; qEnd < q; qEnd++) {
+          IQ->data[qEnd + IQ->size[0] * i9] = r3->data[qEnd + r3->size[0] * i9];
         }
       }
 
       /* %%%%%%%%%%%%% MODIFICADO %%%%%%%%%%%%%%%%% */
       /*  NEW CLASSIC POPULATION */
       if (keeppriority) {
-        b_obsIQini(IQ, numIQ, numObsIQ, ProbXEst, IC);
+        obsIQini(IQ, numIQ, numObsIQ, ProbXEst, IC);
 
         /*  Observaciones de los IQ garantizando que se mantengan en el rango Prioridad             */
       } else {
@@ -2011,15 +1146,16 @@ void b_aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE,
   emxFree_int32_T(&b_PME);
   emxFree_int32_T(&b_PCPrO);
   emxFree_real_T(&c_fitness);
-  emxFree_int32_T(&c_rank_classic);
-  emxFree_real_T(&b_IQ);
+  emxFree_real_T(&r3);
   emxFree_real_T(&b_fitness);
   emxFree_int32_T(&b_rank_classic);
+  emxFree_int8_T(&num2bin);
   emxFree_int32_T(&b_IC);
+  emxFree_int32_T(&iwork);
+  emxFree_int32_T(&idx);
   emxFreeMatrix_cell_wrap_0(b_reshapes);
   emxFree_real_T(&x);
   emxFreeMatrix_cell_wrap_0(reshapes);
-  emxFree_real_T(&IQtemp);
   emxFree_real_T(&tmpColumn);
   emxFree_real_T(&aux_fitness_2);
   emxFree_int32_T(&aux_classic_2);

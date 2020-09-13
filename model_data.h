@@ -20,7 +20,6 @@
 
 /* Variable Declarations */
 extern unsigned int state[625];
-extern const short iv0[17520];
 
 #endif
 

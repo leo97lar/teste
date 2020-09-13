@@ -12,34 +12,16 @@
 /* Include files */
 #include <string.h>
 #include "BDCreator_func.h"
-#include "Calendario.h"
-#include "Codificacion_de_dias_func.h"
-#include "CreaPoQunniforme.h"
-#include "Edade.h"
-#include "PLOTT_func.h"
-#include "actIQ.h"
-#include "aevSPLap.h"
-#include "casorandom.h"
-#include "cc.h"
-#include "favalia.h"
-#include "funcionC.h"
-#include "funcionCPrO.h"
-#include "funcionCR.h"
-#include "funcionDia.h"
-#include "funcionRP.h"
 #include "main_UCI_func.h"
-#include "obsIQ.h"
-#include "obsIQini.h"
-#include "sch.h"
 #include "sort1.h"
-#include "model_emxutil.h"
 #include "sortIdx.h"
+#include "model_emxutil.h"
 
 /* Function Definitions */
 void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 {
   int dim;
-  int i84;
+  int i49;
   emxArray_int32_T *vwork;
   int vlen;
   int x_idx_0;
@@ -52,20 +34,73 @@ void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
   }
 
   if (dim + 2 <= 1) {
-    i84 = x->size[0];
+    i49 = x->size[0];
   } else {
-    i84 = 1;
+    i49 = 1;
   }
 
   emxInit_int32_T(&vwork, 1);
-  vlen = i84 - 1;
+  vlen = i49 - 1;
   x_idx_0 = vwork->size[0];
-  vwork->size[0] = i84;
+  vwork->size[0] = i49;
   emxEnsureCapacity_int32_T(vwork, x_idx_0);
   x_idx_0 = x->size[0];
-  i84 = idx->size[0];
+  i49 = idx->size[0];
   idx->size[0] = x_idx_0;
-  emxEnsureCapacity_int32_T(idx, i84);
+  emxEnsureCapacity_int32_T(idx, i49);
+  vstride = 1;
+  for (k = 0; k <= dim; k++) {
+    vstride *= x->size[0];
+  }
+
+  emxInit_int32_T(&iidx, 1);
+  for (x_idx_0 = 0; x_idx_0 < vstride; x_idx_0++) {
+    for (k = 0; k <= vlen; k++) {
+      vwork->data[k] = x->data[x_idx_0 + k * vstride];
+    }
+
+    b_sortIdx(vwork, iidx);
+    for (k = 0; k <= vlen; k++) {
+      i49 = x_idx_0 + k * vstride;
+      x->data[i49] = vwork->data[k];
+      idx->data[i49] = iidx->data[k];
+    }
+  }
+
+  emxFree_int32_T(&iidx);
+  emxFree_int32_T(&vwork);
+}
+
+void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
+{
+  int dim;
+  int i55;
+  emxArray_real_T *vwork;
+  int vlen;
+  int x_idx_0;
+  int vstride;
+  int k;
+  emxArray_int32_T *iidx;
+  dim = 0;
+  if (x->size[0] != 1) {
+    dim = -1;
+  }
+
+  if (dim + 2 <= 1) {
+    i55 = x->size[0];
+  } else {
+    i55 = 1;
+  }
+
+  emxInit_real_T(&vwork, 1);
+  vlen = i55 - 1;
+  x_idx_0 = vwork->size[0];
+  vwork->size[0] = i55;
+  emxEnsureCapacity_real_T(vwork, x_idx_0);
+  x_idx_0 = x->size[0];
+  i55 = idx->size[0];
+  idx->size[0] = x_idx_0;
+  emxEnsureCapacity_int32_T(idx, i55);
   vstride = 1;
   for (k = 0; k <= dim; k++) {
     vstride *= x->size[0];
@@ -79,9 +114,62 @@ void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 
     c_sortIdx(vwork, iidx);
     for (k = 0; k <= vlen; k++) {
-      i84 = x_idx_0 + k * vstride;
-      x->data[i84] = vwork->data[k];
-      idx->data[i84] = iidx->data[k];
+      i55 = x_idx_0 + k * vstride;
+      x->data[i55] = vwork->data[k];
+      idx->data[i55] = iidx->data[k];
+    }
+  }
+
+  emxFree_int32_T(&iidx);
+  emxFree_real_T(&vwork);
+}
+
+void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
+{
+  int dim;
+  int i59;
+  emxArray_int32_T *vwork;
+  int vlen;
+  int x_idx_0;
+  int vstride;
+  int k;
+  emxArray_int32_T *iidx;
+  dim = 0;
+  if (x->size[0] != 1) {
+    dim = -1;
+  }
+
+  if (dim + 2 <= 1) {
+    i59 = x->size[0];
+  } else {
+    i59 = 1;
+  }
+
+  emxInit_int32_T(&vwork, 1);
+  vlen = i59 - 1;
+  x_idx_0 = vwork->size[0];
+  vwork->size[0] = i59;
+  emxEnsureCapacity_int32_T(vwork, x_idx_0);
+  x_idx_0 = x->size[0];
+  i59 = idx->size[0];
+  idx->size[0] = x_idx_0;
+  emxEnsureCapacity_int32_T(idx, i59);
+  vstride = 1;
+  for (k = 0; k <= dim; k++) {
+    vstride *= x->size[0];
+  }
+
+  emxInit_int32_T(&iidx, 1);
+  for (x_idx_0 = 0; x_idx_0 < vstride; x_idx_0++) {
+    for (k = 0; k <= vlen; k++) {
+      vwork->data[k] = x->data[x_idx_0 + k * vstride];
+    }
+
+    d_sortIdx(vwork, iidx);
+    for (k = 0; k <= vlen; k++) {
+      i59 = x_idx_0 + k * vstride;
+      x->data[i59] = vwork->data[k];
+      idx->data[i59] = iidx->data[k];
     }
   }
 
@@ -89,7 +177,7 @@ void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
   emxFree_int32_T(&vwork);
 }
 
-void c_sort(double x[2000], int idx[2000])
+void sort(double x[2000], int idx[2000])
 {
   double x4[4];
   short idx4[4];
@@ -108,8 +196,8 @@ void c_sort(double x[2000], int idx[2000])
   int idx_tmp;
   int i3;
   int i4;
-  double d30;
-  double d31;
+  double d10;
+  double d11;
   short b_iwork[256];
   double b_xwork[256];
   int exitg1;
@@ -144,16 +232,16 @@ void c_sort(double x[2000], int idx[2000])
         i4 = 3;
       }
 
-      d30 = x4[ib - 1];
-      d31 = x4[i3 - 1];
-      if (d30 <= d31) {
-        d30 = x4[i2 - 1];
-        if (d30 <= d31) {
+      d10 = x4[ib - 1];
+      d11 = x4[i3 - 1];
+      if (d10 <= d11) {
+        d10 = x4[i2 - 1];
+        if (d10 <= d11) {
           perm[0] = (signed char)ib;
           perm[1] = (signed char)i2;
           perm[2] = (signed char)i3;
           perm[3] = (signed char)i4;
-        } else if (d30 <= x4[i4 - 1]) {
+        } else if (d10 <= x4[i4 - 1]) {
           perm[0] = (signed char)ib;
           perm[1] = (signed char)i3;
           perm[2] = (signed char)i2;
@@ -165,9 +253,9 @@ void c_sort(double x[2000], int idx[2000])
           perm[3] = (signed char)i2;
         }
       } else {
-        d31 = x4[i4 - 1];
-        if (d30 <= d31) {
-          if (x4[i2 - 1] <= d31) {
+        d11 = x4[i4 - 1];
+        if (d10 <= d11) {
+          if (x4[i2 - 1] <= d11) {
             perm[0] = (signed char)i3;
             perm[1] = (signed char)ib;
             perm[2] = (signed char)i2;
@@ -302,387 +390,8 @@ void c_sort(double x[2000], int idx[2000])
 
   memset(&iwork[0], 0, 2000U * sizeof(int));
   memset(&xwork[0], 0, 2000U * sizeof(double));
-  c_merge_block(idx, x, 1792, 208, 2, iwork, xwork);
-  c_merge_block(idx, x, 0, 2000, 8, iwork, xwork);
-}
-
-void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
-{
-  int i100;
-  int i1;
-  int n;
-  int b_n;
-  int x4[4];
-  int idx4[4];
-  emxArray_int32_T *iwork;
-  emxArray_int32_T *xwork;
-  int nQuartets;
-  int j;
-  int i3;
-  int i;
-  int i2;
-  int k;
-  signed char perm[4];
-  int offset;
-  int bLen;
-  int bLen2;
-  int nPairs;
-  int i4;
-  int b_iwork[256];
-  int b_xwork[256];
-  int exitg1;
-  i100 = idx->size[0] * idx->size[1];
-  idx->size[0] = 1;
-  idx->size[1] = x->size[1];
-  emxEnsureCapacity_int32_T(idx, i100);
-  i1 = x->size[1];
-  for (i100 = 0; i100 < i1; i100++) {
-    idx->data[i100] = 0;
-  }
-
-  if (x->size[1] != 0) {
-    n = x->size[1];
-    b_n = x->size[1];
-    x4[0] = 0;
-    idx4[0] = 0;
-    x4[1] = 0;
-    idx4[1] = 0;
-    x4[2] = 0;
-    idx4[2] = 0;
-    x4[3] = 0;
-    idx4[3] = 0;
-    emxInit_int32_T(&iwork, 1);
-    i1 = x->size[1];
-    i100 = iwork->size[0];
-    iwork->size[0] = i1;
-    emxEnsureCapacity_int32_T(iwork, i100);
-    for (i100 = 0; i100 < i1; i100++) {
-      iwork->data[i100] = 0;
-    }
-
-    emxInit_int32_T(&xwork, 1);
-    i1 = x->size[1];
-    i100 = xwork->size[0];
-    xwork->size[0] = i1;
-    emxEnsureCapacity_int32_T(xwork, i100);
-    for (i100 = 0; i100 < i1; i100++) {
-      xwork->data[i100] = 0;
-    }
-
-    nQuartets = x->size[1] >> 2;
-    for (j = 0; j < nQuartets; j++) {
-      i = j << 2;
-      idx4[0] = i + 1;
-      idx4[1] = i + 2;
-      idx4[2] = i + 3;
-      idx4[3] = i + 4;
-      x4[0] = x->data[i];
-      x4[1] = x->data[i + 1];
-      x4[2] = x->data[i + 2];
-      x4[3] = x->data[i + 3];
-      if (x->data[i] >= x->data[i + 1]) {
-        i1 = 1;
-        i2 = 2;
-      } else {
-        i1 = 2;
-        i2 = 1;
-      }
-
-      if (x->data[i + 2] >= x->data[i + 3]) {
-        i3 = 3;
-        i4 = 4;
-      } else {
-        i3 = 4;
-        i4 = 3;
-      }
-
-      i100 = x4[i1 - 1];
-      offset = x4[i3 - 1];
-      if (i100 >= offset) {
-        i100 = x4[i2 - 1];
-        if (i100 >= offset) {
-          perm[0] = (signed char)i1;
-          perm[1] = (signed char)i2;
-          perm[2] = (signed char)i3;
-          perm[3] = (signed char)i4;
-        } else if (i100 >= x4[i4 - 1]) {
-          perm[0] = (signed char)i1;
-          perm[1] = (signed char)i3;
-          perm[2] = (signed char)i2;
-          perm[3] = (signed char)i4;
-        } else {
-          perm[0] = (signed char)i1;
-          perm[1] = (signed char)i3;
-          perm[2] = (signed char)i4;
-          perm[3] = (signed char)i2;
-        }
-      } else {
-        offset = x4[i4 - 1];
-        if (i100 >= offset) {
-          if (x4[i2 - 1] >= offset) {
-            perm[0] = (signed char)i3;
-            perm[1] = (signed char)i1;
-            perm[2] = (signed char)i2;
-            perm[3] = (signed char)i4;
-          } else {
-            perm[0] = (signed char)i3;
-            perm[1] = (signed char)i1;
-            perm[2] = (signed char)i4;
-            perm[3] = (signed char)i2;
-          }
-        } else {
-          perm[0] = (signed char)i3;
-          perm[1] = (signed char)i4;
-          perm[2] = (signed char)i1;
-          perm[3] = (signed char)i2;
-        }
-      }
-
-      i100 = perm[0] - 1;
-      idx->data[i] = idx4[i100];
-      offset = perm[1] - 1;
-      idx->data[i + 1] = idx4[offset];
-      i1 = perm[2] - 1;
-      idx->data[i + 2] = idx4[i1];
-      i2 = perm[3] - 1;
-      idx->data[i + 3] = idx4[i2];
-      x->data[i] = x4[i100];
-      x->data[i + 1] = x4[offset];
-      x->data[i + 2] = x4[i1];
-      x->data[i + 3] = x4[i2];
-    }
-
-    i3 = nQuartets << 2;
-    i2 = b_n - i3;
-    if (i2 > 0) {
-      for (k = 0; k < i2; k++) {
-        i1 = i3 + k;
-        idx4[k] = i1 + 1;
-        x4[k] = x->data[i1];
-      }
-
-      perm[1] = 0;
-      perm[2] = 0;
-      perm[3] = 0;
-      if (i2 == 1) {
-        perm[0] = 1;
-      } else if (i2 == 2) {
-        if (x4[0] >= x4[1]) {
-          perm[0] = 1;
-          perm[1] = 2;
-        } else {
-          perm[0] = 2;
-          perm[1] = 1;
-        }
-      } else if (x4[0] >= x4[1]) {
-        if (x4[1] >= x4[2]) {
-          perm[0] = 1;
-          perm[1] = 2;
-          perm[2] = 3;
-        } else if (x4[0] >= x4[2]) {
-          perm[0] = 1;
-          perm[1] = 3;
-          perm[2] = 2;
-        } else {
-          perm[0] = 3;
-          perm[1] = 1;
-          perm[2] = 2;
-        }
-      } else if (x4[0] >= x4[2]) {
-        perm[0] = 2;
-        perm[1] = 1;
-        perm[2] = 3;
-      } else if (x4[1] >= x4[2]) {
-        perm[0] = 2;
-        perm[1] = 3;
-        perm[2] = 1;
-      } else {
-        perm[0] = 3;
-        perm[1] = 2;
-        perm[2] = 1;
-      }
-
-      for (k = 0; k < i2; k++) {
-        i100 = i3 + k;
-        idx->data[i100] = idx4[perm[k] - 1];
-        x->data[i100] = x4[perm[k] - 1];
-      }
-    }
-
-    i1 = 2;
-    if (n > 1) {
-      if (n >= 256) {
-        nQuartets = n >> 8;
-        for (i = 0; i < nQuartets; i++) {
-          offset = i << 8;
-          for (b_n = 0; b_n < 6; b_n++) {
-            bLen = 1 << (b_n + 2);
-            bLen2 = bLen << 1;
-            nPairs = 256 >> (b_n + 3);
-            for (k = 0; k < nPairs; k++) {
-              i3 = offset + k * bLen2;
-              for (j = 0; j < bLen2; j++) {
-                i1 = i3 + j;
-                b_iwork[j] = idx->data[i1];
-                b_xwork[j] = x->data[i1];
-              }
-
-              i4 = 0;
-              i2 = bLen;
-              i1 = i3 - 1;
-              do {
-                exitg1 = 0;
-                i1++;
-                if (b_xwork[i4] >= b_xwork[i2]) {
-                  idx->data[i1] = b_iwork[i4];
-                  x->data[i1] = b_xwork[i4];
-                  if (i4 + 1 < bLen) {
-                    i4++;
-                  } else {
-                    exitg1 = 1;
-                  }
-                } else {
-                  idx->data[i1] = b_iwork[i2];
-                  x->data[i1] = b_xwork[i2];
-                  if (i2 + 1 < bLen2) {
-                    i2++;
-                  } else {
-                    i1 -= i4;
-                    for (j = i4 + 1; j <= bLen; j++) {
-                      i100 = i1 + j;
-                      idx->data[i100] = b_iwork[j - 1];
-                      x->data[i100] = b_xwork[j - 1];
-                    }
-
-                    exitg1 = 1;
-                  }
-                }
-              } while (exitg1 == 0);
-            }
-          }
-        }
-
-        i1 = nQuartets << 8;
-        i2 = n - i1;
-        if (i2 > 0) {
-          d_merge_block(idx, x, i1, i2, 2, iwork, xwork);
-        }
-
-        i1 = 8;
-      }
-
-      d_merge_block(idx, x, 0, n, i1, iwork, xwork);
-    }
-
-    emxFree_int32_T(&xwork);
-    emxFree_int32_T(&iwork);
-  }
-}
-
-void e_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
-{
-  int dim;
-  int i102;
-  emxArray_int32_T *vwork;
-  int vlen;
-  int x_idx_0;
-  int vstride;
-  int k;
-  emxArray_int32_T *iidx;
-  dim = 0;
-  if (x->size[0] != 1) {
-    dim = -1;
-  }
-
-  if (dim + 2 <= 1) {
-    i102 = x->size[0];
-  } else {
-    i102 = 1;
-  }
-
-  emxInit_int32_T(&vwork, 1);
-  vlen = i102 - 1;
-  x_idx_0 = vwork->size[0];
-  vwork->size[0] = i102;
-  emxEnsureCapacity_int32_T(vwork, x_idx_0);
-  x_idx_0 = x->size[0];
-  i102 = idx->size[0];
-  idx->size[0] = x_idx_0;
-  emxEnsureCapacity_int32_T(idx, i102);
-  vstride = 1;
-  for (k = 0; k <= dim; k++) {
-    vstride *= x->size[0];
-  }
-
-  emxInit_int32_T(&iidx, 1);
-  for (x_idx_0 = 0; x_idx_0 < vstride; x_idx_0++) {
-    for (k = 0; k <= vlen; k++) {
-      vwork->data[k] = x->data[x_idx_0 + k * vstride];
-    }
-
-    d_sortIdx(vwork, iidx);
-    for (k = 0; k <= vlen; k++) {
-      i102 = x_idx_0 + k * vstride;
-      x->data[i102] = vwork->data[k];
-      idx->data[i102] = iidx->data[k];
-    }
-  }
-
-  emxFree_int32_T(&iidx);
-  emxFree_int32_T(&vwork);
-}
-
-void sort(emxArray_real_T *x, emxArray_int32_T *idx)
-{
-  int dim;
-  int i80;
-  emxArray_real_T *vwork;
-  int vlen;
-  int x_idx_0;
-  int vstride;
-  int k;
-  emxArray_int32_T *iidx;
-  dim = 0;
-  if (x->size[0] != 1) {
-    dim = -1;
-  }
-
-  if (dim + 2 <= 1) {
-    i80 = x->size[0];
-  } else {
-    i80 = 1;
-  }
-
-  emxInit_real_T(&vwork, 1);
-  vlen = i80 - 1;
-  x_idx_0 = vwork->size[0];
-  vwork->size[0] = i80;
-  emxEnsureCapacity_real_T(vwork, x_idx_0);
-  x_idx_0 = x->size[0];
-  i80 = idx->size[0];
-  idx->size[0] = x_idx_0;
-  emxEnsureCapacity_int32_T(idx, i80);
-  vstride = 1;
-  for (k = 0; k <= dim; k++) {
-    vstride *= x->size[0];
-  }
-
-  emxInit_int32_T(&iidx, 1);
-  for (x_idx_0 = 0; x_idx_0 < vstride; x_idx_0++) {
-    for (k = 0; k <= vlen; k++) {
-      vwork->data[k] = x->data[x_idx_0 + k * vstride];
-    }
-
-    b_sortIdx(vwork, iidx);
-    for (k = 0; k <= vlen; k++) {
-      i80 = x_idx_0 + k * vstride;
-      x->data[i80] = vwork->data[k];
-      idx->data[i80] = iidx->data[k];
-    }
-  }
-
-  emxFree_int32_T(&iidx);
-  emxFree_real_T(&vwork);
+  merge_block(idx, x, 1792, 208, 2, iwork, xwork);
+  merge_block(idx, x, 0, 2000, 8, iwork, xwork);
 }
 
 /* End of code generation (sort1.c) */

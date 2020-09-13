@@ -19,9 +19,8 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void b_randperm(double p[200]);
-extern void c_randperm(double p[2000]);
-extern void randperm(int n, emxArray_real_T *p);
+extern void b_randperm(double p[2000]);
+extern void randperm(double p[200]);
 
 #endif
 

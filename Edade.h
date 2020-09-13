@@ -19,8 +19,7 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void Edade(int b_min, int b_max, int Num, emxArray_real_T *c_Edade);
-extern void b_Edade(double c_Edade[2000]);
+extern void Edade(double b_Edade[2000]);
 
 #endif
 
