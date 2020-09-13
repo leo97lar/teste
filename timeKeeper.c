@@ -31,6 +31,10 @@ static struct_T savedTime;
 static boolean_T savedTime_not_empty;
 
 /* Function Definitions */
+
+/*
+ *
+ */
 void b_timeKeeper(double *outTime_tv_sec, double *outTime_tv_nsec)
 {
   *outTime_tv_sec = savedTime.tv_sec;
@@ -42,6 +46,9 @@ void savedTime_not_empty_init(void)
   savedTime_not_empty = false;
 }
 
+/*
+ *
+ */
 void timeKeeper(double newTime_tv_sec, double newTime_tv_nsec)
 {
   if (!savedTime_not_empty) {

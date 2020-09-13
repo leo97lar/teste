@@ -22,335 +22,357 @@
 #include "model_rtwutil.h"
 
 /* Function Definitions */
+
+/*
+ * function [ newIC ] = obsIQ( IQ,numIQ,numObsIQ )
+ */
 void obsIQ(const emxArray_real_T *IQ, int numIQ, int numObsIQ, emxArray_int32_T *
            newIC)
 {
   emxArray_int32_T *List;
-  double r;
-  int i16;
-  int i17;
-  int loop_ub_tmp;
-  int jj;
+  int numGen;
+  int i18;
+  int ii;
+  emxArray_real_T *Q;
   emxArray_int8_T *Obs;
-  int ibtile;
   emxArray_real_T *Qtem;
-  int nx;
   emxArray_uint32_T *idx;
   emxArray_real_T *Qtem2;
-  int ibmat;
-  emxArray_real_T *r4;
-  int k;
+  emxArray_real_T *r8;
   emxArray_boolean_T *x;
-  emxArray_int32_T *ii;
+  emxArray_int32_T *b_ii;
   emxArray_boolean_T *b_x;
-  emxArray_real_T *r5;
-  emxArray_int32_T *b_idx;
+  emxArray_int32_T *c_ii;
+  emxArray_real_T *r9;
+  emxArray_int32_T *d_ii;
   emxArray_real_T *b_Qtem2;
-  emxArray_real_T *r6;
-  long long i18;
-  int i19;
-  unsigned int unnamed_idx_0;
+  emxArray_real_T *r10;
+  int k;
+  int nx;
+  int jj;
+  int loop_ub;
   int u;
-  int i20;
-  int c_idx;
+  unsigned int unnamed_idx_0;
+  unsigned int unnamed_idx_1;
+  int i;
+  int b_idx;
   boolean_T exitg1;
   boolean_T guard1 = false;
+  double r;
+  int j;
   int exitg2;
   emxInit_int32_T(&List, 2);
 
   /* UNTITLED7 Summary of this function goes here */
   /*    Detailed explanation goes here, */
-  r = rt_roundd((double)IQ->size[0] / (double)numIQ);
-  if (r < 2.147483648E+9) {
-    if (r >= -2.147483648E+9) {
-      i16 = (int)r;
-    } else {
-      i16 = MIN_int32_T;
-    }
-  } else {
-    i16 = MAX_int32_T;
-  }
+  /* 'obsIQ:4' numGen=size(IQ,1)/numIQ; */
+  numGen = (int)rt_roundd((double)IQ->size[0] / (double)numIQ);
 
-  i17 = List->size[0] * List->size[1];
-  List->size[0] = i16;
+  /* 'obsIQ:6' List = zeros(numGen,numObsIQ, 'int32'); */
+  i18 = List->size[0] * List->size[1];
+  List->size[0] = numGen;
   List->size[1] = numObsIQ;
-  emxEnsureCapacity_int32_T(List, i17);
-  loop_ub_tmp = i16 * numObsIQ;
-  for (i17 = 0; i17 < loop_ub_tmp; i17++) {
-    List->data[i17] = 0;
-  }
-
-  i17 = newIC->size[0] * newIC->size[1];
-  newIC->size[0] = i16;
-  newIC->size[1] = numObsIQ * numIQ;
-  emxEnsureCapacity_int32_T(newIC, i17);
-  for (jj = 0; jj < numIQ; jj++) {
-    ibtile = jj * loop_ub_tmp;
-    for (nx = 0; nx < numObsIQ; nx++) {
-      ibmat = ibtile + nx * i16;
-      for (k = 0; k < i16; k++) {
-        newIC->data[ibmat + k] = 0;
-      }
+  emxEnsureCapacity_int32_T(List, i18);
+  for (i18 = 0; i18 < numObsIQ; i18++) {
+    for (ii = 0; ii < numGen; ii++) {
+      List->data[ii + List->size[0] * i18] = 0;
     }
   }
 
+  /* 'obsIQ:7' newIC = repmat(List,1,numIQ); */
+  b_repmat(List, numIQ, newIC);
+
+  /* 'obsIQ:9' for k=1:numIQ */
+  emxInit_real_T(&Q, 2);
   emxInit_int8_T(&Obs, 2);
   emxInit_real_T(&Qtem, 2);
   emxInit_uint32_T(&idx, 2);
   emxInit_real_T(&Qtem2, 2);
-  emxInit_real_T(&r4, 2);
+  emxInit_real_T(&r8, 2);
   emxInit_boolean_T(&x, 2);
-  emxInit_int32_T(&ii, 2);
+  emxInit_int32_T(&b_ii, 2);
   emxInit_boolean_T(&b_x, 2);
-  emxInit_real_T(&r5, 1);
-  emxInit_int32_T(&b_idx, 1);
+  emxInit_int32_T(&c_ii, 1);
+  emxInit_real_T(&r9, 1);
+  emxInit_int32_T(&d_ii, 2);
   emxInit_real_T(&b_Qtem2, 2);
-  emxInit_real_T(&r6, 1);
+  emxInit_real_T(&r10, 1);
   for (k = 0; k < numIQ; k++) {
-    i18 = (long long)k * i16;
-    if (i18 > 2147483647LL) {
-      i18 = 2147483647LL;
-    } else {
-      if (i18 < -2147483648LL) {
-        i18 = -2147483648LL;
+    /* 'obsIQ:11' Q = IQ((k-1)*numGen+1:k*numGen,:); */
+    i18 = k * numGen;
+    ii = (k + 1) * numGen;
+    if (i18 + 1 > ii) {
+      i18 = 0;
+      ii = 0;
+    }
+
+    nx = IQ->size[1];
+    jj = Q->size[0] * Q->size[1];
+    loop_ub = ii - i18;
+    Q->size[0] = loop_ub;
+    Q->size[1] = nx;
+    emxEnsureCapacity_real_T(Q, jj);
+    for (ii = 0; ii < nx; ii++) {
+      for (jj = 0; jj < loop_ub; jj++) {
+        Q->data[jj + Q->size[0] * ii] = IQ->data[(i18 + jj) + IQ->size[0] * ii];
       }
     }
 
-    jj = (int)i18;
-    if (jj > 2147483646) {
-      jj = MAX_int32_T;
-    } else {
-      jj++;
-    }
-
-    i18 = (long long)(k + 1) * i16;
-    if (i18 > 2147483647LL) {
-      i18 = 2147483647LL;
-    } else {
-      if (i18 < -2147483648LL) {
-        i18 = -2147483648LL;
-      }
-    }
-
-    i17 = (int)i18;
-    if (jj > i17) {
-      i19 = -1;
-      i17 = -1;
-    } else {
-      i19 = jj - 2;
-      i17--;
-    }
-
-    if (0 <= numObsIQ - 1) {
-      unnamed_idx_0 = (unsigned int)(i17 - i19);
-    }
-
+    /* 'obsIQ:13' for u=1:numObsIQ */
     for (u = 0; u < numObsIQ; u++) {
-      i20 = IQ->size[1];
-      ibtile = Obs->size[0] * Obs->size[1];
+      /* 'obsIQ:15' Obs = zeros(size(Q), 'int32'); */
+      i18 = IQ->size[1];
+      unnamed_idx_0 = (unsigned int)loop_ub;
+      unnamed_idx_1 = (unsigned int)i18;
+      i18 = Obs->size[0] * Obs->size[1];
       Obs->size[0] = (int)unnamed_idx_0;
-      Obs->size[1] = i20;
-      emxEnsureCapacity_int8_T(Obs, ibtile);
-      nx = (int)unnamed_idx_0 * i20;
-      for (i20 = 0; i20 < nx; i20++) {
-        Obs->data[i20] = 0;
-      }
-
-      nx = IQ->size[1];
-      i20 = Qtem->size[0] * Qtem->size[1];
-      Qtem->size[0] = i17 - i19;
-      Qtem->size[1] = nx;
-      emxEnsureCapacity_real_T(Qtem, i20);
-      for (i20 = 0; i20 < nx; i20++) {
-        jj = i17 - i19;
-        for (ibtile = 0; ibtile < jj; ibtile++) {
-          Qtem->data[ibtile + Qtem->size[0] * i20] = IQ->data[((i19 + ibtile) +
-            IQ->size[0] * i20) + 1];
+      Obs->size[1] = (int)unnamed_idx_1;
+      emxEnsureCapacity_int8_T(Obs, i18);
+      nx = (int)unnamed_idx_1;
+      for (i18 = 0; i18 < nx; i18++) {
+        jj = (int)unnamed_idx_0;
+        for (ii = 0; ii < jj; ii++) {
+          Obs->data[ii + Obs->size[0] * i18] = 0;
         }
       }
 
-      for (jj = 0; jj < i16; jj++) {
+      /* 'obsIQ:16' Qtem = Q; */
+      i18 = Qtem->size[0] * Qtem->size[1];
+      Qtem->size[0] = Q->size[0];
+      Qtem->size[1] = Q->size[1];
+      emxEnsureCapacity_real_T(Qtem, i18);
+      nx = Q->size[1];
+      for (i18 = 0; i18 < nx; i18++) {
+        jj = Q->size[0];
+        for (ii = 0; ii < jj; ii++) {
+          Qtem->data[ii + Qtem->size[0] * i18] = Q->data[ii + Q->size[0] * i18];
+        }
+      }
+
+      /* 'obsIQ:18' for i=1:numGen */
+      for (i = 0; i < numGen; i++) {
+        /* 'obsIQ:20' idx=find(Qtem(i,:)~=0); */
         nx = Qtem->size[1];
-        i20 = x->size[0] * x->size[1];
+        i18 = x->size[0] * x->size[1];
         x->size[0] = 1;
         x->size[1] = nx;
-        emxEnsureCapacity_boolean_T(x, i20);
-        for (i20 = 0; i20 < nx; i20++) {
-          x->data[i20] = (Qtem->data[jj + Qtem->size[0] * i20] != 0.0);
+        emxEnsureCapacity_boolean_T(x, i18);
+        for (i18 = 0; i18 < nx; i18++) {
+          x->data[i18] = (Qtem->data[i + Qtem->size[0] * i18] != 0.0);
         }
 
         nx = x->size[1];
-        c_idx = 0;
-        i20 = ii->size[0] * ii->size[1];
-        ii->size[0] = 1;
-        ii->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(ii, i20);
-        ibtile = 0;
+        b_idx = 0;
+        i18 = b_ii->size[0] * b_ii->size[1];
+        b_ii->size[0] = 1;
+        b_ii->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(b_ii, i18);
+        ii = 0;
         exitg1 = false;
-        while ((!exitg1) && (ibtile <= nx - 1)) {
-          if (x->data[ibtile]) {
-            c_idx++;
-            ii->data[c_idx - 1] = ibtile + 1;
-            if (c_idx >= nx) {
+        while ((!exitg1) && (ii <= nx - 1)) {
+          if (x->data[ii]) {
+            b_idx++;
+            b_ii->data[b_idx - 1] = ii + 1;
+            if (b_idx >= nx) {
               exitg1 = true;
             } else {
-              ibtile++;
+              ii++;
             }
           } else {
-            ibtile++;
+            ii++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (c_idx == 0) {
-            ii->size[0] = 1;
-            ii->size[1] = 0;
+          if (b_idx == 0) {
+            b_ii->size[0] = 1;
+            b_ii->size[1] = 0;
           }
-        } else if (1 > c_idx) {
-          ii->size[1] = 0;
         } else {
-          i20 = ii->size[0] * ii->size[1];
-          ii->size[1] = c_idx;
-          emxEnsureCapacity_int32_T(ii, i20);
+          if (1 > b_idx) {
+            nx = 0;
+          } else {
+            nx = b_idx;
+          }
+
+          i18 = d_ii->size[0] * d_ii->size[1];
+          d_ii->size[0] = 1;
+          d_ii->size[1] = nx;
+          emxEnsureCapacity_int32_T(d_ii, i18);
+          for (i18 = 0; i18 < nx; i18++) {
+            d_ii->data[i18] = b_ii->data[i18];
+          }
+
+          i18 = b_ii->size[0] * b_ii->size[1];
+          b_ii->size[0] = 1;
+          b_ii->size[1] = d_ii->size[1];
+          emxEnsureCapacity_int32_T(b_ii, i18);
+          nx = d_ii->size[1];
+          for (i18 = 0; i18 < nx; i18++) {
+            b_ii->data[i18] = d_ii->data[i18];
+          }
         }
 
-        i20 = idx->size[0] * idx->size[1];
+        i18 = idx->size[0] * idx->size[1];
         idx->size[0] = 1;
-        idx->size[1] = ii->size[1];
-        emxEnsureCapacity_uint32_T(idx, i20);
-        nx = ii->size[0] * ii->size[1];
-        for (i20 = 0; i20 < nx; i20++) {
-          idx->data[i20] = (unsigned int)ii->data[i20];
+        idx->size[1] = b_ii->size[1];
+        emxEnsureCapacity_uint32_T(idx, i18);
+        nx = b_ii->size[1];
+        for (i18 = 0; i18 < nx; i18++) {
+          idx->data[i18] = (unsigned int)b_ii->data[i18];
         }
 
-        i20 = Qtem2->size[0] * Qtem2->size[1];
+        /* 'obsIQ:21' Qtem2=Qtem(i,idx); */
+        i18 = Qtem2->size[0] * Qtem2->size[1];
         Qtem2->size[0] = 1;
         Qtem2->size[1] = idx->size[1];
-        emxEnsureCapacity_real_T(Qtem2, i20);
+        emxEnsureCapacity_real_T(Qtem2, i18);
         nx = idx->size[1];
-        for (i20 = 0; i20 < nx; i20++) {
-          Qtem2->data[i20] = Qtem->data[jj + Qtem->size[0] * ((int)idx->data[i20]
+        for (i18 = 0; i18 < nx; i18++) {
+          Qtem2->data[i18] = Qtem->data[i + Qtem->size[0] * ((int)idx->data[i18]
             - 1)];
         }
 
+        /* 'obsIQ:22' r=rand; */
         r = d_rand();
-        ibmat = 1;
+
+        /* 'obsIQ:24' for j=1:length(Qtem2) */
+        j = 0;
         do {
           exitg2 = 0;
-          i20 = b_idx->size[0];
-          b_idx->size[0] = idx->size[1];
-          emxEnsureCapacity_int32_T(b_idx, i20);
+          i18 = c_ii->size[0];
+          c_ii->size[0] = idx->size[1];
+          emxEnsureCapacity_int32_T(c_ii, i18);
           nx = idx->size[1];
-          for (i20 = 0; i20 < nx; i20++) {
-            b_idx->data[i20] = (int)idx->data[i20];
+          for (i18 = 0; i18 < nx; i18++) {
+            c_ii->data[i18] = (int)idx->data[i18];
           }
 
-          if (ibmat - 1 <= b_idx->size[0] - 1) {
-            i20 = b_idx->size[0];
-            b_idx->size[0] = idx->size[1];
-            emxEnsureCapacity_int32_T(b_idx, i20);
-            nx = idx->size[1];
-            for (i20 = 0; i20 < nx; i20++) {
-              b_idx->data[i20] = (int)idx->data[i20];
+          if (j <= c_ii->size[0] - 1) {
+            /* 'obsIQ:25' if sum(Qtem2(1:j))>r */
+            nx = j + 1;
+            i18 = c_ii->size[0];
+            c_ii->size[0] = idx->size[1];
+            emxEnsureCapacity_int32_T(c_ii, i18);
+            jj = idx->size[1];
+            for (i18 = 0; i18 < jj; i18++) {
+              c_ii->data[i18] = (int)idx->data[i18];
             }
 
-            i20 = b_Qtem2->size[0] * b_Qtem2->size[1];
+            i18 = b_Qtem2->size[0] * b_Qtem2->size[1];
             b_Qtem2->size[0] = 1;
-            b_Qtem2->size[1] = ibmat;
-            emxEnsureCapacity_real_T(b_Qtem2, i20);
-            for (i20 = 0; i20 < ibmat; i20++) {
-              b_Qtem2->data[i20] = Qtem2->data[i20];
+            b_Qtem2->size[1] = j + 1;
+            emxEnsureCapacity_real_T(b_Qtem2, i18);
+            for (i18 = 0; i18 < nx; i18++) {
+              b_Qtem2->data[i18] = Qtem2->data[i18];
             }
 
             if (sum(b_Qtem2) > r) {
-              Obs->data[jj + Obs->size[0] * ((int)idx->data[ibmat - 1] - 1)] = 1;
+              /* 'obsIQ:26' Obs(i,idx(j))=int32(1); */
+              Obs->data[i + Obs->size[0] * ((int)idx->data[j] - 1)] = 1;
+
+              /* 'obsIQ:27' Qtem = (Qtem).*repmat((1./(1-Qtem(:,idx(j)))), 1, size(Qtem, 2)); */
               nx = Qtem->size[0];
-              c_idx = (int)idx->data[ibmat - 1];
-              i20 = r6->size[0];
-              r6->size[0] = nx;
-              emxEnsureCapacity_real_T(r6, i20);
-              for (i20 = 0; i20 < nx; i20++) {
-                r6->data[i20] = 1.0 - Qtem->data[i20 + Qtem->size[0] * (c_idx -
+              b_idx = (int)idx->data[j];
+              i18 = r10->size[0];
+              r10->size[0] = nx;
+              emxEnsureCapacity_real_T(r10, i18);
+              for (i18 = 0; i18 < nx; i18++) {
+                r10->data[i18] = 1.0 - Qtem->data[i18 + Qtem->size[0] * (b_idx -
                   1)];
               }
 
-              b_rdivide_helper(r6, r5);
-              b_repmat(r5, Qtem->size[1], r4);
-              i20 = Qtem->size[0] * Qtem->size[1];
-              ibtile = Qtem->size[0] * Qtem->size[1];
-              emxEnsureCapacity_real_T(Qtem, ibtile);
-              nx = i20 - 1;
-              for (i20 = 0; i20 <= nx; i20++) {
-                Qtem->data[i20] *= r4->data[i20];
+              b_rdivide_helper(r10, r9);
+              c_repmat(r9, Qtem->size[1], r8);
+              i18 = Qtem->size[0] * Qtem->size[1];
+              emxEnsureCapacity_real_T(Qtem, i18);
+              nx = Qtem->size[1];
+              for (i18 = 0; i18 < nx; i18++) {
+                jj = Qtem->size[0];
+                for (ii = 0; ii < jj; ii++) {
+                  Qtem->data[ii + Qtem->size[0] * i18] *= r8->data[ii + r8->
+                    size[0] * i18];
+                }
               }
 
+              /* 'obsIQ:28' Qtem(:,idx(j))=0; */
               nx = Qtem->size[0];
-              c_idx = (int)idx->data[ibmat - 1];
-              for (i20 = 0; i20 < nx; i20++) {
-                Qtem->data[i20 + Qtem->size[0] * (c_idx - 1)] = 0.0;
+              b_idx = (int)idx->data[j];
+              for (i18 = 0; i18 < nx; i18++) {
+                Qtem->data[i18 + Qtem->size[0] * (b_idx - 1)] = 0.0;
               }
 
               exitg2 = 1;
             } else {
-              i20 = b_Qtem2->size[0] * b_Qtem2->size[1];
+              nx = j + 1;
+              i18 = b_Qtem2->size[0] * b_Qtem2->size[1];
               b_Qtem2->size[0] = 1;
-              b_Qtem2->size[1] = ibmat;
-              emxEnsureCapacity_real_T(b_Qtem2, i20);
-              for (i20 = 0; i20 < ibmat; i20++) {
-                b_Qtem2->data[i20] = Qtem2->data[i20];
+              b_Qtem2->size[1] = j + 1;
+              emxEnsureCapacity_real_T(b_Qtem2, i18);
+              for (i18 = 0; i18 < nx; i18++) {
+                b_Qtem2->data[i18] = Qtem2->data[i18];
               }
 
               if (sum(b_Qtem2) <= r) {
-                i20 = b_idx->size[0];
-                b_idx->size[0] = idx->size[1];
-                emxEnsureCapacity_int32_T(b_idx, i20);
+                jj = (int)(j + 2U);
+                i18 = c_ii->size[0];
+                c_ii->size[0] = idx->size[1];
+                emxEnsureCapacity_int32_T(c_ii, i18);
                 nx = idx->size[1];
-                for (i20 = 0; i20 < nx; i20++) {
-                  b_idx->data[i20] = (int)idx->data[i20];
+                for (i18 = 0; i18 < nx; i18++) {
+                  c_ii->data[i18] = (int)idx->data[i18];
                 }
 
-                i20 = b_Qtem2->size[0] * b_Qtem2->size[1];
+                i18 = b_Qtem2->size[0] * b_Qtem2->size[1];
                 b_Qtem2->size[0] = 1;
-                b_Qtem2->size[1] = ibmat + 1;
-                emxEnsureCapacity_real_T(b_Qtem2, i20);
-                for (i20 = 0; i20 <= ibmat; i20++) {
-                  b_Qtem2->data[i20] = Qtem2->data[i20];
+                b_Qtem2->size[1] = jj;
+                emxEnsureCapacity_real_T(b_Qtem2, i18);
+                for (i18 = 0; i18 < jj; i18++) {
+                  b_Qtem2->data[i18] = Qtem2->data[i18];
                 }
 
                 if (sum(b_Qtem2) > r) {
-                  Obs->data[jj + Obs->size[0] * ((int)idx->data[ibmat] - 1)] = 1;
+                  /* 'obsIQ:30' elseif sum(Qtem2(1:j))<=r && sum(Qtem2(1:j+1))>r */
+                  /* 'obsIQ:31' Obs(i,idx(j+1))=int32(1); */
+                  Obs->data[i + Obs->size[0] * ((int)idx->data[j + 1] - 1)] = 1;
+
+                  /* 'obsIQ:32' Qtem = Qtem.*repmat((1./(1-Qtem(:,idx(j+1)))), 1, size(Qtem, 2)); */
                   nx = Qtem->size[0];
-                  c_idx = (int)idx->data[ibmat];
-                  i20 = r6->size[0];
-                  r6->size[0] = nx;
-                  emxEnsureCapacity_real_T(r6, i20);
-                  for (i20 = 0; i20 < nx; i20++) {
-                    r6->data[i20] = 1.0 - Qtem->data[i20 + Qtem->size[0] *
-                      (c_idx - 1)];
+                  b_idx = (int)idx->data[j + 1];
+                  i18 = r10->size[0];
+                  r10->size[0] = nx;
+                  emxEnsureCapacity_real_T(r10, i18);
+                  for (i18 = 0; i18 < nx; i18++) {
+                    r10->data[i18] = 1.0 - Qtem->data[i18 + Qtem->size[0] *
+                      (b_idx - 1)];
                   }
 
-                  b_rdivide_helper(r6, r5);
-                  b_repmat(r5, Qtem->size[1], r4);
-                  i20 = Qtem->size[0] * Qtem->size[1];
-                  ibtile = Qtem->size[0] * Qtem->size[1];
-                  emxEnsureCapacity_real_T(Qtem, ibtile);
-                  nx = i20 - 1;
-                  for (i20 = 0; i20 <= nx; i20++) {
-                    Qtem->data[i20] *= r4->data[i20];
+                  b_rdivide_helper(r10, r9);
+                  c_repmat(r9, Qtem->size[1], r8);
+                  i18 = Qtem->size[0] * Qtem->size[1];
+                  emxEnsureCapacity_real_T(Qtem, i18);
+                  nx = Qtem->size[1];
+                  for (i18 = 0; i18 < nx; i18++) {
+                    jj = Qtem->size[0];
+                    for (ii = 0; ii < jj; ii++) {
+                      Qtem->data[ii + Qtem->size[0] * i18] *= r8->data[ii +
+                        r8->size[0] * i18];
+                    }
                   }
 
+                  /* 'obsIQ:33' Qtem(:,idx(j+1))=0; */
                   nx = Qtem->size[0];
-                  c_idx = (int)idx->data[ibmat];
-                  for (i20 = 0; i20 < nx; i20++) {
-                    Qtem->data[i20 + Qtem->size[0] * (c_idx - 1)] = 0.0;
+                  b_idx = (int)idx->data[j + 1];
+                  for (i18 = 0; i18 < nx; i18++) {
+                    Qtem->data[i18 + Qtem->size[0] * (b_idx - 1)] = 0.0;
                   }
 
                   exitg2 = 1;
                 } else {
-                  ibmat++;
+                  j++;
                 }
               } else {
-                ibmat++;
+                j++;
               }
             }
           } else {
@@ -359,36 +381,37 @@ void obsIQ(const emxArray_real_T *IQ, int numIQ, int numObsIQ, emxArray_int32_T 
         } while (exitg2 == 0);
       }
 
-      i20 = b_x->size[0] * b_x->size[1];
+      /* 'obsIQ:40' [List(:,u),~]=find(Obs'==1); */
+      i18 = b_x->size[0] * b_x->size[1];
       b_x->size[0] = Obs->size[1];
       b_x->size[1] = Obs->size[0];
-      emxEnsureCapacity_boolean_T(b_x, i20);
+      emxEnsureCapacity_boolean_T(b_x, i18);
       nx = Obs->size[0];
-      for (i20 = 0; i20 < nx; i20++) {
+      for (i18 = 0; i18 < nx; i18++) {
         jj = Obs->size[1];
-        for (ibtile = 0; ibtile < jj; ibtile++) {
-          b_x->data[ibtile + b_x->size[0] * i20] = (Obs->data[i20 + Obs->size[0]
-            * ibtile] == 1);
+        for (ii = 0; ii < jj; ii++) {
+          b_x->data[ii + b_x->size[0] * i18] = (Obs->data[i18 + Obs->size[0] *
+            ii] == 1);
         }
       }
 
       nx = b_x->size[0] * b_x->size[1];
       if (nx == 0) {
-        b_idx->size[0] = 0;
+        c_ii->size[0] = 0;
       } else {
-        c_idx = 0;
-        i20 = b_idx->size[0];
-        b_idx->size[0] = nx;
-        emxEnsureCapacity_int32_T(b_idx, i20);
-        ibtile = 1;
+        b_idx = 0;
+        i18 = c_ii->size[0];
+        c_ii->size[0] = nx;
+        emxEnsureCapacity_int32_T(c_ii, i18);
+        ii = 1;
         jj = 1;
         exitg1 = false;
         while ((!exitg1) && (jj <= b_x->size[1])) {
           guard1 = false;
-          if (b_x->data[(ibtile + b_x->size[0] * (jj - 1)) - 1]) {
-            c_idx++;
-            b_idx->data[c_idx - 1] = ibtile;
-            if (c_idx >= nx) {
+          if (b_x->data[(ii + b_x->size[0] * (jj - 1)) - 1]) {
+            b_idx++;
+            c_ii->data[b_idx - 1] = ii;
+            if (b_idx >= nx) {
               exitg1 = true;
             } else {
               guard1 = true;
@@ -398,97 +421,79 @@ void obsIQ(const emxArray_real_T *IQ, int numIQ, int numObsIQ, emxArray_int32_T 
           }
 
           if (guard1) {
-            ibtile++;
-            if (ibtile > b_x->size[0]) {
-              ibtile = 1;
+            ii++;
+            if (ii > b_x->size[0]) {
+              ii = 1;
               jj++;
             }
           }
         }
 
         if (nx == 1) {
-          if (c_idx == 0) {
-            b_idx->size[0] = 0;
+          if (b_idx == 0) {
+            c_ii->size[0] = 0;
           }
         } else {
-          i20 = b_idx->size[0];
-          if (1 > c_idx) {
-            b_idx->size[0] = 0;
+          i18 = c_ii->size[0];
+          if (1 > b_idx) {
+            c_ii->size[0] = 0;
           } else {
-            b_idx->size[0] = c_idx;
+            c_ii->size[0] = b_idx;
           }
 
-          emxEnsureCapacity_int32_T(b_idx, i20);
+          emxEnsureCapacity_int32_T(c_ii, i18);
         }
       }
 
-      nx = b_idx->size[0];
-      for (i20 = 0; i20 < nx; i20++) {
-        List->data[i20 + List->size[0] * u] = b_idx->data[i20];
+      nx = c_ii->size[0];
+      for (i18 = 0; i18 < nx; i18++) {
+        List->data[i18 + List->size[0] * u] = c_ii->data[i18];
       }
+
+      /* 'obsIQ:40' ~ */
     }
 
-    i18 = (long long)k * numObsIQ;
-    if (i18 > 2147483647LL) {
-      i18 = 2147483647LL;
-    } else {
-      if (i18 < -2147483648LL) {
-        i18 = -2147483648LL;
-      }
-    }
-
-    jj = (int)i18;
-    if (jj > 2147483646) {
-      jj = MAX_int32_T;
-    } else {
-      jj++;
-    }
-
-    i18 = (long long)(k + 1) * numObsIQ;
-    if (i18 > 2147483647LL) {
-      i18 = 2147483647LL;
-    } else {
-      if (i18 < -2147483648LL) {
-        i18 = -2147483648LL;
-      }
-    }
-
-    if (jj > (int)i18) {
-      i17 = 1;
-    } else {
-      i17 = jj;
+    /* 'obsIQ:44' newIC(:,(k-1)*numObsIQ+1:k*numObsIQ) = List; */
+    i18 = k * numObsIQ;
+    if (i18 + 1 > (k + 1) * numObsIQ) {
+      i18 = 0;
     }
 
     nx = List->size[1];
-    for (i19 = 0; i19 < nx; i19++) {
-      jj = List->size[0];
-      for (i20 = 0; i20 < jj; i20++) {
-        newIC->data[i20 + newIC->size[0] * ((i17 + i19) - 1)] = List->data[i20 +
-          List->size[0] * i19];
+    for (ii = 0; ii < nx; ii++) {
+      loop_ub = List->size[0];
+      for (jj = 0; jj < loop_ub; jj++) {
+        newIC->data[jj + newIC->size[0] * (i18 + ii)] = List->data[jj +
+          List->size[0] * ii];
       }
     }
 
-    i17 = List->size[0] * List->size[1];
-    List->size[0] = i16;
+    /* 'obsIQ:45' List = zeros(numGen,numObsIQ, 'int32'); */
+    i18 = List->size[0] * List->size[1];
+    List->size[0] = numGen;
     List->size[1] = numObsIQ;
-    emxEnsureCapacity_int32_T(List, i17);
-    for (i17 = 0; i17 < loop_ub_tmp; i17++) {
-      List->data[i17] = 0;
+    emxEnsureCapacity_int32_T(List, i18);
+    for (i18 = 0; i18 < numObsIQ; i18++) {
+      for (ii = 0; ii < numGen; ii++) {
+        List->data[ii + List->size[0] * i18] = 0;
+      }
     }
   }
 
-  emxFree_real_T(&r6);
+  emxFree_real_T(&r10);
   emxFree_real_T(&b_Qtem2);
-  emxFree_int32_T(&b_idx);
-  emxFree_real_T(&r5);
+  emxFree_int32_T(&d_ii);
+  emxFree_real_T(&r9);
+  emxFree_int32_T(&c_ii);
   emxFree_boolean_T(&b_x);
-  emxFree_int32_T(&ii);
+  emxFree_int32_T(&b_ii);
   emxFree_boolean_T(&x);
-  emxFree_real_T(&r4);
+  emxFree_real_T(&r8);
   emxFree_real_T(&Qtem2);
   emxFree_uint32_T(&idx);
   emxFree_real_T(&Qtem);
   emxFree_int8_T(&Obs);
+  emxFree_real_T(&Q);
   emxFree_int32_T(&List);
 }
 

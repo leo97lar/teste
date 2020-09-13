@@ -18,6 +18,10 @@
 #include "funcionDia.h"
 
 /* Function Definitions */
+
+/*
+ * function [ schedule,DiaOp,EspMedOp ] = casorandom(NumTOp,H,NumRec,PCPrO,PME,PMA,PMAn,PS,PCPO,PCR,Dia,UltPosRecXDia,TimeUsoRec,DispMExD)
+ */
 void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
                 emxArray_int32_T *PCPrO, const emxArray_int32_T *PME, const
                 emxArray_int32_T *PMA, const emxArray_int32_T *PMAn, const
@@ -28,14 +32,13 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
                 DiaOp, emxArray_int32_T *EspMedOp)
 {
   int i38;
-  int loop_ub;
   emxArray_int32_T *tempUltPosRecXDia;
   emxArray_int32_T *DispME;
   emxArray_int32_T *EA;
   emxArray_int32_T *AA;
   emxArray_int32_T *AnA;
   emxArray_int32_T *SA;
-  emxArray_int32_T *r8;
+  emxArray_int32_T *r11;
   emxArray_int32_T *b_PCPrO;
   emxArray_int32_T *b_PME;
   emxArray_int32_T *b_PMA;
@@ -45,6 +48,7 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
   emxArray_int32_T *b_PCR;
   int i;
   int contDia;
+  int loop_ub;
   int CPrOA;
   int IniCPrOA;
   int EndCPrOA;
@@ -59,27 +63,37 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
   int IniCRA;
   int EndCRA;
   int i39;
+  int NumRec_tmp;
   int i40;
+  int k;
+  int j;
   int i41;
   int i42;
   int i43;
   int i44;
   int i45;
+  int i46;
   double y;
 
   /* UNTITLED4 Summary of this function goes here */
   /*    Detailed explanation goes here */
   /*     NCPrO  |    NME    |     NS    |     NA    |     NAn    |    NCPO     |   NCR */
   /*   Col 1-20 | Col 21-50 | Col 51-62 | Col 63-87 | Col 88-112 | Col 113-132 | Col 133-172 */
+  /* 'casorandom:7' DiaOp = zeros(NumTOp,1, 'int32'); */
+  /* 'casorandom:8' EspMedOp = zeros(NumTOp,2, 'int32'); */
   i38 = EspMedOp->size[0] * EspMedOp->size[1];
   EspMedOp->size[0] = NumTOp;
   EspMedOp->size[1] = 2;
   emxEnsureCapacity_int32_T(EspMedOp, i38);
-  loop_ub = NumTOp << 1;
-  for (i38 = 0; i38 < loop_ub; i38++) {
+  for (i38 = 0; i38 < NumTOp; i38++) {
     EspMedOp->data[i38] = 0;
   }
 
+  for (i38 = 0; i38 < NumTOp; i38++) {
+    EspMedOp->data[i38 + EspMedOp->size[0]] = 0;
+  }
+
+  /* 'casorandom:10' for i=1:NumTOp */
   i38 = DiaOp->size[0];
   DiaOp->size[0] = NumTOp;
   emxEnsureCapacity_int32_T(DiaOp, i38);
@@ -89,7 +103,7 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
   emxInit_int32_T(&AA, 2);
   emxInit_int32_T(&AnA, 2);
   emxInit_int32_T(&SA, 2);
-  emxInit_int32_T(&r8, 1);
+  emxInit_int32_T(&r11, 1);
   emxInit_int32_T(&b_PCPrO, 2);
   emxInit_int32_T(&b_PME, 2);
   emxInit_int32_T(&b_PMA, 2);
@@ -98,6 +112,9 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
   emxInit_int32_T(&b_PCPO, 2);
   emxInit_int32_T(&b_PCR, 2);
   for (i = 0; i < NumTOp; i++) {
+    /* 'casorandom:12' contDia = int32(2); */
+    /* 'casorandom:14' [contDia,tempUltPosRecXDia,DispME] = funcionDia( NumRec,PCPrO(i,:), Dia,UltPosRecXDia,... */
+    /* 'casorandom:15'         TimeUsoRec(i,1),TimeUsoRec(i,2),contDia,DispMExD); */
     contDia = 2;
     loop_ub = PCPrO->size[1];
     i38 = b_PCPrO->size[0] * b_PCPrO->size[1];
@@ -111,6 +128,10 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
     funcionDia(NumRec, b_PCPrO, Dia, UltPosRecXDia, TimeUsoRec->data[i],
                TimeUsoRec->data[i + TimeUsoRec->size[0]], &contDia, DispMExD,
                tempUltPosRecXDia, DispME);
+
+    /* 'casorandom:17' [ CPrOA,IniCPrOA, EndCPrOA,EndCPrOAxD,EA,AA,AnA,SA,IniSA,EndSA,EndRPxD,CPOA,IniCPOA,EndCPOA,CRA,IniCRA,EndCRA,contDia] = ... */
+    /* 'casorandom:18'         funcionCPrO( NumRec,PCPrO(i,:), PME(i,:),PMA(i,:),PMAn(i,:),PS(i,:),PCPO(i,:),PCR(i,:),H,Dia, UltPosRecXDia,... */
+    /* 'casorandom:19'         TimeUsoRec(i,1), TimeUsoRec(i,2),TimeUsoRec(i,6),TimeUsoRec(i,7),contDia,tempUltPosRecXDia,DispMExD,DispME); */
     loop_ub = PCPrO->size[1];
     i38 = b_PCPrO->size[0] * b_PCPrO->size[1];
     b_PCPrO->size[0] = 1;
@@ -181,21 +202,29 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
                 tempUltPosRecXDia, DispMExD, DispME, &CPrOA, &IniCPrOA,
                 &EndCPrOA, &EndCPrOAxD, EA, AA, AnA, SA, &IniSA, &EndSA,
                 &EndRPxD, &CPOA, &IniCPOA, &EndCPOA, &CRA, &IniCRA, &EndCRA);
+
+    /* 'casorandom:21' DiaOp(i)=contDia; */
     DiaOp->data[i] = contDia;
+
+    /* 'casorandom:23' H(IniCPrOA:EndCPrOA,CPrOA)=i; */
     if (IniCPrOA > EndCPrOA) {
       i38 = 0;
-      EndCPrOA = 0;
+      i39 = 0;
     } else {
       i38 = IniCPrOA - 1;
+      i39 = EndCPrOA;
     }
 
-    loop_ub = EndCPrOA - i38;
+    loop_ub = i39 - i38;
     for (i39 = 0; i39 < loop_ub; i39++) {
       H->data[(i38 + i39) + H->size[0] * (CPrOA - 1)] = i + 1;
     }
 
+    /* 'casorandom:24' UltPosRecXDia(contDia,CPrOA)=EndCPrOAxD; */
     UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (CPrOA - 1)) - 1] =
       EndCPrOAxD;
+
+    /* 'casorandom:26' H(IniSA:EndSA,NumRec(1)+NumRec(2)+int32(SA))=i; */
     if (IniSA > EndSA) {
       i38 = 0;
       i39 = 0;
@@ -204,323 +233,176 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
       i39 = EndSA;
     }
 
-    if ((NumRec[0] < 0) && (NumRec[1] < MIN_int32_T - NumRec[0])) {
-      CPrOA = MIN_int32_T;
-    } else if ((NumRec[0] > 0) && (NumRec[1] > MAX_int32_T - NumRec[0])) {
-      CPrOA = MAX_int32_T;
-    } else {
-      CPrOA = NumRec[0] + NumRec[1];
-    }
-
-    EndCPrOAxD = r8->size[0];
-    r8->size[0] = SA->size[1];
-    emxEnsureCapacity_int32_T(r8, EndCPrOAxD);
+    NumRec_tmp = NumRec[0] + NumRec[1];
+    i40 = b_PCPrO->size[0] * b_PCPrO->size[1];
+    b_PCPrO->size[0] = 1;
+    b_PCPrO->size[1] = SA->size[1];
+    emxEnsureCapacity_int32_T(b_PCPrO, i40);
     loop_ub = SA->size[1];
-    for (EndCPrOAxD = 0; EndCPrOAxD < loop_ub; EndCPrOAxD++) {
-      EndCPrOA = SA->data[EndCPrOAxD];
-      if ((CPrOA < 0) && (EndCPrOA < MIN_int32_T - CPrOA)) {
-        IniCPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (EndCPrOA > MAX_int32_T - CPrOA)) {
-        IniCPrOA = MAX_int32_T;
-      } else {
-        IniCPrOA = CPrOA + EndCPrOA;
+    for (i40 = 0; i40 < loop_ub; i40++) {
+      b_PCPrO->data[i40] = SA->data[i40] + NumRec_tmp;
+    }
+
+    i40 = r11->size[0];
+    r11->size[0] = b_PCPrO->size[1];
+    emxEnsureCapacity_int32_T(r11, i40);
+    loop_ub = b_PCPrO->size[1];
+    for (i40 = 0; i40 < loop_ub; i40++) {
+      r11->data[i40] = b_PCPrO->data[i40];
+    }
+
+    k = i39 - i38;
+    loop_ub = r11->size[0];
+    for (i39 = 0; i39 < loop_ub; i39++) {
+      for (i40 = 0; i40 < k; i40++) {
+        H->data[(i38 + i40) + H->size[0] * (r11->data[i39] - 1)] = i + 1;
       }
-
-      r8->data[EndCPrOAxD] = IniCPrOA;
     }
 
-    IniCPrOA = i39 - i38;
-    EndCPrOA = r8->size[0];
-    for (i39 = 0; i39 < EndCPrOA; i39++) {
-      for (EndCPrOAxD = 0; EndCPrOAxD < IniCPrOA; EndCPrOAxD++) {
-        H->data[(i38 + EndCPrOAxD) + H->size[0] * (r8->data[i39] - 1)] = i + 1;
-      }
+    /* 'casorandom:27' UltPosRecXDia(contDia,NumRec(1)+NumRec(2)+int32(SA))=EndRPxD; */
+    loop_ub = r11->size[0];
+    for (i38 = 0; i38 < loop_ub; i38++) {
+      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (r11->data[i38] -
+        1)) - 1] = EndRPxD;
     }
 
-    EndCPrOA = r8->size[0];
-    for (i38 = 0; i38 < EndCPrOA; i38++) {
-      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (r8->data[i38] - 1))
-        - 1] = EndRPxD;
-    }
-
+    /* 'casorandom:29' for j=1:size(EA,2) */
     i38 = EA->size[1];
     if (0 <= i38 - 1) {
       if (IniSA > EndSA) {
-        i40 = 0;
         i41 = 0;
+        i42 = 0;
       } else {
-        i40 = IniSA - 1;
-        i41 = EndSA;
+        i41 = IniSA - 1;
+        i42 = EndSA;
       }
     }
 
-    for (IniCPrOA = 0; IniCPrOA < i38; IniCPrOA++) {
-      EndCPrOA = EA->data[IniCPrOA];
-      if ((NumRec[0] < 0) && (EndCPrOA < MIN_int32_T - NumRec[0])) {
-        CPrOA = MIN_int32_T;
-      } else if ((NumRec[0] > 0) && (EndCPrOA > MAX_int32_T - NumRec[0])) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA = NumRec[0] + EndCPrOA;
-      }
-
-      loop_ub = i41 - i40;
+    for (j = 0; j < i38; j++) {
+      /* 'casorandom:31' H(IniSA:EndSA,NumRec(1)+EA(j))=i; */
+      k = NumRec[0] + EA->data[j];
+      loop_ub = i42 - i41;
       for (i39 = 0; i39 < loop_ub; i39++) {
-        H->data[(i40 + i39) + H->size[0] * (CPrOA - 1)] = i + 1;
+        H->data[(i41 + i39) + H->size[0] * (k - 1)] = i + 1;
       }
 
-      EndCPrOA = EA->data[IniCPrOA];
-      if ((NumRec[0] < 0) && (EndCPrOA < MIN_int32_T - NumRec[0])) {
-        CPrOA = MIN_int32_T;
-      } else if ((NumRec[0] > 0) && (EndCPrOA > MAX_int32_T - NumRec[0])) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA = NumRec[0] + EndCPrOA;
-      }
+      /* 'casorandom:32' UltPosRecXDia(contDia,NumRec(1)+EA(j))=EndRPxD; */
+      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * ((NumRec[0] +
+        EA->data[j]) - 1)) - 1] = EndRPxD;
 
-      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (CPrOA - 1)) - 1] =
-        EndRPxD;
-      EspMedOp->data[i + EspMedOp->size[0] * IniCPrOA] = PME->data[i + PME->
-        size[0] * (EA->data[IniCPrOA] - 1)];
+      /* 'casorandom:34' EspMedOp(i,j)=PME(i,EA(j)); */
+      EspMedOp->data[i + EspMedOp->size[0] * j] = PME->data[i + PME->size[0] *
+        (EA->data[j] - 1)];
     }
 
+    /* 'casorandom:38' for j=1:size(AA,2) */
     i38 = AA->size[1];
     if (0 <= i38 - 1) {
       if (IniSA > EndSA) {
-        i42 = 0;
         i43 = 0;
+        i44 = 0;
       } else {
-        i42 = IniSA - 1;
-        i43 = EndSA;
+        i43 = IniSA - 1;
+        i44 = EndSA;
       }
     }
 
-    for (IniCPrOA = 0; IniCPrOA < i38; IniCPrOA++) {
-      if ((NumRec[0] < 0) && (NumRec[1] < MIN_int32_T - NumRec[0])) {
-        CPrOA = MIN_int32_T;
-      } else if ((NumRec[0] > 0) && (NumRec[1] > MAX_int32_T - NumRec[0])) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA = NumRec[0] + NumRec[1];
-      }
-
-      if ((CPrOA < 0) && (NumRec[2] < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (NumRec[2] > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += NumRec[2];
-      }
-
-      EndCPrOA = AA->data[IniCPrOA];
-      if ((CPrOA < 0) && (EndCPrOA < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (EndCPrOA > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += EndCPrOA;
-      }
-
-      loop_ub = i43 - i42;
+    for (j = 0; j < i38; j++) {
+      /* 'casorandom:40' H(IniSA:EndSA,NumRec(1)+NumRec(2)+NumRec(3)+AA(j))=i; */
+      k = (NumRec_tmp + NumRec[2]) + AA->data[j];
+      loop_ub = i44 - i43;
       for (i39 = 0; i39 < loop_ub; i39++) {
-        H->data[(i42 + i39) + H->size[0] * (CPrOA - 1)] = i + 1;
+        H->data[(i43 + i39) + H->size[0] * (k - 1)] = i + 1;
       }
 
-      if ((NumRec[0] < 0) && (NumRec[1] < MIN_int32_T - NumRec[0])) {
-        CPrOA = MIN_int32_T;
-      } else if ((NumRec[0] > 0) && (NumRec[1] > MAX_int32_T - NumRec[0])) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA = NumRec[0] + NumRec[1];
-      }
-
-      if ((CPrOA < 0) && (NumRec[2] < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (NumRec[2] > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += NumRec[2];
-      }
-
-      EndCPrOA = AA->data[IniCPrOA];
-      if ((CPrOA < 0) && (EndCPrOA < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (EndCPrOA > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += EndCPrOA;
-      }
-
-      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (CPrOA - 1)) - 1] =
-        EndRPxD;
+      /* 'casorandom:41' UltPosRecXDia(contDia,NumRec(1)+NumRec(2)+NumRec(3)+AA(j))=EndRPxD; */
+      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * ((((NumRec[0] +
+        NumRec[1]) + NumRec[2]) + AA->data[j]) - 1)) - 1] = EndRPxD;
     }
 
+    /* 'casorandom:45' for j=1:size(AnA,2) */
     i38 = AnA->size[1];
     if (0 <= i38 - 1) {
       if (IniSA > EndSA) {
-        i44 = 0;
         i45 = 0;
+        i46 = 0;
       } else {
-        i44 = IniSA - 1;
-        i45 = EndSA;
+        i45 = IniSA - 1;
+        i46 = EndSA;
       }
     }
 
-    for (IniCPrOA = 0; IniCPrOA < i38; IniCPrOA++) {
-      if ((NumRec[0] < 0) && (NumRec[1] < MIN_int32_T - NumRec[0])) {
-        CPrOA = MIN_int32_T;
-      } else if ((NumRec[0] > 0) && (NumRec[1] > MAX_int32_T - NumRec[0])) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA = NumRec[0] + NumRec[1];
-      }
-
-      if ((CPrOA < 0) && (NumRec[2] < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (NumRec[2] > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += NumRec[2];
-      }
-
-      if ((CPrOA < 0) && (NumRec[3] < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (NumRec[3] > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += NumRec[3];
-      }
-
-      EndCPrOA = AnA->data[IniCPrOA];
-      if ((CPrOA < 0) && (EndCPrOA < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (EndCPrOA > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += EndCPrOA;
-      }
-
-      loop_ub = i45 - i44;
+    for (j = 0; j < i38; j++) {
+      /* 'casorandom:47' H(IniSA:EndSA,NumRec(1)+NumRec(2)+NumRec(3)+NumRec(4)+AnA(j))=i; */
+      k = (((NumRec[0] + NumRec[1]) + NumRec[2]) + NumRec[3]) + AnA->data[j];
+      loop_ub = i46 - i45;
       for (i39 = 0; i39 < loop_ub; i39++) {
-        H->data[(i44 + i39) + H->size[0] * (CPrOA - 1)] = i + 1;
+        H->data[(i45 + i39) + H->size[0] * (k - 1)] = i + 1;
       }
 
-      if ((NumRec[0] < 0) && (NumRec[1] < MIN_int32_T - NumRec[0])) {
-        CPrOA = MIN_int32_T;
-      } else if ((NumRec[0] > 0) && (NumRec[1] > MAX_int32_T - NumRec[0])) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA = NumRec[0] + NumRec[1];
-      }
-
-      if ((CPrOA < 0) && (NumRec[2] < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (NumRec[2] > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += NumRec[2];
-      }
-
-      if ((CPrOA < 0) && (NumRec[3] < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (NumRec[3] > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += NumRec[3];
-      }
-
-      EndCPrOA = AnA->data[IniCPrOA];
-      if ((CPrOA < 0) && (EndCPrOA < MIN_int32_T - CPrOA)) {
-        CPrOA = MIN_int32_T;
-      } else if ((CPrOA > 0) && (EndCPrOA > MAX_int32_T - CPrOA)) {
-        CPrOA = MAX_int32_T;
-      } else {
-        CPrOA += EndCPrOA;
-      }
-
-      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (CPrOA - 1)) - 1] =
+      /* 'casorandom:48' UltPosRecXDia(contDia,NumRec(1)+NumRec(2)+NumRec(3)+NumRec(4)+AnA(j))=EndRPxD; */
+      UltPosRecXDia->data[(contDia + UltPosRecXDia->size[0] * (((((NumRec[0] +
+        NumRec[1]) + NumRec[2]) + NumRec[3]) + AnA->data[j]) - 1)) - 1] =
         EndRPxD;
     }
 
+    /* 'casorandom:52' if IniCPOA == 0 */
     if (IniCPOA == 0) {
+      /* 'casorandom:53' H(IniCRA:EndCRA,sum(NumRec(1:6))+CRA)=i; */
       if (IniCRA > EndCRA) {
         i38 = 0;
-        EndCRA = 0;
+        i39 = 0;
       } else {
         i38 = IniCRA - 1;
+        i39 = EndCRA;
       }
 
       y = NumRec[0];
-      for (IniCPrOA = 0; IniCPrOA < 5; IniCPrOA++) {
-        y += (double)NumRec[IniCPrOA + 1];
+      for (k = 0; k < 5; k++) {
+        y += (double)NumRec[k + 1];
       }
 
-      y += (double)CRA;
-      if (y < 2.147483648E+9) {
-        if (y >= -2.147483648E+9) {
-          IniCPrOA = (int)y;
-        } else {
-          IniCPrOA = MIN_int32_T;
-        }
-      } else {
-        IniCPrOA = MAX_int32_T;
-      }
-
-      loop_ub = EndCRA - i38;
+      k = (int)(y + (double)CRA);
+      loop_ub = i39 - i38;
       for (i39 = 0; i39 < loop_ub; i39++) {
-        H->data[(i38 + i39) + H->size[0] * (IniCPrOA - 1)] = i + 1;
+        H->data[(i38 + i39) + H->size[0] * (k - 1)] = i + 1;
       }
     } else {
+      /* 'casorandom:54' else */
+      /* 'casorandom:55' H(IniCPOA:EndCPOA,sum(NumRec(1:5))+CPOA)=i; */
       if (IniCPOA > EndCPOA) {
         i38 = 0;
-        EndCPOA = 0;
+        i39 = 0;
       } else {
         i38 = IniCPOA - 1;
+        i39 = EndCPOA;
       }
 
-      y = (((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
-            (double)NumRec[3]) + (double)NumRec[4]) + (double)CPOA;
-      if (y < 2.147483648E+9) {
-        if (y >= -2.147483648E+9) {
-          IniCPrOA = (int)y;
-        } else {
-          IniCPrOA = MIN_int32_T;
-        }
-      } else {
-        IniCPrOA = MAX_int32_T;
-      }
-
-      loop_ub = EndCPOA - i38;
+      k = (int)((((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2])
+                  + (double)NumRec[3]) + (double)NumRec[4]) + (double)CPOA);
+      loop_ub = i39 - i38;
       for (i39 = 0; i39 < loop_ub; i39++) {
-        H->data[(i38 + i39) + H->size[0] * (IniCPrOA - 1)] = i + 1;
+        H->data[(i38 + i39) + H->size[0] * (k - 1)] = i + 1;
       }
 
+      /* 'casorandom:56' H(IniCRA:EndCRA,sum(NumRec(1:6))+CRA)=i; */
       if (IniCRA > EndCRA) {
         i38 = 0;
-        EndCRA = 0;
+        i39 = 0;
       } else {
         i38 = IniCRA - 1;
+        i39 = EndCRA;
       }
 
       y = NumRec[0];
-      for (IniCPrOA = 0; IniCPrOA < 5; IniCPrOA++) {
-        y += (double)NumRec[IniCPrOA + 1];
+      for (k = 0; k < 5; k++) {
+        y += (double)NumRec[k + 1];
       }
 
-      y += (double)CRA;
-      if (y < 2.147483648E+9) {
-        if (y >= -2.147483648E+9) {
-          IniCPrOA = (int)y;
-        } else {
-          IniCPrOA = MIN_int32_T;
-        }
-      } else {
-        IniCPrOA = MAX_int32_T;
-      }
-
-      loop_ub = EndCRA - i38;
+      k = (int)(y + (double)CRA);
+      loop_ub = i39 - i38;
       for (i39 = 0; i39 < loop_ub; i39++) {
-        H->data[(i38 + i39) + H->size[0] * (IniCPrOA - 1)] = i + 1;
+        H->data[(i38 + i39) + H->size[0] * (k - 1)] = i + 1;
       }
     }
   }
@@ -532,13 +414,15 @@ void casorandom(int NumTOp, emxArray_int32_T *H, const int NumRec[7], const
   emxFree_int32_T(&b_PMA);
   emxFree_int32_T(&b_PME);
   emxFree_int32_T(&b_PCPrO);
-  emxFree_int32_T(&r8);
+  emxFree_int32_T(&r11);
   emxFree_int32_T(&SA);
   emxFree_int32_T(&AnA);
   emxFree_int32_T(&AA);
   emxFree_int32_T(&EA);
   emxFree_int32_T(&DispME);
   emxFree_int32_T(&tempUltPosRecXDia);
+
+  /* 'casorandom:62' schedule=H; */
 }
 
 /* End of code generation (casorandom.c) */

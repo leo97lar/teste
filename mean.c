@@ -16,9 +16,21 @@
 #include "combineVectorElements.h"
 
 /* Function Definitions */
+
+/*
+ *
+ */
 double mean(const emxArray_real_T *x)
 {
-  return combineVectorElements(x) / (double)x->size[0];
+  double y;
+  if (x->size[0] == 0) {
+    y = 0.0;
+  } else {
+    y = nestedIter(x, x->size[0]);
+  }
+
+  y /= (double)x->size[0];
+  return y;
 }
 
 /* End of code generation (mean.c) */

@@ -19,7 +19,10 @@
 #include "model_types.h"
 
 /* Variable Declarations */
-extern unsigned int state[625];
+extern unsigned int method;
+extern unsigned int state;
+extern unsigned int b_state[2];
+extern boolean_T state_not_empty;
 
 #endif
 

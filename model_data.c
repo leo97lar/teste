@@ -15,6 +15,9 @@
 #include "model_data.h"
 
 /* Variable Definitions */
-unsigned int state[625];
+unsigned int method;
+unsigned int state;
+unsigned int b_state[2];
+boolean_T state_not_empty;
 
 /* End of code generation (model_data.c) */

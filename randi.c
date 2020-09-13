@@ -17,6 +17,20 @@
 #include "rand.h"
 
 /* Function Definitions */
+
+/*
+ *
+ */
+double b_randi(void)
+{
+  double r;
+  r = d_rand();
+  return 1.0 + floor(r * 30.0);
+}
+
+/*
+ *
+ */
 void randi(double r[2000])
 {
   int k;

@@ -15,16 +15,21 @@
 #include "main_UCI_func.h"
 #include "std.h"
 #include "model_emxutil.h"
+#include "combineVectorElements.h"
 
 /* Function Definitions */
+
+/*
+ *
+ */
 double b_std(const emxArray_real_T *x)
 {
   double y;
   int n;
-  double xbar;
-  int k;
   emxArray_real_T *absdiff;
+  double xbar;
   int kend;
+  int k;
   double absxk;
   double t;
   n = x->size[0];
@@ -33,12 +38,8 @@ double b_std(const emxArray_real_T *x)
   } else if (x->size[0] == 1) {
     y = 0.0;
   } else {
-    xbar = x->data[0];
-    for (k = 2; k <= n; k++) {
-      xbar += x->data[k - 1];
-    }
-
     emxInit_real_T(&absdiff, 1);
+    xbar = nestedIter(x, x->size[0]);
     xbar /= (double)x->size[0];
     kend = absdiff->size[0];
     absdiff->size[0] = x->size[0];

@@ -18,13 +18,18 @@
 #include "model_emxutil.h"
 
 /* Function Definitions */
+
+/*
+ *
+ */
 void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 {
   int dim;
   int i49;
   emxArray_int32_T *vwork;
   int vlen;
-  int x_idx_0;
+  int j;
+  unsigned int unnamed_idx_0;
   int vstride;
   int k;
   emxArray_int32_T *iidx;
@@ -41,27 +46,28 @@ void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 
   emxInit_int32_T(&vwork, 1);
   vlen = i49 - 1;
-  x_idx_0 = vwork->size[0];
+  j = vwork->size[0];
   vwork->size[0] = i49;
-  emxEnsureCapacity_int32_T(vwork, x_idx_0);
-  x_idx_0 = x->size[0];
+  emxEnsureCapacity_int32_T(vwork, j);
+  unnamed_idx_0 = (unsigned int)x->size[0];
   i49 = idx->size[0];
-  idx->size[0] = x_idx_0;
+  idx->size[0] = (int)unnamed_idx_0;
   emxEnsureCapacity_int32_T(idx, i49);
   vstride = 1;
   for (k = 0; k <= dim; k++) {
-    vstride *= x->size[0];
+    i49 = x->size[0];
+    vstride *= i49;
   }
 
   emxInit_int32_T(&iidx, 1);
-  for (x_idx_0 = 0; x_idx_0 < vstride; x_idx_0++) {
+  for (j = 0; j < vstride; j++) {
     for (k = 0; k <= vlen; k++) {
-      vwork->data[k] = x->data[x_idx_0 + k * vstride];
+      vwork->data[k] = x->data[j + k * vstride];
     }
 
     b_sortIdx(vwork, iidx);
     for (k = 0; k <= vlen; k++) {
-      i49 = x_idx_0 + k * vstride;
+      i49 = j + k * vstride;
       x->data[i49] = vwork->data[k];
       idx->data[i49] = iidx->data[k];
     }
@@ -71,13 +77,17 @@ void b_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
   emxFree_int32_T(&vwork);
 }
 
+/*
+ *
+ */
 void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
 {
   int dim;
-  int i55;
+  int i54;
   emxArray_real_T *vwork;
   int vlen;
-  int x_idx_0;
+  int j;
+  unsigned int unnamed_idx_0;
   int vstride;
   int k;
   emxArray_int32_T *iidx;
@@ -87,36 +97,37 @@ void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
   }
 
   if (dim + 2 <= 1) {
-    i55 = x->size[0];
+    i54 = x->size[0];
   } else {
-    i55 = 1;
+    i54 = 1;
   }
 
   emxInit_real_T(&vwork, 1);
-  vlen = i55 - 1;
-  x_idx_0 = vwork->size[0];
-  vwork->size[0] = i55;
-  emxEnsureCapacity_real_T(vwork, x_idx_0);
-  x_idx_0 = x->size[0];
-  i55 = idx->size[0];
-  idx->size[0] = x_idx_0;
-  emxEnsureCapacity_int32_T(idx, i55);
+  vlen = i54 - 1;
+  j = vwork->size[0];
+  vwork->size[0] = i54;
+  emxEnsureCapacity_real_T(vwork, j);
+  unnamed_idx_0 = (unsigned int)x->size[0];
+  i54 = idx->size[0];
+  idx->size[0] = (int)unnamed_idx_0;
+  emxEnsureCapacity_int32_T(idx, i54);
   vstride = 1;
   for (k = 0; k <= dim; k++) {
-    vstride *= x->size[0];
+    i54 = x->size[0];
+    vstride *= i54;
   }
 
   emxInit_int32_T(&iidx, 1);
-  for (x_idx_0 = 0; x_idx_0 < vstride; x_idx_0++) {
+  for (j = 0; j < vstride; j++) {
     for (k = 0; k <= vlen; k++) {
-      vwork->data[k] = x->data[x_idx_0 + k * vstride];
+      vwork->data[k] = x->data[j + k * vstride];
     }
 
     c_sortIdx(vwork, iidx);
     for (k = 0; k <= vlen; k++) {
-      i55 = x_idx_0 + k * vstride;
-      x->data[i55] = vwork->data[k];
-      idx->data[i55] = iidx->data[k];
+      i54 = j + k * vstride;
+      x->data[i54] = vwork->data[k];
+      idx->data[i54] = iidx->data[k];
     }
   }
 
@@ -124,13 +135,17 @@ void c_sort(emxArray_real_T *x, emxArray_int32_T *idx)
   emxFree_real_T(&vwork);
 }
 
+/*
+ *
+ */
 void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
 {
   int dim;
-  int i59;
+  int i58;
   emxArray_int32_T *vwork;
   int vlen;
-  int x_idx_0;
+  int j;
+  unsigned int unnamed_idx_0;
   int vstride;
   int k;
   emxArray_int32_T *iidx;
@@ -140,36 +155,37 @@ void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
   }
 
   if (dim + 2 <= 1) {
-    i59 = x->size[0];
+    i58 = x->size[0];
   } else {
-    i59 = 1;
+    i58 = 1;
   }
 
   emxInit_int32_T(&vwork, 1);
-  vlen = i59 - 1;
-  x_idx_0 = vwork->size[0];
-  vwork->size[0] = i59;
-  emxEnsureCapacity_int32_T(vwork, x_idx_0);
-  x_idx_0 = x->size[0];
-  i59 = idx->size[0];
-  idx->size[0] = x_idx_0;
-  emxEnsureCapacity_int32_T(idx, i59);
+  vlen = i58 - 1;
+  j = vwork->size[0];
+  vwork->size[0] = i58;
+  emxEnsureCapacity_int32_T(vwork, j);
+  unnamed_idx_0 = (unsigned int)x->size[0];
+  i58 = idx->size[0];
+  idx->size[0] = (int)unnamed_idx_0;
+  emxEnsureCapacity_int32_T(idx, i58);
   vstride = 1;
   for (k = 0; k <= dim; k++) {
-    vstride *= x->size[0];
+    i58 = x->size[0];
+    vstride *= i58;
   }
 
   emxInit_int32_T(&iidx, 1);
-  for (x_idx_0 = 0; x_idx_0 < vstride; x_idx_0++) {
+  for (j = 0; j < vstride; j++) {
     for (k = 0; k <= vlen; k++) {
-      vwork->data[k] = x->data[x_idx_0 + k * vstride];
+      vwork->data[k] = x->data[j + k * vstride];
     }
 
     d_sortIdx(vwork, iidx);
     for (k = 0; k <= vlen; k++) {
-      i59 = x_idx_0 + k * vstride;
-      x->data[i59] = vwork->data[k];
-      idx->data[i59] = iidx->data[k];
+      i58 = j + k * vstride;
+      x->data[i58] = vwork->data[k];
+      idx->data[i58] = iidx->data[k];
     }
   }
 
@@ -177,6 +193,9 @@ void d_sort(emxArray_int32_T *x, emxArray_int32_T *idx)
   emxFree_int32_T(&vwork);
 }
 
+/*
+ *
+ */
 void sort(double x[2000], int idx[2000])
 {
   double x4[4];
@@ -340,13 +359,13 @@ void sort(double x[2000], int idx[2000])
   }
 
   for (b = 0; b < 7; b++) {
-    offset = (b << 8) - 1;
+    offset = b << 8;
     for (b_b = 0; b_b < 6; b_b++) {
       bLen = 1 << (b_b + 2);
       bLen2 = bLen << 1;
       nPairs = 256 >> (b_b + 3);
       for (k = 0; k < nPairs; k++) {
-        i3 = (offset + k * bLen2) + 1;
+        i3 = offset + k * bLen2;
         for (i2 = 0; i2 < bLen2; i2++) {
           ib = i3 + i2;
           b_iwork[i2] = (short)idx[ib];

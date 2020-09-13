@@ -17,6 +17,10 @@
 #include "model_rtwutil.h"
 
 /* Function Definitions */
+
+/*
+ *
+ */
 int b_rem(int x, int y)
 {
   int r;

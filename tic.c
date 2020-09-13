@@ -17,6 +17,10 @@
 #include "getTime.h"
 
 /* Function Definitions */
+
+/*
+ *
+ */
 void tic(void)
 {
   double t0_tv_sec;

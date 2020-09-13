@@ -28,6 +28,9 @@ void freq_not_empty_init(void)
   freq_not_empty = false;
 }
 
+/*
+ *
+ */
 void getTime(double *t_tv_sec, double *t_tv_nsec)
 {
   LARGE_INTEGER freqL;

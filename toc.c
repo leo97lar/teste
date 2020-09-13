@@ -18,6 +18,10 @@
 #include <stdio.h>
 
 /* Function Definitions */
+
+/*
+ *
+ */
 void toc(void)
 {
   double tstart_tv_sec;

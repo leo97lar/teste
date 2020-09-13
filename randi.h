@@ -19,6 +19,7 @@
 #include "model_types.h"
 
 /* Function Declarations */
+extern double b_randi(void);
 extern void randi(double r[2000]);
 
 #endif

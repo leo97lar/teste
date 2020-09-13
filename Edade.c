@@ -14,18 +14,25 @@
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "Edade.h"
+#include "model_emxutil.h"
 #include "sum.h"
 #include "rand.h"
 
 /* Function Definitions */
+
+/*
+ * function [ Edade ] = Edade( min,max,Num )
+ */
 void Edade(double b_Edade[2000])
 {
+  emxArray_real_T *r1;
   int i;
   double r;
   int j;
   boolean_T exitg1;
-  int tmp_size[2];
-  double tmp_data[71];
+  int k;
+  int i4;
+  boolean_T guard1 = false;
   static const double dv0[71] = { 0.0070422535211267607, 0.0072434607645875254,
     0.00744466800804829, 0.0076458752515090548, 0.0078470824949698186,
     0.0080482897384305842, 0.008249496981891348, 0.0084507042253521118,
@@ -51,11 +58,7 @@ void Edade(double b_Edade[2000])
     0.020120724346076455, 0.020321931589537223, 0.020523138832997986,
     0.02072434607645875, 0.020925553319919514, 0.021126760563380281 };
 
-  emxArray_real_T b_tmp_data;
-  boolean_T guard1 = false;
   boolean_T y;
-  emxArray_real_T c_tmp_data;
-  int k;
   boolean_T exitg2;
   static const double ProbXEdade[71] = { 0.0070422535211267607,
     0.0072434607645875254, 0.00744466800804829, 0.0076458752515090548,
@@ -85,32 +88,49 @@ void Edade(double b_Edade[2000])
 
   /* UNTITLED3 Summary of this function goes here */
   /*    Detailed explanation goes here */
+  /* 'Edade:4' PEd= min:1:max; */
+  /* 'Edade:6' CtdPtos = max-min+1; */
+  /* 'Edade:8' CtdadXStep= ((CtdPtos-1)*CtdPtos)/2; */
+  /* 'Edade:10' n=1/(CtdadXStep*2); */
+  /* 'Edade:12' pIni = (1-CtdadXStep*n)/CtdPtos; */
+  /* 'Edade:13' pFim = pIni+n*(max-min); */
+  /* 'Edade:14' ProbXEdade = linspace(double(pIni), double(pFim), double(CtdPtos)); */
+  /* 'Edade:16' Edade = zeros(Num,1); */
   memset(&b_Edade[0], 0, 2000U * sizeof(double));
+
+  /* 'Edade:18' for i=1:Num */
+  emxInit_real_T(&r1, 2);
   for (i = 0; i < 2000; i++) {
+    /* 'Edade:20' r=rand; */
     r = d_rand();
+
+    /* 'Edade:22' for j=1:length(ProbXEdade) */
     j = 0;
     exitg1 = false;
     while ((!exitg1) && (j < 71)) {
-      tmp_size[0] = 1;
-      tmp_size[1] = j + 1;
-      memcpy(&tmp_data[0], &dv0[0], (unsigned int)((j + 1) * (int)sizeof(double)));
-      b_tmp_data.data = &tmp_data[0];
-      b_tmp_data.size = &tmp_size[0];
-      b_tmp_data.allocatedSize = 71;
-      b_tmp_data.numDimensions = 2;
-      b_tmp_data.canFreeData = false;
+      /* 'Edade:24' if sum(ProbXEdade(1:j))<=r && sum(ProbXEdade(1:j+1))>r */
+      k = j + 1;
+      i4 = r1->size[0] * r1->size[1];
+      r1->size[0] = 1;
+      r1->size[1] = j + 1;
+      emxEnsureCapacity_real_T(r1, i4);
+      for (i4 = 0; i4 < k; i4++) {
+        r1->data[i4] = dv0[i4];
+      }
+
       guard1 = false;
-      if (sum(&b_tmp_data) <= r) {
-        tmp_size[0] = 1;
-        tmp_size[1] = j + 2;
-        memcpy(&tmp_data[0], &dv0[0], (unsigned int)((j + 2) * (int)sizeof
-                (double)));
-        c_tmp_data.data = &tmp_data[0];
-        c_tmp_data.size = &tmp_size[0];
-        c_tmp_data.allocatedSize = 71;
-        c_tmp_data.numDimensions = 2;
-        c_tmp_data.canFreeData = false;
-        if (sum(&c_tmp_data) > r) {
+      if (sum(r1) <= r) {
+        k = j + 2;
+        i4 = r1->size[0] * r1->size[1];
+        r1->size[0] = 1;
+        r1->size[1] = j + 2;
+        emxEnsureCapacity_real_T(r1, i4);
+        for (i4 = 0; i4 < k; i4++) {
+          r1->data[i4] = dv0[i4];
+        }
+
+        if (sum(r1) > r) {
+          /* 'Edade:25' Edade(i)=PEd(j+1); */
           b_Edade[i] = 5.0 + (((1.0 + (double)j) + 1.0) - 1.0);
           exitg1 = true;
         } else {
@@ -134,7 +154,9 @@ void Edade(double b_Edade[2000])
         }
 
         if (y) {
-          b_Edade[i] = 5.0 + (double)j;
+          /* 'Edade:27' elseif ProbXEdade>r */
+          /* 'Edade:28' Edade(i)=PEd(j); */
+          b_Edade[i] = 5.0 + ((1.0 + (double)j) - 1.0);
           exitg1 = true;
         } else {
           j++;
@@ -142,6 +164,8 @@ void Edade(double b_Edade[2000])
       }
     }
   }
+
+  emxFree_real_T(&r1);
 }
 
 /* End of code generation (Edade.c) */

@@ -19,7 +19,9 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void b_repmat(const emxArray_real_T *a, double varargin_2,
+extern void b_repmat(const emxArray_int32_T *a, int varargin_2, emxArray_int32_T
+                     *b);
+extern void c_repmat(const emxArray_real_T *a, double varargin_2,
                      emxArray_real_T *b);
 extern void repmat(const emxArray_real_T *a, int varargin_2, emxArray_real_T *b);
 

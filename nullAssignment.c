@@ -16,21 +16,25 @@
 #include "model_emxutil.h"
 
 /* Function Definitions */
+
+/*
+ *
+ */
 void nullAssignment(emxArray_int32_T *x, const emxArray_boolean_T *idx)
 {
   int nxin;
-  int k0;
-  int i58;
-  int k;
   int nxout;
+  int k0;
+  int k;
+  emxArray_int32_T *b_x;
   nxin = x->size[0];
-  k0 = 0;
-  i58 = idx->size[0];
-  for (k = 0; k < i58; k++) {
-    k0 += idx->data[k];
+  nxout = 0;
+  k0 = idx->size[0];
+  for (k = 0; k < k0; k++) {
+    nxout += idx->data[k];
   }
 
-  nxout = x->size[0] - k0;
+  nxout = x->size[0] - nxout;
   k0 = -1;
   for (k = 0; k < nxin; k++) {
     if ((k + 1 > idx->size[0]) || (!idx->data[k])) {
@@ -40,12 +44,26 @@ void nullAssignment(emxArray_int32_T *x, const emxArray_boolean_T *idx)
   }
 
   if (1 > nxout) {
-    x->size[0] = 0;
-  } else {
-    i58 = x->size[0];
-    x->size[0] = nxout;
-    emxEnsureCapacity_int32_T(x, i58);
+    nxout = 0;
   }
+
+  emxInit_int32_T(&b_x, 1);
+  k0 = b_x->size[0];
+  b_x->size[0] = nxout;
+  emxEnsureCapacity_int32_T(b_x, k0);
+  for (k0 = 0; k0 < nxout; k0++) {
+    b_x->data[k0] = x->data[k0];
+  }
+
+  k0 = x->size[0];
+  x->size[0] = b_x->size[0];
+  emxEnsureCapacity_int32_T(x, k0);
+  nxout = b_x->size[0];
+  for (k0 = 0; k0 < nxout; k0++) {
+    x->data[k0] = b_x->data[k0];
+  }
+
+  emxFree_int32_T(&b_x);
 }
 
 /* End of code generation (nullAssignment.c) */

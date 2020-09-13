@@ -19,23 +19,27 @@
 #include "model_rtwutil.h"
 
 /* Function Definitions */
+
+/*
+ * function [contDia,tempUltPosRecXDia,DispME] = funcionDia( NumRec,PCPrO, Dia,UltPosRecXDia, TimeUsoCPrO, TimeUsoS,contDia,DispMExD)
+ */
 void b_funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
                   emxArray_int32_T *Dia, const emxArray_real_T *UltPosRecXDia,
                   int TimeUsoCPrO, int TimeUsoS, int *contDia, const
                   emxArray_int32_T *DispMExD, emxArray_int32_T
                   *tempUltPosRecXDia, emxArray_int32_T *DispME)
 {
-  int i52;
+  int i53;
   int jj;
   emxArray_int32_T *auxUPxR;
-  emxArray_int32_T *r11;
+  emxArray_int32_T *r16;
   emxArray_boolean_T *x;
-  emxArray_int32_T *j;
+  emxArray_int32_T *b_jj;
   int exitg1;
-  double b_Dia;
-  int idx;
-  int qY;
+  int minP;
   double y;
+  double b_y;
+  int idx;
   int end;
   boolean_T exitg2;
 
@@ -46,127 +50,93 @@ void b_funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
   /*  UltPosRecXDia: Ultima posicion asignado del recurso por Dia. */
   /*  Time: El tiempo de uso de la Cama PrO mas el tiempo de operacion. */
   /*  contDia: Contador de dia. */
-  i52 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
+  /* 'funcionDia:10' tempUltPosRecXDia = zeros(1,NumRec(1), 'int32'); */
+  i53 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
   tempUltPosRecXDia->size[0] = 1;
   tempUltPosRecXDia->size[1] = NumRec[0];
-  emxEnsureCapacity_int32_T(tempUltPosRecXDia, i52);
+  emxEnsureCapacity_int32_T(tempUltPosRecXDia, i53);
   jj = NumRec[0];
-  for (i52 = 0; i52 < jj; i52++) {
-    tempUltPosRecXDia->data[i52] = 0;
+  for (i53 = 0; i53 < jj; i53++) {
+    tempUltPosRecXDia->data[i53] = 0;
   }
 
+  /* 'funcionDia:11' flag=true; */
+  /* 'funcionDia:12' while flag==true */
   emxInit_int32_T(&auxUPxR, 2);
-  emxInit_int32_T(&r11, 2);
+  emxInit_int32_T(&r16, 2);
   emxInit_boolean_T(&x, 2);
-  emxInit_int32_T(&j, 2);
+  emxInit_int32_T(&b_jj, 2);
   do {
     exitg1 = 0;
     while (Dia->data[(*contDia + (Dia->size[0] << 1)) - 1] == 0) {
-      jj = *contDia;
-      if (jj > 2147483646) {
-        *contDia = MAX_int32_T;
-      } else {
-        *contDia = jj + 1;
-      }
+      /* 'funcionDia:14' contDia = contDia + 1; */
+      (*contDia)++;
+
+      /* 'funcionDia:13' if Dia(contDia,3)==0 */
     }
 
+    /* 'funcionDia:15' else */
+    /* 'funcionDia:16' auxUPxR = int32(UltPosRecXDia(contDia,1:NumRec(1))); */
     if (1 > NumRec[0]) {
       jj = 0;
     } else {
       jj = NumRec[0];
     }
 
-    i52 = auxUPxR->size[0] * auxUPxR->size[1];
+    i53 = auxUPxR->size[0] * auxUPxR->size[1];
     auxUPxR->size[0] = 1;
     auxUPxR->size[1] = jj;
-    emxEnsureCapacity_int32_T(auxUPxR, i52);
-    for (i52 = 0; i52 < jj; i52++) {
-      b_Dia = rt_roundd(UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0] *
-        i52) - 1]);
-      if (b_Dia < 2.147483648E+9) {
-        if (b_Dia >= -2.147483648E+9) {
-          idx = (int)b_Dia;
-        } else {
-          idx = MIN_int32_T;
-        }
-      } else {
-        idx = MAX_int32_T;
-      }
-
-      auxUPxR->data[i52] = idx;
+    emxEnsureCapacity_int32_T(auxUPxR, i53);
+    for (i53 = 0; i53 < jj; i53++) {
+      auxUPxR->data[i53] = (int)rt_roundd(UltPosRecXDia->data[(*contDia +
+        UltPosRecXDia->size[0] * i53) - 1]);
     }
 
     /*  Selecciono los ultimas posiciones a partir de donde se pueden usar las camas. */
-    jj = Dia->data[(*contDia + Dia->size[0] * 3) - 1];
-    idx = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-    if ((jj >= 0) && (idx < jj - MAX_int32_T)) {
-      qY = MAX_int32_T;
-    } else if ((jj < 0) && (idx > jj - MIN_int32_T)) {
-      qY = MIN_int32_T;
-    } else {
-      qY = jj - idx;
-    }
-
-    if (qY > 2147483646) {
-      qY = MAX_int32_T;
-    } else {
-      qY++;
-    }
-
-    if ((TimeUsoCPrO < 0) && (TimeUsoS < MIN_int32_T - TimeUsoCPrO)) {
-      jj = MIN_int32_T;
-    } else if ((TimeUsoCPrO > 0) && (TimeUsoS > MAX_int32_T - TimeUsoCPrO)) {
-      jj = MAX_int32_T;
-    } else {
-      jj = TimeUsoCPrO + TimeUsoS;
-    }
-
-    if ((qY >= 0) && (jj < qY - MAX_int32_T)) {
-      qY = MAX_int32_T;
-    } else if ((qY < 0) && (jj > qY - MIN_int32_T)) {
-      qY = MIN_int32_T;
-    } else {
-      qY -= jj;
-    }
+    /* 'funcionDia:17' minP = Dia(contDia,4)-Dia(contDia,3)+1-(TimeUsoCPrO+TimeUsoS); */
+    minP = (((Dia->data[(*contDia + Dia->size[0] * 3) - 1] - Dia->data[(*contDia
+               + (Dia->size[0] << 1)) - 1]) - TimeUsoCPrO) - TimeUsoS) + 1;
 
     /*  Posicion maxima a partir de la cual se puede colocar la Operacion */
+    /* 'funcionDia:19' auxUPxS = UltPosRecXDia(contDia,sum(NumRec(1:2))+1:sum(NumRec(1:3))); */
     y = (double)NumRec[0] + (double)NumRec[1];
-    b_Dia = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
-    if (y + 1.0 > b_Dia) {
-      i52 = 1;
+    b_y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+    if (y + 1.0 > b_y) {
+      i53 = 0;
       idx = 0;
     } else {
-      i52 = (int)(y + 1.0);
-      idx = (int)b_Dia;
+      i53 = (int)(y + 1.0) - 1;
+      idx = (int)b_y;
     }
 
     /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los S. */
-    b_Dia = ((double)Dia->data[(*contDia + Dia->size[0] * 3) - 1] - (double)
-             Dia->data[(*contDia + (Dia->size[0] << 1)) - 1]) + 1.0;
+    /* 'funcionDia:20' [~,c]=find(double(Dia(contDia,4))-double(Dia(contDia,3))+1-auxUPxS>=TimeUsoS); */
+    y = ((double)Dia->data[(*contDia + Dia->size[0] * 3) - 1] - (double)
+         Dia->data[(*contDia + (Dia->size[0] << 1)) - 1]) + 1.0;
     end = x->size[0] * x->size[1];
     x->size[0] = 1;
-    jj = idx - i52;
-    x->size[1] = jj + 1;
+    jj = idx - i53;
+    x->size[1] = jj;
     emxEnsureCapacity_boolean_T(x, end);
-    for (idx = 0; idx <= jj; idx++) {
-      x->data[idx] = (b_Dia - UltPosRecXDia->data[(*contDia +
-        UltPosRecXDia->size[0] * ((i52 + idx) - 1)) - 1] >= TimeUsoS);
+    for (idx = 0; idx < jj; idx++) {
+      x->data[idx] = (y - UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
+        * (i53 + idx)) - 1] >= TimeUsoS);
     }
 
     if (x->size[1] == 0) {
-      j->size[1] = 0;
+      b_jj->size[1] = 0;
     } else {
       idx = 0;
-      i52 = j->size[0] * j->size[1];
-      j->size[0] = 1;
-      j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i52);
+      i53 = b_jj->size[0] * b_jj->size[1];
+      b_jj->size[0] = 1;
+      b_jj->size[1] = x->size[1];
+      emxEnsureCapacity_int32_T(b_jj, i53);
       jj = 1;
       exitg2 = false;
       while ((!exitg2) && (jj <= x->size[1])) {
         if (x->data[jj - 1]) {
           idx++;
-          j->data[idx - 1] = jj;
+          b_jj->data[idx - 1] = jj;
           if (idx >= x->size[1]) {
             exitg2 = true;
           } else {
@@ -179,17 +149,22 @@ void b_funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
 
       if (x->size[1] == 1) {
         if (idx == 0) {
-          j->size[1] = 0;
+          b_jj->size[1] = 0;
         }
-      } else if (1 > idx) {
-        j->size[1] = 0;
       } else {
-        i52 = j->size[0] * j->size[1];
-        j->size[1] = idx;
-        emxEnsureCapacity_int32_T(j, i52);
+        i53 = b_jj->size[0] * b_jj->size[1];
+        if (1 > idx) {
+          b_jj->size[1] = 0;
+        } else {
+          b_jj->size[1] = idx;
+        }
+
+        emxEnsureCapacity_int32_T(b_jj, i53);
       }
     }
 
+    /* 'funcionDia:20' ~ */
+    /* 'funcionDia:22' if sum(minP>=auxUPxR(PCPrO==1))~=0 && ~isempty(c) */
     end = PCPrO->size[1] - 1;
     jj = 0;
     for (idx = 0; idx <= end; idx++) {
@@ -198,149 +173,167 @@ void b_funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
       }
     }
 
-    i52 = r11->size[0] * r11->size[1];
-    r11->size[0] = 1;
-    r11->size[1] = jj;
-    emxEnsureCapacity_int32_T(r11, i52);
+    i53 = r16->size[0] * r16->size[1];
+    r16->size[0] = 1;
+    r16->size[1] = jj;
+    emxEnsureCapacity_int32_T(r16, i53);
     jj = 0;
     for (idx = 0; idx <= end; idx++) {
       if (PCPrO->data[idx] == 1) {
-        r11->data[jj] = idx + 1;
+        r16->data[jj] = idx + 1;
         jj++;
       }
     }
 
-    i52 = x->size[0] * x->size[1];
+    i53 = x->size[0] * x->size[1];
     x->size[0] = 1;
-    x->size[1] = r11->size[1];
-    emxEnsureCapacity_boolean_T(x, i52);
-    jj = r11->size[0] * r11->size[1];
-    for (i52 = 0; i52 < jj; i52++) {
-      x->data[i52] = (qY >= auxUPxR->data[r11->data[i52] - 1]);
+    x->size[1] = r16->size[1];
+    emxEnsureCapacity_boolean_T(x, i53);
+    jj = r16->size[1];
+    for (i53 = 0; i53 < jj; i53++) {
+      x->data[i53] = (minP >= auxUPxR->data[r16->data[i53] - 1]);
     }
 
-    if ((g_sum(x) != 0.0) && (j->size[1] != 0)) {
+    if ((c_sum(x) != 0.0) && (b_jj->size[1] != 0)) {
       exitg1 = 1;
     } else {
-      jj = *contDia;
-      if (jj > 2147483646) {
-        *contDia = MAX_int32_T;
-      } else {
-        *contDia = jj + 1;
-      }
+      /* 'funcionDia:25' else */
+      /* 'funcionDia:26' contDia = contDia + 1; */
+      (*contDia)++;
     }
   } while (exitg1 == 0);
 
   /*  Compruebo que cabe en alguna pocision de las posibles, si no cabe incremento el dia. */
-  i52 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
+  /* 'funcionDia:23' tempUltPosRecXDia = auxUPxR; */
+  i53 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
   tempUltPosRecXDia->size[0] = 1;
   tempUltPosRecXDia->size[1] = auxUPxR->size[1];
-  emxEnsureCapacity_int32_T(tempUltPosRecXDia, i52);
-  jj = auxUPxR->size[0] * auxUPxR->size[1];
-  for (i52 = 0; i52 < jj; i52++) {
-    tempUltPosRecXDia->data[i52] = auxUPxR->data[i52];
+  emxEnsureCapacity_int32_T(tempUltPosRecXDia, i53);
+  jj = auxUPxR->size[1];
+  for (i53 = 0; i53 < jj; i53++) {
+    tempUltPosRecXDia->data[i53] = auxUPxR->data[i53];
   }
 
-  emxFree_int32_T(&j);
+  /* 'funcionDia:24' flag=false; */
+  emxFree_int32_T(&b_jj);
   emxFree_boolean_T(&x);
-  emxFree_int32_T(&r11);
+  emxFree_int32_T(&r16);
   emxFree_int32_T(&auxUPxR);
-  i52 = DispME->size[0] * DispME->size[1];
-  DispME->size[0] = 1;
-  DispME->size[1] = DispMExD->size[1];
-  emxEnsureCapacity_int32_T(DispME, i52);
+
+  /* 'funcionDia:33' DispME = zeros(1,size(DispMExD,2), 'int32'); */
   jj = DispMExD->size[1];
-  for (i52 = 0; i52 < jj; i52++) {
-    DispME->data[i52] = 0;
+  i53 = DispME->size[0] * DispME->size[1];
+  DispME->size[0] = 1;
+  DispME->size[1] = jj;
+  emxEnsureCapacity_int32_T(DispME, i53);
+  for (i53 = 0; i53 < jj; i53++) {
+    DispME->data[i53] = 0;
   }
 
+  /* 'funcionDia:34' switch Dia(contDia,2) */
   switch (Dia->data[(*contDia + Dia->size[0]) - 1]) {
    case 2:
+    /* 'funcionDia:35' case 2 */
+    /* 'funcionDia:36' DispME=int32(DispMExD(1,:)); */
     jj = DispMExD->size[1];
-    i52 = DispME->size[0] * DispME->size[1];
+    i53 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
     DispME->size[1] = jj;
-    emxEnsureCapacity_int32_T(DispME, i52);
-    for (i52 = 0; i52 < jj; i52++) {
-      DispME->data[i52] = DispMExD->data[6 * i52];
+    emxEnsureCapacity_int32_T(DispME, i53);
+    for (i53 = 0; i53 < jj; i53++) {
+      DispME->data[i53] = DispMExD->data[6 * i53];
     }
     break;
 
    case 3:
+    /* 'funcionDia:37' case 3 */
+    /* 'funcionDia:38' DispME=int32(DispMExD(2,:)); */
     jj = DispMExD->size[1];
-    i52 = DispME->size[0] * DispME->size[1];
+    i53 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
     DispME->size[1] = jj;
-    emxEnsureCapacity_int32_T(DispME, i52);
-    for (i52 = 0; i52 < jj; i52++) {
-      DispME->data[i52] = DispMExD->data[1 + 6 * i52];
+    emxEnsureCapacity_int32_T(DispME, i53);
+    for (i53 = 0; i53 < jj; i53++) {
+      DispME->data[i53] = DispMExD->data[1 + 6 * i53];
     }
     break;
 
    case 4:
+    /* 'funcionDia:39' case 4 */
+    /* 'funcionDia:40' DispME=int32(DispMExD(3,:)); */
     jj = DispMExD->size[1];
-    i52 = DispME->size[0] * DispME->size[1];
+    i53 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
     DispME->size[1] = jj;
-    emxEnsureCapacity_int32_T(DispME, i52);
-    for (i52 = 0; i52 < jj; i52++) {
-      DispME->data[i52] = DispMExD->data[2 + 6 * i52];
+    emxEnsureCapacity_int32_T(DispME, i53);
+    for (i53 = 0; i53 < jj; i53++) {
+      DispME->data[i53] = DispMExD->data[2 + 6 * i53];
     }
     break;
 
    case 5:
+    /* 'funcionDia:41' case 5 */
+    /* 'funcionDia:42' DispME=int32(DispMExD(4,:)); */
     jj = DispMExD->size[1];
-    i52 = DispME->size[0] * DispME->size[1];
+    i53 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
     DispME->size[1] = jj;
-    emxEnsureCapacity_int32_T(DispME, i52);
-    for (i52 = 0; i52 < jj; i52++) {
-      DispME->data[i52] = DispMExD->data[3 + 6 * i52];
+    emxEnsureCapacity_int32_T(DispME, i53);
+    for (i53 = 0; i53 < jj; i53++) {
+      DispME->data[i53] = DispMExD->data[3 + 6 * i53];
     }
     break;
 
    case 6:
+    /* 'funcionDia:43' case 6 */
+    /* 'funcionDia:44' DispME=int32(DispMExD(5,:)); */
     jj = DispMExD->size[1];
-    i52 = DispME->size[0] * DispME->size[1];
+    i53 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
     DispME->size[1] = jj;
-    emxEnsureCapacity_int32_T(DispME, i52);
-    for (i52 = 0; i52 < jj; i52++) {
-      DispME->data[i52] = DispMExD->data[4 + 6 * i52];
+    emxEnsureCapacity_int32_T(DispME, i53);
+    for (i53 = 0; i53 < jj; i53++) {
+      DispME->data[i53] = DispMExD->data[4 + 6 * i53];
     }
     break;
 
    case 7:
+    /* 'funcionDia:45' case 7 */
+    /* 'funcionDia:46' DispME=int32(DispMExD(6,:)); */
     jj = DispMExD->size[1];
-    i52 = DispME->size[0] * DispME->size[1];
+    i53 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
     DispME->size[1] = jj;
-    emxEnsureCapacity_int32_T(DispME, i52);
-    for (i52 = 0; i52 < jj; i52++) {
-      DispME->data[i52] = DispMExD->data[5 + 6 * i52];
+    emxEnsureCapacity_int32_T(DispME, i53);
+    for (i53 = 0; i53 < jj; i53++) {
+      DispME->data[i53] = DispMExD->data[5 + 6 * i53];
     }
     break;
   }
 }
 
+/*
+ * function [contDia,tempUltPosRecXDia,DispME] = funcionDia( NumRec,PCPrO, Dia,UltPosRecXDia, TimeUsoCPrO, TimeUsoS,contDia,DispMExD)
+ */
 void funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
                 emxArray_int32_T *Dia, const emxArray_int32_T *UltPosRecXDia,
                 int TimeUsoCPrO, int TimeUsoS, int *contDia, const
                 emxArray_int32_T *DispMExD, emxArray_int32_T *tempUltPosRecXDia,
                 emxArray_int32_T *DispME)
 {
-  int i46;
-  int loop_ub;
-  emxArray_int32_T *r9;
-  emxArray_boolean_T *x;
-  emxArray_int32_T *j;
-  int exitg1;
+  int i47;
   int jj;
-  int idx;
-  int qY;
+  emxArray_int32_T *auxUPxR;
+  emxArray_int32_T *r12;
+  emxArray_boolean_T *x;
+  emxArray_int32_T *b_jj;
+  int exitg1;
+  int minP;
   double y;
-  double d12;
-  int b_loop_ub;
+  double b_y;
+  int idx;
+  int b_Dia;
+  int i48;
   boolean_T exitg2;
 
   /*  NumCPrO: Numero de camas PreOperatorias. */
@@ -350,117 +343,93 @@ void funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
   /*  UltPosRecXDia: Ultima posicion asignado del recurso por Dia. */
   /*  Time: El tiempo de uso de la Cama PrO mas el tiempo de operacion. */
   /*  contDia: Contador de dia. */
-  i46 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
+  /* 'funcionDia:10' tempUltPosRecXDia = zeros(1,NumRec(1), 'int32'); */
+  i47 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
   tempUltPosRecXDia->size[0] = 1;
   tempUltPosRecXDia->size[1] = NumRec[0];
-  emxEnsureCapacity_int32_T(tempUltPosRecXDia, i46);
-  loop_ub = NumRec[0];
-  for (i46 = 0; i46 < loop_ub; i46++) {
-    tempUltPosRecXDia->data[i46] = 0;
+  emxEnsureCapacity_int32_T(tempUltPosRecXDia, i47);
+  jj = NumRec[0];
+  for (i47 = 0; i47 < jj; i47++) {
+    tempUltPosRecXDia->data[i47] = 0;
   }
 
-  emxInit_int32_T(&r9, 2);
+  /* 'funcionDia:11' flag=true; */
+  /* 'funcionDia:12' while flag==true */
+  emxInit_int32_T(&auxUPxR, 2);
+  emxInit_int32_T(&r12, 2);
   emxInit_boolean_T(&x, 2);
-  emxInit_int32_T(&j, 2);
+  emxInit_int32_T(&b_jj, 2);
   do {
     exitg1 = 0;
     while (Dia->data[(*contDia + (Dia->size[0] << 1)) - 1] == 0) {
-      jj = *contDia;
-      if (jj > 2147483646) {
-        *contDia = MAX_int32_T;
-      } else {
-        *contDia = jj + 1;
-      }
+      /* 'funcionDia:14' contDia = contDia + 1; */
+      (*contDia)++;
+
+      /* 'funcionDia:13' if Dia(contDia,3)==0 */
     }
 
+    /* 'funcionDia:15' else */
+    /* 'funcionDia:16' auxUPxR = int32(UltPosRecXDia(contDia,1:NumRec(1))); */
     if (1 > NumRec[0]) {
-      loop_ub = 0;
+      jj = 0;
     } else {
-      loop_ub = NumRec[0];
+      jj = NumRec[0];
+    }
+
+    i47 = auxUPxR->size[0] * auxUPxR->size[1];
+    auxUPxR->size[0] = 1;
+    auxUPxR->size[1] = jj;
+    emxEnsureCapacity_int32_T(auxUPxR, i47);
+    for (i47 = 0; i47 < jj; i47++) {
+      auxUPxR->data[i47] = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
+        * i47) - 1];
     }
 
     /*  Selecciono los ultimas posiciones a partir de donde se pueden usar las camas. */
-    jj = Dia->data[(*contDia + Dia->size[0] * 3) - 1];
-    idx = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-    if ((jj >= 0) && (idx < jj - MAX_int32_T)) {
-      qY = MAX_int32_T;
-    } else if ((jj < 0) && (idx > jj - MIN_int32_T)) {
-      qY = MIN_int32_T;
-    } else {
-      qY = jj - idx;
-    }
-
-    if (qY > 2147483646) {
-      qY = MAX_int32_T;
-    } else {
-      qY++;
-    }
-
-    if ((TimeUsoCPrO < 0) && (TimeUsoS < MIN_int32_T - TimeUsoCPrO)) {
-      jj = MIN_int32_T;
-    } else if ((TimeUsoCPrO > 0) && (TimeUsoS > MAX_int32_T - TimeUsoCPrO)) {
-      jj = MAX_int32_T;
-    } else {
-      jj = TimeUsoCPrO + TimeUsoS;
-    }
-
-    if ((qY >= 0) && (jj < qY - MAX_int32_T)) {
-      qY = MAX_int32_T;
-    } else if ((qY < 0) && (jj > qY - MIN_int32_T)) {
-      qY = MIN_int32_T;
-    } else {
-      qY -= jj;
-    }
+    /* 'funcionDia:17' minP = Dia(contDia,4)-Dia(contDia,3)+1-(TimeUsoCPrO+TimeUsoS); */
+    minP = (((Dia->data[(*contDia + Dia->size[0] * 3) - 1] - Dia->data[(*contDia
+               + (Dia->size[0] << 1)) - 1]) - TimeUsoCPrO) - TimeUsoS) + 1;
 
     /*  Posicion maxima a partir de la cual se puede colocar la Operacion */
+    /* 'funcionDia:19' auxUPxS = UltPosRecXDia(contDia,sum(NumRec(1:2))+1:sum(NumRec(1:3))); */
     y = (double)NumRec[0] + (double)NumRec[1];
-    d12 = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
-    if (y + 1.0 > d12) {
-      i46 = 1;
-      jj = 0;
+    b_y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+    if (y + 1.0 > b_y) {
+      i47 = 0;
+      idx = 0;
     } else {
-      i46 = (int)(y + 1.0);
-      jj = (int)d12;
+      i47 = (int)(y + 1.0) - 1;
+      idx = (int)b_y;
     }
 
     /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los S. */
-    y = ((double)Dia->data[(*contDia + Dia->size[0] * 3) - 1] - (double)
-         Dia->data[(*contDia + (Dia->size[0] << 1)) - 1]) + 1.0;
-    idx = x->size[0] * x->size[1];
+    /* 'funcionDia:20' [~,c]=find(double(Dia(contDia,4))-double(Dia(contDia,3))+1-auxUPxS>=TimeUsoS); */
+    b_Dia = Dia->data[(*contDia + Dia->size[0] * 3) - 1] - Dia->data[(*contDia +
+      (Dia->size[0] << 1)) - 1];
+    i48 = x->size[0] * x->size[1];
     x->size[0] = 1;
-    b_loop_ub = jj - i46;
-    x->size[1] = b_loop_ub + 1;
-    emxEnsureCapacity_boolean_T(x, idx);
-    for (jj = 0; jj <= b_loop_ub; jj++) {
-      d12 = y - (double)UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0] *
-        ((i46 + jj) - 1)) - 1];
-      if (d12 < 2.147483648E+9) {
-        if (d12 >= -2.147483648E+9) {
-          idx = (int)d12;
-        } else {
-          idx = MIN_int32_T;
-        }
-      } else {
-        idx = MAX_int32_T;
-      }
-
-      x->data[jj] = (idx >= TimeUsoS);
+    jj = idx - i47;
+    x->size[1] = jj;
+    emxEnsureCapacity_boolean_T(x, i48);
+    for (idx = 0; idx < jj; idx++) {
+      x->data[idx] = ((b_Dia - UltPosRecXDia->data[(*contDia +
+        UltPosRecXDia->size[0] * (i47 + idx)) - 1]) + 1 >= TimeUsoS);
     }
 
     if (x->size[1] == 0) {
-      j->size[1] = 0;
+      b_jj->size[1] = 0;
     } else {
       idx = 0;
-      i46 = j->size[0] * j->size[1];
-      j->size[0] = 1;
-      j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i46);
+      i47 = b_jj->size[0] * b_jj->size[1];
+      b_jj->size[0] = 1;
+      b_jj->size[1] = x->size[1];
+      emxEnsureCapacity_int32_T(b_jj, i47);
       jj = 1;
       exitg2 = false;
       while ((!exitg2) && (jj <= x->size[1])) {
         if (x->data[jj - 1]) {
           idx++;
-          j->data[idx - 1] = jj;
+          b_jj->data[idx - 1] = jj;
           if (idx >= x->size[1]) {
             exitg2 = true;
           } else {
@@ -473,145 +442,164 @@ void funcionDia(const int NumRec[7], const emxArray_int32_T *PCPrO, const
 
       if (x->size[1] == 1) {
         if (idx == 0) {
-          j->size[1] = 0;
+          b_jj->size[1] = 0;
         }
-      } else if (1 > idx) {
-        j->size[1] = 0;
       } else {
-        i46 = j->size[0] * j->size[1];
-        j->size[1] = idx;
-        emxEnsureCapacity_int32_T(j, i46);
+        i47 = b_jj->size[0] * b_jj->size[1];
+        if (1 > idx) {
+          b_jj->size[1] = 0;
+        } else {
+          b_jj->size[1] = idx;
+        }
+
+        emxEnsureCapacity_int32_T(b_jj, i47);
       }
     }
 
-    b_loop_ub = PCPrO->size[1] - 1;
+    /* 'funcionDia:20' ~ */
+    /* 'funcionDia:22' if sum(minP>=auxUPxR(PCPrO==1))~=0 && ~isempty(c) */
+    b_Dia = PCPrO->size[1] - 1;
     jj = 0;
-    for (idx = 0; idx <= b_loop_ub; idx++) {
+    for (idx = 0; idx <= b_Dia; idx++) {
       if (PCPrO->data[idx] == 1) {
         jj++;
       }
     }
 
-    i46 = r9->size[0] * r9->size[1];
-    r9->size[0] = 1;
-    r9->size[1] = jj;
-    emxEnsureCapacity_int32_T(r9, i46);
+    i47 = r12->size[0] * r12->size[1];
+    r12->size[0] = 1;
+    r12->size[1] = jj;
+    emxEnsureCapacity_int32_T(r12, i47);
     jj = 0;
-    for (idx = 0; idx <= b_loop_ub; idx++) {
+    for (idx = 0; idx <= b_Dia; idx++) {
       if (PCPrO->data[idx] == 1) {
-        r9->data[jj] = idx + 1;
+        r12->data[jj] = idx + 1;
         jj++;
       }
     }
 
-    i46 = x->size[0] * x->size[1];
+    i47 = x->size[0] * x->size[1];
     x->size[0] = 1;
-    x->size[1] = r9->size[1];
-    emxEnsureCapacity_boolean_T(x, i46);
-    b_loop_ub = r9->size[1];
-    for (i46 = 0; i46 < b_loop_ub; i46++) {
-      x->data[i46] = (qY >= UltPosRecXDia->data[(*contDia + UltPosRecXDia->size
-        [0] * (r9->data[i46] - 1)) - 1]);
+    x->size[1] = r12->size[1];
+    emxEnsureCapacity_boolean_T(x, i47);
+    jj = r12->size[1];
+    for (i47 = 0; i47 < jj; i47++) {
+      x->data[i47] = (minP >= auxUPxR->data[r12->data[i47] - 1]);
     }
 
-    if ((g_sum(x) != 0.0) && (j->size[1] != 0)) {
+    if ((c_sum(x) != 0.0) && (b_jj->size[1] != 0)) {
       exitg1 = 1;
     } else {
-      jj = *contDia;
-      if (jj > 2147483646) {
-        *contDia = MAX_int32_T;
-      } else {
-        *contDia = jj + 1;
-      }
+      /* 'funcionDia:25' else */
+      /* 'funcionDia:26' contDia = contDia + 1; */
+      (*contDia)++;
     }
   } while (exitg1 == 0);
 
   /*  Compruebo que cabe en alguna pocision de las posibles, si no cabe incremento el dia. */
-  i46 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
+  /* 'funcionDia:23' tempUltPosRecXDia = auxUPxR; */
+  i47 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
   tempUltPosRecXDia->size[0] = 1;
-  tempUltPosRecXDia->size[1] = loop_ub;
-  emxEnsureCapacity_int32_T(tempUltPosRecXDia, i46);
-  for (i46 = 0; i46 < loop_ub; i46++) {
-    tempUltPosRecXDia->data[i46] = UltPosRecXDia->data[(*contDia +
-      UltPosRecXDia->size[0] * i46) - 1];
+  tempUltPosRecXDia->size[1] = auxUPxR->size[1];
+  emxEnsureCapacity_int32_T(tempUltPosRecXDia, i47);
+  jj = auxUPxR->size[1];
+  for (i47 = 0; i47 < jj; i47++) {
+    tempUltPosRecXDia->data[i47] = auxUPxR->data[i47];
   }
 
-  emxFree_int32_T(&j);
+  /* 'funcionDia:24' flag=false; */
+  emxFree_int32_T(&b_jj);
   emxFree_boolean_T(&x);
-  emxFree_int32_T(&r9);
-  i46 = DispME->size[0] * DispME->size[1];
+  emxFree_int32_T(&r12);
+  emxFree_int32_T(&auxUPxR);
+
+  /* 'funcionDia:33' DispME = zeros(1,size(DispMExD,2), 'int32'); */
+  jj = DispMExD->size[1];
+  i47 = DispME->size[0] * DispME->size[1];
   DispME->size[0] = 1;
-  DispME->size[1] = DispMExD->size[1];
-  emxEnsureCapacity_int32_T(DispME, i46);
-  loop_ub = DispMExD->size[1];
-  for (i46 = 0; i46 < loop_ub; i46++) {
-    DispME->data[i46] = 0;
+  DispME->size[1] = jj;
+  emxEnsureCapacity_int32_T(DispME, i47);
+  for (i47 = 0; i47 < jj; i47++) {
+    DispME->data[i47] = 0;
   }
 
+  /* 'funcionDia:34' switch Dia(contDia,2) */
   switch (Dia->data[(*contDia + Dia->size[0]) - 1]) {
    case 2:
-    loop_ub = DispMExD->size[1];
-    i46 = DispME->size[0] * DispME->size[1];
+    /* 'funcionDia:35' case 2 */
+    /* 'funcionDia:36' DispME=int32(DispMExD(1,:)); */
+    jj = DispMExD->size[1];
+    i47 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
-    DispME->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(DispME, i46);
-    for (i46 = 0; i46 < loop_ub; i46++) {
-      DispME->data[i46] = DispMExD->data[6 * i46];
+    DispME->size[1] = jj;
+    emxEnsureCapacity_int32_T(DispME, i47);
+    for (i47 = 0; i47 < jj; i47++) {
+      DispME->data[i47] = DispMExD->data[6 * i47];
     }
     break;
 
    case 3:
-    loop_ub = DispMExD->size[1];
-    i46 = DispME->size[0] * DispME->size[1];
+    /* 'funcionDia:37' case 3 */
+    /* 'funcionDia:38' DispME=int32(DispMExD(2,:)); */
+    jj = DispMExD->size[1];
+    i47 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
-    DispME->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(DispME, i46);
-    for (i46 = 0; i46 < loop_ub; i46++) {
-      DispME->data[i46] = DispMExD->data[1 + 6 * i46];
+    DispME->size[1] = jj;
+    emxEnsureCapacity_int32_T(DispME, i47);
+    for (i47 = 0; i47 < jj; i47++) {
+      DispME->data[i47] = DispMExD->data[1 + 6 * i47];
     }
     break;
 
    case 4:
-    loop_ub = DispMExD->size[1];
-    i46 = DispME->size[0] * DispME->size[1];
+    /* 'funcionDia:39' case 4 */
+    /* 'funcionDia:40' DispME=int32(DispMExD(3,:)); */
+    jj = DispMExD->size[1];
+    i47 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
-    DispME->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(DispME, i46);
-    for (i46 = 0; i46 < loop_ub; i46++) {
-      DispME->data[i46] = DispMExD->data[2 + 6 * i46];
+    DispME->size[1] = jj;
+    emxEnsureCapacity_int32_T(DispME, i47);
+    for (i47 = 0; i47 < jj; i47++) {
+      DispME->data[i47] = DispMExD->data[2 + 6 * i47];
     }
     break;
 
    case 5:
-    loop_ub = DispMExD->size[1];
-    i46 = DispME->size[0] * DispME->size[1];
+    /* 'funcionDia:41' case 5 */
+    /* 'funcionDia:42' DispME=int32(DispMExD(4,:)); */
+    jj = DispMExD->size[1];
+    i47 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
-    DispME->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(DispME, i46);
-    for (i46 = 0; i46 < loop_ub; i46++) {
-      DispME->data[i46] = DispMExD->data[3 + 6 * i46];
+    DispME->size[1] = jj;
+    emxEnsureCapacity_int32_T(DispME, i47);
+    for (i47 = 0; i47 < jj; i47++) {
+      DispME->data[i47] = DispMExD->data[3 + 6 * i47];
     }
     break;
 
    case 6:
-    loop_ub = DispMExD->size[1];
-    i46 = DispME->size[0] * DispME->size[1];
+    /* 'funcionDia:43' case 6 */
+    /* 'funcionDia:44' DispME=int32(DispMExD(5,:)); */
+    jj = DispMExD->size[1];
+    i47 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
-    DispME->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(DispME, i46);
-    for (i46 = 0; i46 < loop_ub; i46++) {
-      DispME->data[i46] = DispMExD->data[4 + 6 * i46];
+    DispME->size[1] = jj;
+    emxEnsureCapacity_int32_T(DispME, i47);
+    for (i47 = 0; i47 < jj; i47++) {
+      DispME->data[i47] = DispMExD->data[4 + 6 * i47];
     }
     break;
 
    case 7:
-    loop_ub = DispMExD->size[1];
-    i46 = DispME->size[0] * DispME->size[1];
+    /* 'funcionDia:45' case 7 */
+    /* 'funcionDia:46' DispME=int32(DispMExD(6,:)); */
+    jj = DispMExD->size[1];
+    i47 = DispME->size[0] * DispME->size[1];
     DispME->size[0] = 1;
-    DispME->size[1] = loop_ub;
-    emxEnsureCapacity_int32_T(DispME, i46);
-    for (i46 = 0; i46 < loop_ub; i46++) {
-      DispME->data[i46] = DispMExD->data[5 + 6 * i46];
+    DispME->size[1] = jj;
+    emxEnsureCapacity_int32_T(DispME, i47);
+    for (i47 = 0; i47 < jj; i47++) {
+      DispME->data[i47] = DispMExD->data[5 + 6 * i47];
     }
     break;
   }

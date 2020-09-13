@@ -20,6 +20,7 @@
 
 /* Function Declarations */
 extern void b_randperm(double p[2000]);
+extern void c_randperm(int n, emxArray_real_T *p);
 extern void randperm(double p[200]);
 
 #endif

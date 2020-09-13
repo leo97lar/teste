@@ -17,10 +17,14 @@
 #include "funcionDia.h"
 #include "model_emxutil.h"
 #include "sum.h"
-#include "obsIQini.h"
-#include "model_rtwutil.h"
 
 /* Function Definitions */
+
+/*
+ * function [ CPrOA,IniCPrOA, EndCPrOA,EndCPrOAxD,EA,AA,AnA,SA,IniSA,EndSA,EndRPxD,CPOA,IniCPOA,EndCPOA,CRA,IniCRA,EndCRA,contDia] = ...
+ *     funcionCPrO(NumRec, PCPrO,PME,PMA,PMAn,PS,PCPO,PCR,H,Dia,UltPosRecXDia, TimeUsoCPrO, TimeUsoS,TimeUsoCPO,TimeUsoCR,contDia,...
+ *     tempUltPosRecXDia,DispMExD,DispME)
+ */
 void b_funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
                    emxArray_int32_T *PME, const emxArray_int32_T *PMA, const
                    emxArray_int32_T *PMAn, const emxArray_int32_T *PS, const
@@ -35,129 +39,144 @@ void b_funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
                    *SA, int *IniSA, int *EndSA, int *EndRPxD, int *CPOA, int
                    *IniCPOA, int *EndCPOA, int *CRA, int *IniCRA, int *EndCRA)
 {
-  int yk;
-  int nm1d2;
+  int b_tmp;
   int n;
   unsigned int nm1;
-  emxArray_int32_T *j;
-  int i53;
+  emxArray_int32_T *jj;
+  int q;
   emxArray_int32_T *E;
-  int temCPrO;
-  int qEnd;
-  double a;
-  double b;
-  emxArray_real_T *r12;
+  int yk;
+  int k;
+  int nb;
+  double y_tmp;
+  double y;
+  emxArray_real_T *r17;
   double ndbl;
   double apnd;
   double cdiff;
   emxArray_int32_T *S;
-  emxArray_real_T *C;
+  emxArray_real_T *r18;
   emxArray_int32_T *A;
-  emxArray_real_T *CR;
+  emxArray_real_T *r19;
   emxArray_int32_T *An;
   emxArray_int32_T *CPO;
-  int kEnd;
+  emxArray_int32_T *CR;
   int b_CPrOA;
   int b_CPOA;
   int b_CRA;
-  int qY;
-  int b_qY;
+  int b_IniCPrOA;
+  int b_EndCPrOA;
   int b_IniSA;
   int b_EndSA;
   int b_IniCPOA;
-  int c_qY;
+  int b_EndCPOA;
   int b_IniCRA;
-  int d_qY;
-  int e_qY;
-  int f_qY;
+  int b_EndCRA;
+  int b_EndCPrOAxD;
+  int b_EndRPxD;
+  emxArray_int32_T *EA_double;
+  emxArray_int32_T *AA_double;
+  emxArray_int32_T *AnA_double;
+  emxArray_int32_T *SA_double;
   boolean_T flag;
   emxArray_uint32_T *uCPrODisp;
+  emxArray_real_T *auxUPxE;
+  emxArray_real_T *auxUPxA;
+  emxArray_real_T *auxUPxAn;
+  emxArray_real_T *auxUPxS;
+  emxArray_int32_T *C;
   emxArray_int32_T *allC;
+  emxArray_int32_T *u;
+  emxArray_int32_T *allE;
   emxArray_int32_T *allA;
   emxArray_int32_T *allAn;
   emxArray_int32_T *allS;
   emxArray_int32_T *allCPO;
   emxArray_int32_T *allCR;
   emxArray_boolean_T *x;
-  emxArray_int32_T *b_b;
+  emxArray_int32_T *b;
   emxArray_int32_T *idx;
   emxArray_int32_T *iwork;
   emxArray_real_T *b_H;
+  int b_idx;
   boolean_T exitg1;
-  int q;
+  int minP;
   int na;
-  int b_j;
-  int nb;
+  int j;
   int p;
-  long long i54;
+  int qEnd;
+  int kEnd;
+  int temCPrO;
   int exitg2;
-  if (NumRec[0] > 2147483646) {
-    yk = MAX_int32_T;
-  } else {
-    yk = NumRec[0] + 1;
-  }
+  int IniCPO;
+  int EndCPO;
+  int IniCR;
 
-  nm1d2 = (int)e_sum(*(int (*)[2])&NumRec[0]);
-  if (nm1d2 < yk) {
+  /* 'funcionCPrO:5' E = 1:size(NumRec(1)+1:sum(NumRec(1:2)),2); */
+  b_tmp = NumRec[0] + NumRec[1];
+  if (b_tmp < NumRec[0] + 1) {
     n = 0;
   } else {
-    if ((yk < 0) && (nm1d2 >= 0)) {
-      nm1 = (unsigned int)nm1d2 - yk;
+    if ((NumRec[0] + 1 < 0) && (b_tmp >= 0)) {
+      nm1 = ((unsigned int)b_tmp - NumRec[0]) - 1U;
     } else {
-      nm1 = (unsigned int)(nm1d2 - yk);
+      nm1 = (unsigned int)((b_tmp - NumRec[0]) - 1);
     }
 
     n = (int)nm1 + 1;
   }
 
-  emxInit_int32_T(&j, 2);
-  i53 = j->size[0] * j->size[1];
-  j->size[0] = 1;
-  j->size[1] = n;
-  emxEnsureCapacity_int32_T(j, i53);
+  emxInit_int32_T(&jj, 2);
+  q = jj->size[0] * jj->size[1];
+  jj->size[0] = 1;
+  jj->size[1] = n;
+  emxEnsureCapacity_int32_T(jj, q);
   if (n > 0) {
-    j->data[0] = yk;
-    for (temCPrO = 2; temCPrO <= n; temCPrO++) {
+    jj->data[0] = NumRec[0] + 1;
+    yk = NumRec[0] + 1;
+    for (k = 2; k <= n; k++) {
       yk++;
-      j->data[temCPrO - 1] = yk;
+      jj->data[k - 1] = yk;
     }
   }
 
   emxInit_int32_T(&E, 2);
-  if (j->size[1] < 1) {
+  if (jj->size[1] < 1) {
     E->size[0] = 1;
     E->size[1] = 0;
   } else {
-    qEnd = j->size[1];
-    i53 = E->size[0] * E->size[1];
+    nb = jj->size[1];
+    q = E->size[0] * E->size[1];
     E->size[0] = 1;
-    E->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(E, i53);
-    for (i53 = 0; i53 < qEnd; i53++) {
-      E->data[i53] = 1 + i53;
+    E->size[1] = nb;
+    emxEnsureCapacity_int32_T(E, q);
+    for (q = 0; q < nb; q++) {
+      E->data[q] = 1 + q;
     }
   }
 
-  a = e_sum(*(int (*)[2])&NumRec[0]) + 1.0;
-  b = f_sum(*(int (*)[3])&NumRec[0]);
-  emxInit_real_T(&r12, 2);
-  if (b < a) {
-    i53 = r12->size[0] * r12->size[1];
-    r12->size[1] = 0;
-    emxEnsureCapacity_real_T(r12, i53);
-  } else if (floor(a) == a) {
-    i53 = r12->size[0] * r12->size[1];
-    r12->size[1] = (int)floor(b - a) + 1;
-    emxEnsureCapacity_real_T(r12, i53);
+  /* 'funcionCPrO:6' S = 1:size(sum(NumRec(1:2))+1:sum(NumRec(1:3)),2); */
+  y_tmp = (double)NumRec[0] + (double)NumRec[1];
+  y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+  emxInit_real_T(&r17, 2);
+  if (y < y_tmp + 1.0) {
+    q = r17->size[0] * r17->size[1];
+    r17->size[1] = 0;
+    emxEnsureCapacity_real_T(r17, q);
+  } else if (((double)NumRec[0] + (double)NumRec[1]) + 1.0 == y_tmp + 1.0) {
+    q = r17->size[0] * r17->size[1];
+    r17->size[1] = (int)(y - (y_tmp + 1.0)) + 1;
+    emxEnsureCapacity_real_T(r17, q);
   } else {
-    ndbl = floor((b - a) + 0.5);
-    apnd = a + ndbl;
-    cdiff = apnd - b;
-    if (fabs(cdiff) < 4.4408920985006262E-16 * fmax(fabs(a), fabs(b))) {
+    ndbl = floor((y - (y_tmp + 1.0)) + 0.5);
+    apnd = (y_tmp + 1.0) + ndbl;
+    cdiff = apnd - y;
+    if (fabs(cdiff) < 4.4408920985006262E-16 * fmax((unsigned int)fabs(y_tmp +
+          1.0), fabs(y))) {
       ndbl++;
-      apnd = b;
+      apnd = y;
     } else if (cdiff > 0.0) {
-      apnd = a + (ndbl - 1.0);
+      apnd = (y_tmp + 1.0) + (ndbl - 1.0);
     } else {
       ndbl++;
     }
@@ -168,487 +187,442 @@ void b_funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
       n = 0;
     }
 
-    i53 = r12->size[0] * r12->size[1];
-    r12->size[0] = 1;
-    r12->size[1] = n;
-    emxEnsureCapacity_real_T(r12, i53);
+    q = r17->size[0] * r17->size[1];
+    r17->size[0] = 1;
+    r17->size[1] = n;
+    emxEnsureCapacity_real_T(r17, q);
     if ((n > 0) && (n > 1)) {
-      r12->data[n - 1] = apnd;
-      nm1d2 = (n - 1) / 2;
-      for (temCPrO = 0; temCPrO <= nm1d2 - 2; temCPrO++) {
-        r12->data[1 + temCPrO] = a + (1.0 + (double)temCPrO);
-        r12->data[(n - temCPrO) - 2] = apnd - (1.0 + (double)temCPrO);
+      r17->data[n - 1] = apnd;
+      yk = (n - 1) / 2;
+      for (k = 0; k <= yk - 2; k++) {
+        r17->data[1 + k] = (y_tmp + 1.0) + (1.0 + (double)k);
+        r17->data[(n - k) - 2] = apnd - (1.0 + (double)k);
       }
 
-      if (nm1d2 << 1 == n - 1) {
-        r12->data[nm1d2] = (a + apnd) / 2.0;
+      if (yk << 1 == n - 1) {
+        r17->data[yk] = ((y_tmp + 1.0) + apnd) / 2.0;
       } else {
-        r12->data[nm1d2] = a + (double)nm1d2;
-        r12->data[nm1d2 + 1] = apnd - (double)nm1d2;
+        r17->data[yk] = (y_tmp + 1.0) + (double)yk;
+        r17->data[yk + 1] = apnd - (double)yk;
       }
     }
   }
 
   emxInit_int32_T(&S, 2);
-  if (r12->size[1] < 1) {
+  if (r17->size[1] < 1) {
     S->size[0] = 1;
     S->size[1] = 0;
   } else {
-    qEnd = r12->size[1];
-    i53 = S->size[0] * S->size[1];
+    nb = r17->size[1];
+    q = S->size[0] * S->size[1];
     S->size[0] = 1;
-    S->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(S, i53);
-    for (i53 = 0; i53 < qEnd; i53++) {
-      S->data[i53] = 1 + i53;
+    S->size[1] = nb;
+    emxEnsureCapacity_int32_T(S, q);
+    for (q = 0; q < nb; q++) {
+      S->data[q] = 1 + q;
     }
   }
 
-  a = f_sum(*(int (*)[3])&NumRec[0]) + 1.0;
-  b = h_sum(*(int (*)[4])&NumRec[0]);
-  emxInit_real_T(&C, 2);
-  if (b < a) {
-    i53 = C->size[0] * C->size[1];
-    C->size[1] = 0;
-    emxEnsureCapacity_real_T(C, i53);
-  } else if (floor(a) == a) {
-    i53 = C->size[0] * C->size[1];
-    C->size[1] = (int)floor(b - a) + 1;
-    emxEnsureCapacity_real_T(C, i53);
+  /* 'funcionCPrO:7' A = 1:size(sum(NumRec(1:3))+1:sum(NumRec(1:4)),2); */
+  y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+  ndbl = (((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) + (double)
+    NumRec[3];
+  emxInit_real_T(&r18, 2);
+  if (ndbl < y + 1.0) {
+    q = r18->size[0] * r18->size[1];
+    r18->size[1] = 0;
+    emxEnsureCapacity_real_T(r18, q);
   } else {
-    ndbl = floor((b - a) + 0.5);
-    apnd = a + ndbl;
-    cdiff = apnd - b;
-    if (fabs(cdiff) < 4.4408920985006262E-16 * fmax(fabs(a), fabs(b))) {
-      ndbl++;
-      apnd = b;
-    } else if (cdiff > 0.0) {
-      apnd = a + (ndbl - 1.0);
-    } else {
-      ndbl++;
-    }
-
-    if (ndbl >= 0.0) {
-      n = (int)ndbl;
-    } else {
-      n = 0;
-    }
-
-    i53 = C->size[0] * C->size[1];
-    C->size[0] = 1;
-    C->size[1] = n;
-    emxEnsureCapacity_real_T(C, i53);
-    if (n > 0) {
-      C->data[0] = a;
-      if (n > 1) {
-        C->data[n - 1] = apnd;
-        nm1d2 = (n - 1) / 2;
-        for (temCPrO = 0; temCPrO <= nm1d2 - 2; temCPrO++) {
-          C->data[1 + temCPrO] = a + (1.0 + (double)temCPrO);
-          C->data[(n - temCPrO) - 2] = apnd - (1.0 + (double)temCPrO);
-        }
-
-        if (nm1d2 << 1 == n - 1) {
-          C->data[nm1d2] = (a + apnd) / 2.0;
-        } else {
-          C->data[nm1d2] = a + (double)nm1d2;
-          C->data[nm1d2 + 1] = apnd - (double)nm1d2;
-        }
-      }
-    }
+    q = r18->size[0] * r18->size[1];
+    r18->size[1] = (int)(ndbl - (y + 1.0)) + 1;
+    emxEnsureCapacity_real_T(r18, q);
   }
 
   emxInit_int32_T(&A, 2);
-  if (C->size[1] < 1) {
+  if (r18->size[1] < 1) {
     A->size[0] = 1;
     A->size[1] = 0;
   } else {
-    qEnd = C->size[1];
-    i53 = A->size[0] * A->size[1];
+    nb = r18->size[1];
+    q = A->size[0] * A->size[1];
     A->size[0] = 1;
-    A->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(A, i53);
-    for (i53 = 0; i53 < qEnd; i53++) {
-      A->data[i53] = 1 + i53;
+    A->size[1] = nb;
+    emxEnsureCapacity_int32_T(A, q);
+    for (q = 0; q < nb; q++) {
+      A->data[q] = 1 + q;
     }
   }
 
-  a = h_sum(*(int (*)[4])&NumRec[0]) + 1.0;
-  b = i_sum(*(int (*)[5])&NumRec[0]);
-  emxInit_real_T(&CR, 2);
-  if (b < a) {
-    i53 = CR->size[0] * CR->size[1];
-    CR->size[1] = 0;
-    emxEnsureCapacity_real_T(CR, i53);
-  } else if (floor(a) == a) {
-    i53 = CR->size[0] * CR->size[1];
-    CR->size[1] = (int)floor(b - a) + 1;
-    emxEnsureCapacity_real_T(CR, i53);
+  emxFree_real_T(&r18);
+
+  /* 'funcionCPrO:8' An = 1:size(sum(NumRec(1:4))+1:sum(NumRec(1:5)),2); */
+  y = (((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) + (double)
+    NumRec[3];
+  ndbl = ((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+          (double)NumRec[3]) + (double)NumRec[4];
+  emxInit_real_T(&r19, 2);
+  if (ndbl < y + 1.0) {
+    q = r19->size[0] * r19->size[1];
+    r19->size[1] = 0;
+    emxEnsureCapacity_real_T(r19, q);
   } else {
-    ndbl = floor((b - a) + 0.5);
-    apnd = a + ndbl;
-    cdiff = apnd - b;
-    if (fabs(cdiff) < 4.4408920985006262E-16 * fmax(fabs(a), fabs(b))) {
-      ndbl++;
-      apnd = b;
-    } else if (cdiff > 0.0) {
-      apnd = a + (ndbl - 1.0);
-    } else {
-      ndbl++;
-    }
-
-    if (ndbl >= 0.0) {
-      n = (int)ndbl;
-    } else {
-      n = 0;
-    }
-
-    i53 = CR->size[0] * CR->size[1];
-    CR->size[0] = 1;
-    CR->size[1] = n;
-    emxEnsureCapacity_real_T(CR, i53);
-    if (n > 0) {
-      CR->data[0] = a;
-      if (n > 1) {
-        CR->data[n - 1] = apnd;
-        nm1d2 = (n - 1) / 2;
-        for (temCPrO = 0; temCPrO <= nm1d2 - 2; temCPrO++) {
-          CR->data[1 + temCPrO] = a + (1.0 + (double)temCPrO);
-          CR->data[(n - temCPrO) - 2] = apnd - (1.0 + (double)temCPrO);
-        }
-
-        if (nm1d2 << 1 == n - 1) {
-          CR->data[nm1d2] = (a + apnd) / 2.0;
-        } else {
-          CR->data[nm1d2] = a + (double)nm1d2;
-          CR->data[nm1d2 + 1] = apnd - (double)nm1d2;
-        }
-      }
-    }
+    q = r19->size[0] * r19->size[1];
+    r19->size[1] = (int)(ndbl - (y + 1.0)) + 1;
+    emxEnsureCapacity_real_T(r19, q);
   }
 
   emxInit_int32_T(&An, 2);
-  if (CR->size[1] < 1) {
+  if (r19->size[1] < 1) {
     An->size[0] = 1;
     An->size[1] = 0;
   } else {
-    qEnd = CR->size[1];
-    i53 = An->size[0] * An->size[1];
+    nb = r19->size[1];
+    q = An->size[0] * An->size[1];
     An->size[0] = 1;
-    An->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(An, i53);
-    for (i53 = 0; i53 < qEnd; i53++) {
-      An->data[i53] = 1 + i53;
+    An->size[1] = nb;
+    emxEnsureCapacity_int32_T(An, q);
+    for (q = 0; q < nb; q++) {
+      An->data[q] = 1 + q;
     }
   }
 
+  emxFree_real_T(&r19);
+
+  /* 'funcionCPrO:9' CPO = 1:size(PCPO, 2); */
   emxInit_int32_T(&CPO, 2);
   if (PCPO->size[1] < 1) {
     CPO->size[0] = 1;
     CPO->size[1] = 0;
   } else {
-    qEnd = PCPO->size[1];
-    i53 = CPO->size[0] * CPO->size[1];
+    nb = PCPO->size[1];
+    q = CPO->size[0] * CPO->size[1];
     CPO->size[0] = 1;
-    CPO->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(CPO, i53);
-    for (i53 = 0; i53 < qEnd; i53++) {
-      CPO->data[i53] = 1 + i53;
+    CPO->size[1] = nb;
+    emxEnsureCapacity_int32_T(CPO, q);
+    for (q = 0; q < nb; q++) {
+      CPO->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:10' CR = 1:size(PCR, 2); */
+  emxInit_int32_T(&CR, 2);
   if (PCR->size[1] < 1) {
     CR->size[0] = 1;
     CR->size[1] = 0;
   } else {
-    i53 = PCR->size[1];
-    kEnd = CR->size[0] * CR->size[1];
+    nb = PCR->size[1];
+    q = CR->size[0] * CR->size[1];
     CR->size[0] = 1;
-    qEnd = (int)((double)i53 - 1.0);
-    CR->size[1] = qEnd + 1;
-    emxEnsureCapacity_real_T(CR, kEnd);
-    for (i53 = 0; i53 <= qEnd; i53++) {
-      CR->data[i53] = 1.0 + (double)i53;
+    CR->size[1] = nb;
+    emxEnsureCapacity_int32_T(CR, q);
+    for (q = 0; q < nb; q++) {
+      CR->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:11' CPrOA = int32(0); */
   b_CPrOA = 0;
+
+  /* 'funcionCPrO:12' CPOA = int32(0); */
   b_CPOA = 0;
+
+  /* 'funcionCPrO:13' CRA = int32(0); */
   b_CRA = 0;
-  qY = 0;
-  b_qY = 0;
+
+  /* 'funcionCPrO:14' IniCPrOA = int32(0); */
+  b_IniCPrOA = 0;
+
+  /* 'funcionCPrO:15' EndCPrOA = int32(0); */
+  b_EndCPrOA = 1;
+
+  /* 'funcionCPrO:16' IniSA = int32(0); */
   b_IniSA = 0;
-  b_EndSA = 1;
-  b_IniCPOA = 0;
-  c_qY = 0;
-  b_IniCRA = 0;
-  d_qY = 0;
-  e_qY = 0;
-  f_qY = 0;
+
+  /* 'funcionCPrO:17' EndSA = int32(0); */
+  b_EndSA = 0;
+
+  /* 'funcionCPrO:18' IniCPOA = int32(0); */
+  b_IniCPOA = -1;
+
+  /* 'funcionCPrO:19' EndCPOA = int32(0); */
+  b_EndCPOA = 0;
+
+  /* 'funcionCPrO:20' IniCRA = int32(0); */
+  b_IniCRA = -1;
+
+  /* 'funcionCPrO:21' EndCRA = int32(0); */
+  b_EndCRA = 0;
+
+  /* 'funcionCPrO:22' EndCPrOAxD = int32(0); */
+  b_EndCPrOAxD = 0;
+
+  /* 'funcionCPrO:23' EndRPxD = int32(0); */
+  b_EndRPxD = 0;
+
+  /* 'funcionCPrO:24' EA_double = 1:size(PME,2)-1; */
+  emxInit_int32_T(&EA_double, 2);
   if (PME->size[1] - 1 < 1) {
-    EA->size[0] = 1;
-    EA->size[1] = 0;
+    EA_double->size[0] = 1;
+    EA_double->size[1] = 0;
   } else {
-    qEnd = PME->size[1] - 2;
-    i53 = EA->size[0] * EA->size[1];
-    EA->size[0] = 1;
-    EA->size[1] = qEnd + 1;
-    emxEnsureCapacity_int32_T(EA, i53);
-    for (i53 = 0; i53 <= qEnd; i53++) {
-      EA->data[i53] = 1 + i53;
+    nb = PME->size[1] - 2;
+    q = EA_double->size[0] * EA_double->size[1];
+    EA_double->size[0] = 1;
+    EA_double->size[1] = nb + 1;
+    emxEnsureCapacity_int32_T(EA_double, q);
+    for (q = 0; q <= nb; q++) {
+      EA_double->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:25' AA_double = 1:size(PMA,2)-1; */
+  emxInit_int32_T(&AA_double, 2);
   if (PMA->size[1] - 1 < 1) {
-    AA->size[0] = 1;
-    AA->size[1] = 0;
+    AA_double->size[0] = 1;
+    AA_double->size[1] = 0;
   } else {
-    qEnd = PMA->size[1] - 2;
-    i53 = AA->size[0] * AA->size[1];
-    AA->size[0] = 1;
-    AA->size[1] = qEnd + 1;
-    emxEnsureCapacity_int32_T(AA, i53);
-    for (i53 = 0; i53 <= qEnd; i53++) {
-      AA->data[i53] = 1 + i53;
+    nb = PMA->size[1] - 2;
+    q = AA_double->size[0] * AA_double->size[1];
+    AA_double->size[0] = 1;
+    AA_double->size[1] = nb + 1;
+    emxEnsureCapacity_int32_T(AA_double, q);
+    for (q = 0; q <= nb; q++) {
+      AA_double->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:26' AnA_double = 1:size(PMAn,2)-1; */
+  emxInit_int32_T(&AnA_double, 2);
   if (PMAn->size[1] - 1 < 1) {
-    AnA->size[0] = 1;
-    AnA->size[1] = 0;
+    AnA_double->size[0] = 1;
+    AnA_double->size[1] = 0;
   } else {
-    qEnd = PMAn->size[1] - 2;
-    i53 = AnA->size[0] * AnA->size[1];
-    AnA->size[0] = 1;
-    AnA->size[1] = qEnd + 1;
-    emxEnsureCapacity_int32_T(AnA, i53);
-    for (i53 = 0; i53 <= qEnd; i53++) {
-      AnA->data[i53] = 1 + i53;
+    nb = PMAn->size[1] - 2;
+    q = AnA_double->size[0] * AnA_double->size[1];
+    AnA_double->size[0] = 1;
+    AnA_double->size[1] = nb + 1;
+    emxEnsureCapacity_int32_T(AnA_double, q);
+    for (q = 0; q <= nb; q++) {
+      AnA_double->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:27' SA_double = 1:size(PS,2)-1; */
+  emxInit_int32_T(&SA_double, 2);
   if (PS->size[1] - 1 < 1) {
-    SA->size[0] = 1;
-    SA->size[1] = 0;
+    SA_double->size[0] = 1;
+    SA_double->size[1] = 0;
   } else {
-    qEnd = PS->size[1] - 2;
-    i53 = SA->size[0] * SA->size[1];
-    SA->size[0] = 1;
-    SA->size[1] = qEnd + 1;
-    emxEnsureCapacity_int32_T(SA, i53);
-    for (i53 = 0; i53 <= qEnd; i53++) {
-      SA->data[i53] = 1 + i53;
+    nb = PS->size[1] - 2;
+    q = SA_double->size[0] * SA_double->size[1];
+    SA_double->size[0] = 1;
+    SA_double->size[1] = nb + 1;
+    emxEnsureCapacity_int32_T(SA_double, q);
+    for (q = 0; q <= nb; q++) {
+      SA_double->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:29' flag = true; */
   flag = true;
+
+  /* 'funcionCPrO:30' while flag */
   emxInit_uint32_T(&uCPrODisp, 2);
+  emxInit_real_T(&auxUPxE, 2);
+  emxInit_real_T(&auxUPxA, 2);
+  emxInit_real_T(&auxUPxAn, 2);
+  emxInit_real_T(&auxUPxS, 2);
+  emxInit_int32_T(&C, 2);
   emxInit_int32_T(&allC, 2);
+  emxInit_int32_T(&u, 1);
+  emxInit_int32_T(&allE, 2);
   emxInit_int32_T(&allA, 2);
   emxInit_int32_T(&allAn, 2);
   emxInit_int32_T(&allS, 2);
   emxInit_int32_T(&allCPO, 2);
   emxInit_int32_T(&allCR, 2);
   emxInit_boolean_T(&x, 2);
-  emxInit_int32_T(&b_b, 2);
+  emxInit_int32_T(&b, 2);
   emxInit_int32_T(&idx, 2);
   emxInit_int32_T(&iwork, 1);
   emxInit_real_T(&b_H, 2);
   while (flag) {
+    /* 'funcionCPrO:32' auxUPxR = tempUltPosRecXDia; */
     /*  Selecciono los ultimas posiciones a partir de donde se pueden usar las camas. */
-    i53 = x->size[0] * x->size[1];
+    /* 'funcionCPrO:33' [~,C]=find(PCPrO~=0); */
+    q = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = PCPrO->size[1];
-    emxEnsureCapacity_boolean_T(x, i53);
-    qEnd = PCPrO->size[0] * PCPrO->size[1];
-    for (i53 = 0; i53 < qEnd; i53++) {
-      x->data[i53] = (PCPrO->data[i53] != 0);
+    emxEnsureCapacity_boolean_T(x, q);
+    nb = PCPrO->size[1];
+    for (q = 0; q < nb; q++) {
+      x->data[q] = (PCPrO->data[q] != 0);
     }
 
     if (x->size[1] == 0) {
-      j->size[0] = 1;
-      j->size[1] = 0;
+      jj->size[0] = 1;
+      jj->size[1] = 0;
     } else {
-      yk = 0;
-      i53 = j->size[0] * j->size[1];
-      j->size[0] = 1;
-      j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i53);
-      nm1d2 = 1;
+      b_idx = 0;
+      q = jj->size[0] * jj->size[1];
+      jj->size[0] = 1;
+      jj->size[1] = x->size[1];
+      emxEnsureCapacity_int32_T(jj, q);
+      yk = 1;
       exitg1 = false;
-      while ((!exitg1) && (nm1d2 <= x->size[1])) {
-        if (x->data[nm1d2 - 1]) {
-          yk++;
-          j->data[yk - 1] = nm1d2;
-          if (yk >= x->size[1]) {
+      while ((!exitg1) && (yk <= x->size[1])) {
+        if (x->data[yk - 1]) {
+          b_idx++;
+          jj->data[b_idx - 1] = yk;
+          if (b_idx >= x->size[1]) {
             exitg1 = true;
           } else {
-            nm1d2++;
+            yk++;
           }
         } else {
-          nm1d2++;
+          yk++;
         }
       }
 
       if (x->size[1] == 1) {
-        if (yk == 0) {
-          j->size[0] = 1;
-          j->size[1] = 0;
+        if (b_idx == 0) {
+          jj->size[0] = 1;
+          jj->size[1] = 0;
         }
-      } else if (1 > yk) {
-        j->size[1] = 0;
       } else {
-        i53 = j->size[0] * j->size[1];
-        j->size[1] = yk;
-        emxEnsureCapacity_int32_T(j, i53);
+        q = jj->size[0] * jj->size[1];
+        if (1 > b_idx) {
+          jj->size[1] = 0;
+        } else {
+          jj->size[1] = b_idx;
+        }
+
+        emxEnsureCapacity_int32_T(jj, q);
       }
     }
 
-    i53 = C->size[0] * C->size[1];
+    q = C->size[0] * C->size[1];
     C->size[0] = 1;
-    C->size[1] = j->size[1];
-    emxEnsureCapacity_real_T(C, i53);
-    qEnd = j->size[0] * j->size[1];
-    for (i53 = 0; i53 < qEnd; i53++) {
-      C->data[i53] = j->data[i53];
+    C->size[1] = jj->size[1];
+    emxEnsureCapacity_int32_T(C, q);
+    nb = jj->size[1];
+    for (q = 0; q < nb; q++) {
+      C->data[q] = jj->data[q];
     }
 
+    /* 'funcionCPrO:33' ~ */
     /*  Busco las posibles camas a usar. */
-    nm1d2 = Dia->data[(*contDia + Dia->size[0] * 3) - 1];
-    yk = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-    if ((nm1d2 >= 0) && (yk < nm1d2 - MAX_int32_T)) {
-      nm1d2 = MAX_int32_T;
-    } else if ((nm1d2 < 0) && (yk > nm1d2 - MIN_int32_T)) {
-      nm1d2 = MIN_int32_T;
-    } else {
-      nm1d2 -= yk;
-    }
-
-    if (nm1d2 > 2147483646) {
-      nm1d2 = MAX_int32_T;
-    } else {
-      nm1d2++;
-    }
-
-    if ((TimeUsoCPrO < 0) && (TimeUsoS < MIN_int32_T - TimeUsoCPrO)) {
-      q = MIN_int32_T;
-    } else if ((TimeUsoCPrO > 0) && (TimeUsoS > MAX_int32_T - TimeUsoCPrO)) {
-      q = MAX_int32_T;
-    } else {
-      q = TimeUsoCPrO + TimeUsoS;
-    }
-
-    if ((nm1d2 >= 0) && (q < nm1d2 - MAX_int32_T)) {
-      nm1d2 = MAX_int32_T;
-    } else if ((nm1d2 < 0) && (q > nm1d2 - MIN_int32_T)) {
-      nm1d2 = MIN_int32_T;
-    } else {
-      nm1d2 -= q;
-    }
+    /* 'funcionCPrO:34' minP = Dia(contDia,4)-Dia(contDia,3)+1-(TimeUsoCPrO+TimeUsoS); */
+    minP = (((Dia->data[(*contDia + Dia->size[0] * 3) - 1] - Dia->data[(*contDia
+               + (Dia->size[0] << 1)) - 1]) - TimeUsoCPrO) - TimeUsoS) + 1;
 
     /*  Posicion maxima a partir de la cual se puede colocar la Operacion. */
-    i53 = x->size[0] * x->size[1];
+    /* 'funcionCPrO:35' [~,allC]=find(auxUPxR(C)<=minP); */
+    q = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = C->size[1];
-    emxEnsureCapacity_boolean_T(x, i53);
-    qEnd = C->size[0] * C->size[1];
-    for (i53 = 0; i53 < qEnd; i53++) {
-      x->data[i53] = (tempUltPosRecXDia->data[(int)C->data[i53] - 1] <= nm1d2);
+    emxEnsureCapacity_boolean_T(x, q);
+    nb = C->size[1];
+    for (q = 0; q < nb; q++) {
+      x->data[q] = (tempUltPosRecXDia->data[C->data[q] - 1] <= minP);
     }
 
     if (x->size[1] == 0) {
-      j->size[0] = 1;
-      j->size[1] = 0;
+      jj->size[0] = 1;
+      jj->size[1] = 0;
     } else {
-      yk = 0;
-      i53 = j->size[0] * j->size[1];
-      j->size[0] = 1;
-      j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i53);
-      nm1d2 = 1;
+      b_idx = 0;
+      q = jj->size[0] * jj->size[1];
+      jj->size[0] = 1;
+      jj->size[1] = x->size[1];
+      emxEnsureCapacity_int32_T(jj, q);
+      yk = 1;
       exitg1 = false;
-      while ((!exitg1) && (nm1d2 <= x->size[1])) {
-        if (x->data[nm1d2 - 1]) {
-          yk++;
-          j->data[yk - 1] = nm1d2;
-          if (yk >= x->size[1]) {
+      while ((!exitg1) && (yk <= x->size[1])) {
+        if (x->data[yk - 1]) {
+          b_idx++;
+          jj->data[b_idx - 1] = yk;
+          if (b_idx >= x->size[1]) {
             exitg1 = true;
           } else {
-            nm1d2++;
+            yk++;
           }
         } else {
-          nm1d2++;
+          yk++;
         }
       }
 
       if (x->size[1] == 1) {
-        if (yk == 0) {
-          j->size[0] = 1;
-          j->size[1] = 0;
+        if (b_idx == 0) {
+          jj->size[0] = 1;
+          jj->size[1] = 0;
         }
-      } else if (1 > yk) {
-        j->size[1] = 0;
       } else {
-        i53 = j->size[0] * j->size[1];
-        j->size[1] = yk;
-        emxEnsureCapacity_int32_T(j, i53);
+        q = jj->size[0] * jj->size[1];
+        if (1 > b_idx) {
+          jj->size[1] = 0;
+        } else {
+          jj->size[1] = b_idx;
+        }
+
+        emxEnsureCapacity_int32_T(jj, q);
       }
     }
 
-    i53 = allC->size[0] * allC->size[1];
+    q = allC->size[0] * allC->size[1];
     allC->size[0] = 1;
-    allC->size[1] = j->size[1];
-    emxEnsureCapacity_int32_T(allC, i53);
-    qEnd = j->size[0] * j->size[1];
-    for (i53 = 0; i53 < qEnd; i53++) {
-      allC->data[i53] = j->data[i53];
+    allC->size[1] = jj->size[1];
+    emxEnsureCapacity_int32_T(allC, q);
+    nb = jj->size[1];
+    for (q = 0; q < nb; q++) {
+      allC->data[q] = jj->data[q];
     }
 
+    /* 'funcionCPrO:35' ~ */
     /*  Veo en cuales es posible asignar la operacion. */
+    /* 'funcionCPrO:37' if isempty(allC) */
     if (allC->size[1] == 0) {
       /*  Si no es posible asignar ninguna cama incremento el contDia e llamo a funcionDia */
-      nm1d2 = *contDia;
-      if (nm1d2 > 2147483646) {
-        *contDia = MAX_int32_T;
-      } else {
-        *contDia = nm1d2 + 1;
-      }
+      /* 'funcionCPrO:38' contDia = contDia + 1; */
+      (*contDia)++;
 
+      /* 'funcionCPrO:39' [contDia,tempUltPosRecXDia,DispME] = funcionDia(NumRec, PCPrO, Dia,UltPosRecXDia, TimeUsoCPrO, TimeUsoS, contDia, DispMExD); */
       b_funcionDia(NumRec, PCPrO, Dia, UltPosRecXDia, TimeUsoCPrO, TimeUsoS,
                    contDia, DispMExD, tempUltPosRecXDia, DispME);
     } else {
-      i53 = j->size[0] * j->size[1];
-      j->size[0] = 1;
-      j->size[1] = allC->size[1];
-      emxEnsureCapacity_int32_T(j, i53);
-      qEnd = allC->size[0] * allC->size[1];
-      for (i53 = 0; i53 < qEnd; i53++) {
-        j->data[i53] = tempUltPosRecXDia->data[(int)(unsigned int)C->data
-          [allC->data[i53] - 1] - 1];
+      /* 'funcionCPrO:40' else */
+      /* 'funcionCPrO:41' [~,u]=unique(auxUPxR(C(allC))); */
+      q = jj->size[0] * jj->size[1];
+      jj->size[0] = 1;
+      jj->size[1] = allC->size[1];
+      emxEnsureCapacity_int32_T(jj, q);
+      nb = allC->size[1];
+      for (q = 0; q < nb; q++) {
+        jj->data[q] = tempUltPosRecXDia->data[C->data[allC->data[q] - 1] - 1];
       }
 
       na = allC->size[1];
       n = allC->size[1] + 1;
-      i53 = idx->size[0] * idx->size[1];
+      yk = allC->size[1];
+      q = idx->size[0] * idx->size[1];
       idx->size[0] = 1;
-      idx->size[1] = allC->size[1];
-      emxEnsureCapacity_int32_T(idx, i53);
-      qEnd = allC->size[1];
-      for (i53 = 0; i53 < qEnd; i53++) {
-        idx->data[i53] = 0;
+      idx->size[1] = yk;
+      emxEnsureCapacity_int32_T(idx, q);
+      for (q = 0; q < yk; q++) {
+        idx->data[q] = 0;
       }
 
-      i53 = iwork->size[0];
+      q = iwork->size[0];
       iwork->size[0] = allC->size[1];
-      emxEnsureCapacity_int32_T(iwork, i53);
-      i53 = allC->size[1] - 1;
-      for (temCPrO = 1; temCPrO <= i53; temCPrO += 2) {
-        if (j->data[temCPrO - 1] <= j->data[temCPrO]) {
-          idx->data[temCPrO - 1] = temCPrO;
-          idx->data[temCPrO] = temCPrO + 1;
+      emxEnsureCapacity_int32_T(iwork, q);
+      q = allC->size[1] - 1;
+      for (k = 1; k <= q; k += 2) {
+        if (jj->data[k - 1] <= jj->data[k]) {
+          idx->data[k - 1] = k;
+          idx->data[k] = k + 1;
         } else {
-          idx->data[temCPrO - 1] = temCPrO + 1;
-          idx->data[temCPrO] = temCPrO;
+          idx->data[k - 1] = k + 1;
+          idx->data[k] = k;
         }
       }
 
@@ -656,1278 +630,1291 @@ void b_funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
         idx->data[allC->size[1] - 1] = allC->size[1];
       }
 
-      nm1d2 = 2;
-      while (nm1d2 < n - 1) {
-        yk = nm1d2 << 1;
-        b_j = 1;
-        for (nb = 1 + nm1d2; nb < n; nb = qEnd + nm1d2) {
-          p = b_j;
+      yk = 2;
+      while (yk < n - 1) {
+        b_idx = yk << 1;
+        j = 1;
+        for (nb = 1 + yk; nb < n; nb = qEnd + yk) {
+          p = j;
           q = nb;
-          qEnd = b_j + yk;
+          qEnd = j + b_idx;
           if (qEnd > n) {
             qEnd = n;
           }
 
-          temCPrO = 0;
-          kEnd = qEnd - b_j;
-          while (temCPrO + 1 <= kEnd) {
-            if (j->data[idx->data[p - 1] - 1] <= j->data[idx->data[q - 1] - 1])
+          k = 0;
+          kEnd = qEnd - j;
+          while (k + 1 <= kEnd) {
+            if (jj->data[idx->data[p - 1] - 1] <= jj->data[idx->data[q - 1] - 1])
             {
-              iwork->data[temCPrO] = idx->data[p - 1];
+              iwork->data[k] = idx->data[p - 1];
               p++;
               if (p == nb) {
                 while (q < qEnd) {
-                  temCPrO++;
-                  iwork->data[temCPrO] = idx->data[q - 1];
+                  k++;
+                  iwork->data[k] = idx->data[q - 1];
                   q++;
                 }
               }
             } else {
-              iwork->data[temCPrO] = idx->data[q - 1];
+              iwork->data[k] = idx->data[q - 1];
               q++;
               if (q == qEnd) {
                 while (p < nb) {
-                  temCPrO++;
-                  iwork->data[temCPrO] = idx->data[p - 1];
+                  k++;
+                  iwork->data[k] = idx->data[p - 1];
                   p++;
                 }
               }
             }
 
-            temCPrO++;
+            k++;
           }
 
-          for (temCPrO = 0; temCPrO < kEnd; temCPrO++) {
-            idx->data[(b_j + temCPrO) - 1] = iwork->data[temCPrO];
+          for (k = 0; k < kEnd; k++) {
+            idx->data[(j + k) - 1] = iwork->data[k];
           }
 
-          b_j = qEnd;
+          j = qEnd;
         }
 
-        nm1d2 = yk;
+        yk = b_idx;
       }
 
-      i53 = b_b->size[0] * b_b->size[1];
-      b_b->size[0] = 1;
-      b_b->size[1] = allC->size[1];
-      emxEnsureCapacity_int32_T(b_b, i53);
-      for (temCPrO = 0; temCPrO < na; temCPrO++) {
-        b_b->data[temCPrO] = j->data[idx->data[temCPrO] - 1];
+      nm1 = (unsigned int)allC->size[1];
+      q = b->size[0] * b->size[1];
+      b->size[0] = 1;
+      b->size[1] = (int)nm1;
+      emxEnsureCapacity_int32_T(b, q);
+      for (k = 0; k < na; k++) {
+        b->data[k] = jj->data[idx->data[k] - 1];
       }
 
       nb = -1;
-      temCPrO = 0;
-      while (temCPrO + 1 <= na) {
-        nm1d2 = b_b->data[temCPrO];
-        yk = temCPrO;
+      k = 0;
+      while (k + 1 <= na) {
+        yk = b->data[k];
+        b_idx = k;
         do {
-          temCPrO++;
-        } while (!((temCPrO + 1 > na) || (b_b->data[temCPrO] != nm1d2)));
+          k++;
+        } while (!((k + 1 > na) || (b->data[k] != yk)));
 
         nb++;
-        b_b->data[nb] = nm1d2;
-        idx->data[nb] = idx->data[yk];
+        b->data[nb] = yk;
+        idx->data[nb] = idx->data[b_idx];
       }
 
-      i53 = iwork->size[0];
+      q = iwork->size[0];
       iwork->size[0] = nb + 1;
-      emxEnsureCapacity_int32_T(iwork, i53);
-      for (temCPrO = 0; temCPrO <= nb; temCPrO++) {
-        iwork->data[temCPrO] = idx->data[temCPrO];
+      emxEnsureCapacity_int32_T(iwork, q);
+      for (k = 0; k <= nb; k++) {
+        iwork->data[k] = idx->data[k];
       }
 
-      i53 = uCPrODisp->size[0] * uCPrODisp->size[1];
+      q = u->size[0];
+      u->size[0] = iwork->size[0];
+      emxEnsureCapacity_int32_T(u, q);
+      nb = iwork->size[0];
+      for (q = 0; q < nb; q++) {
+        u->data[q] = iwork->data[q];
+      }
+
+      /* 'funcionCPrO:41' ~ */
+      /* 'funcionCPrO:42' uCPrODisp=C(allC(u)); */
+      q = uCPrODisp->size[0] * uCPrODisp->size[1];
       uCPrODisp->size[0] = 1;
-      uCPrODisp->size[1] = iwork->size[0];
-      emxEnsureCapacity_uint32_T(uCPrODisp, i53);
-      qEnd = iwork->size[0];
-      for (i53 = 0; i53 < qEnd; i53++) {
-        uCPrODisp->data[i53] = (unsigned int)C->data[allC->data[iwork->data[i53]
-          - 1] - 1];
+      uCPrODisp->size[1] = u->size[0];
+      emxEnsureCapacity_uint32_T(uCPrODisp, q);
+      nb = u->size[0];
+      for (q = 0; q < nb; q++) {
+        uCPrODisp->data[q] = (unsigned int)C->data[allC->data[u->data[q] - 1] -
+          1];
       }
 
-      if (NumRec[0] > 2147483646) {
-        nm1d2 = MAX_int32_T;
+      /* 'funcionCPrO:46' auxUPxE = UltPosRecXDia(contDia,NumRec(1)+1:sum(NumRec(1:2))); */
+      if (NumRec[0] + 1 > b_tmp) {
+        q = 0;
+        p = -1;
       } else {
-        nm1d2 = NumRec[0] + 1;
+        q = NumRec[0];
+        p = b_tmp - 1;
       }
 
-      a = rt_roundd(e_sum(*(int (*)[2])&NumRec[0]));
-      if (a < 2.147483648E+9) {
-        if (a >= -2.147483648E+9) {
-          i53 = (int)a;
-        } else {
-          i53 = MIN_int32_T;
-        }
-      } else {
-        i53 = MAX_int32_T;
-      }
-
-      if (nm1d2 > i53) {
-        i53 = -1;
-      } else {
-        i53 = nm1d2 - 2;
+      yk = auxUPxE->size[0] * auxUPxE->size[1];
+      auxUPxE->size[0] = 1;
+      nb = p - q;
+      auxUPxE->size[1] = nb + 1;
+      emxEnsureCapacity_real_T(auxUPxE, yk);
+      for (p = 0; p <= nb; p++) {
+        auxUPxE->data[p] = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
+          * (q + p)) - 1];
       }
 
       /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los ME. */
+      /* 'funcionCPrO:47' auxPME=PME(1:end-1).*DispME; */
       if (1 > PME->size[1] - 1) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PME->size[1] - 1;
+        nb = PME->size[1] - 1;
       }
 
-      kEnd = x->size[0] * x->size[1];
+      /* 'funcionCPrO:48' [~,allE]=find(auxPME~=0); */
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, kEnd);
-      for (kEnd = 0; kEnd < qEnd; kEnd++) {
-        i54 = (long long)PME->data[kEnd] * DispME->data[kEnd];
-        if (i54 > 2147483647LL) {
-          i54 = 2147483647LL;
-        } else {
-          if (i54 < -2147483648LL) {
-            i54 = -2147483648LL;
-          }
-        }
-
-        x->data[kEnd] = ((int)i54 != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PME->data[q] * DispME->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        kEnd = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, kEnd);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          kEnd = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, kEnd);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      kEnd = C->size[0] * C->size[1];
-      C->size[0] = 1;
-      C->size[1] = j->size[1];
-      emxEnsureCapacity_real_T(C, kEnd);
-      qEnd = j->size[0] * j->size[1];
-      for (kEnd = 0; kEnd < qEnd; kEnd++) {
-        C->data[kEnd] = j->data[kEnd];
+      q = allE->size[0] * allE->size[1];
+      allE->size[0] = 1;
+      allE->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allE, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allE->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:48' ~ */
       /*  Busco los posibles Especialistas a usar. */
-      a = f_sum(*(int (*)[3])&NumRec[0]) + 1.0;
-      b = h_sum(*(int (*)[4])&NumRec[0]);
-      if (a > b) {
-        kEnd = -1;
+      /* 'funcionCPrO:50' auxUPxA = UltPosRecXDia(contDia,sum(NumRec(1:3))+1:sum(NumRec(1:4))); */
+      y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+      ndbl = (((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+        (double)NumRec[3];
+      if (y + 1.0 > ndbl) {
+        q = 0;
+        p = -1;
       } else {
-        kEnd = (int)a - 2;
+        q = (int)(y + 1.0) - 1;
+        p = (int)ndbl - 1;
+      }
+
+      yk = auxUPxA->size[0] * auxUPxA->size[1];
+      auxUPxA->size[0] = 1;
+      nb = p - q;
+      auxUPxA->size[1] = nb + 1;
+      emxEnsureCapacity_real_T(auxUPxA, yk);
+      for (p = 0; p <= nb; p++) {
+        auxUPxA->data[p] = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
+          * (q + p)) - 1];
       }
 
       /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los A. */
+      /* 'funcionCPrO:51' [~,allA]=find(PMA(1:end-1)~=0); */
       if (1 > PMA->size[1] - 1) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PMA->size[1] - 1;
+        nb = PMA->size[1] - 1;
       }
 
-      n = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, n);
-      for (n = 0; n < qEnd; n++) {
-        x->data[n] = (PMA->data[n] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PMA->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        n = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, n);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          n = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, n);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      n = allA->size[0] * allA->size[1];
+      q = allA->size[0] * allA->size[1];
       allA->size[0] = 1;
-      allA->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allA, n);
-      qEnd = j->size[0] * j->size[1];
-      for (n = 0; n < qEnd; n++) {
-        allA->data[n] = j->data[n];
+      allA->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allA, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allA->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:51' ~ */
       /*  Busco los posibles Asistentes a usar. */
-      a = h_sum(*(int (*)[4])&NumRec[0]) + 1.0;
-      b = i_sum(*(int (*)[5])&NumRec[0]);
-      if (a > b) {
-        n = -1;
+      /* 'funcionCPrO:53' auxUPxAn = UltPosRecXDia(contDia,sum(NumRec(1:4))+1:sum(NumRec(1:5))); */
+      y = (((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+        (double)NumRec[3];
+      ndbl = ((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+              (double)NumRec[3]) + (double)NumRec[4];
+      if (y + 1.0 > ndbl) {
+        q = 0;
+        p = -1;
       } else {
-        n = (int)a - 2;
+        q = (int)(y + 1.0) - 1;
+        p = (int)ndbl - 1;
+      }
+
+      yk = auxUPxAn->size[0] * auxUPxAn->size[1];
+      auxUPxAn->size[0] = 1;
+      nb = p - q;
+      auxUPxAn->size[1] = nb + 1;
+      emxEnsureCapacity_real_T(auxUPxAn, yk);
+      for (p = 0; p <= nb; p++) {
+        auxUPxAn->data[p] = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size
+          [0] * (q + p)) - 1];
       }
 
       /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los An. */
+      /* 'funcionCPrO:54' [~,allAn]=find(PMAn(1:end-1)~=0); */
       if (1 > PMAn->size[1] - 1) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PMAn->size[1] - 1;
+        nb = PMAn->size[1] - 1;
       }
 
-      na = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, na);
-      for (na = 0; na < qEnd; na++) {
-        x->data[na] = (PMAn->data[na] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PMAn->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        na = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, na);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          na = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, na);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      na = allAn->size[0] * allAn->size[1];
+      q = allAn->size[0] * allAn->size[1];
       allAn->size[0] = 1;
-      allAn->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allAn, na);
-      qEnd = j->size[0] * j->size[1];
-      for (na = 0; na < qEnd; na++) {
-        allAn->data[na] = j->data[na];
+      allAn->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allAn, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allAn->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:54' ~ */
       /*  Busco los posibles Anestesistas a usar. */
-      a = e_sum(*(int (*)[2])&NumRec[0]) + 1.0;
-      b = f_sum(*(int (*)[3])&NumRec[0]);
-      if (a > b) {
-        na = -1;
+      /* 'funcionCPrO:56' auxUPxS = UltPosRecXDia(contDia,sum(NumRec(1:2))+1:sum(NumRec(1:3))); */
+      y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+      if (y_tmp + 1.0 > y) {
+        q = 0;
+        p = -1;
       } else {
-        na = (int)a - 2;
+        q = (int)(y_tmp + 1.0) - 1;
+        p = (int)y - 1;
+      }
+
+      yk = auxUPxS->size[0] * auxUPxS->size[1];
+      auxUPxS->size[0] = 1;
+      nb = p - q;
+      auxUPxS->size[1] = nb + 1;
+      emxEnsureCapacity_real_T(auxUPxS, yk);
+      for (p = 0; p <= nb; p++) {
+        auxUPxS->data[p] = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
+          * (q + p)) - 1];
       }
 
       /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los S. */
+      /* 'funcionCPrO:57' [~,allS]=find(PS(1:end)~=0); */
       if (1 > PS->size[1]) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PS->size[1];
+        nb = PS->size[1];
       }
 
-      p = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, p);
-      for (p = 0; p < qEnd; p++) {
-        x->data[p] = (PS->data[p] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PS->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        p = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, p);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          p = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, p);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      p = allS->size[0] * allS->size[1];
+      q = allS->size[0] * allS->size[1];
       allS->size[0] = 1;
-      allS->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allS, p);
-      qEnd = j->size[0] * j->size[1];
-      for (p = 0; p < qEnd; p++) {
-        allS->data[p] = j->data[p];
+      allS->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allS, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allS->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:57' ~ */
       /*  Busco los posibles Salones a usar. */
       /* auxUPxCPO = UltPosRecXDia(contDia,NumRec(1:5)+1:sum(NumRec(1:6)));% Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los ME. */
+      /* 'funcionCPrO:60' [~,allCPO]=find(PCPO(1:end)~=0); */
       if (1 > PCPO->size[1]) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PCPO->size[1];
+        nb = PCPO->size[1];
       }
 
-      p = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, p);
-      for (p = 0; p < qEnd; p++) {
-        x->data[p] = (PCPO->data[p] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PCPO->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        p = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, p);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          p = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, p);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      p = allCPO->size[0] * allCPO->size[1];
+      q = allCPO->size[0] * allCPO->size[1];
       allCPO->size[0] = 1;
-      allCPO->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allCPO, p);
-      qEnd = j->size[0] * j->size[1];
-      for (p = 0; p < qEnd; p++) {
-        allCPO->data[p] = j->data[p];
+      allCPO->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allCPO, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allCPO->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:60' ~ */
       /*  Busco los posibles Especialistas a usar. */
       /* auxUPxCR = UltPosRecXDia(contDia,sum(NumRec(1:6))+1:sum(NumRec(1:7)));% Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los S. */
+      /* 'funcionCPrO:63' [~,allCR]=find(PCR(1:end)~=0); */
       if (1 > PCR->size[1]) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PCR->size[1];
+        nb = PCR->size[1];
       }
 
-      p = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, p);
-      for (p = 0; p < qEnd; p++) {
-        x->data[p] = (PCR->data[p] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PCR->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        p = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, p);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          p = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, p);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      p = allCR->size[0] * allCR->size[1];
+      q = allCR->size[0] * allCR->size[1];
       allCR->size[0] = 1;
-      allCR->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allCR, p);
-      qEnd = j->size[0] * j->size[1];
-      for (p = 0; p < qEnd; p++) {
-        allCR->data[p] = j->data[p];
+      allCR->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allCR, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allCR->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:63' ~ */
       /*  Busco los posibles Salones a usar. */
+      /* 'funcionCPrO:64' temCPrO=-1; */
       temCPrO = -1;
-      b_j = 0;
+
+      /* 'funcionCPrO:66' for j=1:length(uCPrODisp) */
+      j = 0;
       do {
         exitg2 = 0;
-        nm1d2 = iwork->size[0];
-        if (b_j <= nm1d2 - 1) {
-          nm1d2 = tempUltPosRecXDia->data[(int)uCPrODisp->data[b_j] - 1];
-          if ((nm1d2 < 0) && (TimeUsoCPrO < MIN_int32_T - nm1d2)) {
-            e_qY = MIN_int32_T;
-          } else if ((nm1d2 > 0) && (TimeUsoCPrO > MAX_int32_T - nm1d2)) {
-            e_qY = MAX_int32_T;
-          } else {
-            e_qY = nm1d2 + TimeUsoCPrO;
-          }
+        yk = u->size[0];
+        if (j <= yk - 1) {
+          /* 'funcionCPrO:68' EndCPrOAxD = auxUPxR(uCPrODisp(j))+TimeUsoCPrO; */
+          b_EndCPrOAxD = tempUltPosRecXDia->data[(int)uCPrODisp->data[j] - 1] +
+            TimeUsoCPrO;
 
-          if ((e_qY < 0) && (TimeUsoS < MIN_int32_T - e_qY)) {
-            f_qY = MIN_int32_T;
-          } else if ((e_qY > 0) && (TimeUsoS > MAX_int32_T - e_qY)) {
-            f_qY = MAX_int32_T;
-          } else {
-            f_qY = e_qY + TimeUsoS;
-          }
+          /* 'funcionCPrO:69' EndRPxD = EndCPrOAxD+TimeUsoS; */
+          b_EndRPxD = b_EndCPrOAxD + TimeUsoS;
 
-          p = x->size[0] * x->size[1];
+          /* 'funcionCPrO:71' [~,E]=find(auxUPxE(allE)<=EndCPrOAxD); */
+          q = x->size[0] * x->size[1];
           x->size[0] = 1;
-          x->size[1] = C->size[1];
-          emxEnsureCapacity_boolean_T(x, p);
-          qEnd = C->size[1];
-          for (p = 0; p < qEnd; p++) {
-            x->data[p] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
-              * (i53 + (int)C->data[p])) - 1] <= e_qY);
+          x->size[1] = allE->size[1];
+          emxEnsureCapacity_boolean_T(x, q);
+          nb = allE->size[1];
+          for (q = 0; q < nb; q++) {
+            x->data[q] = (auxUPxE->data[allE->data[q] - 1] <= b_EndCPrOAxD);
           }
 
           if (x->size[1] == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           } else {
-            yk = 0;
-            p = j->size[0] * j->size[1];
-            j->size[0] = 1;
-            j->size[1] = x->size[1];
-            emxEnsureCapacity_int32_T(j, p);
-            nm1d2 = 1;
+            b_idx = 0;
+            q = jj->size[0] * jj->size[1];
+            jj->size[0] = 1;
+            jj->size[1] = x->size[1];
+            emxEnsureCapacity_int32_T(jj, q);
+            yk = 1;
             exitg1 = false;
-            while ((!exitg1) && (nm1d2 <= x->size[1])) {
-              if (x->data[nm1d2 - 1]) {
-                yk++;
-                j->data[yk - 1] = nm1d2;
-                if (yk >= x->size[1]) {
+            while ((!exitg1) && (yk <= x->size[1])) {
+              if (x->data[yk - 1]) {
+                b_idx++;
+                jj->data[b_idx - 1] = yk;
+                if (b_idx >= x->size[1]) {
                   exitg1 = true;
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               } else {
-                nm1d2++;
+                yk++;
               }
             }
 
             if (x->size[1] == 1) {
-              if (yk == 0) {
-                j->size[0] = 1;
-                j->size[1] = 0;
+              if (b_idx == 0) {
+                jj->size[0] = 1;
+                jj->size[1] = 0;
               }
-            } else if (1 > yk) {
-              j->size[1] = 0;
             } else {
-              p = j->size[0] * j->size[1];
-              j->size[1] = yk;
-              emxEnsureCapacity_int32_T(j, p);
+              q = jj->size[0] * jj->size[1];
+              if (1 > b_idx) {
+                jj->size[1] = 0;
+              } else {
+                jj->size[1] = b_idx;
+              }
+
+              emxEnsureCapacity_int32_T(jj, q);
             }
           }
 
-          p = E->size[0] * E->size[1];
+          q = E->size[0] * E->size[1];
           E->size[0] = 1;
-          E->size[1] = j->size[1];
-          emxEnsureCapacity_int32_T(E, p);
-          qEnd = j->size[0] * j->size[1];
-          for (p = 0; p < qEnd; p++) {
-            E->data[p] = j->data[p];
+          E->size[1] = jj->size[1];
+          emxEnsureCapacity_int32_T(E, q);
+          nb = jj->size[1];
+          for (q = 0; q < nb; q++) {
+            E->data[q] = jj->data[q];
           }
 
+          /* 'funcionCPrO:71' ~ */
           /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
-          p = x->size[0] * x->size[1];
+          /* 'funcionCPrO:72' [~,A]=find(auxUPxA(allA)<=EndCPrOAxD); */
+          q = x->size[0] * x->size[1];
           x->size[0] = 1;
           x->size[1] = allA->size[1];
-          emxEnsureCapacity_boolean_T(x, p);
-          qEnd = allA->size[1];
-          for (p = 0; p < qEnd; p++) {
-            x->data[p] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
-              * (kEnd + allA->data[p])) - 1] <= e_qY);
+          emxEnsureCapacity_boolean_T(x, q);
+          nb = allA->size[1];
+          for (q = 0; q < nb; q++) {
+            x->data[q] = (auxUPxA->data[allA->data[q] - 1] <= b_EndCPrOAxD);
           }
 
           if (x->size[1] == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           } else {
-            yk = 0;
-            p = j->size[0] * j->size[1];
-            j->size[0] = 1;
-            j->size[1] = x->size[1];
-            emxEnsureCapacity_int32_T(j, p);
-            nm1d2 = 1;
+            b_idx = 0;
+            q = jj->size[0] * jj->size[1];
+            jj->size[0] = 1;
+            jj->size[1] = x->size[1];
+            emxEnsureCapacity_int32_T(jj, q);
+            yk = 1;
             exitg1 = false;
-            while ((!exitg1) && (nm1d2 <= x->size[1])) {
-              if (x->data[nm1d2 - 1]) {
-                yk++;
-                j->data[yk - 1] = nm1d2;
-                if (yk >= x->size[1]) {
+            while ((!exitg1) && (yk <= x->size[1])) {
+              if (x->data[yk - 1]) {
+                b_idx++;
+                jj->data[b_idx - 1] = yk;
+                if (b_idx >= x->size[1]) {
                   exitg1 = true;
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               } else {
-                nm1d2++;
+                yk++;
               }
             }
 
             if (x->size[1] == 1) {
-              if (yk == 0) {
-                j->size[0] = 1;
-                j->size[1] = 0;
+              if (b_idx == 0) {
+                jj->size[0] = 1;
+                jj->size[1] = 0;
               }
-            } else if (1 > yk) {
-              j->size[1] = 0;
             } else {
-              p = j->size[0] * j->size[1];
-              j->size[1] = yk;
-              emxEnsureCapacity_int32_T(j, p);
+              q = jj->size[0] * jj->size[1];
+              if (1 > b_idx) {
+                jj->size[1] = 0;
+              } else {
+                jj->size[1] = b_idx;
+              }
+
+              emxEnsureCapacity_int32_T(jj, q);
             }
           }
 
-          p = A->size[0] * A->size[1];
+          q = A->size[0] * A->size[1];
           A->size[0] = 1;
-          A->size[1] = j->size[1];
-          emxEnsureCapacity_int32_T(A, p);
-          qEnd = j->size[0] * j->size[1];
-          for (p = 0; p < qEnd; p++) {
-            A->data[p] = j->data[p];
+          A->size[1] = jj->size[1];
+          emxEnsureCapacity_int32_T(A, q);
+          nb = jj->size[1];
+          for (q = 0; q < nb; q++) {
+            A->data[q] = jj->data[q];
           }
 
+          /* 'funcionCPrO:72' ~ */
           /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
-          p = x->size[0] * x->size[1];
+          /* 'funcionCPrO:73' [~,An]=find(auxUPxAn(allAn)<=EndCPrOAxD); */
+          q = x->size[0] * x->size[1];
           x->size[0] = 1;
           x->size[1] = allAn->size[1];
-          emxEnsureCapacity_boolean_T(x, p);
-          qEnd = allAn->size[1];
-          for (p = 0; p < qEnd; p++) {
-            x->data[p] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
-              * (n + allAn->data[p])) - 1] <= e_qY);
+          emxEnsureCapacity_boolean_T(x, q);
+          nb = allAn->size[1];
+          for (q = 0; q < nb; q++) {
+            x->data[q] = (auxUPxAn->data[allAn->data[q] - 1] <= b_EndCPrOAxD);
           }
 
           if (x->size[1] == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           } else {
-            yk = 0;
-            p = j->size[0] * j->size[1];
-            j->size[0] = 1;
-            j->size[1] = x->size[1];
-            emxEnsureCapacity_int32_T(j, p);
-            nm1d2 = 1;
+            b_idx = 0;
+            q = jj->size[0] * jj->size[1];
+            jj->size[0] = 1;
+            jj->size[1] = x->size[1];
+            emxEnsureCapacity_int32_T(jj, q);
+            yk = 1;
             exitg1 = false;
-            while ((!exitg1) && (nm1d2 <= x->size[1])) {
-              if (x->data[nm1d2 - 1]) {
-                yk++;
-                j->data[yk - 1] = nm1d2;
-                if (yk >= x->size[1]) {
+            while ((!exitg1) && (yk <= x->size[1])) {
+              if (x->data[yk - 1]) {
+                b_idx++;
+                jj->data[b_idx - 1] = yk;
+                if (b_idx >= x->size[1]) {
                   exitg1 = true;
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               } else {
-                nm1d2++;
+                yk++;
               }
             }
 
             if (x->size[1] == 1) {
-              if (yk == 0) {
-                j->size[0] = 1;
-                j->size[1] = 0;
+              if (b_idx == 0) {
+                jj->size[0] = 1;
+                jj->size[1] = 0;
               }
-            } else if (1 > yk) {
-              j->size[1] = 0;
             } else {
-              p = j->size[0] * j->size[1];
-              j->size[1] = yk;
-              emxEnsureCapacity_int32_T(j, p);
+              q = jj->size[0] * jj->size[1];
+              if (1 > b_idx) {
+                jj->size[1] = 0;
+              } else {
+                jj->size[1] = b_idx;
+              }
+
+              emxEnsureCapacity_int32_T(jj, q);
             }
           }
 
-          p = An->size[0] * An->size[1];
+          q = An->size[0] * An->size[1];
           An->size[0] = 1;
-          An->size[1] = j->size[1];
-          emxEnsureCapacity_int32_T(An, p);
-          qEnd = j->size[0] * j->size[1];
-          for (p = 0; p < qEnd; p++) {
-            An->data[p] = j->data[p];
+          An->size[1] = jj->size[1];
+          emxEnsureCapacity_int32_T(An, q);
+          nb = jj->size[1];
+          for (q = 0; q < nb; q++) {
+            An->data[q] = jj->data[q];
           }
 
+          /* 'funcionCPrO:73' ~ */
           /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
-          p = x->size[0] * x->size[1];
+          /* 'funcionCPrO:74' [~,S]=find(auxUPxS(allS)<=EndCPrOAxD); */
+          q = x->size[0] * x->size[1];
           x->size[0] = 1;
           x->size[1] = allS->size[1];
-          emxEnsureCapacity_boolean_T(x, p);
-          qEnd = allS->size[1];
-          for (p = 0; p < qEnd; p++) {
-            x->data[p] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
-              * (na + allS->data[p])) - 1] <= e_qY);
+          emxEnsureCapacity_boolean_T(x, q);
+          nb = allS->size[1];
+          for (q = 0; q < nb; q++) {
+            x->data[q] = (auxUPxS->data[allS->data[q] - 1] <= b_EndCPrOAxD);
           }
 
           if (x->size[1] == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           } else {
-            yk = 0;
-            p = j->size[0] * j->size[1];
-            j->size[0] = 1;
-            j->size[1] = x->size[1];
-            emxEnsureCapacity_int32_T(j, p);
-            nm1d2 = 1;
+            b_idx = 0;
+            q = jj->size[0] * jj->size[1];
+            jj->size[0] = 1;
+            jj->size[1] = x->size[1];
+            emxEnsureCapacity_int32_T(jj, q);
+            yk = 1;
             exitg1 = false;
-            while ((!exitg1) && (nm1d2 <= x->size[1])) {
-              if (x->data[nm1d2 - 1]) {
-                yk++;
-                j->data[yk - 1] = nm1d2;
-                if (yk >= x->size[1]) {
+            while ((!exitg1) && (yk <= x->size[1])) {
+              if (x->data[yk - 1]) {
+                b_idx++;
+                jj->data[b_idx - 1] = yk;
+                if (b_idx >= x->size[1]) {
                   exitg1 = true;
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               } else {
-                nm1d2++;
+                yk++;
               }
             }
 
             if (x->size[1] == 1) {
-              if (yk == 0) {
-                j->size[0] = 1;
-                j->size[1] = 0;
+              if (b_idx == 0) {
+                jj->size[0] = 1;
+                jj->size[1] = 0;
               }
-            } else if (1 > yk) {
-              j->size[1] = 0;
             } else {
-              p = j->size[0] * j->size[1];
-              j->size[1] = yk;
-              emxEnsureCapacity_int32_T(j, p);
+              q = jj->size[0] * jj->size[1];
+              if (1 > b_idx) {
+                jj->size[1] = 0;
+              } else {
+                jj->size[1] = b_idx;
+              }
+
+              emxEnsureCapacity_int32_T(jj, q);
             }
           }
 
-          p = S->size[0] * S->size[1];
+          q = S->size[0] * S->size[1];
           S->size[0] = 1;
-          S->size[1] = j->size[1];
-          emxEnsureCapacity_int32_T(S, p);
-          qEnd = j->size[0] * j->size[1];
-          for (p = 0; p < qEnd; p++) {
-            S->data[p] = j->data[p];
+          S->size[1] = jj->size[1];
+          emxEnsureCapacity_int32_T(S, q);
+          nb = jj->size[1];
+          for (q = 0; q < nb; q++) {
+            S->data[q] = jj->data[q];
           }
 
+          /* 'funcionCPrO:74' ~ */
           /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo.         */
+          /* 'funcionCPrO:76' if TimeUsoCPO == 0 */
           if (TimeUsoCPO == 0) {
-            p = CPO->size[0] * CPO->size[1];
+            /* 'funcionCPrO:77' CPO=0; */
+            q = CPO->size[0] * CPO->size[1];
             CPO->size[0] = 1;
             CPO->size[1] = 1;
-            emxEnsureCapacity_int32_T(CPO, p);
+            emxEnsureCapacity_int32_T(CPO, q);
             CPO->data[0] = 0;
-            nm1d2 = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-            if ((nm1d2 < 0) && (e_qY < MIN_int32_T - nm1d2)) {
-              nm1d2 = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (e_qY > MAX_int32_T - nm1d2)) {
-              nm1d2 = MAX_int32_T;
-            } else {
-              nm1d2 += e_qY;
-            }
 
-            if ((nm1d2 < 0) && (TimeUsoS < MIN_int32_T - nm1d2)) {
-              nm1d2 = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (TimeUsoS > MAX_int32_T - nm1d2)) {
-              nm1d2 = MAX_int32_T;
-            } else {
-              nm1d2 += TimeUsoS;
-            }
+            /* 'funcionCPrO:78' IniCR=Dia(contDia,3)+EndCPrOAxD+TimeUsoS; */
+            IniCR = ((Dia->data[(*contDia + (Dia->size[0] << 1)) - 1] +
+                      b_EndCPrOAxD) + TimeUsoS) - 1;
 
-            if ((nm1d2 < 0) && (TimeUsoCR < MIN_int32_T - nm1d2)) {
-              q = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (TimeUsoCR > MAX_int32_T - nm1d2)) {
-              q = MAX_int32_T;
-            } else {
-              q = nm1d2 + TimeUsoCR;
-            }
-
-            if (q < -2147483647) {
-              q = MIN_int32_T;
-            } else {
-              q--;
-            }
-
-            if (nm1d2 > q) {
+            /* 'funcionCPrO:79' [~,CR]=find(sum(H(IniCR:IniCR+TimeUsoCR-1,sum(NumRec(1:6))+allCR))==0); */
+            q = IniCR + TimeUsoCR;
+            if (IniCR + 1 > q) {
               p = 0;
               q = 0;
             } else {
-              p = nm1d2 - 1;
+              p = IniCR;
             }
 
-            a = j_sum(*(int (*)[6])&NumRec[0]);
-            nb = b_H->size[0] * b_H->size[1];
-            qEnd = q - p;
-            b_H->size[0] = qEnd;
+            y = NumRec[0];
+            for (k = 0; k < 5; k++) {
+              y += (double)NumRec[k + 1];
+            }
+
+            yk = b_H->size[0] * b_H->size[1];
+            nb = q - p;
+            b_H->size[0] = nb;
             b_H->size[1] = allCR->size[1];
-            emxEnsureCapacity_real_T(b_H, nb);
-            yk = allCR->size[1];
-            for (nb = 0; nb < yk; nb++) {
-              for (nm1d2 = 0; nm1d2 < qEnd; nm1d2++) {
-                b_H->data[nm1d2 + b_H->size[0] * nb] = H->data[(p + nm1d2) +
-                  H->size[0] * ((int)(a + (double)allCR->data[nb]) - 1)];
+            emxEnsureCapacity_real_T(b_H, yk);
+            b_idx = allCR->size[1];
+            for (q = 0; q < b_idx; q++) {
+              for (yk = 0; yk < nb; yk++) {
+                b_H->data[yk + b_H->size[0] * q] = H->data[(p + yk) + H->size[0]
+                  * ((int)(y + (double)allCR->data[q]) - 1)];
               }
             }
 
-            m_sum(b_H, r12);
-            p = x->size[0] * x->size[1];
+            f_sum(b_H, r17);
+            q = x->size[0] * x->size[1];
             x->size[0] = 1;
-            x->size[1] = r12->size[1];
-            emxEnsureCapacity_boolean_T(x, p);
-            qEnd = r12->size[0] * r12->size[1];
-            for (p = 0; p < qEnd; p++) {
-              x->data[p] = (r12->data[p] == 0.0);
+            x->size[1] = r17->size[1];
+            emxEnsureCapacity_boolean_T(x, q);
+            nb = r17->size[1];
+            for (q = 0; q < nb; q++) {
+              x->data[q] = (r17->data[q] == 0.0);
             }
 
             if (x->size[1] == 0) {
-              j->size[0] = 1;
-              j->size[1] = 0;
+              jj->size[0] = 1;
+              jj->size[1] = 0;
             } else {
-              yk = 0;
-              p = j->size[0] * j->size[1];
-              j->size[0] = 1;
-              j->size[1] = x->size[1];
-              emxEnsureCapacity_int32_T(j, p);
-              nm1d2 = 1;
+              b_idx = 0;
+              q = jj->size[0] * jj->size[1];
+              jj->size[0] = 1;
+              jj->size[1] = x->size[1];
+              emxEnsureCapacity_int32_T(jj, q);
+              yk = 1;
               exitg1 = false;
-              while ((!exitg1) && (nm1d2 <= x->size[1])) {
-                if (x->data[nm1d2 - 1]) {
-                  yk++;
-                  j->data[yk - 1] = nm1d2;
-                  if (yk >= x->size[1]) {
+              while ((!exitg1) && (yk <= x->size[1])) {
+                if (x->data[yk - 1]) {
+                  b_idx++;
+                  jj->data[b_idx - 1] = yk;
+                  if (b_idx >= x->size[1]) {
                     exitg1 = true;
                   } else {
-                    nm1d2++;
+                    yk++;
                   }
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               }
 
               if (x->size[1] == 1) {
-                if (yk == 0) {
-                  j->size[0] = 1;
-                  j->size[1] = 0;
+                if (b_idx == 0) {
+                  jj->size[0] = 1;
+                  jj->size[1] = 0;
                 }
-              } else if (1 > yk) {
-                j->size[1] = 0;
               } else {
-                p = j->size[0] * j->size[1];
-                j->size[1] = yk;
-                emxEnsureCapacity_int32_T(j, p);
+                q = jj->size[0] * jj->size[1];
+                if (1 > b_idx) {
+                  jj->size[1] = 0;
+                } else {
+                  jj->size[1] = b_idx;
+                }
+
+                emxEnsureCapacity_int32_T(jj, q);
               }
             }
 
-            p = CR->size[0] * CR->size[1];
+            q = CR->size[0] * CR->size[1];
             CR->size[0] = 1;
-            CR->size[1] = j->size[1];
-            emxEnsureCapacity_real_T(CR, p);
-            qEnd = j->size[0] * j->size[1];
-            for (p = 0; p < qEnd; p++) {
-              CR->data[p] = j->data[p];
+            CR->size[1] = jj->size[1];
+            emxEnsureCapacity_int32_T(CR, q);
+            nb = jj->size[1];
+            for (q = 0; q < nb; q++) {
+              CR->data[q] = jj->data[q];
             }
+
+            /* 'funcionCPrO:79' ~ */
           } else {
-            nm1d2 = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-            if ((nm1d2 < 0) && (e_qY < MIN_int32_T - nm1d2)) {
-              nm1d2 = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (e_qY > MAX_int32_T - nm1d2)) {
-              nm1d2 = MAX_int32_T;
+            /* 'funcionCPrO:80' else */
+            /* 'funcionCPrO:81' IniCPO=Dia(contDia,3)+EndCPrOAxD+TimeUsoS; */
+            IniCPO = ((Dia->data[(*contDia + (Dia->size[0] << 1)) - 1] +
+                       b_EndCPrOAxD) + TimeUsoS) - 1;
+
+            /* 'funcionCPrO:82' EndCPO=IniCPO+TimeUsoCPO-1; */
+            EndCPO = (IniCPO + TimeUsoCPO) - 1;
+
+            /* 'funcionCPrO:83' [~,CPO]=find(sum(H(IniCPO:EndCPO,sum(NumRec(1:5))+allCPO))==0); */
+            if (IniCPO + 1 > EndCPO + 1) {
+              q = 0;
+              p = -1;
             } else {
-              nm1d2 += e_qY;
+              q = IniCPO;
+              p = EndCPO;
             }
 
-            if ((nm1d2 < 0) && (TimeUsoS < MIN_int32_T - nm1d2)) {
-              nm1d2 = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (TimeUsoS > MAX_int32_T - nm1d2)) {
-              nm1d2 = MAX_int32_T;
-            } else {
-              nm1d2 += TimeUsoS;
-            }
-
-            if ((nm1d2 < 0) && (TimeUsoCPO < MIN_int32_T - nm1d2)) {
-              q = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (TimeUsoCPO > MAX_int32_T - nm1d2)) {
-              q = MAX_int32_T;
-            } else {
-              q = nm1d2 + TimeUsoCPO;
-            }
-
-            if (q < -2147483647) {
-              q = MIN_int32_T;
-            } else {
-              q--;
-            }
-
-            if (nm1d2 > q) {
-              p = 0;
-              nb = 0;
-            } else {
-              p = nm1d2 - 1;
-              nb = q;
-            }
-
-            a = i_sum(*(int (*)[5])&NumRec[0]);
-            nm1d2 = b_H->size[0] * b_H->size[1];
-            qEnd = nb - p;
-            b_H->size[0] = qEnd;
+            y = ((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+                 (double)NumRec[3]) + (double)NumRec[4];
+            yk = b_H->size[0] * b_H->size[1];
+            nb = p - q;
+            b_H->size[0] = nb + 1;
             b_H->size[1] = allCPO->size[1];
-            emxEnsureCapacity_real_T(b_H, nm1d2);
-            yk = allCPO->size[1];
-            for (nb = 0; nb < yk; nb++) {
-              for (nm1d2 = 0; nm1d2 < qEnd; nm1d2++) {
-                b_H->data[nm1d2 + b_H->size[0] * nb] = H->data[(p + nm1d2) +
-                  H->size[0] * ((int)(a + (double)allCPO->data[nb]) - 1)];
+            emxEnsureCapacity_real_T(b_H, yk);
+            b_idx = allCPO->size[1];
+            for (p = 0; p < b_idx; p++) {
+              for (yk = 0; yk <= nb; yk++) {
+                b_H->data[yk + b_H->size[0] * p] = H->data[(q + yk) + H->size[0]
+                  * ((int)(y + (double)allCPO->data[p]) - 1)];
               }
             }
 
-            m_sum(b_H, r12);
-            p = x->size[0] * x->size[1];
+            f_sum(b_H, r17);
+            q = x->size[0] * x->size[1];
             x->size[0] = 1;
-            x->size[1] = r12->size[1];
-            emxEnsureCapacity_boolean_T(x, p);
-            qEnd = r12->size[0] * r12->size[1];
-            for (p = 0; p < qEnd; p++) {
-              x->data[p] = (r12->data[p] == 0.0);
+            x->size[1] = r17->size[1];
+            emxEnsureCapacity_boolean_T(x, q);
+            nb = r17->size[1];
+            for (q = 0; q < nb; q++) {
+              x->data[q] = (r17->data[q] == 0.0);
             }
 
             if (x->size[1] == 0) {
-              j->size[0] = 1;
-              j->size[1] = 0;
+              jj->size[0] = 1;
+              jj->size[1] = 0;
             } else {
-              yk = 0;
-              p = j->size[0] * j->size[1];
-              j->size[0] = 1;
-              j->size[1] = x->size[1];
-              emxEnsureCapacity_int32_T(j, p);
-              nm1d2 = 1;
+              b_idx = 0;
+              q = jj->size[0] * jj->size[1];
+              jj->size[0] = 1;
+              jj->size[1] = x->size[1];
+              emxEnsureCapacity_int32_T(jj, q);
+              yk = 1;
               exitg1 = false;
-              while ((!exitg1) && (nm1d2 <= x->size[1])) {
-                if (x->data[nm1d2 - 1]) {
-                  yk++;
-                  j->data[yk - 1] = nm1d2;
-                  if (yk >= x->size[1]) {
+              while ((!exitg1) && (yk <= x->size[1])) {
+                if (x->data[yk - 1]) {
+                  b_idx++;
+                  jj->data[b_idx - 1] = yk;
+                  if (b_idx >= x->size[1]) {
                     exitg1 = true;
                   } else {
-                    nm1d2++;
+                    yk++;
                   }
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               }
 
               if (x->size[1] == 1) {
-                if (yk == 0) {
-                  j->size[0] = 1;
-                  j->size[1] = 0;
+                if (b_idx == 0) {
+                  jj->size[0] = 1;
+                  jj->size[1] = 0;
                 }
-              } else if (1 > yk) {
-                j->size[1] = 0;
               } else {
-                p = j->size[0] * j->size[1];
-                j->size[1] = yk;
-                emxEnsureCapacity_int32_T(j, p);
+                q = jj->size[0] * jj->size[1];
+                if (1 > b_idx) {
+                  jj->size[1] = 0;
+                } else {
+                  jj->size[1] = b_idx;
+                }
+
+                emxEnsureCapacity_int32_T(jj, q);
               }
             }
 
-            p = CPO->size[0] * CPO->size[1];
+            q = CPO->size[0] * CPO->size[1];
             CPO->size[0] = 1;
-            CPO->size[1] = j->size[1];
-            emxEnsureCapacity_int32_T(CPO, p);
-            qEnd = j->size[0] * j->size[1];
-            for (p = 0; p < qEnd; p++) {
-              CPO->data[p] = j->data[p];
+            CPO->size[1] = jj->size[1];
+            emxEnsureCapacity_int32_T(CPO, q);
+            nb = jj->size[1];
+            for (q = 0; q < nb; q++) {
+              CPO->data[q] = jj->data[q];
             }
 
+            /* 'funcionCPrO:83' ~ */
             /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
-            a = j_sum(*(int (*)[6])&NumRec[0]);
-            p = b_H->size[0] * b_H->size[1];
+            /* 'funcionCPrO:84' [~,CR]=find(~sum(H(EndCPO+1:EndCPO+TimeUsoCR,sum(NumRec(1:6))+allCR))); */
+            y = NumRec[0];
+            for (k = 0; k < 5; k++) {
+              y += (double)NumRec[k + 1];
+            }
+
+            q = b_H->size[0] * b_H->size[1];
             b_H->size[0] = TimeUsoCR;
             b_H->size[1] = allCR->size[1];
-            emxEnsureCapacity_real_T(b_H, p);
-            qEnd = allCR->size[1];
-            for (p = 0; p < qEnd; p++) {
-              for (nb = 0; nb < TimeUsoCR; nb++) {
-                yk = 1 + nb;
-                if ((q < 0) && (yk < MIN_int32_T - q)) {
-                  nm1d2 = MIN_int32_T;
-                } else if ((q > 0) && (yk > MAX_int32_T - q)) {
-                  nm1d2 = MAX_int32_T;
-                } else {
-                  nm1d2 = q + yk;
-                }
-
-                b_H->data[nb + b_H->size[0] * p] = H->data[(nm1d2 + H->size[0] *
-                  ((int)(a + (double)allCR->data[p]) - 1)) - 1];
+            emxEnsureCapacity_real_T(b_H, q);
+            nb = allCR->size[1];
+            for (q = 0; q < nb; q++) {
+              for (p = 0; p < TimeUsoCR; p++) {
+                b_H->data[p + b_H->size[0] * q] = H->data[((p + EndCPO) +
+                  H->size[0] * ((int)(y + (double)allCR->data[q]) - 1)) + 1];
               }
             }
 
-            m_sum(b_H, r12);
-            p = x->size[0] * x->size[1];
+            f_sum(b_H, r17);
+            q = x->size[0] * x->size[1];
             x->size[0] = 1;
-            x->size[1] = r12->size[1];
-            emxEnsureCapacity_boolean_T(x, p);
-            qEnd = r12->size[0] * r12->size[1];
-            for (p = 0; p < qEnd; p++) {
-              x->data[p] = (r12->data[p] == 0.0);
+            x->size[1] = r17->size[1];
+            emxEnsureCapacity_boolean_T(x, q);
+            nb = r17->size[1];
+            for (q = 0; q < nb; q++) {
+              x->data[q] = (r17->data[q] == 0.0);
             }
 
             if (x->size[1] == 0) {
-              j->size[0] = 1;
-              j->size[1] = 0;
+              jj->size[0] = 1;
+              jj->size[1] = 0;
             } else {
-              yk = 0;
-              p = j->size[0] * j->size[1];
-              j->size[0] = 1;
-              j->size[1] = x->size[1];
-              emxEnsureCapacity_int32_T(j, p);
-              nm1d2 = 1;
+              b_idx = 0;
+              q = jj->size[0] * jj->size[1];
+              jj->size[0] = 1;
+              jj->size[1] = x->size[1];
+              emxEnsureCapacity_int32_T(jj, q);
+              yk = 1;
               exitg1 = false;
-              while ((!exitg1) && (nm1d2 <= x->size[1])) {
-                if (x->data[nm1d2 - 1]) {
-                  yk++;
-                  j->data[yk - 1] = nm1d2;
-                  if (yk >= x->size[1]) {
+              while ((!exitg1) && (yk <= x->size[1])) {
+                if (x->data[yk - 1]) {
+                  b_idx++;
+                  jj->data[b_idx - 1] = yk;
+                  if (b_idx >= x->size[1]) {
                     exitg1 = true;
                   } else {
-                    nm1d2++;
+                    yk++;
                   }
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               }
 
               if (x->size[1] == 1) {
-                if (yk == 0) {
-                  j->size[0] = 1;
-                  j->size[1] = 0;
+                if (b_idx == 0) {
+                  jj->size[0] = 1;
+                  jj->size[1] = 0;
                 }
-              } else if (1 > yk) {
-                j->size[1] = 0;
               } else {
-                p = j->size[0] * j->size[1];
-                j->size[1] = yk;
-                emxEnsureCapacity_int32_T(j, p);
+                q = jj->size[0] * jj->size[1];
+                if (1 > b_idx) {
+                  jj->size[1] = 0;
+                } else {
+                  jj->size[1] = b_idx;
+                }
+
+                emxEnsureCapacity_int32_T(jj, q);
               }
             }
 
-            p = CR->size[0] * CR->size[1];
+            q = CR->size[0] * CR->size[1];
             CR->size[0] = 1;
-            CR->size[1] = j->size[1];
-            emxEnsureCapacity_real_T(CR, p);
-            qEnd = j->size[0] * j->size[1];
-            for (p = 0; p < qEnd; p++) {
-              CR->data[p] = j->data[p];
+            CR->size[1] = jj->size[1];
+            emxEnsureCapacity_int32_T(CR, q);
+            nb = jj->size[1];
+            for (q = 0; q < nb; q++) {
+              CR->data[q] = jj->data[q];
             }
+
+            /* 'funcionCPrO:84' ~ */
           }
 
+          /* 'funcionCPrO:88' if ~isempty(CPO)&&~isempty(CR)&&~isempty(S)&&size(E,2)>=PME(end)&&size(A,2)>=PMA(end)&&size(An,2)>=PMAn(end) */
           if ((CPO->size[1] != 0) && (CR->size[1] != 0) && (S->size[1] != 0) &&
               (E->size[1] >= PME->data[PME->size[1] - 1]) && (A->size[1] >=
                PMA->data[PMA->size[1] - 1]) && (An->size[1] >= PMAn->data
                [PMAn->size[1] - 1])) {
-            temCPrO = (int)uCPrODisp->data[b_j];
+            /* 'funcionCPrO:89' temCPrO = uCPrODisp(j); */
+            temCPrO = (int)uCPrODisp->data[j];
             exitg2 = 1;
           } else {
-            b_j++;
+            j++;
           }
         } else {
           exitg2 = 1;
         }
       } while (exitg2 == 0);
 
+      /* 'funcionCPrO:95' if temCPrO == -1 */
       if (temCPrO == -1) {
-        i53 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
-        kEnd = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
+        /* 'funcionCPrO:97' tempUltPosRecXDia = tempUltPosRecXDia+1; */
+        q = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
         tempUltPosRecXDia->size[0] = 1;
-        emxEnsureCapacity_int32_T(tempUltPosRecXDia, kEnd);
-        qEnd = i53 - 1;
-        for (i53 = 0; i53 <= qEnd; i53++) {
-          nm1d2 = tempUltPosRecXDia->data[i53];
-          if (nm1d2 > 2147483646) {
-            nm1d2 = MAX_int32_T;
-          } else {
-            nm1d2++;
-          }
-
-          tempUltPosRecXDia->data[i53] = nm1d2;
+        emxEnsureCapacity_int32_T(tempUltPosRecXDia, q);
+        nb = tempUltPosRecXDia->size[1];
+        for (q = 0; q < nb; q++) {
+          tempUltPosRecXDia->data[q]++;
         }
       } else {
+        /* 'funcionCPrO:99' else */
+        /* 'funcionCPrO:101' CPrOA = int32(temCPrO); */
         b_CPrOA = temCPrO;
-        nm1d2 = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-        yk = tempUltPosRecXDia->data[temCPrO - 1];
-        if ((nm1d2 < 0) && (yk < MIN_int32_T - nm1d2)) {
-          qY = MIN_int32_T;
-        } else if ((nm1d2 > 0) && (yk > MAX_int32_T - nm1d2)) {
-          qY = MAX_int32_T;
-        } else {
-          qY = nm1d2 + yk;
-        }
 
-        if ((qY < 0) && (TimeUsoCPrO < MIN_int32_T - qY)) {
-          nm1d2 = MIN_int32_T;
-        } else if ((qY > 0) && (TimeUsoCPrO > MAX_int32_T - qY)) {
-          nm1d2 = MAX_int32_T;
-        } else {
-          nm1d2 = qY + TimeUsoCPrO;
-        }
+        /* 'funcionCPrO:102' IniCPrOA = Dia(contDia,3)+int32(auxUPxR(CPrOA)); */
+        b_IniCPrOA = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1] +
+          tempUltPosRecXDia->data[temCPrO - 1];
 
-        if (nm1d2 < -2147483647) {
-          b_qY = MIN_int32_T;
-        } else {
-          b_qY = nm1d2 - 1;
-        }
+        /* 'funcionCPrO:103' EndCPrOA = IniCPrOA + TimeUsoCPrO-1; */
+        b_EndCPrOA = b_IniCPrOA + TimeUsoCPrO;
 
-        i53 = SA->size[0] * SA->size[1];
-        SA->size[0] = 1;
-        SA->size[1] = 1;
-        emxEnsureCapacity_int32_T(SA, i53);
-        SA->data[0] = allS->data[S->data[0] - 1];
-        b_IniSA = b_qY + 1;
-        nm1d2 = b_qY + 1;
-        if ((nm1d2 < 0) && (TimeUsoS < MIN_int32_T - nm1d2)) {
-          nm1d2 = MIN_int32_T;
-        } else if ((nm1d2 > 0) && (TimeUsoS > MAX_int32_T - nm1d2)) {
-          nm1d2 = MAX_int32_T;
-        } else {
-          nm1d2 += TimeUsoS;
-        }
+        /* 'funcionCPrO:105' SA_double = allS(S(1)); */
+        q = SA_double->size[0] * SA_double->size[1];
+        SA_double->size[0] = 1;
+        SA_double->size[1] = 1;
+        emxEnsureCapacity_int32_T(SA_double, q);
+        SA_double->data[0] = allS->data[S->data[0] - 1];
 
-        if (nm1d2 < -2147483647) {
-          nm1d2 = MIN_int32_T;
-        } else {
-          nm1d2--;
-        }
+        /* 'funcionCPrO:106' IniSA = EndCPrOA+1; */
+        b_IniSA = b_EndCPrOA;
 
-        b_EndSA = nm1d2 + 1;
+        /* 'funcionCPrO:107' EndSA = IniSA+TimeUsoS-1; */
+        b_EndSA = (b_EndCPrOA + TimeUsoS) - 1;
+
+        /* 'funcionCPrO:109' EA_double = allE(E(1:PME(end))); */
         if (1 > PME->data[PME->size[1] - 1]) {
-          qEnd = 0;
+          nb = 0;
         } else {
-          qEnd = PME->data[PME->size[1] - 1];
+          nb = PME->data[PME->size[1] - 1];
         }
 
-        i53 = EA->size[0] * EA->size[1];
-        EA->size[0] = 1;
-        EA->size[1] = qEnd;
-        emxEnsureCapacity_int32_T(EA, i53);
-        for (i53 = 0; i53 < qEnd; i53++) {
-          EA->data[i53] = (int)C->data[E->data[i53] - 1];
+        q = EA_double->size[0] * EA_double->size[1];
+        EA_double->size[0] = 1;
+        EA_double->size[1] = nb;
+        emxEnsureCapacity_int32_T(EA_double, q);
+        for (q = 0; q < nb; q++) {
+          EA_double->data[q] = allE->data[E->data[q] - 1];
         }
 
+        /* 'funcionCPrO:111' AA_double = allA(A(1:PMA(end))); */
         if (1 > PMA->data[PMA->size[1] - 1]) {
-          qEnd = 0;
+          nb = 0;
         } else {
-          qEnd = PMA->data[PMA->size[1] - 1];
+          nb = PMA->data[PMA->size[1] - 1];
         }
 
-        i53 = AA->size[0] * AA->size[1];
-        AA->size[0] = 1;
-        AA->size[1] = qEnd;
-        emxEnsureCapacity_int32_T(AA, i53);
-        for (i53 = 0; i53 < qEnd; i53++) {
-          AA->data[i53] = allA->data[A->data[i53] - 1];
+        q = AA_double->size[0] * AA_double->size[1];
+        AA_double->size[0] = 1;
+        AA_double->size[1] = nb;
+        emxEnsureCapacity_int32_T(AA_double, q);
+        for (q = 0; q < nb; q++) {
+          AA_double->data[q] = allA->data[A->data[q] - 1];
         }
 
+        /* 'funcionCPrO:113' AnA_double = allAn(An(1:PMAn(end))); */
         if (1 > PMAn->data[PMAn->size[1] - 1]) {
-          qEnd = 0;
+          nb = 0;
         } else {
-          qEnd = PMAn->data[PMAn->size[1] - 1];
+          nb = PMAn->data[PMAn->size[1] - 1];
         }
 
-        i53 = AnA->size[0] * AnA->size[1];
-        AnA->size[0] = 1;
-        AnA->size[1] = qEnd;
-        emxEnsureCapacity_int32_T(AnA, i53);
-        for (i53 = 0; i53 < qEnd; i53++) {
-          AnA->data[i53] = allAn->data[An->data[i53] - 1];
+        q = AnA_double->size[0] * AnA_double->size[1];
+        AnA_double->size[0] = 1;
+        AnA_double->size[1] = nb;
+        emxEnsureCapacity_int32_T(AnA_double, q);
+        for (q = 0; q < nb; q++) {
+          AnA_double->data[q] = allAn->data[An->data[q] - 1];
         }
 
+        /* 'funcionCPrO:115' if TimeUsoCPO==0 */
         if (TimeUsoCPO == 0) {
+          /* 'funcionCPrO:116' CPOA = int32(0); */
           b_CPOA = 0;
-          b_IniCPOA = 0;
-          c_qY = 0;
-          b_CRA = allCR->data[(int)CR->data[0] - 1];
+
+          /* 'funcionCPrO:117' IniCPOA = int32(0); */
+          b_IniCPOA = -1;
+
+          /* 'funcionCPrO:118' EndCPOA = int32(0); */
+          b_EndCPOA = 0;
+
+          /* 'funcionCPrO:120' CRA = int32(allCR(CR(1))); */
+          b_CRA = allCR->data[CR->data[0] - 1];
+
+          /* 'funcionCPrO:121' IniCRA = EndSA+1; */
           b_IniCRA = b_EndSA;
-          if ((b_EndSA < 0) && (TimeUsoCR < MIN_int32_T - b_EndSA)) {
-            nm1d2 = MIN_int32_T;
-          } else if ((b_EndSA > 0) && (TimeUsoCR > MAX_int32_T - b_EndSA)) {
-            nm1d2 = MAX_int32_T;
-          } else {
-            nm1d2 = b_EndSA + TimeUsoCR;
-          }
 
-          if (nm1d2 < -2147483647) {
-            d_qY = MIN_int32_T;
-          } else {
-            d_qY = nm1d2 - 1;
-          }
+          /* 'funcionCPrO:122' EndCRA = IniCRA + TimeUsoCR-1; */
+          b_EndCRA = b_EndSA + TimeUsoCR;
         } else {
+          /* 'funcionCPrO:123' else */
+          /* 'funcionCPrO:124' CPOA = int32(allCPO(CPO(1))); */
           b_CPOA = allCPO->data[CPO->data[0] - 1];
+
+          /* 'funcionCPrO:125' IniCPOA = EndSA+1; */
           b_IniCPOA = b_EndSA;
-          if ((b_EndSA < 0) && (TimeUsoCPO < MIN_int32_T - b_EndSA)) {
-            nm1d2 = MIN_int32_T;
-          } else if ((b_EndSA > 0) && (TimeUsoCPO > MAX_int32_T - b_EndSA)) {
-            nm1d2 = MAX_int32_T;
-          } else {
-            nm1d2 = b_EndSA + TimeUsoCPO;
-          }
 
-          if (nm1d2 < -2147483647) {
-            c_qY = MIN_int32_T;
-          } else {
-            c_qY = nm1d2 - 1;
-          }
+          /* 'funcionCPrO:126' EndCPOA = IniCPOA + TimeUsoCPO-1; */
+          b_EndCPOA = b_EndSA + TimeUsoCPO;
 
-          b_CRA = allCR->data[(int)CR->data[0] - 1];
-          b_IniCRA = c_qY + 1;
-          nm1d2 = c_qY + 1;
-          if ((nm1d2 < 0) && (TimeUsoCR < MIN_int32_T - nm1d2)) {
-            nm1d2 = MIN_int32_T;
-          } else if ((nm1d2 > 0) && (TimeUsoCR > MAX_int32_T - nm1d2)) {
-            nm1d2 = MAX_int32_T;
-          } else {
-            nm1d2 += TimeUsoCR;
-          }
+          /* 'funcionCPrO:128' CRA = int32(allCR(CR(1))); */
+          b_CRA = allCR->data[CR->data[0] - 1];
 
-          if (nm1d2 < -2147483647) {
-            d_qY = MIN_int32_T;
-          } else {
-            d_qY = nm1d2 - 1;
-          }
+          /* 'funcionCPrO:129' IniCRA = EndCPOA+1; */
+          b_IniCRA = b_EndCPOA;
+
+          /* 'funcionCPrO:130' EndCRA = IniCRA + TimeUsoCR-1; */
+          b_EndCRA = b_EndCPOA + TimeUsoCR;
         }
 
+        /* 'funcionCPrO:133' flag = false; */
         flag = false;
       }
     }
@@ -1936,39 +1923,98 @@ void b_funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
   emxFree_real_T(&b_H);
   emxFree_int32_T(&iwork);
   emxFree_int32_T(&idx);
-  emxFree_int32_T(&b_b);
-  emxFree_int32_T(&j);
+  emxFree_int32_T(&b);
+  emxFree_int32_T(&jj);
   emxFree_boolean_T(&x);
-  emxFree_real_T(&r12);
+  emxFree_real_T(&r17);
   emxFree_int32_T(&allCR);
   emxFree_int32_T(&allCPO);
   emxFree_int32_T(&allS);
   emxFree_int32_T(&allAn);
   emxFree_int32_T(&allA);
+  emxFree_int32_T(&allE);
+  emxFree_int32_T(&u);
   emxFree_int32_T(&allC);
-  emxFree_real_T(&C);
+  emxFree_int32_T(&C);
+  emxFree_real_T(&auxUPxS);
+  emxFree_real_T(&auxUPxAn);
+  emxFree_real_T(&auxUPxA);
+  emxFree_real_T(&auxUPxE);
   emxFree_uint32_T(&uCPrODisp);
-  emxFree_real_T(&CR);
+  emxFree_int32_T(&CR);
   emxFree_int32_T(&CPO);
   emxFree_int32_T(&An);
   emxFree_int32_T(&A);
   emxFree_int32_T(&S);
   emxFree_int32_T(&E);
+
+  /* 'funcionCPrO:140' EA = int32(EA_double); */
+  q = EA->size[0] * EA->size[1];
+  EA->size[0] = 1;
+  EA->size[1] = EA_double->size[1];
+  emxEnsureCapacity_int32_T(EA, q);
+  nb = EA_double->size[1];
+  for (q = 0; q < nb; q++) {
+    EA->data[q] = EA_double->data[q];
+  }
+
+  emxFree_int32_T(&EA_double);
+
+  /* 'funcionCPrO:141' AA = int32(AA_double); */
+  q = AA->size[0] * AA->size[1];
+  AA->size[0] = 1;
+  AA->size[1] = AA_double->size[1];
+  emxEnsureCapacity_int32_T(AA, q);
+  nb = AA_double->size[1];
+  for (q = 0; q < nb; q++) {
+    AA->data[q] = AA_double->data[q];
+  }
+
+  emxFree_int32_T(&AA_double);
+
+  /* 'funcionCPrO:142' AnA = int32(AnA_double); */
+  q = AnA->size[0] * AnA->size[1];
+  AnA->size[0] = 1;
+  AnA->size[1] = AnA_double->size[1];
+  emxEnsureCapacity_int32_T(AnA, q);
+  nb = AnA_double->size[1];
+  for (q = 0; q < nb; q++) {
+    AnA->data[q] = AnA_double->data[q];
+  }
+
+  emxFree_int32_T(&AnA_double);
+
+  /* 'funcionCPrO:143' SA = int32(SA_double); */
+  q = SA->size[0] * SA->size[1];
+  SA->size[0] = 1;
+  SA->size[1] = SA_double->size[1];
+  emxEnsureCapacity_int32_T(SA, q);
+  nb = SA_double->size[1];
+  for (q = 0; q < nb; q++) {
+    SA->data[q] = SA_double->data[q];
+  }
+
+  emxFree_int32_T(&SA_double);
   *CPrOA = b_CPrOA;
-  *IniCPrOA = qY;
-  *EndCPrOA = b_qY;
-  *EndCPrOAxD = e_qY;
+  *IniCPrOA = b_IniCPrOA;
+  *EndCPrOA = b_EndCPrOA - 1;
+  *EndCPrOAxD = b_EndCPrOAxD;
   *IniSA = b_IniSA;
-  *EndSA = b_EndSA - 1;
-  *EndRPxD = f_qY;
+  *EndSA = b_EndSA;
+  *EndRPxD = b_EndRPxD;
   *CPOA = b_CPOA;
-  *IniCPOA = b_IniCPOA;
-  *EndCPOA = c_qY;
+  *IniCPOA = b_IniCPOA + 1;
+  *EndCPOA = b_EndCPOA;
   *CRA = b_CRA;
-  *IniCRA = b_IniCRA;
-  *EndCRA = d_qY;
+  *IniCRA = b_IniCRA + 1;
+  *EndCRA = b_EndCRA;
 }
 
+/*
+ * function [ CPrOA,IniCPrOA, EndCPrOA,EndCPrOAxD,EA,AA,AnA,SA,IniSA,EndSA,EndRPxD,CPOA,IniCPOA,EndCPOA,CRA,IniCRA,EndCRA,contDia] = ...
+ *     funcionCPrO(NumRec, PCPrO,PME,PMA,PMAn,PS,PCPO,PCR,H,Dia,UltPosRecXDia, TimeUsoCPrO, TimeUsoS,TimeUsoCPO,TimeUsoCR,contDia,...
+ *     tempUltPosRecXDia,DispMExD,DispME)
+ */
 void funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
                  emxArray_int32_T *PME, const emxArray_int32_T *PMA, const
                  emxArray_int32_T *PMAn, const emxArray_int32_T *PS, const
@@ -1983,129 +2029,144 @@ void funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
                  *SA, int *IniSA, int *EndSA, int *EndRPxD, int *CPOA, int
                  *IniCPOA, int *EndCPOA, int *CRA, int *IniCRA, int *EndCRA)
 {
-  int yk;
-  int nm1d2;
+  int b_tmp;
   int n;
   unsigned int nm1;
-  emxArray_int32_T *j;
-  int i47;
+  emxArray_int32_T *jj;
+  int q;
   emxArray_int32_T *E;
-  int temCPrO;
-  int qEnd;
-  double a;
-  double b;
-  emxArray_real_T *r10;
+  int yk;
+  int k;
+  int nb;
+  double y_tmp;
+  double y;
+  emxArray_real_T *r13;
   double ndbl;
   double apnd;
   double cdiff;
   emxArray_int32_T *S;
-  emxArray_real_T *C;
+  emxArray_real_T *r14;
   emxArray_int32_T *A;
-  emxArray_real_T *CR;
+  emxArray_real_T *r15;
   emxArray_int32_T *An;
   emxArray_int32_T *CPO;
-  int kEnd;
+  emxArray_int32_T *CR;
   int b_CPrOA;
   int b_CPOA;
   int b_CRA;
-  int qY;
-  int b_qY;
+  int b_IniCPrOA;
+  int b_EndCPrOA;
   int b_IniSA;
   int b_EndSA;
   int b_IniCPOA;
-  int c_qY;
+  int b_EndCPOA;
   int b_IniCRA;
-  int d_qY;
-  int e_qY;
-  int f_qY;
+  int b_EndCRA;
+  int b_EndCPrOAxD;
+  int b_EndRPxD;
+  emxArray_int32_T *EA_double;
+  emxArray_int32_T *AA_double;
+  emxArray_int32_T *AnA_double;
+  emxArray_int32_T *SA_double;
   boolean_T flag;
   emxArray_uint32_T *uCPrODisp;
+  emxArray_int32_T *auxUPxE;
+  emxArray_int32_T *auxUPxA;
+  emxArray_int32_T *auxUPxAn;
+  emxArray_int32_T *auxUPxS;
+  emxArray_int32_T *C;
   emxArray_int32_T *allC;
+  emxArray_int32_T *u;
+  emxArray_int32_T *allE;
   emxArray_int32_T *allA;
   emxArray_int32_T *allAn;
   emxArray_int32_T *allS;
   emxArray_int32_T *allCPO;
   emxArray_int32_T *allCR;
   emxArray_boolean_T *x;
-  emxArray_int32_T *b_b;
+  emxArray_int32_T *b;
   emxArray_int32_T *idx;
   emxArray_int32_T *iwork;
   emxArray_int32_T *b_H;
+  int b_idx;
   boolean_T exitg1;
-  int q;
+  int minP;
   int na;
-  int b_j;
-  int nb;
+  int j;
   int p;
-  long long i48;
+  int qEnd;
+  int kEnd;
+  int temCPrO;
   int exitg2;
-  if (NumRec[0] > 2147483646) {
-    yk = MAX_int32_T;
-  } else {
-    yk = NumRec[0] + 1;
-  }
+  int IniCPO;
+  int EndCPO;
+  int IniCR;
 
-  nm1d2 = (int)e_sum(*(int (*)[2])&NumRec[0]);
-  if (nm1d2 < yk) {
+  /* 'funcionCPrO:5' E = 1:size(NumRec(1)+1:sum(NumRec(1:2)),2); */
+  b_tmp = NumRec[0] + NumRec[1];
+  if (b_tmp < NumRec[0] + 1) {
     n = 0;
   } else {
-    if ((yk < 0) && (nm1d2 >= 0)) {
-      nm1 = (unsigned int)nm1d2 - yk;
+    if ((NumRec[0] + 1 < 0) && (b_tmp >= 0)) {
+      nm1 = ((unsigned int)b_tmp - NumRec[0]) - 1U;
     } else {
-      nm1 = (unsigned int)(nm1d2 - yk);
+      nm1 = (unsigned int)((b_tmp - NumRec[0]) - 1);
     }
 
     n = (int)nm1 + 1;
   }
 
-  emxInit_int32_T(&j, 2);
-  i47 = j->size[0] * j->size[1];
-  j->size[0] = 1;
-  j->size[1] = n;
-  emxEnsureCapacity_int32_T(j, i47);
+  emxInit_int32_T(&jj, 2);
+  q = jj->size[0] * jj->size[1];
+  jj->size[0] = 1;
+  jj->size[1] = n;
+  emxEnsureCapacity_int32_T(jj, q);
   if (n > 0) {
-    j->data[0] = yk;
-    for (temCPrO = 2; temCPrO <= n; temCPrO++) {
+    jj->data[0] = NumRec[0] + 1;
+    yk = NumRec[0] + 1;
+    for (k = 2; k <= n; k++) {
       yk++;
-      j->data[temCPrO - 1] = yk;
+      jj->data[k - 1] = yk;
     }
   }
 
   emxInit_int32_T(&E, 2);
-  if (j->size[1] < 1) {
+  if (jj->size[1] < 1) {
     E->size[0] = 1;
     E->size[1] = 0;
   } else {
-    qEnd = j->size[1];
-    i47 = E->size[0] * E->size[1];
+    nb = jj->size[1];
+    q = E->size[0] * E->size[1];
     E->size[0] = 1;
-    E->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(E, i47);
-    for (i47 = 0; i47 < qEnd; i47++) {
-      E->data[i47] = 1 + i47;
+    E->size[1] = nb;
+    emxEnsureCapacity_int32_T(E, q);
+    for (q = 0; q < nb; q++) {
+      E->data[q] = 1 + q;
     }
   }
 
-  a = e_sum(*(int (*)[2])&NumRec[0]) + 1.0;
-  b = f_sum(*(int (*)[3])&NumRec[0]);
-  emxInit_real_T(&r10, 2);
-  if (b < a) {
-    i47 = r10->size[0] * r10->size[1];
-    r10->size[1] = 0;
-    emxEnsureCapacity_real_T(r10, i47);
-  } else if (floor(a) == a) {
-    i47 = r10->size[0] * r10->size[1];
-    r10->size[1] = (int)floor(b - a) + 1;
-    emxEnsureCapacity_real_T(r10, i47);
+  /* 'funcionCPrO:6' S = 1:size(sum(NumRec(1:2))+1:sum(NumRec(1:3)),2); */
+  y_tmp = (double)NumRec[0] + (double)NumRec[1];
+  y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+  emxInit_real_T(&r13, 2);
+  if (y < y_tmp + 1.0) {
+    q = r13->size[0] * r13->size[1];
+    r13->size[1] = 0;
+    emxEnsureCapacity_real_T(r13, q);
+  } else if (((double)NumRec[0] + (double)NumRec[1]) + 1.0 == y_tmp + 1.0) {
+    q = r13->size[0] * r13->size[1];
+    r13->size[1] = (int)(y - (y_tmp + 1.0)) + 1;
+    emxEnsureCapacity_real_T(r13, q);
   } else {
-    ndbl = floor((b - a) + 0.5);
-    apnd = a + ndbl;
-    cdiff = apnd - b;
-    if (fabs(cdiff) < 4.4408920985006262E-16 * fmax(fabs(a), fabs(b))) {
+    ndbl = floor((y - (y_tmp + 1.0)) + 0.5);
+    apnd = (y_tmp + 1.0) + ndbl;
+    cdiff = apnd - y;
+    if (fabs(cdiff) < 4.4408920985006262E-16 * fmax((unsigned int)fabs(y_tmp +
+          1.0), fabs(y))) {
       ndbl++;
-      apnd = b;
+      apnd = y;
     } else if (cdiff > 0.0) {
-      apnd = a + (ndbl - 1.0);
+      apnd = (y_tmp + 1.0) + (ndbl - 1.0);
     } else {
       ndbl++;
     }
@@ -2116,487 +2177,442 @@ void funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
       n = 0;
     }
 
-    i47 = r10->size[0] * r10->size[1];
-    r10->size[0] = 1;
-    r10->size[1] = n;
-    emxEnsureCapacity_real_T(r10, i47);
+    q = r13->size[0] * r13->size[1];
+    r13->size[0] = 1;
+    r13->size[1] = n;
+    emxEnsureCapacity_real_T(r13, q);
     if ((n > 0) && (n > 1)) {
-      r10->data[n - 1] = apnd;
-      nm1d2 = (n - 1) / 2;
-      for (temCPrO = 0; temCPrO <= nm1d2 - 2; temCPrO++) {
-        r10->data[1 + temCPrO] = a + (1.0 + (double)temCPrO);
-        r10->data[(n - temCPrO) - 2] = apnd - (1.0 + (double)temCPrO);
+      r13->data[n - 1] = apnd;
+      yk = (n - 1) / 2;
+      for (k = 0; k <= yk - 2; k++) {
+        r13->data[1 + k] = (y_tmp + 1.0) + (1.0 + (double)k);
+        r13->data[(n - k) - 2] = apnd - (1.0 + (double)k);
       }
 
-      if (nm1d2 << 1 == n - 1) {
-        r10->data[nm1d2] = (a + apnd) / 2.0;
+      if (yk << 1 == n - 1) {
+        r13->data[yk] = ((y_tmp + 1.0) + apnd) / 2.0;
       } else {
-        r10->data[nm1d2] = a + (double)nm1d2;
-        r10->data[nm1d2 + 1] = apnd - (double)nm1d2;
+        r13->data[yk] = (y_tmp + 1.0) + (double)yk;
+        r13->data[yk + 1] = apnd - (double)yk;
       }
     }
   }
 
   emxInit_int32_T(&S, 2);
-  if (r10->size[1] < 1) {
+  if (r13->size[1] < 1) {
     S->size[0] = 1;
     S->size[1] = 0;
   } else {
-    qEnd = r10->size[1];
-    i47 = S->size[0] * S->size[1];
+    nb = r13->size[1];
+    q = S->size[0] * S->size[1];
     S->size[0] = 1;
-    S->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(S, i47);
-    for (i47 = 0; i47 < qEnd; i47++) {
-      S->data[i47] = 1 + i47;
+    S->size[1] = nb;
+    emxEnsureCapacity_int32_T(S, q);
+    for (q = 0; q < nb; q++) {
+      S->data[q] = 1 + q;
     }
   }
 
-  a = f_sum(*(int (*)[3])&NumRec[0]) + 1.0;
-  b = h_sum(*(int (*)[4])&NumRec[0]);
-  emxInit_real_T(&C, 2);
-  if (b < a) {
-    i47 = C->size[0] * C->size[1];
-    C->size[1] = 0;
-    emxEnsureCapacity_real_T(C, i47);
-  } else if (floor(a) == a) {
-    i47 = C->size[0] * C->size[1];
-    C->size[1] = (int)floor(b - a) + 1;
-    emxEnsureCapacity_real_T(C, i47);
+  /* 'funcionCPrO:7' A = 1:size(sum(NumRec(1:3))+1:sum(NumRec(1:4)),2); */
+  y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+  ndbl = (((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) + (double)
+    NumRec[3];
+  emxInit_real_T(&r14, 2);
+  if (ndbl < y + 1.0) {
+    q = r14->size[0] * r14->size[1];
+    r14->size[1] = 0;
+    emxEnsureCapacity_real_T(r14, q);
   } else {
-    ndbl = floor((b - a) + 0.5);
-    apnd = a + ndbl;
-    cdiff = apnd - b;
-    if (fabs(cdiff) < 4.4408920985006262E-16 * fmax(fabs(a), fabs(b))) {
-      ndbl++;
-      apnd = b;
-    } else if (cdiff > 0.0) {
-      apnd = a + (ndbl - 1.0);
-    } else {
-      ndbl++;
-    }
-
-    if (ndbl >= 0.0) {
-      n = (int)ndbl;
-    } else {
-      n = 0;
-    }
-
-    i47 = C->size[0] * C->size[1];
-    C->size[0] = 1;
-    C->size[1] = n;
-    emxEnsureCapacity_real_T(C, i47);
-    if (n > 0) {
-      C->data[0] = a;
-      if (n > 1) {
-        C->data[n - 1] = apnd;
-        nm1d2 = (n - 1) / 2;
-        for (temCPrO = 0; temCPrO <= nm1d2 - 2; temCPrO++) {
-          C->data[1 + temCPrO] = a + (1.0 + (double)temCPrO);
-          C->data[(n - temCPrO) - 2] = apnd - (1.0 + (double)temCPrO);
-        }
-
-        if (nm1d2 << 1 == n - 1) {
-          C->data[nm1d2] = (a + apnd) / 2.0;
-        } else {
-          C->data[nm1d2] = a + (double)nm1d2;
-          C->data[nm1d2 + 1] = apnd - (double)nm1d2;
-        }
-      }
-    }
+    q = r14->size[0] * r14->size[1];
+    r14->size[1] = (int)(ndbl - (y + 1.0)) + 1;
+    emxEnsureCapacity_real_T(r14, q);
   }
 
   emxInit_int32_T(&A, 2);
-  if (C->size[1] < 1) {
+  if (r14->size[1] < 1) {
     A->size[0] = 1;
     A->size[1] = 0;
   } else {
-    qEnd = C->size[1];
-    i47 = A->size[0] * A->size[1];
+    nb = r14->size[1];
+    q = A->size[0] * A->size[1];
     A->size[0] = 1;
-    A->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(A, i47);
-    for (i47 = 0; i47 < qEnd; i47++) {
-      A->data[i47] = 1 + i47;
+    A->size[1] = nb;
+    emxEnsureCapacity_int32_T(A, q);
+    for (q = 0; q < nb; q++) {
+      A->data[q] = 1 + q;
     }
   }
 
-  a = h_sum(*(int (*)[4])&NumRec[0]) + 1.0;
-  b = i_sum(*(int (*)[5])&NumRec[0]);
-  emxInit_real_T(&CR, 2);
-  if (b < a) {
-    i47 = CR->size[0] * CR->size[1];
-    CR->size[1] = 0;
-    emxEnsureCapacity_real_T(CR, i47);
-  } else if (floor(a) == a) {
-    i47 = CR->size[0] * CR->size[1];
-    CR->size[1] = (int)floor(b - a) + 1;
-    emxEnsureCapacity_real_T(CR, i47);
+  emxFree_real_T(&r14);
+
+  /* 'funcionCPrO:8' An = 1:size(sum(NumRec(1:4))+1:sum(NumRec(1:5)),2); */
+  y = (((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) + (double)
+    NumRec[3];
+  ndbl = ((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+          (double)NumRec[3]) + (double)NumRec[4];
+  emxInit_real_T(&r15, 2);
+  if (ndbl < y + 1.0) {
+    q = r15->size[0] * r15->size[1];
+    r15->size[1] = 0;
+    emxEnsureCapacity_real_T(r15, q);
   } else {
-    ndbl = floor((b - a) + 0.5);
-    apnd = a + ndbl;
-    cdiff = apnd - b;
-    if (fabs(cdiff) < 4.4408920985006262E-16 * fmax(fabs(a), fabs(b))) {
-      ndbl++;
-      apnd = b;
-    } else if (cdiff > 0.0) {
-      apnd = a + (ndbl - 1.0);
-    } else {
-      ndbl++;
-    }
-
-    if (ndbl >= 0.0) {
-      n = (int)ndbl;
-    } else {
-      n = 0;
-    }
-
-    i47 = CR->size[0] * CR->size[1];
-    CR->size[0] = 1;
-    CR->size[1] = n;
-    emxEnsureCapacity_real_T(CR, i47);
-    if (n > 0) {
-      CR->data[0] = a;
-      if (n > 1) {
-        CR->data[n - 1] = apnd;
-        nm1d2 = (n - 1) / 2;
-        for (temCPrO = 0; temCPrO <= nm1d2 - 2; temCPrO++) {
-          CR->data[1 + temCPrO] = a + (1.0 + (double)temCPrO);
-          CR->data[(n - temCPrO) - 2] = apnd - (1.0 + (double)temCPrO);
-        }
-
-        if (nm1d2 << 1 == n - 1) {
-          CR->data[nm1d2] = (a + apnd) / 2.0;
-        } else {
-          CR->data[nm1d2] = a + (double)nm1d2;
-          CR->data[nm1d2 + 1] = apnd - (double)nm1d2;
-        }
-      }
-    }
+    q = r15->size[0] * r15->size[1];
+    r15->size[1] = (int)(ndbl - (y + 1.0)) + 1;
+    emxEnsureCapacity_real_T(r15, q);
   }
 
   emxInit_int32_T(&An, 2);
-  if (CR->size[1] < 1) {
+  if (r15->size[1] < 1) {
     An->size[0] = 1;
     An->size[1] = 0;
   } else {
-    qEnd = CR->size[1];
-    i47 = An->size[0] * An->size[1];
+    nb = r15->size[1];
+    q = An->size[0] * An->size[1];
     An->size[0] = 1;
-    An->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(An, i47);
-    for (i47 = 0; i47 < qEnd; i47++) {
-      An->data[i47] = 1 + i47;
+    An->size[1] = nb;
+    emxEnsureCapacity_int32_T(An, q);
+    for (q = 0; q < nb; q++) {
+      An->data[q] = 1 + q;
     }
   }
 
+  emxFree_real_T(&r15);
+
+  /* 'funcionCPrO:9' CPO = 1:size(PCPO, 2); */
   emxInit_int32_T(&CPO, 2);
   if (PCPO->size[1] < 1) {
     CPO->size[0] = 1;
     CPO->size[1] = 0;
   } else {
-    qEnd = PCPO->size[1];
-    i47 = CPO->size[0] * CPO->size[1];
+    nb = PCPO->size[1];
+    q = CPO->size[0] * CPO->size[1];
     CPO->size[0] = 1;
-    CPO->size[1] = qEnd;
-    emxEnsureCapacity_int32_T(CPO, i47);
-    for (i47 = 0; i47 < qEnd; i47++) {
-      CPO->data[i47] = 1 + i47;
+    CPO->size[1] = nb;
+    emxEnsureCapacity_int32_T(CPO, q);
+    for (q = 0; q < nb; q++) {
+      CPO->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:10' CR = 1:size(PCR, 2); */
+  emxInit_int32_T(&CR, 2);
   if (PCR->size[1] < 1) {
     CR->size[0] = 1;
     CR->size[1] = 0;
   } else {
-    i47 = PCR->size[1];
-    kEnd = CR->size[0] * CR->size[1];
+    nb = PCR->size[1];
+    q = CR->size[0] * CR->size[1];
     CR->size[0] = 1;
-    qEnd = (int)((double)i47 - 1.0);
-    CR->size[1] = qEnd + 1;
-    emxEnsureCapacity_real_T(CR, kEnd);
-    for (i47 = 0; i47 <= qEnd; i47++) {
-      CR->data[i47] = 1.0 + (double)i47;
+    CR->size[1] = nb;
+    emxEnsureCapacity_int32_T(CR, q);
+    for (q = 0; q < nb; q++) {
+      CR->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:11' CPrOA = int32(0); */
   b_CPrOA = 0;
+
+  /* 'funcionCPrO:12' CPOA = int32(0); */
   b_CPOA = 0;
+
+  /* 'funcionCPrO:13' CRA = int32(0); */
   b_CRA = 0;
-  qY = 0;
-  b_qY = 0;
+
+  /* 'funcionCPrO:14' IniCPrOA = int32(0); */
+  b_IniCPrOA = 0;
+
+  /* 'funcionCPrO:15' EndCPrOA = int32(0); */
+  b_EndCPrOA = 1;
+
+  /* 'funcionCPrO:16' IniSA = int32(0); */
   b_IniSA = 0;
-  b_EndSA = 1;
-  b_IniCPOA = 0;
-  c_qY = 0;
-  b_IniCRA = 0;
-  d_qY = 0;
-  e_qY = 0;
-  f_qY = 0;
+
+  /* 'funcionCPrO:17' EndSA = int32(0); */
+  b_EndSA = 0;
+
+  /* 'funcionCPrO:18' IniCPOA = int32(0); */
+  b_IniCPOA = -1;
+
+  /* 'funcionCPrO:19' EndCPOA = int32(0); */
+  b_EndCPOA = 0;
+
+  /* 'funcionCPrO:20' IniCRA = int32(0); */
+  b_IniCRA = -1;
+
+  /* 'funcionCPrO:21' EndCRA = int32(0); */
+  b_EndCRA = 0;
+
+  /* 'funcionCPrO:22' EndCPrOAxD = int32(0); */
+  b_EndCPrOAxD = 0;
+
+  /* 'funcionCPrO:23' EndRPxD = int32(0); */
+  b_EndRPxD = 0;
+
+  /* 'funcionCPrO:24' EA_double = 1:size(PME,2)-1; */
+  emxInit_int32_T(&EA_double, 2);
   if (PME->size[1] - 1 < 1) {
-    EA->size[0] = 1;
-    EA->size[1] = 0;
+    EA_double->size[0] = 1;
+    EA_double->size[1] = 0;
   } else {
-    qEnd = PME->size[1] - 2;
-    i47 = EA->size[0] * EA->size[1];
-    EA->size[0] = 1;
-    EA->size[1] = qEnd + 1;
-    emxEnsureCapacity_int32_T(EA, i47);
-    for (i47 = 0; i47 <= qEnd; i47++) {
-      EA->data[i47] = 1 + i47;
+    nb = PME->size[1] - 2;
+    q = EA_double->size[0] * EA_double->size[1];
+    EA_double->size[0] = 1;
+    EA_double->size[1] = nb + 1;
+    emxEnsureCapacity_int32_T(EA_double, q);
+    for (q = 0; q <= nb; q++) {
+      EA_double->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:25' AA_double = 1:size(PMA,2)-1; */
+  emxInit_int32_T(&AA_double, 2);
   if (PMA->size[1] - 1 < 1) {
-    AA->size[0] = 1;
-    AA->size[1] = 0;
+    AA_double->size[0] = 1;
+    AA_double->size[1] = 0;
   } else {
-    qEnd = PMA->size[1] - 2;
-    i47 = AA->size[0] * AA->size[1];
-    AA->size[0] = 1;
-    AA->size[1] = qEnd + 1;
-    emxEnsureCapacity_int32_T(AA, i47);
-    for (i47 = 0; i47 <= qEnd; i47++) {
-      AA->data[i47] = 1 + i47;
+    nb = PMA->size[1] - 2;
+    q = AA_double->size[0] * AA_double->size[1];
+    AA_double->size[0] = 1;
+    AA_double->size[1] = nb + 1;
+    emxEnsureCapacity_int32_T(AA_double, q);
+    for (q = 0; q <= nb; q++) {
+      AA_double->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:26' AnA_double = 1:size(PMAn,2)-1; */
+  emxInit_int32_T(&AnA_double, 2);
   if (PMAn->size[1] - 1 < 1) {
-    AnA->size[0] = 1;
-    AnA->size[1] = 0;
+    AnA_double->size[0] = 1;
+    AnA_double->size[1] = 0;
   } else {
-    qEnd = PMAn->size[1] - 2;
-    i47 = AnA->size[0] * AnA->size[1];
-    AnA->size[0] = 1;
-    AnA->size[1] = qEnd + 1;
-    emxEnsureCapacity_int32_T(AnA, i47);
-    for (i47 = 0; i47 <= qEnd; i47++) {
-      AnA->data[i47] = 1 + i47;
+    nb = PMAn->size[1] - 2;
+    q = AnA_double->size[0] * AnA_double->size[1];
+    AnA_double->size[0] = 1;
+    AnA_double->size[1] = nb + 1;
+    emxEnsureCapacity_int32_T(AnA_double, q);
+    for (q = 0; q <= nb; q++) {
+      AnA_double->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:27' SA_double = 1:size(PS,2)-1; */
+  emxInit_int32_T(&SA_double, 2);
   if (PS->size[1] - 1 < 1) {
-    SA->size[0] = 1;
-    SA->size[1] = 0;
+    SA_double->size[0] = 1;
+    SA_double->size[1] = 0;
   } else {
-    qEnd = PS->size[1] - 2;
-    i47 = SA->size[0] * SA->size[1];
-    SA->size[0] = 1;
-    SA->size[1] = qEnd + 1;
-    emxEnsureCapacity_int32_T(SA, i47);
-    for (i47 = 0; i47 <= qEnd; i47++) {
-      SA->data[i47] = 1 + i47;
+    nb = PS->size[1] - 2;
+    q = SA_double->size[0] * SA_double->size[1];
+    SA_double->size[0] = 1;
+    SA_double->size[1] = nb + 1;
+    emxEnsureCapacity_int32_T(SA_double, q);
+    for (q = 0; q <= nb; q++) {
+      SA_double->data[q] = 1 + q;
     }
   }
 
+  /* 'funcionCPrO:29' flag = true; */
   flag = true;
+
+  /* 'funcionCPrO:30' while flag */
   emxInit_uint32_T(&uCPrODisp, 2);
+  emxInit_int32_T(&auxUPxE, 2);
+  emxInit_int32_T(&auxUPxA, 2);
+  emxInit_int32_T(&auxUPxAn, 2);
+  emxInit_int32_T(&auxUPxS, 2);
+  emxInit_int32_T(&C, 2);
   emxInit_int32_T(&allC, 2);
+  emxInit_int32_T(&u, 1);
+  emxInit_int32_T(&allE, 2);
   emxInit_int32_T(&allA, 2);
   emxInit_int32_T(&allAn, 2);
   emxInit_int32_T(&allS, 2);
   emxInit_int32_T(&allCPO, 2);
   emxInit_int32_T(&allCR, 2);
   emxInit_boolean_T(&x, 2);
-  emxInit_int32_T(&b_b, 2);
+  emxInit_int32_T(&b, 2);
   emxInit_int32_T(&idx, 2);
   emxInit_int32_T(&iwork, 1);
   emxInit_int32_T(&b_H, 2);
   while (flag) {
+    /* 'funcionCPrO:32' auxUPxR = tempUltPosRecXDia; */
     /*  Selecciono los ultimas posiciones a partir de donde se pueden usar las camas. */
-    i47 = x->size[0] * x->size[1];
+    /* 'funcionCPrO:33' [~,C]=find(PCPrO~=0); */
+    q = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = PCPrO->size[1];
-    emxEnsureCapacity_boolean_T(x, i47);
-    qEnd = PCPrO->size[0] * PCPrO->size[1];
-    for (i47 = 0; i47 < qEnd; i47++) {
-      x->data[i47] = (PCPrO->data[i47] != 0);
+    emxEnsureCapacity_boolean_T(x, q);
+    nb = PCPrO->size[1];
+    for (q = 0; q < nb; q++) {
+      x->data[q] = (PCPrO->data[q] != 0);
     }
 
     if (x->size[1] == 0) {
-      j->size[0] = 1;
-      j->size[1] = 0;
+      jj->size[0] = 1;
+      jj->size[1] = 0;
     } else {
-      yk = 0;
-      i47 = j->size[0] * j->size[1];
-      j->size[0] = 1;
-      j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i47);
-      nm1d2 = 1;
+      b_idx = 0;
+      q = jj->size[0] * jj->size[1];
+      jj->size[0] = 1;
+      jj->size[1] = x->size[1];
+      emxEnsureCapacity_int32_T(jj, q);
+      yk = 1;
       exitg1 = false;
-      while ((!exitg1) && (nm1d2 <= x->size[1])) {
-        if (x->data[nm1d2 - 1]) {
-          yk++;
-          j->data[yk - 1] = nm1d2;
-          if (yk >= x->size[1]) {
+      while ((!exitg1) && (yk <= x->size[1])) {
+        if (x->data[yk - 1]) {
+          b_idx++;
+          jj->data[b_idx - 1] = yk;
+          if (b_idx >= x->size[1]) {
             exitg1 = true;
           } else {
-            nm1d2++;
+            yk++;
           }
         } else {
-          nm1d2++;
+          yk++;
         }
       }
 
       if (x->size[1] == 1) {
-        if (yk == 0) {
-          j->size[0] = 1;
-          j->size[1] = 0;
+        if (b_idx == 0) {
+          jj->size[0] = 1;
+          jj->size[1] = 0;
         }
-      } else if (1 > yk) {
-        j->size[1] = 0;
       } else {
-        i47 = j->size[0] * j->size[1];
-        j->size[1] = yk;
-        emxEnsureCapacity_int32_T(j, i47);
+        q = jj->size[0] * jj->size[1];
+        if (1 > b_idx) {
+          jj->size[1] = 0;
+        } else {
+          jj->size[1] = b_idx;
+        }
+
+        emxEnsureCapacity_int32_T(jj, q);
       }
     }
 
-    i47 = C->size[0] * C->size[1];
+    q = C->size[0] * C->size[1];
     C->size[0] = 1;
-    C->size[1] = j->size[1];
-    emxEnsureCapacity_real_T(C, i47);
-    qEnd = j->size[0] * j->size[1];
-    for (i47 = 0; i47 < qEnd; i47++) {
-      C->data[i47] = j->data[i47];
+    C->size[1] = jj->size[1];
+    emxEnsureCapacity_int32_T(C, q);
+    nb = jj->size[1];
+    for (q = 0; q < nb; q++) {
+      C->data[q] = jj->data[q];
     }
 
+    /* 'funcionCPrO:33' ~ */
     /*  Busco las posibles camas a usar. */
-    nm1d2 = Dia->data[(*contDia + Dia->size[0] * 3) - 1];
-    yk = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-    if ((nm1d2 >= 0) && (yk < nm1d2 - MAX_int32_T)) {
-      nm1d2 = MAX_int32_T;
-    } else if ((nm1d2 < 0) && (yk > nm1d2 - MIN_int32_T)) {
-      nm1d2 = MIN_int32_T;
-    } else {
-      nm1d2 -= yk;
-    }
-
-    if (nm1d2 > 2147483646) {
-      nm1d2 = MAX_int32_T;
-    } else {
-      nm1d2++;
-    }
-
-    if ((TimeUsoCPrO < 0) && (TimeUsoS < MIN_int32_T - TimeUsoCPrO)) {
-      q = MIN_int32_T;
-    } else if ((TimeUsoCPrO > 0) && (TimeUsoS > MAX_int32_T - TimeUsoCPrO)) {
-      q = MAX_int32_T;
-    } else {
-      q = TimeUsoCPrO + TimeUsoS;
-    }
-
-    if ((nm1d2 >= 0) && (q < nm1d2 - MAX_int32_T)) {
-      nm1d2 = MAX_int32_T;
-    } else if ((nm1d2 < 0) && (q > nm1d2 - MIN_int32_T)) {
-      nm1d2 = MIN_int32_T;
-    } else {
-      nm1d2 -= q;
-    }
+    /* 'funcionCPrO:34' minP = Dia(contDia,4)-Dia(contDia,3)+1-(TimeUsoCPrO+TimeUsoS); */
+    minP = (((Dia->data[(*contDia + Dia->size[0] * 3) - 1] - Dia->data[(*contDia
+               + (Dia->size[0] << 1)) - 1]) - TimeUsoCPrO) - TimeUsoS) + 1;
 
     /*  Posicion maxima a partir de la cual se puede colocar la Operacion. */
-    i47 = x->size[0] * x->size[1];
+    /* 'funcionCPrO:35' [~,allC]=find(auxUPxR(C)<=minP); */
+    q = x->size[0] * x->size[1];
     x->size[0] = 1;
     x->size[1] = C->size[1];
-    emxEnsureCapacity_boolean_T(x, i47);
-    qEnd = C->size[0] * C->size[1];
-    for (i47 = 0; i47 < qEnd; i47++) {
-      x->data[i47] = (tempUltPosRecXDia->data[(int)C->data[i47] - 1] <= nm1d2);
+    emxEnsureCapacity_boolean_T(x, q);
+    nb = C->size[1];
+    for (q = 0; q < nb; q++) {
+      x->data[q] = (tempUltPosRecXDia->data[C->data[q] - 1] <= minP);
     }
 
     if (x->size[1] == 0) {
-      j->size[0] = 1;
-      j->size[1] = 0;
+      jj->size[0] = 1;
+      jj->size[1] = 0;
     } else {
-      yk = 0;
-      i47 = j->size[0] * j->size[1];
-      j->size[0] = 1;
-      j->size[1] = x->size[1];
-      emxEnsureCapacity_int32_T(j, i47);
-      nm1d2 = 1;
+      b_idx = 0;
+      q = jj->size[0] * jj->size[1];
+      jj->size[0] = 1;
+      jj->size[1] = x->size[1];
+      emxEnsureCapacity_int32_T(jj, q);
+      yk = 1;
       exitg1 = false;
-      while ((!exitg1) && (nm1d2 <= x->size[1])) {
-        if (x->data[nm1d2 - 1]) {
-          yk++;
-          j->data[yk - 1] = nm1d2;
-          if (yk >= x->size[1]) {
+      while ((!exitg1) && (yk <= x->size[1])) {
+        if (x->data[yk - 1]) {
+          b_idx++;
+          jj->data[b_idx - 1] = yk;
+          if (b_idx >= x->size[1]) {
             exitg1 = true;
           } else {
-            nm1d2++;
+            yk++;
           }
         } else {
-          nm1d2++;
+          yk++;
         }
       }
 
       if (x->size[1] == 1) {
-        if (yk == 0) {
-          j->size[0] = 1;
-          j->size[1] = 0;
+        if (b_idx == 0) {
+          jj->size[0] = 1;
+          jj->size[1] = 0;
         }
-      } else if (1 > yk) {
-        j->size[1] = 0;
       } else {
-        i47 = j->size[0] * j->size[1];
-        j->size[1] = yk;
-        emxEnsureCapacity_int32_T(j, i47);
+        q = jj->size[0] * jj->size[1];
+        if (1 > b_idx) {
+          jj->size[1] = 0;
+        } else {
+          jj->size[1] = b_idx;
+        }
+
+        emxEnsureCapacity_int32_T(jj, q);
       }
     }
 
-    i47 = allC->size[0] * allC->size[1];
+    q = allC->size[0] * allC->size[1];
     allC->size[0] = 1;
-    allC->size[1] = j->size[1];
-    emxEnsureCapacity_int32_T(allC, i47);
-    qEnd = j->size[0] * j->size[1];
-    for (i47 = 0; i47 < qEnd; i47++) {
-      allC->data[i47] = j->data[i47];
+    allC->size[1] = jj->size[1];
+    emxEnsureCapacity_int32_T(allC, q);
+    nb = jj->size[1];
+    for (q = 0; q < nb; q++) {
+      allC->data[q] = jj->data[q];
     }
 
+    /* 'funcionCPrO:35' ~ */
     /*  Veo en cuales es posible asignar la operacion. */
+    /* 'funcionCPrO:37' if isempty(allC) */
     if (allC->size[1] == 0) {
       /*  Si no es posible asignar ninguna cama incremento el contDia e llamo a funcionDia */
-      nm1d2 = *contDia;
-      if (nm1d2 > 2147483646) {
-        *contDia = MAX_int32_T;
-      } else {
-        *contDia = nm1d2 + 1;
-      }
+      /* 'funcionCPrO:38' contDia = contDia + 1; */
+      (*contDia)++;
 
+      /* 'funcionCPrO:39' [contDia,tempUltPosRecXDia,DispME] = funcionDia(NumRec, PCPrO, Dia,UltPosRecXDia, TimeUsoCPrO, TimeUsoS, contDia, DispMExD); */
       funcionDia(NumRec, PCPrO, Dia, UltPosRecXDia, TimeUsoCPrO, TimeUsoS,
                  contDia, DispMExD, tempUltPosRecXDia, DispME);
     } else {
-      i47 = j->size[0] * j->size[1];
-      j->size[0] = 1;
-      j->size[1] = allC->size[1];
-      emxEnsureCapacity_int32_T(j, i47);
-      qEnd = allC->size[0] * allC->size[1];
-      for (i47 = 0; i47 < qEnd; i47++) {
-        j->data[i47] = tempUltPosRecXDia->data[(int)(unsigned int)C->data
-          [allC->data[i47] - 1] - 1];
+      /* 'funcionCPrO:40' else */
+      /* 'funcionCPrO:41' [~,u]=unique(auxUPxR(C(allC))); */
+      q = jj->size[0] * jj->size[1];
+      jj->size[0] = 1;
+      jj->size[1] = allC->size[1];
+      emxEnsureCapacity_int32_T(jj, q);
+      nb = allC->size[1];
+      for (q = 0; q < nb; q++) {
+        jj->data[q] = tempUltPosRecXDia->data[C->data[allC->data[q] - 1] - 1];
       }
 
       na = allC->size[1];
       n = allC->size[1] + 1;
-      i47 = idx->size[0] * idx->size[1];
+      yk = allC->size[1];
+      q = idx->size[0] * idx->size[1];
       idx->size[0] = 1;
-      idx->size[1] = allC->size[1];
-      emxEnsureCapacity_int32_T(idx, i47);
-      qEnd = allC->size[1];
-      for (i47 = 0; i47 < qEnd; i47++) {
-        idx->data[i47] = 0;
+      idx->size[1] = yk;
+      emxEnsureCapacity_int32_T(idx, q);
+      for (q = 0; q < yk; q++) {
+        idx->data[q] = 0;
       }
 
-      i47 = iwork->size[0];
+      q = iwork->size[0];
       iwork->size[0] = allC->size[1];
-      emxEnsureCapacity_int32_T(iwork, i47);
-      i47 = allC->size[1] - 1;
-      for (temCPrO = 1; temCPrO <= i47; temCPrO += 2) {
-        if (j->data[temCPrO - 1] <= j->data[temCPrO]) {
-          idx->data[temCPrO - 1] = temCPrO;
-          idx->data[temCPrO] = temCPrO + 1;
+      emxEnsureCapacity_int32_T(iwork, q);
+      q = allC->size[1] - 1;
+      for (k = 1; k <= q; k += 2) {
+        if (jj->data[k - 1] <= jj->data[k]) {
+          idx->data[k - 1] = k;
+          idx->data[k] = k + 1;
         } else {
-          idx->data[temCPrO - 1] = temCPrO + 1;
-          idx->data[temCPrO] = temCPrO;
+          idx->data[k - 1] = k + 1;
+          idx->data[k] = k;
         }
       }
 
@@ -2604,1278 +2620,1291 @@ void funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
         idx->data[allC->size[1] - 1] = allC->size[1];
       }
 
-      nm1d2 = 2;
-      while (nm1d2 < n - 1) {
-        yk = nm1d2 << 1;
-        b_j = 1;
-        for (nb = 1 + nm1d2; nb < n; nb = qEnd + nm1d2) {
-          p = b_j;
+      yk = 2;
+      while (yk < n - 1) {
+        b_idx = yk << 1;
+        j = 1;
+        for (nb = 1 + yk; nb < n; nb = qEnd + yk) {
+          p = j;
           q = nb;
-          qEnd = b_j + yk;
+          qEnd = j + b_idx;
           if (qEnd > n) {
             qEnd = n;
           }
 
-          temCPrO = 0;
-          kEnd = qEnd - b_j;
-          while (temCPrO + 1 <= kEnd) {
-            if (j->data[idx->data[p - 1] - 1] <= j->data[idx->data[q - 1] - 1])
+          k = 0;
+          kEnd = qEnd - j;
+          while (k + 1 <= kEnd) {
+            if (jj->data[idx->data[p - 1] - 1] <= jj->data[idx->data[q - 1] - 1])
             {
-              iwork->data[temCPrO] = idx->data[p - 1];
+              iwork->data[k] = idx->data[p - 1];
               p++;
               if (p == nb) {
                 while (q < qEnd) {
-                  temCPrO++;
-                  iwork->data[temCPrO] = idx->data[q - 1];
+                  k++;
+                  iwork->data[k] = idx->data[q - 1];
                   q++;
                 }
               }
             } else {
-              iwork->data[temCPrO] = idx->data[q - 1];
+              iwork->data[k] = idx->data[q - 1];
               q++;
               if (q == qEnd) {
                 while (p < nb) {
-                  temCPrO++;
-                  iwork->data[temCPrO] = idx->data[p - 1];
+                  k++;
+                  iwork->data[k] = idx->data[p - 1];
                   p++;
                 }
               }
             }
 
-            temCPrO++;
+            k++;
           }
 
-          for (temCPrO = 0; temCPrO < kEnd; temCPrO++) {
-            idx->data[(b_j + temCPrO) - 1] = iwork->data[temCPrO];
+          for (k = 0; k < kEnd; k++) {
+            idx->data[(j + k) - 1] = iwork->data[k];
           }
 
-          b_j = qEnd;
+          j = qEnd;
         }
 
-        nm1d2 = yk;
+        yk = b_idx;
       }
 
-      i47 = b_b->size[0] * b_b->size[1];
-      b_b->size[0] = 1;
-      b_b->size[1] = allC->size[1];
-      emxEnsureCapacity_int32_T(b_b, i47);
-      for (temCPrO = 0; temCPrO < na; temCPrO++) {
-        b_b->data[temCPrO] = j->data[idx->data[temCPrO] - 1];
+      nm1 = (unsigned int)allC->size[1];
+      q = b->size[0] * b->size[1];
+      b->size[0] = 1;
+      b->size[1] = (int)nm1;
+      emxEnsureCapacity_int32_T(b, q);
+      for (k = 0; k < na; k++) {
+        b->data[k] = jj->data[idx->data[k] - 1];
       }
 
       nb = -1;
-      temCPrO = 0;
-      while (temCPrO + 1 <= na) {
-        nm1d2 = b_b->data[temCPrO];
-        yk = temCPrO;
+      k = 0;
+      while (k + 1 <= na) {
+        yk = b->data[k];
+        b_idx = k;
         do {
-          temCPrO++;
-        } while (!((temCPrO + 1 > na) || (b_b->data[temCPrO] != nm1d2)));
+          k++;
+        } while (!((k + 1 > na) || (b->data[k] != yk)));
 
         nb++;
-        b_b->data[nb] = nm1d2;
-        idx->data[nb] = idx->data[yk];
+        b->data[nb] = yk;
+        idx->data[nb] = idx->data[b_idx];
       }
 
-      i47 = iwork->size[0];
+      q = iwork->size[0];
       iwork->size[0] = nb + 1;
-      emxEnsureCapacity_int32_T(iwork, i47);
-      for (temCPrO = 0; temCPrO <= nb; temCPrO++) {
-        iwork->data[temCPrO] = idx->data[temCPrO];
+      emxEnsureCapacity_int32_T(iwork, q);
+      for (k = 0; k <= nb; k++) {
+        iwork->data[k] = idx->data[k];
       }
 
-      i47 = uCPrODisp->size[0] * uCPrODisp->size[1];
+      q = u->size[0];
+      u->size[0] = iwork->size[0];
+      emxEnsureCapacity_int32_T(u, q);
+      nb = iwork->size[0];
+      for (q = 0; q < nb; q++) {
+        u->data[q] = iwork->data[q];
+      }
+
+      /* 'funcionCPrO:41' ~ */
+      /* 'funcionCPrO:42' uCPrODisp=C(allC(u)); */
+      q = uCPrODisp->size[0] * uCPrODisp->size[1];
       uCPrODisp->size[0] = 1;
-      uCPrODisp->size[1] = iwork->size[0];
-      emxEnsureCapacity_uint32_T(uCPrODisp, i47);
-      qEnd = iwork->size[0];
-      for (i47 = 0; i47 < qEnd; i47++) {
-        uCPrODisp->data[i47] = (unsigned int)C->data[allC->data[iwork->data[i47]
-          - 1] - 1];
+      uCPrODisp->size[1] = u->size[0];
+      emxEnsureCapacity_uint32_T(uCPrODisp, q);
+      nb = u->size[0];
+      for (q = 0; q < nb; q++) {
+        uCPrODisp->data[q] = (unsigned int)C->data[allC->data[u->data[q] - 1] -
+          1];
       }
 
-      if (NumRec[0] > 2147483646) {
-        nm1d2 = MAX_int32_T;
+      /* 'funcionCPrO:46' auxUPxE = UltPosRecXDia(contDia,NumRec(1)+1:sum(NumRec(1:2))); */
+      if (NumRec[0] + 1 > b_tmp) {
+        q = 0;
+        p = -1;
       } else {
-        nm1d2 = NumRec[0] + 1;
+        q = NumRec[0];
+        p = b_tmp - 1;
       }
 
-      a = rt_roundd(e_sum(*(int (*)[2])&NumRec[0]));
-      if (a < 2.147483648E+9) {
-        if (a >= -2.147483648E+9) {
-          i47 = (int)a;
-        } else {
-          i47 = MIN_int32_T;
-        }
-      } else {
-        i47 = MAX_int32_T;
-      }
-
-      if (nm1d2 > i47) {
-        i47 = -1;
-      } else {
-        i47 = nm1d2 - 2;
+      yk = auxUPxE->size[0] * auxUPxE->size[1];
+      auxUPxE->size[0] = 1;
+      nb = p - q;
+      auxUPxE->size[1] = nb + 1;
+      emxEnsureCapacity_int32_T(auxUPxE, yk);
+      for (p = 0; p <= nb; p++) {
+        auxUPxE->data[p] = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
+          * (q + p)) - 1];
       }
 
       /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los ME. */
+      /* 'funcionCPrO:47' auxPME=PME(1:end-1).*DispME; */
       if (1 > PME->size[1] - 1) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PME->size[1] - 1;
+        nb = PME->size[1] - 1;
       }
 
-      kEnd = x->size[0] * x->size[1];
+      /* 'funcionCPrO:48' [~,allE]=find(auxPME~=0); */
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, kEnd);
-      for (kEnd = 0; kEnd < qEnd; kEnd++) {
-        i48 = (long long)PME->data[kEnd] * DispME->data[kEnd];
-        if (i48 > 2147483647LL) {
-          i48 = 2147483647LL;
-        } else {
-          if (i48 < -2147483648LL) {
-            i48 = -2147483648LL;
-          }
-        }
-
-        x->data[kEnd] = ((int)i48 != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PME->data[q] * DispME->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        kEnd = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, kEnd);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          kEnd = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, kEnd);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      kEnd = C->size[0] * C->size[1];
-      C->size[0] = 1;
-      C->size[1] = j->size[1];
-      emxEnsureCapacity_real_T(C, kEnd);
-      qEnd = j->size[0] * j->size[1];
-      for (kEnd = 0; kEnd < qEnd; kEnd++) {
-        C->data[kEnd] = j->data[kEnd];
+      q = allE->size[0] * allE->size[1];
+      allE->size[0] = 1;
+      allE->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allE, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allE->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:48' ~ */
       /*  Busco los posibles Especialistas a usar. */
-      a = f_sum(*(int (*)[3])&NumRec[0]) + 1.0;
-      b = h_sum(*(int (*)[4])&NumRec[0]);
-      if (a > b) {
-        kEnd = -1;
+      /* 'funcionCPrO:50' auxUPxA = UltPosRecXDia(contDia,sum(NumRec(1:3))+1:sum(NumRec(1:4))); */
+      y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+      ndbl = (((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+        (double)NumRec[3];
+      if (y + 1.0 > ndbl) {
+        q = 0;
+        p = -1;
       } else {
-        kEnd = (int)a - 2;
+        q = (int)(y + 1.0) - 1;
+        p = (int)ndbl - 1;
+      }
+
+      yk = auxUPxA->size[0] * auxUPxA->size[1];
+      auxUPxA->size[0] = 1;
+      nb = p - q;
+      auxUPxA->size[1] = nb + 1;
+      emxEnsureCapacity_int32_T(auxUPxA, yk);
+      for (p = 0; p <= nb; p++) {
+        auxUPxA->data[p] = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
+          * (q + p)) - 1];
       }
 
       /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los A. */
+      /* 'funcionCPrO:51' [~,allA]=find(PMA(1:end-1)~=0); */
       if (1 > PMA->size[1] - 1) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PMA->size[1] - 1;
+        nb = PMA->size[1] - 1;
       }
 
-      n = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, n);
-      for (n = 0; n < qEnd; n++) {
-        x->data[n] = (PMA->data[n] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PMA->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        n = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, n);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          n = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, n);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      n = allA->size[0] * allA->size[1];
+      q = allA->size[0] * allA->size[1];
       allA->size[0] = 1;
-      allA->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allA, n);
-      qEnd = j->size[0] * j->size[1];
-      for (n = 0; n < qEnd; n++) {
-        allA->data[n] = j->data[n];
+      allA->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allA, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allA->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:51' ~ */
       /*  Busco los posibles Asistentes a usar. */
-      a = h_sum(*(int (*)[4])&NumRec[0]) + 1.0;
-      b = i_sum(*(int (*)[5])&NumRec[0]);
-      if (a > b) {
-        n = -1;
+      /* 'funcionCPrO:53' auxUPxAn = UltPosRecXDia(contDia,sum(NumRec(1:4))+1:sum(NumRec(1:5))); */
+      y = (((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+        (double)NumRec[3];
+      ndbl = ((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+              (double)NumRec[3]) + (double)NumRec[4];
+      if (y + 1.0 > ndbl) {
+        q = 0;
+        p = -1;
       } else {
-        n = (int)a - 2;
+        q = (int)(y + 1.0) - 1;
+        p = (int)ndbl - 1;
+      }
+
+      yk = auxUPxAn->size[0] * auxUPxAn->size[1];
+      auxUPxAn->size[0] = 1;
+      nb = p - q;
+      auxUPxAn->size[1] = nb + 1;
+      emxEnsureCapacity_int32_T(auxUPxAn, yk);
+      for (p = 0; p <= nb; p++) {
+        auxUPxAn->data[p] = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size
+          [0] * (q + p)) - 1];
       }
 
       /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los An. */
+      /* 'funcionCPrO:54' [~,allAn]=find(PMAn(1:end-1)~=0); */
       if (1 > PMAn->size[1] - 1) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PMAn->size[1] - 1;
+        nb = PMAn->size[1] - 1;
       }
 
-      na = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, na);
-      for (na = 0; na < qEnd; na++) {
-        x->data[na] = (PMAn->data[na] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PMAn->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        na = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, na);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          na = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, na);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      na = allAn->size[0] * allAn->size[1];
+      q = allAn->size[0] * allAn->size[1];
       allAn->size[0] = 1;
-      allAn->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allAn, na);
-      qEnd = j->size[0] * j->size[1];
-      for (na = 0; na < qEnd; na++) {
-        allAn->data[na] = j->data[na];
+      allAn->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allAn, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allAn->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:54' ~ */
       /*  Busco los posibles Anestesistas a usar. */
-      a = e_sum(*(int (*)[2])&NumRec[0]) + 1.0;
-      b = f_sum(*(int (*)[3])&NumRec[0]);
-      if (a > b) {
-        na = -1;
+      /* 'funcionCPrO:56' auxUPxS = UltPosRecXDia(contDia,sum(NumRec(1:2))+1:sum(NumRec(1:3))); */
+      y = ((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2];
+      if (y_tmp + 1.0 > y) {
+        q = 0;
+        p = -1;
       } else {
-        na = (int)a - 2;
+        q = (int)(y_tmp + 1.0) - 1;
+        p = (int)y - 1;
+      }
+
+      yk = auxUPxS->size[0] * auxUPxS->size[1];
+      auxUPxS->size[0] = 1;
+      nb = p - q;
+      auxUPxS->size[1] = nb + 1;
+      emxEnsureCapacity_int32_T(auxUPxS, yk);
+      for (p = 0; p <= nb; p++) {
+        auxUPxS->data[p] = UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
+          * (q + p)) - 1];
       }
 
       /*  Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los S. */
+      /* 'funcionCPrO:57' [~,allS]=find(PS(1:end)~=0); */
       if (1 > PS->size[1]) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PS->size[1];
+        nb = PS->size[1];
       }
 
-      p = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, p);
-      for (p = 0; p < qEnd; p++) {
-        x->data[p] = (PS->data[p] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PS->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        p = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, p);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          p = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, p);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      p = allS->size[0] * allS->size[1];
+      q = allS->size[0] * allS->size[1];
       allS->size[0] = 1;
-      allS->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allS, p);
-      qEnd = j->size[0] * j->size[1];
-      for (p = 0; p < qEnd; p++) {
-        allS->data[p] = j->data[p];
+      allS->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allS, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allS->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:57' ~ */
       /*  Busco los posibles Salones a usar. */
       /* auxUPxCPO = UltPosRecXDia(contDia,NumRec(1:5)+1:sum(NumRec(1:6)));% Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los ME. */
+      /* 'funcionCPrO:60' [~,allCPO]=find(PCPO(1:end)~=0); */
       if (1 > PCPO->size[1]) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PCPO->size[1];
+        nb = PCPO->size[1];
       }
 
-      p = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, p);
-      for (p = 0; p < qEnd; p++) {
-        x->data[p] = (PCPO->data[p] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PCPO->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        p = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, p);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          p = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, p);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      p = allCPO->size[0] * allCPO->size[1];
+      q = allCPO->size[0] * allCPO->size[1];
       allCPO->size[0] = 1;
-      allCPO->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allCPO, p);
-      qEnd = j->size[0] * j->size[1];
-      for (p = 0; p < qEnd; p++) {
-        allCPO->data[p] = j->data[p];
+      allCPO->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allCPO, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allCPO->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:60' ~ */
       /*  Busco los posibles Especialistas a usar. */
       /* auxUPxCR = UltPosRecXDia(contDia,sum(NumRec(1:6))+1:sum(NumRec(1:7)));% Selecciono los ultimas posiciones a partir de donde se pueden seleccionar los S. */
+      /* 'funcionCPrO:63' [~,allCR]=find(PCR(1:end)~=0); */
       if (1 > PCR->size[1]) {
-        qEnd = 0;
+        nb = 0;
       } else {
-        qEnd = PCR->size[1];
+        nb = PCR->size[1];
       }
 
-      p = x->size[0] * x->size[1];
+      q = x->size[0] * x->size[1];
       x->size[0] = 1;
-      x->size[1] = qEnd;
-      emxEnsureCapacity_boolean_T(x, p);
-      for (p = 0; p < qEnd; p++) {
-        x->data[p] = (PCR->data[p] != 0);
+      x->size[1] = nb;
+      emxEnsureCapacity_boolean_T(x, q);
+      for (q = 0; q < nb; q++) {
+        x->data[q] = (PCR->data[q] != 0);
       }
 
       if (x->size[1] == 0) {
-        j->size[0] = 1;
-        j->size[1] = 0;
+        jj->size[0] = 1;
+        jj->size[1] = 0;
       } else {
-        yk = 0;
-        p = j->size[0] * j->size[1];
-        j->size[0] = 1;
-        j->size[1] = x->size[1];
-        emxEnsureCapacity_int32_T(j, p);
-        nm1d2 = 1;
+        b_idx = 0;
+        q = jj->size[0] * jj->size[1];
+        jj->size[0] = 1;
+        jj->size[1] = x->size[1];
+        emxEnsureCapacity_int32_T(jj, q);
+        yk = 1;
         exitg1 = false;
-        while ((!exitg1) && (nm1d2 <= x->size[1])) {
-          if (x->data[nm1d2 - 1]) {
-            yk++;
-            j->data[yk - 1] = nm1d2;
-            if (yk >= x->size[1]) {
+        while ((!exitg1) && (yk <= x->size[1])) {
+          if (x->data[yk - 1]) {
+            b_idx++;
+            jj->data[b_idx - 1] = yk;
+            if (b_idx >= x->size[1]) {
               exitg1 = true;
             } else {
-              nm1d2++;
+              yk++;
             }
           } else {
-            nm1d2++;
+            yk++;
           }
         }
 
         if (x->size[1] == 1) {
-          if (yk == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+          if (b_idx == 0) {
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           }
-        } else if (1 > yk) {
-          j->size[1] = 0;
         } else {
-          p = j->size[0] * j->size[1];
-          j->size[1] = yk;
-          emxEnsureCapacity_int32_T(j, p);
+          q = jj->size[0] * jj->size[1];
+          if (1 > b_idx) {
+            jj->size[1] = 0;
+          } else {
+            jj->size[1] = b_idx;
+          }
+
+          emxEnsureCapacity_int32_T(jj, q);
         }
       }
 
-      p = allCR->size[0] * allCR->size[1];
+      q = allCR->size[0] * allCR->size[1];
       allCR->size[0] = 1;
-      allCR->size[1] = j->size[1];
-      emxEnsureCapacity_int32_T(allCR, p);
-      qEnd = j->size[0] * j->size[1];
-      for (p = 0; p < qEnd; p++) {
-        allCR->data[p] = j->data[p];
+      allCR->size[1] = jj->size[1];
+      emxEnsureCapacity_int32_T(allCR, q);
+      nb = jj->size[1];
+      for (q = 0; q < nb; q++) {
+        allCR->data[q] = jj->data[q];
       }
 
+      /* 'funcionCPrO:63' ~ */
       /*  Busco los posibles Salones a usar. */
+      /* 'funcionCPrO:64' temCPrO=-1; */
       temCPrO = -1;
-      b_j = 0;
+
+      /* 'funcionCPrO:66' for j=1:length(uCPrODisp) */
+      j = 0;
       do {
         exitg2 = 0;
-        nm1d2 = iwork->size[0];
-        if (b_j <= nm1d2 - 1) {
-          nm1d2 = tempUltPosRecXDia->data[(int)uCPrODisp->data[b_j] - 1];
-          if ((nm1d2 < 0) && (TimeUsoCPrO < MIN_int32_T - nm1d2)) {
-            e_qY = MIN_int32_T;
-          } else if ((nm1d2 > 0) && (TimeUsoCPrO > MAX_int32_T - nm1d2)) {
-            e_qY = MAX_int32_T;
-          } else {
-            e_qY = nm1d2 + TimeUsoCPrO;
-          }
+        yk = u->size[0];
+        if (j <= yk - 1) {
+          /* 'funcionCPrO:68' EndCPrOAxD = auxUPxR(uCPrODisp(j))+TimeUsoCPrO; */
+          b_EndCPrOAxD = tempUltPosRecXDia->data[(int)uCPrODisp->data[j] - 1] +
+            TimeUsoCPrO;
 
-          if ((e_qY < 0) && (TimeUsoS < MIN_int32_T - e_qY)) {
-            f_qY = MIN_int32_T;
-          } else if ((e_qY > 0) && (TimeUsoS > MAX_int32_T - e_qY)) {
-            f_qY = MAX_int32_T;
-          } else {
-            f_qY = e_qY + TimeUsoS;
-          }
+          /* 'funcionCPrO:69' EndRPxD = EndCPrOAxD+TimeUsoS; */
+          b_EndRPxD = b_EndCPrOAxD + TimeUsoS;
 
-          p = x->size[0] * x->size[1];
+          /* 'funcionCPrO:71' [~,E]=find(auxUPxE(allE)<=EndCPrOAxD); */
+          q = x->size[0] * x->size[1];
           x->size[0] = 1;
-          x->size[1] = C->size[1];
-          emxEnsureCapacity_boolean_T(x, p);
-          qEnd = C->size[1];
-          for (p = 0; p < qEnd; p++) {
-            x->data[p] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
-              * (i47 + (int)C->data[p])) - 1] <= e_qY);
+          x->size[1] = allE->size[1];
+          emxEnsureCapacity_boolean_T(x, q);
+          nb = allE->size[1];
+          for (q = 0; q < nb; q++) {
+            x->data[q] = (auxUPxE->data[allE->data[q] - 1] <= b_EndCPrOAxD);
           }
 
           if (x->size[1] == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           } else {
-            yk = 0;
-            p = j->size[0] * j->size[1];
-            j->size[0] = 1;
-            j->size[1] = x->size[1];
-            emxEnsureCapacity_int32_T(j, p);
-            nm1d2 = 1;
+            b_idx = 0;
+            q = jj->size[0] * jj->size[1];
+            jj->size[0] = 1;
+            jj->size[1] = x->size[1];
+            emxEnsureCapacity_int32_T(jj, q);
+            yk = 1;
             exitg1 = false;
-            while ((!exitg1) && (nm1d2 <= x->size[1])) {
-              if (x->data[nm1d2 - 1]) {
-                yk++;
-                j->data[yk - 1] = nm1d2;
-                if (yk >= x->size[1]) {
+            while ((!exitg1) && (yk <= x->size[1])) {
+              if (x->data[yk - 1]) {
+                b_idx++;
+                jj->data[b_idx - 1] = yk;
+                if (b_idx >= x->size[1]) {
                   exitg1 = true;
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               } else {
-                nm1d2++;
+                yk++;
               }
             }
 
             if (x->size[1] == 1) {
-              if (yk == 0) {
-                j->size[0] = 1;
-                j->size[1] = 0;
+              if (b_idx == 0) {
+                jj->size[0] = 1;
+                jj->size[1] = 0;
               }
-            } else if (1 > yk) {
-              j->size[1] = 0;
             } else {
-              p = j->size[0] * j->size[1];
-              j->size[1] = yk;
-              emxEnsureCapacity_int32_T(j, p);
+              q = jj->size[0] * jj->size[1];
+              if (1 > b_idx) {
+                jj->size[1] = 0;
+              } else {
+                jj->size[1] = b_idx;
+              }
+
+              emxEnsureCapacity_int32_T(jj, q);
             }
           }
 
-          p = E->size[0] * E->size[1];
+          q = E->size[0] * E->size[1];
           E->size[0] = 1;
-          E->size[1] = j->size[1];
-          emxEnsureCapacity_int32_T(E, p);
-          qEnd = j->size[0] * j->size[1];
-          for (p = 0; p < qEnd; p++) {
-            E->data[p] = j->data[p];
+          E->size[1] = jj->size[1];
+          emxEnsureCapacity_int32_T(E, q);
+          nb = jj->size[1];
+          for (q = 0; q < nb; q++) {
+            E->data[q] = jj->data[q];
           }
 
+          /* 'funcionCPrO:71' ~ */
           /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
-          p = x->size[0] * x->size[1];
+          /* 'funcionCPrO:72' [~,A]=find(auxUPxA(allA)<=EndCPrOAxD); */
+          q = x->size[0] * x->size[1];
           x->size[0] = 1;
           x->size[1] = allA->size[1];
-          emxEnsureCapacity_boolean_T(x, p);
-          qEnd = allA->size[1];
-          for (p = 0; p < qEnd; p++) {
-            x->data[p] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
-              * (kEnd + allA->data[p])) - 1] <= e_qY);
+          emxEnsureCapacity_boolean_T(x, q);
+          nb = allA->size[1];
+          for (q = 0; q < nb; q++) {
+            x->data[q] = (auxUPxA->data[allA->data[q] - 1] <= b_EndCPrOAxD);
           }
 
           if (x->size[1] == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           } else {
-            yk = 0;
-            p = j->size[0] * j->size[1];
-            j->size[0] = 1;
-            j->size[1] = x->size[1];
-            emxEnsureCapacity_int32_T(j, p);
-            nm1d2 = 1;
+            b_idx = 0;
+            q = jj->size[0] * jj->size[1];
+            jj->size[0] = 1;
+            jj->size[1] = x->size[1];
+            emxEnsureCapacity_int32_T(jj, q);
+            yk = 1;
             exitg1 = false;
-            while ((!exitg1) && (nm1d2 <= x->size[1])) {
-              if (x->data[nm1d2 - 1]) {
-                yk++;
-                j->data[yk - 1] = nm1d2;
-                if (yk >= x->size[1]) {
+            while ((!exitg1) && (yk <= x->size[1])) {
+              if (x->data[yk - 1]) {
+                b_idx++;
+                jj->data[b_idx - 1] = yk;
+                if (b_idx >= x->size[1]) {
                   exitg1 = true;
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               } else {
-                nm1d2++;
+                yk++;
               }
             }
 
             if (x->size[1] == 1) {
-              if (yk == 0) {
-                j->size[0] = 1;
-                j->size[1] = 0;
+              if (b_idx == 0) {
+                jj->size[0] = 1;
+                jj->size[1] = 0;
               }
-            } else if (1 > yk) {
-              j->size[1] = 0;
             } else {
-              p = j->size[0] * j->size[1];
-              j->size[1] = yk;
-              emxEnsureCapacity_int32_T(j, p);
+              q = jj->size[0] * jj->size[1];
+              if (1 > b_idx) {
+                jj->size[1] = 0;
+              } else {
+                jj->size[1] = b_idx;
+              }
+
+              emxEnsureCapacity_int32_T(jj, q);
             }
           }
 
-          p = A->size[0] * A->size[1];
+          q = A->size[0] * A->size[1];
           A->size[0] = 1;
-          A->size[1] = j->size[1];
-          emxEnsureCapacity_int32_T(A, p);
-          qEnd = j->size[0] * j->size[1];
-          for (p = 0; p < qEnd; p++) {
-            A->data[p] = j->data[p];
+          A->size[1] = jj->size[1];
+          emxEnsureCapacity_int32_T(A, q);
+          nb = jj->size[1];
+          for (q = 0; q < nb; q++) {
+            A->data[q] = jj->data[q];
           }
 
+          /* 'funcionCPrO:72' ~ */
           /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
-          p = x->size[0] * x->size[1];
+          /* 'funcionCPrO:73' [~,An]=find(auxUPxAn(allAn)<=EndCPrOAxD); */
+          q = x->size[0] * x->size[1];
           x->size[0] = 1;
           x->size[1] = allAn->size[1];
-          emxEnsureCapacity_boolean_T(x, p);
-          qEnd = allAn->size[1];
-          for (p = 0; p < qEnd; p++) {
-            x->data[p] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
-              * (n + allAn->data[p])) - 1] <= e_qY);
+          emxEnsureCapacity_boolean_T(x, q);
+          nb = allAn->size[1];
+          for (q = 0; q < nb; q++) {
+            x->data[q] = (auxUPxAn->data[allAn->data[q] - 1] <= b_EndCPrOAxD);
           }
 
           if (x->size[1] == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           } else {
-            yk = 0;
-            p = j->size[0] * j->size[1];
-            j->size[0] = 1;
-            j->size[1] = x->size[1];
-            emxEnsureCapacity_int32_T(j, p);
-            nm1d2 = 1;
+            b_idx = 0;
+            q = jj->size[0] * jj->size[1];
+            jj->size[0] = 1;
+            jj->size[1] = x->size[1];
+            emxEnsureCapacity_int32_T(jj, q);
+            yk = 1;
             exitg1 = false;
-            while ((!exitg1) && (nm1d2 <= x->size[1])) {
-              if (x->data[nm1d2 - 1]) {
-                yk++;
-                j->data[yk - 1] = nm1d2;
-                if (yk >= x->size[1]) {
+            while ((!exitg1) && (yk <= x->size[1])) {
+              if (x->data[yk - 1]) {
+                b_idx++;
+                jj->data[b_idx - 1] = yk;
+                if (b_idx >= x->size[1]) {
                   exitg1 = true;
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               } else {
-                nm1d2++;
+                yk++;
               }
             }
 
             if (x->size[1] == 1) {
-              if (yk == 0) {
-                j->size[0] = 1;
-                j->size[1] = 0;
+              if (b_idx == 0) {
+                jj->size[0] = 1;
+                jj->size[1] = 0;
               }
-            } else if (1 > yk) {
-              j->size[1] = 0;
             } else {
-              p = j->size[0] * j->size[1];
-              j->size[1] = yk;
-              emxEnsureCapacity_int32_T(j, p);
+              q = jj->size[0] * jj->size[1];
+              if (1 > b_idx) {
+                jj->size[1] = 0;
+              } else {
+                jj->size[1] = b_idx;
+              }
+
+              emxEnsureCapacity_int32_T(jj, q);
             }
           }
 
-          p = An->size[0] * An->size[1];
+          q = An->size[0] * An->size[1];
           An->size[0] = 1;
-          An->size[1] = j->size[1];
-          emxEnsureCapacity_int32_T(An, p);
-          qEnd = j->size[0] * j->size[1];
-          for (p = 0; p < qEnd; p++) {
-            An->data[p] = j->data[p];
+          An->size[1] = jj->size[1];
+          emxEnsureCapacity_int32_T(An, q);
+          nb = jj->size[1];
+          for (q = 0; q < nb; q++) {
+            An->data[q] = jj->data[q];
           }
 
+          /* 'funcionCPrO:73' ~ */
           /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
-          p = x->size[0] * x->size[1];
+          /* 'funcionCPrO:74' [~,S]=find(auxUPxS(allS)<=EndCPrOAxD); */
+          q = x->size[0] * x->size[1];
           x->size[0] = 1;
           x->size[1] = allS->size[1];
-          emxEnsureCapacity_boolean_T(x, p);
-          qEnd = allS->size[1];
-          for (p = 0; p < qEnd; p++) {
-            x->data[p] = (UltPosRecXDia->data[(*contDia + UltPosRecXDia->size[0]
-              * (na + allS->data[p])) - 1] <= e_qY);
+          emxEnsureCapacity_boolean_T(x, q);
+          nb = allS->size[1];
+          for (q = 0; q < nb; q++) {
+            x->data[q] = (auxUPxS->data[allS->data[q] - 1] <= b_EndCPrOAxD);
           }
 
           if (x->size[1] == 0) {
-            j->size[0] = 1;
-            j->size[1] = 0;
+            jj->size[0] = 1;
+            jj->size[1] = 0;
           } else {
-            yk = 0;
-            p = j->size[0] * j->size[1];
-            j->size[0] = 1;
-            j->size[1] = x->size[1];
-            emxEnsureCapacity_int32_T(j, p);
-            nm1d2 = 1;
+            b_idx = 0;
+            q = jj->size[0] * jj->size[1];
+            jj->size[0] = 1;
+            jj->size[1] = x->size[1];
+            emxEnsureCapacity_int32_T(jj, q);
+            yk = 1;
             exitg1 = false;
-            while ((!exitg1) && (nm1d2 <= x->size[1])) {
-              if (x->data[nm1d2 - 1]) {
-                yk++;
-                j->data[yk - 1] = nm1d2;
-                if (yk >= x->size[1]) {
+            while ((!exitg1) && (yk <= x->size[1])) {
+              if (x->data[yk - 1]) {
+                b_idx++;
+                jj->data[b_idx - 1] = yk;
+                if (b_idx >= x->size[1]) {
                   exitg1 = true;
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               } else {
-                nm1d2++;
+                yk++;
               }
             }
 
             if (x->size[1] == 1) {
-              if (yk == 0) {
-                j->size[0] = 1;
-                j->size[1] = 0;
+              if (b_idx == 0) {
+                jj->size[0] = 1;
+                jj->size[1] = 0;
               }
-            } else if (1 > yk) {
-              j->size[1] = 0;
             } else {
-              p = j->size[0] * j->size[1];
-              j->size[1] = yk;
-              emxEnsureCapacity_int32_T(j, p);
+              q = jj->size[0] * jj->size[1];
+              if (1 > b_idx) {
+                jj->size[1] = 0;
+              } else {
+                jj->size[1] = b_idx;
+              }
+
+              emxEnsureCapacity_int32_T(jj, q);
             }
           }
 
-          p = S->size[0] * S->size[1];
+          q = S->size[0] * S->size[1];
           S->size[0] = 1;
-          S->size[1] = j->size[1];
-          emxEnsureCapacity_int32_T(S, p);
-          qEnd = j->size[0] * j->size[1];
-          for (p = 0; p < qEnd; p++) {
-            S->data[p] = j->data[p];
+          S->size[1] = jj->size[1];
+          emxEnsureCapacity_int32_T(S, q);
+          nb = jj->size[1];
+          for (q = 0; q < nb; q++) {
+            S->data[q] = jj->data[q];
           }
 
+          /* 'funcionCPrO:74' ~ */
           /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo.         */
+          /* 'funcionCPrO:76' if TimeUsoCPO == 0 */
           if (TimeUsoCPO == 0) {
-            p = CPO->size[0] * CPO->size[1];
+            /* 'funcionCPrO:77' CPO=0; */
+            q = CPO->size[0] * CPO->size[1];
             CPO->size[0] = 1;
             CPO->size[1] = 1;
-            emxEnsureCapacity_int32_T(CPO, p);
+            emxEnsureCapacity_int32_T(CPO, q);
             CPO->data[0] = 0;
-            nm1d2 = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-            if ((nm1d2 < 0) && (e_qY < MIN_int32_T - nm1d2)) {
-              nm1d2 = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (e_qY > MAX_int32_T - nm1d2)) {
-              nm1d2 = MAX_int32_T;
-            } else {
-              nm1d2 += e_qY;
-            }
 
-            if ((nm1d2 < 0) && (TimeUsoS < MIN_int32_T - nm1d2)) {
-              nm1d2 = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (TimeUsoS > MAX_int32_T - nm1d2)) {
-              nm1d2 = MAX_int32_T;
-            } else {
-              nm1d2 += TimeUsoS;
-            }
+            /* 'funcionCPrO:78' IniCR=Dia(contDia,3)+EndCPrOAxD+TimeUsoS; */
+            IniCR = ((Dia->data[(*contDia + (Dia->size[0] << 1)) - 1] +
+                      b_EndCPrOAxD) + TimeUsoS) - 1;
 
-            if ((nm1d2 < 0) && (TimeUsoCR < MIN_int32_T - nm1d2)) {
-              q = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (TimeUsoCR > MAX_int32_T - nm1d2)) {
-              q = MAX_int32_T;
-            } else {
-              q = nm1d2 + TimeUsoCR;
-            }
-
-            if (q < -2147483647) {
-              q = MIN_int32_T;
-            } else {
-              q--;
-            }
-
-            if (nm1d2 > q) {
+            /* 'funcionCPrO:79' [~,CR]=find(sum(H(IniCR:IniCR+TimeUsoCR-1,sum(NumRec(1:6))+allCR))==0); */
+            q = IniCR + TimeUsoCR;
+            if (IniCR + 1 > q) {
               p = 0;
               q = 0;
             } else {
-              p = nm1d2 - 1;
+              p = IniCR;
             }
 
-            a = j_sum(*(int (*)[6])&NumRec[0]);
-            nb = b_H->size[0] * b_H->size[1];
-            qEnd = q - p;
-            b_H->size[0] = qEnd;
+            y = NumRec[0];
+            for (k = 0; k < 5; k++) {
+              y += (double)NumRec[k + 1];
+            }
+
+            yk = b_H->size[0] * b_H->size[1];
+            nb = q - p;
+            b_H->size[0] = nb;
             b_H->size[1] = allCR->size[1];
-            emxEnsureCapacity_int32_T(b_H, nb);
-            yk = allCR->size[1];
-            for (nb = 0; nb < yk; nb++) {
-              for (nm1d2 = 0; nm1d2 < qEnd; nm1d2++) {
-                b_H->data[nm1d2 + b_H->size[0] * nb] = H->data[(p + nm1d2) +
-                  H->size[0] * ((int)(a + (double)allCR->data[nb]) - 1)];
+            emxEnsureCapacity_int32_T(b_H, yk);
+            b_idx = allCR->size[1];
+            for (q = 0; q < b_idx; q++) {
+              for (yk = 0; yk < nb; yk++) {
+                b_H->data[yk + b_H->size[0] * q] = H->data[(p + yk) + H->size[0]
+                  * ((int)(y + (double)allCR->data[q]) - 1)];
               }
             }
 
-            k_sum(b_H, r10);
-            p = x->size[0] * x->size[1];
+            d_sum(b_H, r13);
+            q = x->size[0] * x->size[1];
             x->size[0] = 1;
-            x->size[1] = r10->size[1];
-            emxEnsureCapacity_boolean_T(x, p);
-            qEnd = r10->size[0] * r10->size[1];
-            for (p = 0; p < qEnd; p++) {
-              x->data[p] = (r10->data[p] == 0.0);
+            x->size[1] = r13->size[1];
+            emxEnsureCapacity_boolean_T(x, q);
+            nb = r13->size[1];
+            for (q = 0; q < nb; q++) {
+              x->data[q] = (r13->data[q] == 0.0);
             }
 
             if (x->size[1] == 0) {
-              j->size[0] = 1;
-              j->size[1] = 0;
+              jj->size[0] = 1;
+              jj->size[1] = 0;
             } else {
-              yk = 0;
-              p = j->size[0] * j->size[1];
-              j->size[0] = 1;
-              j->size[1] = x->size[1];
-              emxEnsureCapacity_int32_T(j, p);
-              nm1d2 = 1;
+              b_idx = 0;
+              q = jj->size[0] * jj->size[1];
+              jj->size[0] = 1;
+              jj->size[1] = x->size[1];
+              emxEnsureCapacity_int32_T(jj, q);
+              yk = 1;
               exitg1 = false;
-              while ((!exitg1) && (nm1d2 <= x->size[1])) {
-                if (x->data[nm1d2 - 1]) {
-                  yk++;
-                  j->data[yk - 1] = nm1d2;
-                  if (yk >= x->size[1]) {
+              while ((!exitg1) && (yk <= x->size[1])) {
+                if (x->data[yk - 1]) {
+                  b_idx++;
+                  jj->data[b_idx - 1] = yk;
+                  if (b_idx >= x->size[1]) {
                     exitg1 = true;
                   } else {
-                    nm1d2++;
+                    yk++;
                   }
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               }
 
               if (x->size[1] == 1) {
-                if (yk == 0) {
-                  j->size[0] = 1;
-                  j->size[1] = 0;
+                if (b_idx == 0) {
+                  jj->size[0] = 1;
+                  jj->size[1] = 0;
                 }
-              } else if (1 > yk) {
-                j->size[1] = 0;
               } else {
-                p = j->size[0] * j->size[1];
-                j->size[1] = yk;
-                emxEnsureCapacity_int32_T(j, p);
+                q = jj->size[0] * jj->size[1];
+                if (1 > b_idx) {
+                  jj->size[1] = 0;
+                } else {
+                  jj->size[1] = b_idx;
+                }
+
+                emxEnsureCapacity_int32_T(jj, q);
               }
             }
 
-            p = CR->size[0] * CR->size[1];
+            q = CR->size[0] * CR->size[1];
             CR->size[0] = 1;
-            CR->size[1] = j->size[1];
-            emxEnsureCapacity_real_T(CR, p);
-            qEnd = j->size[0] * j->size[1];
-            for (p = 0; p < qEnd; p++) {
-              CR->data[p] = j->data[p];
+            CR->size[1] = jj->size[1];
+            emxEnsureCapacity_int32_T(CR, q);
+            nb = jj->size[1];
+            for (q = 0; q < nb; q++) {
+              CR->data[q] = jj->data[q];
             }
+
+            /* 'funcionCPrO:79' ~ */
           } else {
-            nm1d2 = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-            if ((nm1d2 < 0) && (e_qY < MIN_int32_T - nm1d2)) {
-              nm1d2 = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (e_qY > MAX_int32_T - nm1d2)) {
-              nm1d2 = MAX_int32_T;
+            /* 'funcionCPrO:80' else */
+            /* 'funcionCPrO:81' IniCPO=Dia(contDia,3)+EndCPrOAxD+TimeUsoS; */
+            IniCPO = ((Dia->data[(*contDia + (Dia->size[0] << 1)) - 1] +
+                       b_EndCPrOAxD) + TimeUsoS) - 1;
+
+            /* 'funcionCPrO:82' EndCPO=IniCPO+TimeUsoCPO-1; */
+            EndCPO = (IniCPO + TimeUsoCPO) - 1;
+
+            /* 'funcionCPrO:83' [~,CPO]=find(sum(H(IniCPO:EndCPO,sum(NumRec(1:5))+allCPO))==0); */
+            if (IniCPO + 1 > EndCPO + 1) {
+              q = 0;
+              p = -1;
             } else {
-              nm1d2 += e_qY;
+              q = IniCPO;
+              p = EndCPO;
             }
 
-            if ((nm1d2 < 0) && (TimeUsoS < MIN_int32_T - nm1d2)) {
-              nm1d2 = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (TimeUsoS > MAX_int32_T - nm1d2)) {
-              nm1d2 = MAX_int32_T;
-            } else {
-              nm1d2 += TimeUsoS;
-            }
-
-            if ((nm1d2 < 0) && (TimeUsoCPO < MIN_int32_T - nm1d2)) {
-              q = MIN_int32_T;
-            } else if ((nm1d2 > 0) && (TimeUsoCPO > MAX_int32_T - nm1d2)) {
-              q = MAX_int32_T;
-            } else {
-              q = nm1d2 + TimeUsoCPO;
-            }
-
-            if (q < -2147483647) {
-              q = MIN_int32_T;
-            } else {
-              q--;
-            }
-
-            if (nm1d2 > q) {
-              p = 0;
-              nb = 0;
-            } else {
-              p = nm1d2 - 1;
-              nb = q;
-            }
-
-            a = i_sum(*(int (*)[5])&NumRec[0]);
-            nm1d2 = b_H->size[0] * b_H->size[1];
-            qEnd = nb - p;
-            b_H->size[0] = qEnd;
+            y = ((((double)NumRec[0] + (double)NumRec[1]) + (double)NumRec[2]) +
+                 (double)NumRec[3]) + (double)NumRec[4];
+            yk = b_H->size[0] * b_H->size[1];
+            nb = p - q;
+            b_H->size[0] = nb + 1;
             b_H->size[1] = allCPO->size[1];
-            emxEnsureCapacity_int32_T(b_H, nm1d2);
-            yk = allCPO->size[1];
-            for (nb = 0; nb < yk; nb++) {
-              for (nm1d2 = 0; nm1d2 < qEnd; nm1d2++) {
-                b_H->data[nm1d2 + b_H->size[0] * nb] = H->data[(p + nm1d2) +
-                  H->size[0] * ((int)(a + (double)allCPO->data[nb]) - 1)];
+            emxEnsureCapacity_int32_T(b_H, yk);
+            b_idx = allCPO->size[1];
+            for (p = 0; p < b_idx; p++) {
+              for (yk = 0; yk <= nb; yk++) {
+                b_H->data[yk + b_H->size[0] * p] = H->data[(q + yk) + H->size[0]
+                  * ((int)(y + (double)allCPO->data[p]) - 1)];
               }
             }
 
-            k_sum(b_H, r10);
-            p = x->size[0] * x->size[1];
+            d_sum(b_H, r13);
+            q = x->size[0] * x->size[1];
             x->size[0] = 1;
-            x->size[1] = r10->size[1];
-            emxEnsureCapacity_boolean_T(x, p);
-            qEnd = r10->size[0] * r10->size[1];
-            for (p = 0; p < qEnd; p++) {
-              x->data[p] = (r10->data[p] == 0.0);
+            x->size[1] = r13->size[1];
+            emxEnsureCapacity_boolean_T(x, q);
+            nb = r13->size[1];
+            for (q = 0; q < nb; q++) {
+              x->data[q] = (r13->data[q] == 0.0);
             }
 
             if (x->size[1] == 0) {
-              j->size[0] = 1;
-              j->size[1] = 0;
+              jj->size[0] = 1;
+              jj->size[1] = 0;
             } else {
-              yk = 0;
-              p = j->size[0] * j->size[1];
-              j->size[0] = 1;
-              j->size[1] = x->size[1];
-              emxEnsureCapacity_int32_T(j, p);
-              nm1d2 = 1;
+              b_idx = 0;
+              q = jj->size[0] * jj->size[1];
+              jj->size[0] = 1;
+              jj->size[1] = x->size[1];
+              emxEnsureCapacity_int32_T(jj, q);
+              yk = 1;
               exitg1 = false;
-              while ((!exitg1) && (nm1d2 <= x->size[1])) {
-                if (x->data[nm1d2 - 1]) {
-                  yk++;
-                  j->data[yk - 1] = nm1d2;
-                  if (yk >= x->size[1]) {
+              while ((!exitg1) && (yk <= x->size[1])) {
+                if (x->data[yk - 1]) {
+                  b_idx++;
+                  jj->data[b_idx - 1] = yk;
+                  if (b_idx >= x->size[1]) {
                     exitg1 = true;
                   } else {
-                    nm1d2++;
+                    yk++;
                   }
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               }
 
               if (x->size[1] == 1) {
-                if (yk == 0) {
-                  j->size[0] = 1;
-                  j->size[1] = 0;
+                if (b_idx == 0) {
+                  jj->size[0] = 1;
+                  jj->size[1] = 0;
                 }
-              } else if (1 > yk) {
-                j->size[1] = 0;
               } else {
-                p = j->size[0] * j->size[1];
-                j->size[1] = yk;
-                emxEnsureCapacity_int32_T(j, p);
+                q = jj->size[0] * jj->size[1];
+                if (1 > b_idx) {
+                  jj->size[1] = 0;
+                } else {
+                  jj->size[1] = b_idx;
+                }
+
+                emxEnsureCapacity_int32_T(jj, q);
               }
             }
 
-            p = CPO->size[0] * CPO->size[1];
+            q = CPO->size[0] * CPO->size[1];
             CPO->size[0] = 1;
-            CPO->size[1] = j->size[1];
-            emxEnsureCapacity_int32_T(CPO, p);
-            qEnd = j->size[0] * j->size[1];
-            for (p = 0; p < qEnd; p++) {
-              CPO->data[p] = j->data[p];
+            CPO->size[1] = jj->size[1];
+            emxEnsureCapacity_int32_T(CPO, q);
+            nb = jj->size[1];
+            for (q = 0; q < nb; q++) {
+              CPO->data[q] = jj->data[q];
             }
 
+            /* 'funcionCPrO:83' ~ */
             /*  Veo, dentro de los posibles, cuales estan libre en ese tiempo. */
-            a = j_sum(*(int (*)[6])&NumRec[0]);
-            p = b_H->size[0] * b_H->size[1];
+            /* 'funcionCPrO:84' [~,CR]=find(~sum(H(EndCPO+1:EndCPO+TimeUsoCR,sum(NumRec(1:6))+allCR))); */
+            y = NumRec[0];
+            for (k = 0; k < 5; k++) {
+              y += (double)NumRec[k + 1];
+            }
+
+            q = b_H->size[0] * b_H->size[1];
             b_H->size[0] = TimeUsoCR;
             b_H->size[1] = allCR->size[1];
-            emxEnsureCapacity_int32_T(b_H, p);
-            qEnd = allCR->size[1];
-            for (p = 0; p < qEnd; p++) {
-              for (nb = 0; nb < TimeUsoCR; nb++) {
-                yk = 1 + nb;
-                if ((q < 0) && (yk < MIN_int32_T - q)) {
-                  nm1d2 = MIN_int32_T;
-                } else if ((q > 0) && (yk > MAX_int32_T - q)) {
-                  nm1d2 = MAX_int32_T;
-                } else {
-                  nm1d2 = q + yk;
-                }
-
-                b_H->data[nb + b_H->size[0] * p] = H->data[(nm1d2 + H->size[0] *
-                  ((int)(a + (double)allCR->data[p]) - 1)) - 1];
+            emxEnsureCapacity_int32_T(b_H, q);
+            nb = allCR->size[1];
+            for (q = 0; q < nb; q++) {
+              for (p = 0; p < TimeUsoCR; p++) {
+                b_H->data[p + b_H->size[0] * q] = H->data[((p + EndCPO) +
+                  H->size[0] * ((int)(y + (double)allCR->data[q]) - 1)) + 1];
               }
             }
 
-            k_sum(b_H, r10);
-            p = x->size[0] * x->size[1];
+            d_sum(b_H, r13);
+            q = x->size[0] * x->size[1];
             x->size[0] = 1;
-            x->size[1] = r10->size[1];
-            emxEnsureCapacity_boolean_T(x, p);
-            qEnd = r10->size[0] * r10->size[1];
-            for (p = 0; p < qEnd; p++) {
-              x->data[p] = (r10->data[p] == 0.0);
+            x->size[1] = r13->size[1];
+            emxEnsureCapacity_boolean_T(x, q);
+            nb = r13->size[1];
+            for (q = 0; q < nb; q++) {
+              x->data[q] = (r13->data[q] == 0.0);
             }
 
             if (x->size[1] == 0) {
-              j->size[0] = 1;
-              j->size[1] = 0;
+              jj->size[0] = 1;
+              jj->size[1] = 0;
             } else {
-              yk = 0;
-              p = j->size[0] * j->size[1];
-              j->size[0] = 1;
-              j->size[1] = x->size[1];
-              emxEnsureCapacity_int32_T(j, p);
-              nm1d2 = 1;
+              b_idx = 0;
+              q = jj->size[0] * jj->size[1];
+              jj->size[0] = 1;
+              jj->size[1] = x->size[1];
+              emxEnsureCapacity_int32_T(jj, q);
+              yk = 1;
               exitg1 = false;
-              while ((!exitg1) && (nm1d2 <= x->size[1])) {
-                if (x->data[nm1d2 - 1]) {
-                  yk++;
-                  j->data[yk - 1] = nm1d2;
-                  if (yk >= x->size[1]) {
+              while ((!exitg1) && (yk <= x->size[1])) {
+                if (x->data[yk - 1]) {
+                  b_idx++;
+                  jj->data[b_idx - 1] = yk;
+                  if (b_idx >= x->size[1]) {
                     exitg1 = true;
                   } else {
-                    nm1d2++;
+                    yk++;
                   }
                 } else {
-                  nm1d2++;
+                  yk++;
                 }
               }
 
               if (x->size[1] == 1) {
-                if (yk == 0) {
-                  j->size[0] = 1;
-                  j->size[1] = 0;
+                if (b_idx == 0) {
+                  jj->size[0] = 1;
+                  jj->size[1] = 0;
                 }
-              } else if (1 > yk) {
-                j->size[1] = 0;
               } else {
-                p = j->size[0] * j->size[1];
-                j->size[1] = yk;
-                emxEnsureCapacity_int32_T(j, p);
+                q = jj->size[0] * jj->size[1];
+                if (1 > b_idx) {
+                  jj->size[1] = 0;
+                } else {
+                  jj->size[1] = b_idx;
+                }
+
+                emxEnsureCapacity_int32_T(jj, q);
               }
             }
 
-            p = CR->size[0] * CR->size[1];
+            q = CR->size[0] * CR->size[1];
             CR->size[0] = 1;
-            CR->size[1] = j->size[1];
-            emxEnsureCapacity_real_T(CR, p);
-            qEnd = j->size[0] * j->size[1];
-            for (p = 0; p < qEnd; p++) {
-              CR->data[p] = j->data[p];
+            CR->size[1] = jj->size[1];
+            emxEnsureCapacity_int32_T(CR, q);
+            nb = jj->size[1];
+            for (q = 0; q < nb; q++) {
+              CR->data[q] = jj->data[q];
             }
+
+            /* 'funcionCPrO:84' ~ */
           }
 
+          /* 'funcionCPrO:88' if ~isempty(CPO)&&~isempty(CR)&&~isempty(S)&&size(E,2)>=PME(end)&&size(A,2)>=PMA(end)&&size(An,2)>=PMAn(end) */
           if ((CPO->size[1] != 0) && (CR->size[1] != 0) && (S->size[1] != 0) &&
               (E->size[1] >= PME->data[PME->size[1] - 1]) && (A->size[1] >=
                PMA->data[PMA->size[1] - 1]) && (An->size[1] >= PMAn->data
                [PMAn->size[1] - 1])) {
-            temCPrO = (int)uCPrODisp->data[b_j];
+            /* 'funcionCPrO:89' temCPrO = uCPrODisp(j); */
+            temCPrO = (int)uCPrODisp->data[j];
             exitg2 = 1;
           } else {
-            b_j++;
+            j++;
           }
         } else {
           exitg2 = 1;
         }
       } while (exitg2 == 0);
 
+      /* 'funcionCPrO:95' if temCPrO == -1 */
       if (temCPrO == -1) {
-        i47 = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
-        kEnd = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
+        /* 'funcionCPrO:97' tempUltPosRecXDia = tempUltPosRecXDia+1; */
+        q = tempUltPosRecXDia->size[0] * tempUltPosRecXDia->size[1];
         tempUltPosRecXDia->size[0] = 1;
-        emxEnsureCapacity_int32_T(tempUltPosRecXDia, kEnd);
-        qEnd = i47 - 1;
-        for (i47 = 0; i47 <= qEnd; i47++) {
-          nm1d2 = tempUltPosRecXDia->data[i47];
-          if (nm1d2 > 2147483646) {
-            nm1d2 = MAX_int32_T;
-          } else {
-            nm1d2++;
-          }
-
-          tempUltPosRecXDia->data[i47] = nm1d2;
+        emxEnsureCapacity_int32_T(tempUltPosRecXDia, q);
+        nb = tempUltPosRecXDia->size[1];
+        for (q = 0; q < nb; q++) {
+          tempUltPosRecXDia->data[q]++;
         }
       } else {
+        /* 'funcionCPrO:99' else */
+        /* 'funcionCPrO:101' CPrOA = int32(temCPrO); */
         b_CPrOA = temCPrO;
-        nm1d2 = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1];
-        yk = tempUltPosRecXDia->data[temCPrO - 1];
-        if ((nm1d2 < 0) && (yk < MIN_int32_T - nm1d2)) {
-          qY = MIN_int32_T;
-        } else if ((nm1d2 > 0) && (yk > MAX_int32_T - nm1d2)) {
-          qY = MAX_int32_T;
-        } else {
-          qY = nm1d2 + yk;
-        }
 
-        if ((qY < 0) && (TimeUsoCPrO < MIN_int32_T - qY)) {
-          nm1d2 = MIN_int32_T;
-        } else if ((qY > 0) && (TimeUsoCPrO > MAX_int32_T - qY)) {
-          nm1d2 = MAX_int32_T;
-        } else {
-          nm1d2 = qY + TimeUsoCPrO;
-        }
+        /* 'funcionCPrO:102' IniCPrOA = Dia(contDia,3)+int32(auxUPxR(CPrOA)); */
+        b_IniCPrOA = Dia->data[(*contDia + (Dia->size[0] << 1)) - 1] +
+          tempUltPosRecXDia->data[temCPrO - 1];
 
-        if (nm1d2 < -2147483647) {
-          b_qY = MIN_int32_T;
-        } else {
-          b_qY = nm1d2 - 1;
-        }
+        /* 'funcionCPrO:103' EndCPrOA = IniCPrOA + TimeUsoCPrO-1; */
+        b_EndCPrOA = b_IniCPrOA + TimeUsoCPrO;
 
-        i47 = SA->size[0] * SA->size[1];
-        SA->size[0] = 1;
-        SA->size[1] = 1;
-        emxEnsureCapacity_int32_T(SA, i47);
-        SA->data[0] = allS->data[S->data[0] - 1];
-        b_IniSA = b_qY + 1;
-        nm1d2 = b_qY + 1;
-        if ((nm1d2 < 0) && (TimeUsoS < MIN_int32_T - nm1d2)) {
-          nm1d2 = MIN_int32_T;
-        } else if ((nm1d2 > 0) && (TimeUsoS > MAX_int32_T - nm1d2)) {
-          nm1d2 = MAX_int32_T;
-        } else {
-          nm1d2 += TimeUsoS;
-        }
+        /* 'funcionCPrO:105' SA_double = allS(S(1)); */
+        q = SA_double->size[0] * SA_double->size[1];
+        SA_double->size[0] = 1;
+        SA_double->size[1] = 1;
+        emxEnsureCapacity_int32_T(SA_double, q);
+        SA_double->data[0] = allS->data[S->data[0] - 1];
 
-        if (nm1d2 < -2147483647) {
-          nm1d2 = MIN_int32_T;
-        } else {
-          nm1d2--;
-        }
+        /* 'funcionCPrO:106' IniSA = EndCPrOA+1; */
+        b_IniSA = b_EndCPrOA;
 
-        b_EndSA = nm1d2 + 1;
+        /* 'funcionCPrO:107' EndSA = IniSA+TimeUsoS-1; */
+        b_EndSA = (b_EndCPrOA + TimeUsoS) - 1;
+
+        /* 'funcionCPrO:109' EA_double = allE(E(1:PME(end))); */
         if (1 > PME->data[PME->size[1] - 1]) {
-          qEnd = 0;
+          nb = 0;
         } else {
-          qEnd = PME->data[PME->size[1] - 1];
+          nb = PME->data[PME->size[1] - 1];
         }
 
-        i47 = EA->size[0] * EA->size[1];
-        EA->size[0] = 1;
-        EA->size[1] = qEnd;
-        emxEnsureCapacity_int32_T(EA, i47);
-        for (i47 = 0; i47 < qEnd; i47++) {
-          EA->data[i47] = (int)C->data[E->data[i47] - 1];
+        q = EA_double->size[0] * EA_double->size[1];
+        EA_double->size[0] = 1;
+        EA_double->size[1] = nb;
+        emxEnsureCapacity_int32_T(EA_double, q);
+        for (q = 0; q < nb; q++) {
+          EA_double->data[q] = allE->data[E->data[q] - 1];
         }
 
+        /* 'funcionCPrO:111' AA_double = allA(A(1:PMA(end))); */
         if (1 > PMA->data[PMA->size[1] - 1]) {
-          qEnd = 0;
+          nb = 0;
         } else {
-          qEnd = PMA->data[PMA->size[1] - 1];
+          nb = PMA->data[PMA->size[1] - 1];
         }
 
-        i47 = AA->size[0] * AA->size[1];
-        AA->size[0] = 1;
-        AA->size[1] = qEnd;
-        emxEnsureCapacity_int32_T(AA, i47);
-        for (i47 = 0; i47 < qEnd; i47++) {
-          AA->data[i47] = allA->data[A->data[i47] - 1];
+        q = AA_double->size[0] * AA_double->size[1];
+        AA_double->size[0] = 1;
+        AA_double->size[1] = nb;
+        emxEnsureCapacity_int32_T(AA_double, q);
+        for (q = 0; q < nb; q++) {
+          AA_double->data[q] = allA->data[A->data[q] - 1];
         }
 
+        /* 'funcionCPrO:113' AnA_double = allAn(An(1:PMAn(end))); */
         if (1 > PMAn->data[PMAn->size[1] - 1]) {
-          qEnd = 0;
+          nb = 0;
         } else {
-          qEnd = PMAn->data[PMAn->size[1] - 1];
+          nb = PMAn->data[PMAn->size[1] - 1];
         }
 
-        i47 = AnA->size[0] * AnA->size[1];
-        AnA->size[0] = 1;
-        AnA->size[1] = qEnd;
-        emxEnsureCapacity_int32_T(AnA, i47);
-        for (i47 = 0; i47 < qEnd; i47++) {
-          AnA->data[i47] = allAn->data[An->data[i47] - 1];
+        q = AnA_double->size[0] * AnA_double->size[1];
+        AnA_double->size[0] = 1;
+        AnA_double->size[1] = nb;
+        emxEnsureCapacity_int32_T(AnA_double, q);
+        for (q = 0; q < nb; q++) {
+          AnA_double->data[q] = allAn->data[An->data[q] - 1];
         }
 
+        /* 'funcionCPrO:115' if TimeUsoCPO==0 */
         if (TimeUsoCPO == 0) {
+          /* 'funcionCPrO:116' CPOA = int32(0); */
           b_CPOA = 0;
-          b_IniCPOA = 0;
-          c_qY = 0;
-          b_CRA = allCR->data[(int)CR->data[0] - 1];
+
+          /* 'funcionCPrO:117' IniCPOA = int32(0); */
+          b_IniCPOA = -1;
+
+          /* 'funcionCPrO:118' EndCPOA = int32(0); */
+          b_EndCPOA = 0;
+
+          /* 'funcionCPrO:120' CRA = int32(allCR(CR(1))); */
+          b_CRA = allCR->data[CR->data[0] - 1];
+
+          /* 'funcionCPrO:121' IniCRA = EndSA+1; */
           b_IniCRA = b_EndSA;
-          if ((b_EndSA < 0) && (TimeUsoCR < MIN_int32_T - b_EndSA)) {
-            nm1d2 = MIN_int32_T;
-          } else if ((b_EndSA > 0) && (TimeUsoCR > MAX_int32_T - b_EndSA)) {
-            nm1d2 = MAX_int32_T;
-          } else {
-            nm1d2 = b_EndSA + TimeUsoCR;
-          }
 
-          if (nm1d2 < -2147483647) {
-            d_qY = MIN_int32_T;
-          } else {
-            d_qY = nm1d2 - 1;
-          }
+          /* 'funcionCPrO:122' EndCRA = IniCRA + TimeUsoCR-1; */
+          b_EndCRA = b_EndSA + TimeUsoCR;
         } else {
+          /* 'funcionCPrO:123' else */
+          /* 'funcionCPrO:124' CPOA = int32(allCPO(CPO(1))); */
           b_CPOA = allCPO->data[CPO->data[0] - 1];
+
+          /* 'funcionCPrO:125' IniCPOA = EndSA+1; */
           b_IniCPOA = b_EndSA;
-          if ((b_EndSA < 0) && (TimeUsoCPO < MIN_int32_T - b_EndSA)) {
-            nm1d2 = MIN_int32_T;
-          } else if ((b_EndSA > 0) && (TimeUsoCPO > MAX_int32_T - b_EndSA)) {
-            nm1d2 = MAX_int32_T;
-          } else {
-            nm1d2 = b_EndSA + TimeUsoCPO;
-          }
 
-          if (nm1d2 < -2147483647) {
-            c_qY = MIN_int32_T;
-          } else {
-            c_qY = nm1d2 - 1;
-          }
+          /* 'funcionCPrO:126' EndCPOA = IniCPOA + TimeUsoCPO-1; */
+          b_EndCPOA = b_EndSA + TimeUsoCPO;
 
-          b_CRA = allCR->data[(int)CR->data[0] - 1];
-          b_IniCRA = c_qY + 1;
-          nm1d2 = c_qY + 1;
-          if ((nm1d2 < 0) && (TimeUsoCR < MIN_int32_T - nm1d2)) {
-            nm1d2 = MIN_int32_T;
-          } else if ((nm1d2 > 0) && (TimeUsoCR > MAX_int32_T - nm1d2)) {
-            nm1d2 = MAX_int32_T;
-          } else {
-            nm1d2 += TimeUsoCR;
-          }
+          /* 'funcionCPrO:128' CRA = int32(allCR(CR(1))); */
+          b_CRA = allCR->data[CR->data[0] - 1];
 
-          if (nm1d2 < -2147483647) {
-            d_qY = MIN_int32_T;
-          } else {
-            d_qY = nm1d2 - 1;
-          }
+          /* 'funcionCPrO:129' IniCRA = EndCPOA+1; */
+          b_IniCRA = b_EndCPOA;
+
+          /* 'funcionCPrO:130' EndCRA = IniCRA + TimeUsoCR-1; */
+          b_EndCRA = b_EndCPOA + TimeUsoCR;
         }
 
+        /* 'funcionCPrO:133' flag = false; */
         flag = false;
       }
     }
@@ -3884,37 +3913,91 @@ void funcionCPrO(const int NumRec[7], const emxArray_int32_T *PCPrO, const
   emxFree_int32_T(&b_H);
   emxFree_int32_T(&iwork);
   emxFree_int32_T(&idx);
-  emxFree_int32_T(&b_b);
-  emxFree_int32_T(&j);
+  emxFree_int32_T(&b);
+  emxFree_int32_T(&jj);
   emxFree_boolean_T(&x);
-  emxFree_real_T(&r10);
+  emxFree_real_T(&r13);
   emxFree_int32_T(&allCR);
   emxFree_int32_T(&allCPO);
   emxFree_int32_T(&allS);
   emxFree_int32_T(&allAn);
   emxFree_int32_T(&allA);
+  emxFree_int32_T(&allE);
+  emxFree_int32_T(&u);
   emxFree_int32_T(&allC);
-  emxFree_real_T(&C);
+  emxFree_int32_T(&C);
+  emxFree_int32_T(&auxUPxS);
+  emxFree_int32_T(&auxUPxAn);
+  emxFree_int32_T(&auxUPxA);
+  emxFree_int32_T(&auxUPxE);
   emxFree_uint32_T(&uCPrODisp);
-  emxFree_real_T(&CR);
+  emxFree_int32_T(&CR);
   emxFree_int32_T(&CPO);
   emxFree_int32_T(&An);
   emxFree_int32_T(&A);
   emxFree_int32_T(&S);
   emxFree_int32_T(&E);
+
+  /* 'funcionCPrO:140' EA = int32(EA_double); */
+  q = EA->size[0] * EA->size[1];
+  EA->size[0] = 1;
+  EA->size[1] = EA_double->size[1];
+  emxEnsureCapacity_int32_T(EA, q);
+  nb = EA_double->size[1];
+  for (q = 0; q < nb; q++) {
+    EA->data[q] = EA_double->data[q];
+  }
+
+  emxFree_int32_T(&EA_double);
+
+  /* 'funcionCPrO:141' AA = int32(AA_double); */
+  q = AA->size[0] * AA->size[1];
+  AA->size[0] = 1;
+  AA->size[1] = AA_double->size[1];
+  emxEnsureCapacity_int32_T(AA, q);
+  nb = AA_double->size[1];
+  for (q = 0; q < nb; q++) {
+    AA->data[q] = AA_double->data[q];
+  }
+
+  emxFree_int32_T(&AA_double);
+
+  /* 'funcionCPrO:142' AnA = int32(AnA_double); */
+  q = AnA->size[0] * AnA->size[1];
+  AnA->size[0] = 1;
+  AnA->size[1] = AnA_double->size[1];
+  emxEnsureCapacity_int32_T(AnA, q);
+  nb = AnA_double->size[1];
+  for (q = 0; q < nb; q++) {
+    AnA->data[q] = AnA_double->data[q];
+  }
+
+  emxFree_int32_T(&AnA_double);
+
+  /* 'funcionCPrO:143' SA = int32(SA_double); */
+  q = SA->size[0] * SA->size[1];
+  SA->size[0] = 1;
+  SA->size[1] = SA_double->size[1];
+  emxEnsureCapacity_int32_T(SA, q);
+  nb = SA_double->size[1];
+  for (q = 0; q < nb; q++) {
+    SA->data[q] = SA_double->data[q];
+  }
+
+  emxFree_int32_T(&SA_double);
   *CPrOA = b_CPrOA;
-  *IniCPrOA = qY;
-  *EndCPrOA = b_qY;
-  *EndCPrOAxD = e_qY;
+  *IniCPrOA = b_IniCPrOA;
+  *EndCPrOA = b_EndCPrOA - 1;
+  *EndCPrOAxD = b_EndCPrOAxD;
   *IniSA = b_IniSA;
-  *EndSA = b_EndSA - 1;
-  *EndRPxD = f_qY;
+  *EndSA = b_EndSA;
+  *EndRPxD = b_EndRPxD;
   *CPOA = b_CPOA;
-  *IniCPOA = b_IniCPOA;
-  *EndCPOA = c_qY;
+  *IniCPOA = b_IniCPOA + 1;
+  *EndCPOA = b_EndCPOA;
   *CRA = b_CRA;
-  *IniCRA = b_IniCRA;
-  *EndCRA = d_qY;
+  *IniCRA = b_IniCRA + 1;
+  *EndCRA = b_EndCRA;
 }
 
 /* End of code generation (funcionCPrO.c) */

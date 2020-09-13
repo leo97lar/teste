@@ -19,7 +19,7 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void c_eml_rand_mt19937ar_stateful_i(void);
+extern void state_not_empty_init(void);
 
 #endif
 

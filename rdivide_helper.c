@@ -16,19 +16,26 @@
 #include "model_emxutil.h"
 
 /* Function Definitions */
+
+/*
+ *
+ */
 void b_rdivide_helper(const emxArray_real_T *y, emxArray_real_T *z)
 {
-  int i15;
+  int i17;
   int loop_ub;
-  i15 = z->size[0];
+  i17 = z->size[0];
   z->size[0] = y->size[0];
-  emxEnsureCapacity_real_T(z, i15);
+  emxEnsureCapacity_real_T(z, i17);
   loop_ub = y->size[0];
-  for (i15 = 0; i15 < loop_ub; i15++) {
-    z->data[i15] = 1.0 / y->data[i15];
+  for (i17 = 0; i17 < loop_ub; i17++) {
+    z->data[i17] = 1.0 / y->data[i17];
   }
 }
 
+/*
+ *
+ */
 int rdivide_helper(int x, int y)
 {
   int z;
@@ -46,11 +53,7 @@ int rdivide_helper(int x, int y)
   } else if (y == 1) {
     z = x;
   } else if (y == -1) {
-    if (x <= MIN_int32_T) {
-      z = MAX_int32_T;
-    } else {
-      z = -x;
-    }
+    z = -x;
   } else {
     if (x >= 0) {
       b_x = (unsigned int)x;
@@ -68,12 +71,7 @@ int rdivide_helper(int x, int y)
       b_y = (unsigned int)-y;
     }
 
-    if (b_y == 0U) {
-      q = MAX_uint32_T;
-    } else {
-      q = b_x / b_y;
-    }
-
+    q = b_x / b_y;
     b_x -= q * b_y;
     if ((b_x > 0U) && (b_x >= (b_y >> 1U) + (b_y & 1U))) {
       q++;

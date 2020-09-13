@@ -16,50 +16,58 @@
 #include "model_emxutil.h"
 
 /* Function Definitions */
+
+/*
+ * function [ IQ ] = CreaPoQunniforme( NumTOp,ctdadIQ )
+ */
 void CreaPoQunniforme(int NumTOp, int ctdadIQ, emxArray_real_T *IQ)
 {
-  emxArray_real_T *Qini;
-  int jcol;
+  emxArray_real_T *a;
+  int i14;
   int outsize_idx_0;
   int outsize_idx_1;
-  int iacol;
-  int ibmat;
-  int itilerow;
-  int ibcol;
+  int na;
+  int t;
+  int offset;
   int k;
-  emxInit_real_T(&Qini, 2);
+  emxInit_real_T(&a, 2);
 
   /* UNTITLED3 Summary of this function goes here */
   /*    Detailed explanation goes here */
-  jcol = Qini->size[0] * Qini->size[1];
-  Qini->size[0] = NumTOp;
-  Qini->size[1] = NumTOp;
-  emxEnsureCapacity_real_T(Qini, jcol);
-  outsize_idx_0 = NumTOp * NumTOp;
-  for (jcol = 0; jcol < outsize_idx_0; jcol++) {
-    Qini->data[jcol] = 1.0 / (double)NumTOp;
+  /* 'CreaPoQunniforme:5' Qini = ones(NumTOp,NumTOp)/double(NumTOp); */
+  i14 = a->size[0] * a->size[1];
+  a->size[0] = NumTOp;
+  a->size[1] = NumTOp;
+  emxEnsureCapacity_real_T(a, i14);
+  for (i14 = 0; i14 < NumTOp; i14++) {
+    for (outsize_idx_0 = 0; outsize_idx_0 < NumTOp; outsize_idx_0++) {
+      a->data[outsize_idx_0 + a->size[0] * i14] = 1.0 / (double)NumTOp;
+    }
   }
 
-  outsize_idx_0 = Qini->size[0] * ctdadIQ;
-  outsize_idx_1 = Qini->size[1];
-  jcol = IQ->size[0] * IQ->size[1];
+  /* 'CreaPoQunniforme:6' IQ=repmat(Qini,ctdadIQ,1); */
+  outsize_idx_0 = a->size[0] * ctdadIQ;
+  outsize_idx_1 = a->size[1];
+  i14 = IQ->size[0] * IQ->size[1];
   IQ->size[0] = outsize_idx_0;
   IQ->size[1] = outsize_idx_1;
-  emxEnsureCapacity_real_T(IQ, jcol);
-  outsize_idx_0 = Qini->size[0];
-  outsize_idx_1 = Qini->size[1];
-  for (jcol = 0; jcol < outsize_idx_1; jcol++) {
-    iacol = jcol * outsize_idx_0;
-    ibmat = jcol * (outsize_idx_0 * ctdadIQ) - 1;
-    for (itilerow = 0; itilerow < ctdadIQ; itilerow++) {
-      ibcol = ibmat + itilerow * outsize_idx_0;
-      for (k = 0; k < outsize_idx_0; k++) {
-        IQ->data[(ibcol + k) + 1] = Qini->data[iacol + k];
+  emxEnsureCapacity_real_T(IQ, i14);
+  if ((IQ->size[0] != 0) && (IQ->size[1] != 0)) {
+    outsize_idx_0 = a->size[1];
+    for (outsize_idx_1 = 0; outsize_idx_1 < outsize_idx_0; outsize_idx_1++) {
+      na = a->size[0];
+      i14 = ctdadIQ - 1;
+      for (t = 0; t <= i14; t++) {
+        offset = t * na;
+        for (k = 0; k < na; k++) {
+          IQ->data[(offset + k) + IQ->size[0] * outsize_idx_1] = a->data[k +
+            a->size[0] * outsize_idx_1];
+        }
       }
     }
   }
 
-  emxFree_real_T(&Qini);
+  emxFree_real_T(&a);
 }
 
 /* End of code generation (CreaPoQunniforme.c) */

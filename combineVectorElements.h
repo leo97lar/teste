@@ -19,7 +19,7 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern double combineVectorElements(const emxArray_real_T *x);
+extern double nestedIter(const emxArray_real_T *x, int vlen);
 
 #endif
 
