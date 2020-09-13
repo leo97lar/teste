@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{248c03a5-7b49-40b1-8a5e-e7725e6a984a}</ProjectGuid>
+    <RootNamespace>Modelblank</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="CP.csv" />
+    <None Include="CPO.csv" />
+    <None Include="CPrO.csv" />
+    <None Include="CR.csv" />
+    <None Include="Data.csv" />
+    <None Include="Dia.csv" />
+    <None Include="DispMExD.csv" />
+    <None Include="MA.csv" />
+    <None Include="MAn.csv" />
+    <None Include="ME.csv" />
+    <None Include="RO.csv" />
+    <None Include="S.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="aevSPLap.c" />
+    <ClCompile Include="BDCreator_func.c" />
+    <ClCompile Include="casorandom.c" />
+    <ClCompile Include="cc.c" />
+    <ClCompile Include="combineVectorElements.c" />
+    <ClCompile Include="CreaPoQunniforme.c" />
+    <ClCompile Include="Edade.c" />
+    <ClCompile Include="eml_rand.c" />
+    <ClCompile Include="eml_rand_mcg16807_stateful.c" />
+    <ClCompile Include="eml_rand_mt19937ar_stateful.c" />
+    <ClCompile Include="eml_rand_shr3cong_stateful.c" />
+    <ClCompile Include="favalia.c" />
+    <ClCompile Include="funcionCPrO.c" />
+    <ClCompile Include="funcionDia.c" />
+    <ClCompile Include="getTime.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="main_UCI_func.c" />
+    <ClCompile Include="mean.c" />
+    <ClCompile Include="model_data.c" />
+    <ClCompile Include="model_emxAPI.c" />
+    <ClCompile Include="model_emxutil.c" />
+    <ClCompile Include="model_initialize.c" />
+    <ClCompile Include="model_rtwutil.c" />
+    <ClCompile Include="model_terminate.c" />
+    <ClCompile Include="nullAssignment.c" />
+    <ClCompile Include="obsIQ.c" />
+    <ClCompile Include="obsIQini.c" />
+    <ClCompile Include="rand.c" />
+    <ClCompile Include="randi.c" />
+    <ClCompile Include="randperm.c" />
+    <ClCompile Include="rdivide_helper.c" />
+    <ClCompile Include="rem.c" />
+    <ClCompile Include="repmat.c" />
+    <ClCompile Include="sch.c" />
+    <ClCompile Include="sort1.c" />
+    <ClCompile Include="sortIdx.c" />
+    <ClCompile Include="std.c" />
+    <ClCompile Include="sum.c" />
+    <ClCompile Include="tic.c" />
+    <ClCompile Include="timeKeeper.c" />
+    <ClCompile Include="toc.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="aevSPLap.h" />
+    <ClInclude Include="BDCreator_func.h" />
+    <ClInclude Include="casorandom.h" />
+    <ClInclude Include="cc.h" />
+    <ClInclude Include="combineVectorElements.h" />
+    <ClInclude Include="CreaPoQunniforme.h" />
+    <ClInclude Include="Edade.h" />
+    <ClInclude Include="eml_rand.h" />
+    <ClInclude Include="eml_rand_mcg16807_stateful.h" />
+    <ClInclude Include="eml_rand_mt19937ar_stateful.h" />
+    <ClInclude Include="eml_rand_shr3cong_stateful.h" />
+    <ClInclude Include="favalia.h" />
+    <ClInclude Include="funcionCPrO.h" />
+    <ClInclude Include="funcionDia.h" />
+    <ClInclude Include="getTime.h" />
+    <ClInclude Include="main_UCI_func.h" />
+    <ClInclude Include="mean.h" />
+    <ClInclude Include="model_data.h" />
+    <ClInclude Include="model_emxAPI.h" />
+    <ClInclude Include="model_emxutil.h" />
+    <ClInclude Include="model_initialize.h" />
+    <ClInclude Include="model_rtwutil.h" />
+    <ClInclude Include="model_terminate.h" />
+    <ClInclude Include="model_types.h" />
+    <ClInclude Include="nullAssignment.h" />
+    <ClInclude Include="obsIQ.h" />
+    <ClInclude Include="obsIQini.h" />
+    <ClInclude Include="rand.h" />
+    <ClInclude Include="randi.h" />
+    <ClInclude Include="randperm.h" />
+    <ClInclude Include="rdivide_helper.h" />
+    <ClInclude Include="rem.h" />
+    <ClInclude Include="repmat.h" />
+    <ClInclude Include="rtwtypes.h" />
+    <ClInclude Include="sch.h" />
+    <ClInclude Include="sort1.h" />
+    <ClInclude Include="sortIdx.h" />
+    <ClInclude Include="std.h" />
+    <ClInclude Include="sum.h" />
+    <ClInclude Include="tic.h" />
+    <ClInclude Include="timeKeeper.h" />
+    <ClInclude Include="tmwtypes.h" />
+    <ClInclude Include="toc.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
