@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #define MAX_LINE_CSV 1000
 
 
@@ -10,15 +12,17 @@
 
 emxArray_int32_T* read_csv(char filepath[])
 {
-	int i, lin = 2, col = 1, count = 1, aux_int;
+	int i, lin = 2, col = 1, count = 1;
 	char aux_char = 0, aux_str[MAX_LINE_CSV];
 	emxArray_int32_T* mat;
 	FILE* f;
 	fopen_s(&f, filepath, "r");
+	if (f == 0)
+		return NULL;
 
 	for (i = 0; aux_char != '\n'; i++)
 	{
-		fscanf_s(f, "%c", &aux_char);
+		fscanf_s(f, "%c", &aux_char, 1);
 		col += (aux_char == ',');
 	}
 
