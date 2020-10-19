@@ -2,6 +2,7 @@
 
 
 #include <stdio.h>
+#include <string.h>
 #include "main_UCI_func.h"
 #include "model_terminate.h"
 #include "model_initialize.h"
@@ -30,6 +31,20 @@ emxArray_int32_T* read_csv(char filepath[])
 		count = fscanf_s(f, "%d%*c", &mat->data[i]);
 
 	return mat;
+}
+
+void int_array_to_emxArray(void* c_array, void* emxArray, int len)
+{
+	int* from = (int*)c_array;
+	emxArray_int32_T* to = (emxArray_int32_T*)emxArray;
+	memcpy(to->data, from, len * sizeof(int));
+}
+
+void real_array_to_emxArray(void* c_array, void* emxArray, int len)
+{
+	double* from = (double*)c_array;
+	emxArray_real_T* to = (emxArray_real_T*)emxArray;
+	memcpy(to->data, from, len * sizeof(double));
 }
 
 int main(void)
