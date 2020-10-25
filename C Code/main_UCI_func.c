@@ -1419,7 +1419,7 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   /* 'PLOTT_func:13' xlabel('Generations','FontName','Arial','FontSize', 28); */
   /* 'PLOTT_func:14' ylabel('# surgeries out of term','FontName','Arial','FontSize', 28); */
   /* 'PLOTT_func:15' fprintf('ignore: %2d, %2d', bestexperimento(3), bestexperimento(5)); */
-  printf("ignore: %2d, %2d", bestexperimento->data[2], bestexperimento->data[4]);
+  printf("ignore: %2d, %2d\n", bestexperimento->data[2], bestexperimento->data[4]);
   fflush(stdout);
   emxFree_real_T(&trace);
   emxFree_int32_T(&bestexperimento);
