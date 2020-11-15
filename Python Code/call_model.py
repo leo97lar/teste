@@ -24,10 +24,10 @@ model.emxDestroyArray_int32_T.argtypes = [c_void_p]
 model.emxDestroyArray_real_T.argtypes = [c_void_p]
 model.main_UCI_func.restype = POINTER(c_int)
 model.main_UCI_func.argtypes = [
-    c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, 
-    c_int, c_int, c_int, c_int, c_int, c_int, c_int, 
-    c_int, c_int, c_int, c_int, c_double, c_double, c_double, c_double, 
-    c_int, c_int, c_double, c_double, c_double, c_void_p, c_int, 
+    c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p,
+    c_int, c_int, c_int, c_int, c_int, c_int, c_int,
+    c_int, c_int, c_int, c_int, c_double, c_double, c_double, c_double,
+    c_int, c_int, c_double, c_double, c_double, c_void_p, c_int,
     c_int, c_uint8,
 ]
 
@@ -76,7 +76,7 @@ NumCPrO = csvs['CPrO']['shape'][0]  # Numero de camas Pre - Operatorias
 NumCR = csvs['CR']['shape'][0]  # Numero de camas Recuperacion
 
 NumMedEsp = csvs['ME']['shape'][0]  # Numero de Medicos Especialistas
-NumEspxE = int(NumMedEsp/NumEsp) #  Numero de Especialistas por Especialidad
+NumEspxE = int(NumMedEsp/NumEsp)  # Numero de Especialistas por Especialidad
 NumAsist = csvs['MA']['shape'][0]  # Numero de Medico Asistentes
 NumAnest = csvs['MAn']['shape'][0]  # Numero de Anestesistas
 
@@ -91,12 +91,19 @@ model.real_array_to_emxArray(c_ProbXEst, ProbXEst, len(py_ProbXEst))
 
 # 	/* Call the entry-point 'main_UCI_func'. */
 c_queue = model.main_UCI_func(csvs['CP']['data'], csvs['RO']['data'], csvs['CPO']['data'], csvs['CPrO']['data'], csvs['CR']['data'], csvs['Data']['data'], csvs['Dia']['data'], csvs['DispMExD']['data'], csvs['MA']['data'], csvs['MAn']['data'], csvs['ME']['data'], csvs['S']['data'],
-    TipoOp, NumEsp, NumTOp, NumSalOp, NumCPO, NumCPrO, NumCR,
-    NumMedEsp, NumEspxE, NumAsist, NumAnest, k0, k1, k2, k3,
-    numIQ, numIC, taxC, taxE, taxEQ, ProbXEst, genToWidth,
-    generations, keeppriority)
+                              TipoOp, NumEsp, NumTOp, NumSalOp, NumCPO, NumCPrO, NumCR,
+                              NumMedEsp, NumEspxE, NumAsist, NumAnest, k0, k1, k2, k3,
+                              numIQ, numIC, taxC, taxE, taxEQ, ProbXEst, genToWidth,
+                              generations, keeppriority)
 
-#%% Terminate model
+#%% Testar resultado
+print('rodou: ' + str(c_queue))
+a = time()
+queue = [c_queue[i] for i in range(NumTOp)]
+
+print('conversão: ' + str(time()-a) + "\n" + str(queue))
+
+#%%Terminate model
 
 model.emxDestroyArray_int32_T(csvs['S'])
 model.emxDestroyArray_int32_T(csvs['ME'])

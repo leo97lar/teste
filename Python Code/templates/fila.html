@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section>
+	<strong>Fila de pacientes definida pela última vez que o modelo foi rodado</strong>
+</section>
+<section id="pageContent">
+	<main role="main">
+		<article>
+			<h2>Fila</h2>
+			{% for cirurgia_id in fila %}
+			<p>{{ cirurgia_id }}</p>
+			{% endfor %}
+		</article>
+		<article>
+			<h2>Calendário</h2>
+			<p>Preencher</p>
+		</article>
+	</main>
+</section>
+
+{% endblock %}
