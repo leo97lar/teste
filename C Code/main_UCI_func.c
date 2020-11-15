@@ -21,6 +21,7 @@
 #include "tic.h"
 #include "model_rtwutil.h"
 #include <stdio.h>
+#include <string.h>
 
 /* Function Definitions */
 
@@ -65,7 +66,7 @@
  *                boolean_T keeppriority
  * Return Type  : void
  */
-void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
+int* main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
                    emxArray_int32_T *CPO, const emxArray_int32_T *CPrO, const
                    emxArray_int32_T *CR, const emxArray_int32_T *Data, const
                    emxArray_int32_T *Dia, const emxArray_int32_T *DispMExD,
@@ -124,6 +125,7 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   double varargin_5;
   double varargin_6;
   unsigned int iidx_idx_0;
+  int* resp;
   emxArray_int32_T *iidx;
   emxArray_int32_T *NAWD;
   emxArray_int32_T *x;
@@ -1419,7 +1421,10 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   /* 'PLOTT_func:13' xlabel('Generations','FontName','Arial','FontSize', 28); */
   /* 'PLOTT_func:14' ylabel('# surgeries out of term','FontName','Arial','FontSize', 28); */
   /* 'PLOTT_func:15' fprintf('ignore: %2d, %2d', bestexperimento(3), bestexperimento(5)); */
-  printf("ignore: %2d, %2d\n", bestexperimento->data[2], bestexperimento->data[4]);
+
+  resp = (int*)malloc(sizeof(int) * NumTOp);
+  memcpy(resp, bestexperimento->data, sizeof(int) * NumTOp);
+
   fflush(stdout);
   emxFree_real_T(&trace);
   emxFree_int32_T(&bestexperimento);
@@ -1436,6 +1441,8 @@ void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   emxFree_int32_T(&NewPME);
   emxFree_int32_T(&NewTimeUsoRec);
   emxFree_int32_T(&UltPosRecXDia);
+
+  return resp;
 }
 
 /*

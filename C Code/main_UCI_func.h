@@ -18,7 +18,7 @@
 #include "model_types.h"
 
 /* Function Declarations */
-extern void main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO,
+extern int* main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO,
   const emxArray_int32_T *CPO, const emxArray_int32_T *CPrO, const
   emxArray_int32_T *CR, const emxArray_int32_T *Data, const emxArray_int32_T
   *Dia, const emxArray_int32_T *DispMExD, const emxArray_int32_T *MA, const

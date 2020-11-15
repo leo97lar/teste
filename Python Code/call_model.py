@@ -7,12 +7,12 @@
 
 # gcc -shared -o model.so aevSPLap.c BDCreator_func.c casorandom.c cc.c combineVectorElements.c CreaPoQunniforme.c Edade.c eml_rand.c eml_rand_mcg16807_stateful.c eml_rand_mt19937ar_stateful.c eml_rand_shr3cong_stateful.c favalia.c funcionCPrO.c funcionDia.c getTime.c main.c main_UCI_func.c mean.c model_data.c model_emxAPI.c model_emxutil.c model_initialize.c model_rtwutil.c model_terminate.c nullAssignment.c obsIQ.c obsIQini.c rand.c randi.c randperm.c rdivide_helper.c rem.c repmat.c sch.c sort1.c sortIdx.c std.c sum.c tic.c timeKeeper.c toc.c
 #%% Load model
-from ctypes import CDLL, c_void_p, c_int, c_double, c_uint8, byref
+import pandas as pd
+from ctypes import CDLL, c_void_p, c_int, c_double, c_uint8, POINTER, byref
 from time import time
+from config import dll, csv_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority
 
 inicio = time()
-
-dll = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/C Code/model.so'
 
 model = CDLL(dll)
 
@@ -31,7 +31,6 @@ model.main_UCI_func.argtypes = [
 ]
 
 #%% Load CSV
-import pandas as pd
 
 def read_c_csv(filepath):
     df = pd.read_csv(filepath, header=None)
@@ -107,7 +106,7 @@ keeppriority = False
 #%% Rodar Modelo
 
 # 	/* Call the entry-point 'main_UCI_func'. */
-aux = model.main_UCI_func(CP, RO, CPO, CPrO, CR, Data, Dia, DispMExD, MA, MAn, ME, S,
+c_queue = model.main_UCI_func(csvs['CP']['data'], csvs['RO']['data'], csvs['CPO']['data'], csvs['CPrO']['data'], csvs['CR']['data'], csvs['Data']['data'], csvs['Dia']['data'], csvs['DispMExD']['data'], csvs['MA']['data'], csvs['MAn']['data'], csvs['ME']['data'], csvs['S']['data'],
     TipoOp, NumEsp, NumTOp, NumSalOp, NumCPO, NumCPrO, NumCR,
     NumMedEsp, NumEspxE, NumAsist, NumAnest, k0, k1, k2, k3,
     numIQ, numIC, taxC, taxE, taxEQ, ProbXEst, genToWidth,
