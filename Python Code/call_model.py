@@ -22,6 +22,7 @@ model.int_array_to_emxArray.argtypes = [c_void_p, c_void_p, c_int]
 model.real_array_to_emxArray.argtypes = [c_void_p, c_void_p, c_int]
 model.emxDestroyArray_int32_T.argtypes = [c_void_p]
 model.emxDestroyArray_real_T.argtypes = [c_void_p]
+model.main_UCI_func.restype = POINTER(c_int)
 model.main_UCI_func.argtypes = [
     c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, 
     c_int, c_int, c_int, c_int, c_int, c_int, c_int, 
@@ -32,8 +33,9 @@ model.main_UCI_func.argtypes = [
 
 #%% Load CSV
 
-def read_c_csv(filepath):
-    df = pd.read_csv(filepath, header=None)
+
+def read_c_csv(filepath, header):
+    df = pd.read_csv(filepath, header=None, skiprows=int(header))
     flat = df.values.flatten()
     arr = (c_int * df.size)(*flat)
 
@@ -43,65 +45,47 @@ def read_c_csv(filepath):
 
     return c_mat, df.shape
 
+
 #   Initialize the application.
 #   You do not need to do this more than one time.
 model.model_initialize()
 
-csv_folder = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/'
+files = [
+    ('CP', False), ('RO', False), ('CPO', False), ('CPrO', False),
+    ('CR', False), ('Data', False), ('Dia', False), ('DispMExD', False),
+    ('MA', False), ('MAn', False), ('ME', False), ('S', False)
+]
+csvs = {}
 
-CP, CP_shape = read_c_csv(csv_folder + "CP.csv")
-RO, RO_shape = read_c_csv(csv_folder + "RO.csv")
-CPO, CPO_shape = read_c_csv(csv_folder + "CPO.csv")
-CPrO, CPrO_shape = read_c_csv(csv_folder + "CPrO.csv")
-CR, CR_shape = read_c_csv(csv_folder + "CR.csv")
-Data, _ = read_c_csv(csv_folder + "Data.csv")
-Dia, _ = read_c_csv(csv_folder + "Dia.csv")
-DispMExD, _ = read_c_csv(csv_folder + "DispMExD.csv")
-MA, MA_shape = read_c_csv(csv_folder + "MA.csv")
-MAn, MAn_shape = read_c_csv(csv_folder + "MAn.csv")
-ME, ME_shape = read_c_csv(csv_folder + "ME.csv")
-S, S_shape = read_c_csv(csv_folder + "S.csv")
+for filename, header in files:
+    data, shape = read_c_csv(csv_folder + filename + ".csv", header=header)
+    csvs[filename] = {'data': data, 'shape': shape}
 
 #%% Inicializar Variáveis
 
 #   Variables de Interes
 
-TipoOp = RO_shape[0] #  Tipos de operaciones
-NumEsp = ME_shape[1] #  Numero de Especialidades
-NumTOp = CP_shape[0] #  Numero Total de Operaciones
+TipoOp = csvs['RO']['shape'][0]  # Tipos de operaciones
+NumEsp = csvs['ME']['shape'][1]  # Numero de Especialidades
+NumTOp = csvs['CP']['shape'][0]  # Numero Total de Operaciones
 
 #   Recursos materiales
-NumSalOp = S_shape[0] #     Numero de Salones de operaciones
-NumCPO = CPO_shape[0] #     Numero de camas Post - Operatorias
-NumCPrO = CPrO_shape[0] #   Numero de camas Pre - Operatorias
-NumCR = CR_shape[0] #       Numero de camas Recuperacion
+NumSalOp = csvs['S']['shape'][0]  # Numero de Salones de operaciones
+NumCPO = csvs['CPO']['shape'][0]  # Numero de camas Post - Operatorias
+NumCPrO = csvs['CPrO']['shape'][0]  # Numero de camas Pre - Operatorias
+NumCR = csvs['CR']['shape'][0]  # Numero de camas Recuperacion
 
-NumMedEsp = ME_shape[0] #           Numero de Medicos Especialistas
+NumMedEsp = csvs['ME']['shape'][0]  # Numero de Medicos Especialistas
 NumEspxE = int(NumMedEsp/NumEsp) #  Numero de Especialistas por Especialidad
-NumAsist = MA_shape[0] #            Numero de Medico Asistentes
-NumAnest = MAn_shape[0] #           Numero de Anestesistas
+NumAsist = csvs['MA']['shape'][0]  # Numero de Medico Asistentes
+NumAnest = csvs['MAn']['shape'][0]  # Numero de Anestesistas
 
-#   Variables del model
-k0 = 0
-k1 = 0
-k2 = 0
-k3 = 0
-
-numIQ = 5 #     Numero de individuos cuanticos.
-numIC = 20 #    Numero de individuos clasicos.
-taxC = 0.9 #    Tasa de cruzamiento
-taxE = 50 #     Tasa de elitismo[%]
-taxEQ = 10
 
 ProbXEst = model.emxCreate_real_T(5, 1)
-data = [10.0, 20.0, 40.0, 20.0, 10.0]
-c_data = (c_double * len(data))(*data)
-model.real_array_to_emxArray(c_data, ProbXEst, len(data))
 
-genToWidth = 5 #    Número de gerações de espera antes de reduzir a largura dos indivíduos quânticos
-generations = 2 #   Número de gerações
+c_ProbXEst = (c_double * len(py_ProbXEst))(*py_ProbXEst)
+model.real_array_to_emxArray(c_ProbXEst, ProbXEst, len(py_ProbXEst))
 
-keeppriority = False
 
 #%% Rodar Modelo
 
@@ -114,20 +98,19 @@ c_queue = model.main_UCI_func(csvs['CP']['data'], csvs['RO']['data'], csvs['CPO'
 
 #%% Terminate model
 
-print('rodou: ' + str(aux))
-
-model.emxDestroyArray_int32_T(S)
-model.emxDestroyArray_int32_T(ME)
-model.emxDestroyArray_int32_T(MAn)
-model.emxDestroyArray_int32_T(MA)
-model.emxDestroyArray_int32_T(DispMExD)
-model.emxDestroyArray_int32_T(Dia)
-model.emxDestroyArray_int32_T(Data)
-model.emxDestroyArray_int32_T(CR)
-model.emxDestroyArray_int32_T(CPrO)
-model.emxDestroyArray_int32_T(CPO)
-model.emxDestroyArray_int32_T(RO)
-model.emxDestroyArray_int32_T(CP)
+model.emxDestroyArray_int32_T(csvs['S'])
+model.emxDestroyArray_int32_T(csvs['ME'])
+model.emxDestroyArray_int32_T(csvs['MAn'])
+model.emxDestroyArray_int32_T(csvs['MA'])
+model.emxDestroyArray_int32_T(csvs['DispMExD'])
+model.emxDestroyArray_int32_T(csvs['Dia'])
+model.emxDestroyArray_int32_T(csvs['Data'])
+model.emxDestroyArray_int32_T(csvs['CR'])
+model.emxDestroyArray_int32_T(csvs['CPrO'])
+model.emxDestroyArray_int32_T(csvs['CPO'])
+model.emxDestroyArray_int32_T(csvs['RO'])
+model.emxDestroyArray_int32_T(csvs['CP'])
+model.emxDestroyArray_int32_T(c_queue)
 
 model.emxDestroyArray_real_T(ProbXEst)
 
