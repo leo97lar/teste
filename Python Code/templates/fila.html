@@ -8,10 +8,16 @@
 <section id="pageContent">
 	<main role="main">
 		<article>
+			<h2>Rodar modelo</h2>
+			{% if running_thread and running_thread.is_alive() %}
+			<p>Model running, please wait</p>
+			{% else %}
+			<button type="button" onclick="{{run_model()}}">Click Me!</button>
+			{% endif %}
+		</article>
+		<article>
 			<h2>Fila</h2>
-			{% for cirurgia_id in fila %}
-			<p>{{ cirurgia_id }}</p>
-			{% endfor %}
+			{{fila}}
 		</article>
 		<article>
 			<h2>Calendário</h2>

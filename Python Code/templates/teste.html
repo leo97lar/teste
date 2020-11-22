@@ -3,6 +3,40 @@
 {% block content %}
 
 <section>
+	<strong> Valores das variáveis do hospital</strong>
+</section>
+<section id="pageContent">
+	<main role="main">
+		<article>
+			<label for="mesp">Médicos Especialistas:</label> {{hosp_values['NumMedEsp']}}
+			<button type="button" onclick="{{run_model()}}">+</button>
+			<button type="button" onclick="{{run_model()}}">-</button>
+			<br><br>
+			<label for="mass">Médicos Assistentes:</label> {{hosp_values['NumAsist']}}
+			<button type="button" onclick="{{run_model()}}">+</button>
+			<button type="button" onclick="{{run_model()}}">-</button>
+			<br><br>
+			<label for="mane">Médicos Anestesistas:</label> {{hosp_values['NumAnest']}}
+			<button type="button" onclick="{{run_model()}}">+</button>
+			<button type="button" onclick="{{run_model()}}">-</button>
+			<br><br>
+			<br>
+			<label for="cpre">Camas Pré Operação:</label>
+			<input type="text" id="cpre" name="cpre" value="{{hosp_values['NumCPrO']}}"><br><br>
+			<label for="cpos">Camas Pós Operação:</label>
+			<input type="text" id="cpos" name="cpos" value="{{hosp_values['NumCPO']}}"><br><br>
+			<label for="cres">Camas Repouso:</label>
+			<input type="text" id="cres" name="cres" value="{{hosp_values['NumCR']}}"><br><br>
+			<br>
+			<label for="salas">Salas:</label>
+			<input type="text" id="salas" name="salas" value="{{hosp_values['NumSalOp']}}"><br><br>
+		</article>
+		<article>
+			<button type="button" onclick="{{run_model()}}">Run</button>
+			<button type="button" onclick="{{run_model()}}">Resetar</button>
+			<button type="button" onclick="{{run_model()}}">Ultima Configuração</button>
+		</article>
+	</main>
 </section>
 
 {% endblock %}
