@@ -10,31 +10,31 @@
 import pandas as pd
 from ctypes import CDLL, c_void_p, c_int, c_double, c_uint8, POINTER, byref
 from time import time
-from config import dll, csv_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority
+from config import dll, hosp_csv_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority
 
 headers = {
-    'CP': False,
-    'RO': False,
-    'CPO': False,
-    'CPrO': False,
-    'CR': False,
-    'Data': False,
-    'Dia': False,
-    'DispMExD': False,
-    'MA': False,
-    'MAn': False,
-    'ME': False,
-    'S': False,
+    'CP': (True,None),
+    'RO': (True,None),
+    'CPO': (False,None),
+    'CPrO': (False,None),
+    'CR': (False,None),
+    'Data': (True,None),
+    'Dia': (True,None),
+    'DispMExD': (True,0),
+    'MA': (True,0),
+    'MAn': (True,0),
+    'ME': (True,0),
+    'S': (False,None),
 }
 
 def _get_shape(filename, shape=None):
-    df = pd.read_csv(csv_folder + filename + ".csv", header=None, skiprows=int(headers[filename]))
+    df = pd.read_csv(hosp_csv_folder + filename + ".csv", header=None, skiprows=int(headers[filename][0]), index_col=headers[filename][1])
     if shape is not None:
         return df.shape[shape]
     return df.shape
 
 
-def get_hospital_values():
+def get_hospital_csv_values():
     return {
         'NumSalOp': _get_shape('S', 0),     # Numero de Salones de operaciones
 
@@ -76,8 +76,8 @@ def run_model():
 
     csvs = {}
 
-    def read_c_csv(filepath, header):
-        df = pd.read_csv(filepath, header=None, skiprows=int(header))
+    def read_c_csv(filepath, header, index_col=None):
+        df = pd.read_csv(filepath, header=None, skiprows=int(header), index_col=index_col)
         flat = df.values.flatten()
         arr = (c_int * df.size)(*flat)
 
@@ -87,8 +87,9 @@ def run_model():
 
         return c_mat, df.shape
 
-    for filename, header in headers.items():
-        data, shape = read_c_csv(csv_folder + filename + ".csv", header=header)
+    for filename, (header, index_col) in headers.items():
+        data, shape = read_c_csv(
+            hosp_csv_folder + filename + ".csv", header=header, index_col=index_col)
         csvs[filename] = {'data': data, 'shape': shape}
 
     #%% Inicializar Variáveis
@@ -155,3 +156,4 @@ def run_model():
 
     print('Tempo total: ' + str(total_time) + ' segundos')
     return queue, total_time
+

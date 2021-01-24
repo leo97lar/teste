@@ -1,0 +1,10 @@
+diff a/Matlab Code/test_func.m b/Matlab Code/test_func.m	(rejected hunks)
+@@ -90,7 +90,7 @@
+ 
+ ProbXEst=[10;20;40;20;10];
+ genToWidth=int32(5);                % N�mero de gera��es de espera antes de reduzir a largura dos indiv�duos qu�nticos
+-generations=int32(50);             % N�mero de gera��es
++generations=int32(1);             % N�mero de gera��es
+ 
+ keeppriority = false;
+ 

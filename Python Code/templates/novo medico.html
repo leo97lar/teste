@@ -1,0 +1,20 @@
+{% extends 'teste.html' %}
+
+{% block aside %}
+
+
+<div>
+	Configurações do Novo {{tipo.capitalize()}}:
+
+	Identificador:
+	<input type="text" id="med_id" name="med_id">
+	Habilidade(entre 0 e 3): 
+	{% for esp in especialidades %}
+		{{esp}}: <input type="text" id="med_id" name="med_id">
+	{% endfor %}
+
+</select>
+	
+</div>
+
+{% endblock %}

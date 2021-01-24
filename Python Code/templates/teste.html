@@ -8,35 +8,96 @@
 <section id="pageContent">
 	<main role="main">
 		<article>
-			<label for="mesp">Médicos Especialistas:</label> {{hosp_values['NumMedEsp']}}
-			<button type="button" onclick="{{run_model()}}">+</button>
-			<button type="button" onclick="{{run_model()}}">-</button>
-			<br><br>
-			<label for="mass">Médicos Assistentes:</label> {{hosp_values['NumAsist']}}
-			<button type="button" onclick="{{run_model()}}">+</button>
-			<button type="button" onclick="{{run_model()}}">-</button>
-			<br><br>
-			<label for="mane">Médicos Anestesistas:</label> {{hosp_values['NumAnest']}}
-			<button type="button" onclick="{{run_model()}}">+</button>
-			<button type="button" onclick="{{run_model()}}">-</button>
-			<br><br>
+			<table>
+				<label for="mesp">Médicos Especialistas:</label> {{get_hospital_values()['NumMedEsp']}}
+				<form action="/novo_medico/especialista">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_medico/especialista">
+					<button type="submit">-</button>
+				</form>
+			</table>
 			<br>
-			<label for="cpre">Camas Pré Operação:</label>
-			<input type="text" id="cpre" name="cpre" value="{{hosp_values['NumCPrO']}}"><br><br>
-			<label for="cpos">Camas Pós Operação:</label>
-			<input type="text" id="cpos" name="cpos" value="{{hosp_values['NumCPO']}}"><br><br>
-			<label for="cres">Camas Repouso:</label>
-			<input type="text" id="cres" name="cres" value="{{hosp_values['NumCR']}}"><br><br>
+			<table>
+				<label for="mass">Médicos Assistentes:</label> {{get_hospital_values()['NumAsist']}}
+				<form action="/novo_medico/assistente">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_medico/assistente">
+					<button type="submit">-</button>
+				</form>
+			</table>
 			<br>
-			<label for="salas">Salas:</label>
-			<input type="text" id="salas" name="salas" value="{{hosp_values['NumSalOp']}}"><br><br>
+			<table>
+				<label for="mane">Médicos Anestesistas:</label> {{get_hospital_values()['NumAnest']}}
+				<form action="/novo_medico/anestesista">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_medico/anestesista">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<br>
+			<table>
+				<label for="cpos">Camas Pré Operação:</label> {{get_hospital_values()['NumCPrO']}}
+				<form action="/set_hospital/NumCPrO/+">
+					<button type="submit">+</button>
+				</form>
+				<form action="/set_hospital/NumCPrO/-">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="cpos">Camas Pós Operação:</label> {{get_hospital_values()['NumCPO']}}
+				<form action="/set_hospital/NumCPO/+">
+					<button type="submit">+</button>
+				</form>
+				<form action="/set_hospital/NumCPO/-">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="cres">Camas Repouso:</label> {{get_hospital_values()['NumCR']}}
+				<form action="/set_hospital/NumCR/+">
+					<button type="submit">+</button>
+				</form>
+				<form action="/set_hospital/NumCR/-">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<br>
+			<table>
+				<label for="salas">Salas:</label> {{get_hospital_values()['NumSalOp']}}
+				<form action="/set_hospital/NumSalOp/+">
+					<button type="submit">+</button>
+				</form>
+				<form action="/set_hospital/NumSalOp/-">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
 		</article>
 		<article>
-			<button type="button" onclick="{{run_model()}}">Run</button>
-			<button type="button" onclick="{{run_model()}}">Resetar</button>
-			<button type="button" onclick="{{run_model()}}">Ultima Configuração</button>
+			<table>
+				<form action="/run_model/teste">
+					<button type="submit">Rodar Teste</button>
+				</form>
+				<form action="/set_hospital/all/reset">
+					<button type="submit">Resetar</button>
+				</form>
+				<form action="/set_hospital/all/last run">
+					<button type="submit">Ultima Configuração</button>
+				</form>
+			</table>
 		</article>
 	</main>
+	<aside>
+		{% block aside %}{% endblock %}
+	</aside>
 </section>
 
 {% endblock %}

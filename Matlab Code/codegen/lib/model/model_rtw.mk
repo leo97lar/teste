@@ -2,7 +2,7 @@
 ## Makefile generated for MATLAB file/project 'model'. 
 ## 
 ## Makefile     : model_rtw.mk
-## Generated on : Mon Sep 07 12:13:39 2020
+## Generated on : Sun Dec 20 16:46:54 2020
 ## MATLAB Coder version: 4.2 (R2019a)
 ## 
 ## Build Info:
@@ -30,7 +30,7 @@ MATLAB_ROOT               = C:\PROGRA~1\MATLAB\R2019a
 MATLAB_BIN                = C:\PROGRA~1\MATLAB\R2019a\bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)\win64
 MASTER_ANCHOR_DIR         = 
-START_DIR                 = C:\Users\leo97\OneDrive\READET~1\DISSER~1\CODIGO~1\codegen\lib\model
+START_DIR                 = C:\Users\leo97\OneDrive\READET~1\DISSER~1\Git\MATLAB~1\codegen\lib\model
 ARCH                      = win64
 TGT_FCN_LIB               = ISO_C
 RELATIVE_PATH_TO_ANCHOR   = .
@@ -311,11 +311,11 @@ $(PRODUCT) : $(OBJS) $(PREBUILT_OBJS)
 	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
 
 
-{C:\Users\leo97\OneDrive\READET~1\DISSER~1\CODIGO~1}.c.obj :
+{C:\Users\leo97\OneDrive\READET~1\DISSER~1\Git\MATLAB~1}.c.obj :
 	$(CC) $(CFLAGS) -Fo"$@" "$<"
 
 
-{C:\Users\leo97\OneDrive\READET~1\DISSER~1\CODIGO~1}.cpp.obj :
+{C:\Users\leo97\OneDrive\READET~1\DISSER~1\Git\MATLAB~1}.cpp.obj :
 	$(CPP) $(CPPFLAGS) -Fo"$@" "$<"
 
 
