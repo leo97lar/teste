@@ -7,6 +7,7 @@
  * MATLAB Coder version            : 4.2
  * C/C++ source code generated on  : 13-Sep-2020 19:00:28
  */
+#define SCHEDULE_PATH "C:\\Users\\leo97\\OneDrive\\Área de Trabalho\\Dissertação\\Git\\CSVs\\schedule_dirty.csv"
 
 /* Include Files */
 #include "BDCreator_func.h"
@@ -52,6 +53,38 @@
  *                double *NOE3
  * Return Type  : void
  */
+
+void print_schedule(emxArray_int32_T* schedule, int numCPrO, int numMedEsp, int numSalOp, int numAsist, int numAnest, int numCPO, int numCR)
+{
+    int i, j, totrow = schedule->size[0], totcol = schedule->size[1];
+    FILE* f;
+    fopen_s(&f, SCHEDULE_PATH, "w");
+    //write header
+    fprintf_s(f, "Horario");
+    for (i = 1; i <= numCPrO; i++)
+        fprintf_s(f, ",Cama Pre Operatoria %d", i);
+    for (i = 1; i <= numMedEsp; i++)
+        fprintf_s(f, ",Medico Especialista %d", i);
+    for (i = 1; i <= numSalOp; i++)
+        fprintf_s(f, ",Sala Operatoria %d", i);
+    for (i = 1; i <= numAsist; i++)
+        fprintf_s(f, ",Medico Auxiliar %d", i);
+    for (i = 1; i <= numAnest; i++)
+        fprintf_s(f, ",Medico Anestesista %d", i);
+    for (i = 1; i <= numCPO; i++)
+        fprintf_s(f, ",Cama Pos Operatoria %d", i);
+    for (i = 1; i <= numCR; i++)
+        fprintf_s(f, ",Cama Repouso %d", i);
+    //write schedule
+    for (i = 0; i < totrow; i++)
+    {
+        fprintf_s(f, "\n%d", i);
+        for (j = 0; j < totcol; j++)
+            fprintf_s(f, ",%d", schedule->data[i * totcol + j]);
+    }
+
+}
+
 void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
          emxArray_int32_T *PCPrO, emxArray_int32_T *PME, emxArray_int32_T *PMA,
          emxArray_int32_T *PMAn, emxArray_int32_T *PS, emxArray_int32_T *PCPO,
@@ -59,7 +92,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
          emxArray_int32_T *Data, emxArray_int32_T *TimeUsoRec, const
          emxArray_int32_T *DispMExD, emxArray_int32_T *EP, double k0, double k1,
          double k2, double k3, double *fitness, double *Tt, double *NOFP, double
-         *TmNOFP, double *NOE2, double *NOE3)
+         *TmNOFP, double *NOE2, double *NOE3, bool printSchedule)
 {
   double y;
   int k;
@@ -730,6 +763,9 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   emxFree_int32_T(&DispME);
   emxFree_int32_T(&tempUltPosRecXDia);
   emxFree_int32_T(&UltPosRecXDia);
+
+  if (printSchedule)
+      print_schedule(H, NumRec[0], NumRec[1], NumRec[2], NumRec[3], NumRec[4], NumRec[5], NumRec[6]);
 
   /* 'sch:77' schedule=H; */
   /* 'sch:79' [ fitness,Tt,NOFP,TmNOFP,NOE2,NOE3] = favalia( schedule,DiaOp,int32(EP),EspMedOp,k0,k1,k2,k3 ); */

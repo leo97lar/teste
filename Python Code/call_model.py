@@ -5,30 +5,18 @@
 # for a in l:
 #     print(a[64:])
 
+# cd C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Git\C Code
 # gcc -shared -o model.so aevSPLap.c BDCreator_func.c casorandom.c cc.c combineVectorElements.c CreaPoQunniforme.c Edade.c eml_rand.c eml_rand_mcg16807_stateful.c eml_rand_mt19937ar_stateful.c eml_rand_shr3cong_stateful.c favalia.c funcionCPrO.c funcionDia.c getTime.c main.c main_UCI_func.c mean.c model_data.c model_emxAPI.c model_emxutil.c model_initialize.c model_rtwutil.c model_terminate.c nullAssignment.c obsIQ.c obsIQini.c rand.c randi.c randperm.c rdivide_helper.c rem.c repmat.c sch.c sort1.c sortIdx.c std.c sum.c tic.c timeKeeper.c toc.c
 #%% Load model
 import pandas as pd
 from ctypes import CDLL, c_void_p, c_int, c_double, c_uint8, POINTER, byref
 from time import time
-from config import dll, hosp_csv_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority
-
-headers = {
-    'CP': (True,None),
-    'RO': (True,None),
-    'CPO': (False,None),
-    'CPrO': (False,None),
-    'CR': (False,None),
-    'Data': (True,None),
-    'Dia': (True,None),
-    'DispMExD': (True,0),
-    'MA': (True,0),
-    'MAn': (True,0),
-    'ME': (True,0),
-    'S': (False,None),
-}
+from config import dll, hosp_csv_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority, headers
+import datetime
+import json
 
 def _get_shape(filename, shape=None):
-    df = pd.read_csv(hosp_csv_folder + filename + ".csv", header=None, skiprows=int(headers[filename][0]), index_col=headers[filename][1])
+    df = pd.read_csv(hosp_csv_folder + filename + ".csv", header=None, skiprows=int(headers[filename]['header']), index_col=headers[filename]['index'])
     if shape is not None:
         return df.shape[shape]
     return df.shape
@@ -46,6 +34,28 @@ def get_hospital_csv_values():
         'NumAsist': _get_shape('MA', 0),    # Numero de Medico Asistentes
         'NumAnest': _get_shape('MAn', 0),   # Numero de Anestesistas
     }
+
+
+def initialize_model():
+    model = CDLL(dll)
+
+    model.emxCreate_int32_T.restype = c_void_p
+    model.emxCreate_real_T.restype = c_void_p
+    model.int_array_to_emxArray.argtypes = [c_void_p, c_void_p, c_int]
+    model.real_array_to_emxArray.argtypes = [c_void_p, c_void_p, c_int]
+    model.emxDestroyArray_int32_T.argtypes = [c_void_p]
+    model.emxDestroyArray_real_T.argtypes = [c_void_p]
+    model.main_UCI_func.restype = POINTER(c_int)
+    model.main_UCI_func.argtypes = [
+        c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p,
+        c_int, c_int, c_int, c_int, c_int, c_int, c_int,
+        c_int, c_int, c_int, c_int, c_double, c_double, c_double, c_double,
+        c_int, c_int, c_double, c_double, c_double, c_void_p, c_int,
+        c_int, c_uint8,
+    ]
+    model.model_initialize()
+
+    return model
 
 def run_model():
     inicio = time()
@@ -72,9 +82,7 @@ def run_model():
 
     #   Initialize the application.
     #   You do not need to do this more than one time.
-    model.model_initialize()
-
-    csvs = {}
+    model = initialize_model()
 
     def read_c_csv(filepath, header, index_col=None):
         df = pd.read_csv(filepath, header=None, skiprows=int(header), index_col=index_col)
@@ -87,9 +95,11 @@ def run_model():
 
         return c_mat, df.shape
 
-    for filename, (header, index_col) in headers.items():
+    csvs = {}
+
+    for filename, header_dict in headers.items():
         data, shape = read_c_csv(
-            hosp_csv_folder + filename + ".csv", header=header, index_col=index_col)
+            hosp_csv_folder + filename + ".csv", header=header_dict['header'], index_col=header_dict['index'])
         csvs[filename] = {'data': data, 'shape': shape}
 
     #%% Inicializar Variáveis
@@ -134,18 +144,18 @@ def run_model():
 
     #%%Terminate model
 
-    model.emxDestroyArray_int32_T(csvs['S'])
-    model.emxDestroyArray_int32_T(csvs['ME'])
-    model.emxDestroyArray_int32_T(csvs['MAn'])
-    model.emxDestroyArray_int32_T(csvs['MA'])
-    model.emxDestroyArray_int32_T(csvs['DispMExD'])
-    model.emxDestroyArray_int32_T(csvs['Dia'])
-    model.emxDestroyArray_int32_T(csvs['Data'])
-    model.emxDestroyArray_int32_T(csvs['CR'])
-    model.emxDestroyArray_int32_T(csvs['CPrO'])
-    model.emxDestroyArray_int32_T(csvs['CPO'])
-    model.emxDestroyArray_int32_T(csvs['RO'])
-    model.emxDestroyArray_int32_T(csvs['CP'])
+    model.emxDestroyArray_int32_T(csvs['S']['data'])
+    model.emxDestroyArray_int32_T(csvs['ME']['data'])
+    model.emxDestroyArray_int32_T(csvs['MAn']['data'])
+    model.emxDestroyArray_int32_T(csvs['MA']['data'])
+    model.emxDestroyArray_int32_T(csvs['DispMExD']['data'])
+    model.emxDestroyArray_int32_T(csvs['Dia']['data'])
+    model.emxDestroyArray_int32_T(csvs['Data']['data'])
+    model.emxDestroyArray_int32_T(csvs['CR']['data'])
+    model.emxDestroyArray_int32_T(csvs['CPrO']['data'])
+    model.emxDestroyArray_int32_T(csvs['CPO']['data'])
+    model.emxDestroyArray_int32_T(csvs['RO']['data'])
+    model.emxDestroyArray_int32_T(csvs['CP']['data'])
     model.emxDestroyArray_int32_T(c_queue)
 
     model.emxDestroyArray_real_T(ProbXEst)
@@ -157,3 +167,40 @@ def run_model():
     print('Tempo total: ' + str(total_time) + ' segundos')
     return queue, total_time
 
+def generate_calendar():
+    Data = pd.read_csv(hosp_csv_folder + "Data.csv", header=0)
+    schedule = pd.read_csv(hosp_csv_folder + "schedule_dirty.csv", header=0, index_col=0)
+
+    schedule.index = Data.apply(lambda row: datetime.datetime(year=row['Ano'],month=row['Mes'],hour=row['Hora']-1,day=row['Dia']), axis=1)
+
+    def get_equipment_events(equipment_schedule):
+        sched_gb = equipment_schedule.groupby([(equipment_schedule.ne(equipment_schedule.shift())).cumsum()])
+        sched = sched_gb.agg(title=lambda group: 'Operacao ' + str(max(group)), start=lambda group: str(min(group.index)), end=lambda group: str(max(group.index + pd.to_timedelta(1,unit='h'))))
+        sched = sched[sched['title'].ne('Operacao 0')]
+        sched = sched.apply(pd.Series.to_json, axis=1)
+        return pd.DataFrame([['x']*len(sched)],columns=list(sched), index=[equipment_schedule.name])
+    
+    events = pd.DataFrame()
+    for equipment in schedule.columns:
+        events = events.append(get_equipment_events(schedule[equipment]))
+
+    events_json = '['
+    calendar_details = {}
+
+    event_id = 0
+    for event in events.columns:
+        event_id += 1
+        events_json += event[:-1] + ',"id":'+str(event_id)+',"url":"http://127.0.0.1:5000/calendar_details/' + str(event_id) + '"},'
+        equipments = events[event].dropna()
+        calendar_details[event_id] = list(equipments.index)
+
+    events_json = events_json[:-1] + ']'
+    return events_json, json.dumps(calendar_details)
+
+
+events_json, details_json = generate_calendar()
+
+with open('C:\\Users\\leo97\\OneDrive\\Área de Trabalho\\Dissertação\\Git\\CSVs\\events.json', 'w') as f:
+    f.write(events_json)
+with open('C:\\Users\\leo97\\OneDrive\\Área de Trabalho\\Dissertação\\Git\\CSVs\\details.json', 'w') as f:
+    f.write(details_json)

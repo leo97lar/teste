@@ -409,7 +409,7 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
 
       sch(NumTOp, iidx, NumRec, b_PCPrO, b_PME, b_PMA, b_PMAn, b_PS, b_PCPO,
           b_PCR, Dia, Data, b_TimeUsoRec, DispMExD, b_EP, k0, k1, k2, k3, &d0,
-          &varargin_5, &d1, &d2, &d3, &d4);
+          &varargin_5, &d1, &d2, &d3, &d4, g==generations-1);
       fitness->data[6 * j] = d0;
       fitness->data[1 + 6 * j] = varargin_5;
       fitness->data[2 + 6 * j] = d1;
@@ -418,9 +418,6 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
       fitness->data[5 + 6 * j] = d4;
     }
 
-    /*     save(strcat('fitness_', int2str(g),'.mat'),'fitness'); */
-    /*     file = load(strcat('fitness_', int2str(g),'.mat')); */
-    /*     fitness = file.fitness; */
     /* ATUALIZA POPULAÇÃO B(T) */
     /* 'aevSPLap:60' if (g == 1) */
     if (1 + g == 1) {

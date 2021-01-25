@@ -26,6 +26,12 @@ med_type_to_csv = {
 def calendar():
     return render_template("fila.html")
 
+@app.route('/calendar_details/<int:event_id>')
+def calendar_details(event_id):
+    with open('C:\\Users\\leo97\\OneDrive\\Área de Trabalho\\Dissertação\\Git\\CSVs\\details.json', 'r') as f:
+        details = json.load(f)[str(event_id)]
+    return str(details)
+
 
 @app.route('/data')
 def return_data():
