@@ -1,7 +1,11 @@
 dll = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/C Code/model.so'
-hosp_csv_folder = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/'
-test_csv_folder = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs_test/'
-last_csv_folder = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs_test/'
+def get_csv_folder(folder_type):
+    aux = {
+        'hosp': 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/',
+        'test': 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs_test/',
+        'last': 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs_last/',
+    }
+    return aux[folder_type]
 
 #   Variables del model
 k0 = 0

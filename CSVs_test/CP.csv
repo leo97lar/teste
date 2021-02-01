@@ -1,4 +1,4 @@
-Identificador,Data de Entrada, Estado do Paciente, Tipo de Operacao, Idade, Tempo Pre Operatorio, Tempo Pos Operatorio, Tempo Recuperacao
+Identificador,Data de Entrada,Estado do Paciente,Tipo de Operacao,Idade,Tempo Pre Operatorio,Tempo Pos Operatorio,Tempo Recuperacao
 1,1,90,70,44,2,24,48
 2,1,180,133,62,3,24,72
 3,1,6,165,59,2,8,24

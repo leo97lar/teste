@@ -1,0 +1,16 @@
+{% extends 'calendar_base.html' %}
+
+{% block content2 %}
+
+<div>
+	<section>
+		<strong> Recursos necessários para {{title}} (id={{event_id}}):</strong>
+	</section>
+	<br>
+	{% for det in details %}
+		{{det}}<br>
+	{% endfor %}
+
+</div>
+
+{% endblock %}

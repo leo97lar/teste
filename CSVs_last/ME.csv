@@ -1,31 +1,31 @@
-Medico, Esp 1, Esp 2, Esp 3, Esp 4, Esp 5, Esp 6, Esp 7, Esp 8, Esp 9, Esp 10, Esp 11, Esp 12, Esp 13, Esp 14, Esp 15
-Med 1,1,0,0,0,2,0,0,3,0,2,3,0,3,0,0
-Med 2,2,1,0,3,2,2,0,0,0,0,0,2,3,2,0
-Med 3,2,2,1,3,3,0,2,2,0,2,0,0,2,2,0
-Med 4,0,0,0,1,3,2,0,0,2,3,0,2,0,3,0
-Med 5,2,0,2,0,1,2,2,0,0,3,2,3,0,0,0
-Med 6,0,2,2,3,2,1,0,0,0,3,3,3,0,0,0
-Med 7,2,2,0,0,2,0,1,2,3,0,3,2,0,3,0
-Med 8,2,0,3,0,0,0,0,1,2,0,2,3,3,0,0
-Med 9,3,2,2,0,2,0,0,3,1,0,0,0,0,0,0
-Med 10,0,2,0,0,0,0,0,2,3,1,2,2,0,0,0
-Med 11,0,0,0,0,3,0,2,0,0,3,1,0,0,0,0
-Med 12,0,3,0,2,3,0,0,0,0,0,0,1,3,0,0
-Med 13,0,0,3,0,0,2,2,3,2,2,2,0,1,0,0
-Med 14,2,0,0,0,0,2,0,3,0,2,3,0,0,1,0
-Med 15,2,3,0,0,0,0,0,0,0,0,0,0,0,2,1
-Med 16,1,0,0,2,0,0,3,3,2,0,0,3,2,3,2
-Med 17,3,1,3,0,3,0,0,0,0,0,2,0,0,2,0
-Med 18,2,0,1,2,2,2,0,2,2,2,0,2,0,0,0
-Med 19,0,3,0,1,0,2,2,2,3,0,0,0,0,0,2
-Med 20,0,0,3,0,1,0,0,0,3,3,0,0,0,0,0
-Med 21,0,0,0,0,2,1,0,2,0,0,2,0,0,0,0
-Med 22,2,0,0,0,0,3,1,0,0,0,3,3,0,0,0
-Med 23,0,0,3,3,2,0,0,1,2,2,0,0,2,2,3
-Med 24,2,0,2,2,2,0,0,0,1,0,0,2,2,2,0
-Med 25,0,0,0,2,3,0,2,0,0,1,0,2,2,3,0
-Med 26,2,3,0,0,0,0,2,0,0,2,1,2,0,0,2
-Med 27,2,0,2,0,2,2,0,0,0,0,0,1,0,2,0
-Med 28,0,0,0,0,3,2,0,0,3,0,2,3,1,3,3
-Med 29,0,0,0,0,0,2,0,0,0,0,0,0,2,1,2
-Med 30,3,3,0,3,2,0,0,0,0,2,0,2,0,0,1
+Medico Especialistaico,Especialidade 1,Especialidade 2,Especialidade 3,Especialidade 4,Especialidade 5,Especialidade 6,Especialidade 7,Especialidade 8,Especialidade 9,Especialidade 10,Especialidade 11,Especialidade 12,Especialidade 13,Especialidade 14,Especialidade 15
+Medico Especialista 1,1,0,0,0,2,0,0,3,0,2,3,0,3,0,0
+Medico Especialista 2,2,1,0,3,2,2,0,0,0,0,0,2,3,2,0
+Medico Especialista 3,2,2,1,3,3,0,2,2,0,2,0,0,2,2,0
+Medico Especialista 4,0,0,0,1,3,2,0,0,2,3,0,2,0,3,0
+Medico Especialista 5,2,0,2,0,1,2,2,0,0,3,2,3,0,0,0
+Medico Especialista 6,0,2,2,3,2,1,0,0,0,3,3,3,0,0,0
+Medico Especialista 7,2,2,0,0,2,0,1,2,3,0,3,2,0,3,0
+Medico Especialista 8,2,0,3,0,0,0,0,1,2,0,2,3,3,0,0
+Medico Especialista 9,3,2,2,0,2,0,0,3,1,0,0,0,0,0,0
+Medico Especialista 10,0,2,0,0,0,0,0,2,3,1,2,2,0,0,0
+Medico Especialista 11,0,0,0,0,3,0,2,0,0,3,1,0,0,0,0
+Medico Especialista 12,0,3,0,2,3,0,0,0,0,0,0,1,3,0,0
+Medico Especialista 13,0,0,3,0,0,2,2,3,2,2,2,0,1,0,0
+Medico Especialista 14,2,0,0,0,0,2,0,3,0,2,3,0,0,1,0
+Medico Especialista 15,2,3,0,0,0,0,0,0,0,0,0,0,0,2,1
+Medico Especialista 16,1,0,0,2,0,0,3,3,2,0,0,3,2,3,2
+Medico Especialista 17,3,1,3,0,3,0,0,0,0,0,2,0,0,2,0
+Medico Especialista 18,2,0,1,2,2,2,0,2,2,2,0,2,0,0,0
+Medico Especialista 19,0,3,0,1,0,2,2,2,3,0,0,0,0,0,2
+Medico Especialista 20,0,0,3,0,1,0,0,0,3,3,0,0,0,0,0
+Medico Especialista 21,0,0,0,0,2,1,0,2,0,0,2,0,0,0,0
+Medico Especialista 22,2,0,0,0,0,3,1,0,0,0,3,3,0,0,0
+Medico Especialista 23,0,0,3,3,2,0,0,1,2,2,0,0,2,2,3
+Medico Especialista 24,2,0,2,2,2,0,0,0,1,0,0,2,2,2,0
+Medico Especialista 25,0,0,0,2,3,0,2,0,0,1,0,2,2,3,0
+Medico Especialista 26,2,3,0,0,0,0,2,0,0,2,1,2,0,0,2
+Medico Especialista 27,2,0,2,0,2,2,0,0,0,0,0,1,0,2,0
+Medico Especialista 28,0,0,0,0,3,2,0,0,3,0,2,3,1,3,3
+Medico Especialista 29,0,0,0,0,0,2,0,0,0,0,0,0,2,1,2
+Medico Especialista 30,3,3,0,3,2,0,0,0,0,2,0,2,0,0,1

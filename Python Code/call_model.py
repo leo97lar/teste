@@ -11,29 +11,76 @@
 import pandas as pd
 from ctypes import CDLL, c_void_p, c_int, c_double, c_uint8, POINTER, byref
 from time import time
-from config import dll, hosp_csv_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority, headers
+from config import dll, get_csv_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority, headers
 import datetime
 import json
 
-def _get_shape(filename, shape=None):
-    df = pd.read_csv(hosp_csv_folder + filename + ".csv", header=None, skiprows=int(headers[filename]['header']), index_col=headers[filename]['index'])
+
+def _get_shape(filename, csv_folder, shape=None):
+    df = pd.read_csv(csv_folder + filename + ".csv", header=None, skiprows=int(
+        headers[filename]['header']), index_col=headers[filename]['index'])
     if shape is not None:
         return df.shape[shape]
     return df.shape
 
 
-def get_hospital_csv_values():
+def get_hospital_csv_values(folder_type):
+    csv_folder = get_csv_folder(folder_type)
     return {
-        'NumSalOp': _get_shape('S', 0),     # Numero de Salones de operaciones
+        # Numero de Salones de operaciones
+        'NumSalOp': _get_shape('S', csv_folder, 0),
 
-        'NumCPO':   _get_shape('CPO', 0),   # Numero de camas Post - Operatorias
-        'NumCPrO':  _get_shape('CPrO', 0),  # Numero de camas Pre - Operatorias
-        'NumCR':    _get_shape('CR', 0),    # Numero de camas Recuperacion
+        # Numero de camas Post - Operatorias
+        'NumCPO':   _get_shape('CPO', csv_folder, 0),
+        # Numero de camas Pre - Operatorias
+        'NumCPrO':  _get_shape('CPrO', csv_folder, 0),
+        # Numero de camas Recuperacion
+        'NumCR':    _get_shape('CR', csv_folder, 0),
 
-        'NumMedEsp':_get_shape('ME', 0),    # Numero de Medicos Especialistas
-        'NumAsist': _get_shape('MA', 0),    # Numero de Medico Asistentes
-        'NumAnest': _get_shape('MAn', 0),   # Numero de Anestesistas
+        # Numero de Medicos Especialistas
+        'NumMedEsp': _get_shape('ME', csv_folder, 0),
+        # Numero de Medico Asistentes
+        'NumAsist': _get_shape('MA', csv_folder, 0),
+        # Numero de Anestesistas
+        'NumAnest': _get_shape('MAn', csv_folder, 0),
     }
+
+
+def generate_calendar():
+    csv_folder = get_csv_folder('hosp')
+    Data = pd.read_csv(csv_folder + "Data.csv", header=0)
+    schedule = pd.read_csv(
+        csv_folder + "schedule_dirty.csv", header=0, index_col=0)
+
+    schedule.index = Data.apply(lambda row: datetime.datetime(
+        year=row['Ano'], month=row['Mes'], hour=row['Hora']-1, day=row['Dia']), axis=1)
+
+    def get_equipment_events(equipment_schedule):
+        sched_gb = equipment_schedule.groupby(
+            [(equipment_schedule.ne(equipment_schedule.shift())).cumsum()])
+        sched = sched_gb.agg(title=lambda group: 'Operacao ' + str(max(group)), start=lambda group: str(
+            min(group.index)), end=lambda group: str(max(group.index + pd.to_timedelta(1, unit='h'))))
+        sched = sched[sched['title'].ne('Operacao 0')]
+        sched = sched.apply(pd.Series.to_json, axis=1)
+        return pd.DataFrame([['x']*len(sched)], columns=list(sched), index=[equipment_schedule.name])
+
+    events = pd.DataFrame()
+    for equipment in schedule.columns:
+        events = events.append(get_equipment_events(schedule[equipment]))
+
+    events_json = '['
+    calendar_details = {}
+
+    event_id = 0
+    for event in events.columns:
+        event_id += 1
+        events_json += event[:-1] + ',"id":'+str(
+            event_id)+',"url":"http://127.0.0.1:5000/calendar_details/' + str(event_id) + '"},'
+        equipments = events[event].dropna()
+        calendar_details[event_id] = {'op_id':json.loads(event)['title'], 'equips':list(equipments.index)}
+
+    events_json = events_json[:-1] + ']'
+    return events_json, json.dumps(calendar_details)
 
 
 def initialize_model():
@@ -57,7 +104,10 @@ def initialize_model():
 
     return model
 
-def run_model():
+
+def run_model(folder_type):
+    csv_folder = get_csv_folder(folder_type)
+
     inicio = time()
 
     model = CDLL(dll)
@@ -79,13 +129,13 @@ def run_model():
 
     #%% Load CSV
 
-
     #   Initialize the application.
     #   You do not need to do this more than one time.
     model = initialize_model()
 
     def read_c_csv(filepath, header, index_col=None):
-        df = pd.read_csv(filepath, header=None, skiprows=int(header), index_col=index_col)
+        df = pd.read_csv(filepath, header=None,
+                         skiprows=int(header), index_col=index_col)
         flat = df.values.flatten()
         arr = (c_int * df.size)(*flat)
 
@@ -99,7 +149,7 @@ def run_model():
 
     for filename, header_dict in headers.items():
         data, shape = read_c_csv(
-            hosp_csv_folder + filename + ".csv", header=header_dict['header'], index_col=header_dict['index'])
+            csv_folder + filename + ".csv", header=header_dict['header'], index_col=header_dict['index'])
         csvs[filename] = {'data': data, 'shape': shape}
 
     #%% Inicializar Variáveis
@@ -117,7 +167,8 @@ def run_model():
     NumCR = csvs['CR']['shape'][0]  # Numero de camas Recuperacion
 
     NumMedEsp = csvs['ME']['shape'][0]  # Numero de Medicos Especialistas
-    NumEspxE = int(NumMedEsp/NumEsp)  # Numero de Especialistas por Especialidad
+    # Numero de Especialistas por Especialidad
+    NumEspxE = int(NumMedEsp/NumEsp)
     NumAsist = csvs['MA']['shape'][0]  # Numero de Medico Asistentes
     NumAnest = csvs['MAn']['shape'][0]  # Numero de Anestesistas
 
@@ -165,42 +216,14 @@ def run_model():
     total_time = time() - inicio
 
     print('Tempo total: ' + str(total_time) + ' segundos')
+
+    if folder_type == 'hosp':
+        events_json, details_json = generate_calendar()
+
+        with open(csv_folder + 'events.json', 'w') as f:
+            f.write(events_json)
+        with open(csv_folder + 'details.json', 'w') as f:
+            f.write(details_json)
+
     return queue, total_time
 
-def generate_calendar():
-    Data = pd.read_csv(hosp_csv_folder + "Data.csv", header=0)
-    schedule = pd.read_csv(hosp_csv_folder + "schedule_dirty.csv", header=0, index_col=0)
-
-    schedule.index = Data.apply(lambda row: datetime.datetime(year=row['Ano'],month=row['Mes'],hour=row['Hora']-1,day=row['Dia']), axis=1)
-
-    def get_equipment_events(equipment_schedule):
-        sched_gb = equipment_schedule.groupby([(equipment_schedule.ne(equipment_schedule.shift())).cumsum()])
-        sched = sched_gb.agg(title=lambda group: 'Operacao ' + str(max(group)), start=lambda group: str(min(group.index)), end=lambda group: str(max(group.index + pd.to_timedelta(1,unit='h'))))
-        sched = sched[sched['title'].ne('Operacao 0')]
-        sched = sched.apply(pd.Series.to_json, axis=1)
-        return pd.DataFrame([['x']*len(sched)],columns=list(sched), index=[equipment_schedule.name])
-    
-    events = pd.DataFrame()
-    for equipment in schedule.columns:
-        events = events.append(get_equipment_events(schedule[equipment]))
-
-    events_json = '['
-    calendar_details = {}
-
-    event_id = 0
-    for event in events.columns:
-        event_id += 1
-        events_json += event[:-1] + ',"id":'+str(event_id)+',"url":"http://127.0.0.1:5000/calendar_details/' + str(event_id) + '"},'
-        equipments = events[event].dropna()
-        calendar_details[event_id] = list(equipments.index)
-
-    events_json = events_json[:-1] + ']'
-    return events_json, json.dumps(calendar_details)
-
-
-events_json, details_json = generate_calendar()
-
-with open('C:\\Users\\leo97\\OneDrive\\Área de Trabalho\\Dissertação\\Git\\CSVs\\events.json', 'w') as f:
-    f.write(events_json)
-with open('C:\\Users\\leo97\\OneDrive\\Área de Trabalho\\Dissertação\\Git\\CSVs\\details.json', 'w') as f:
-    f.write(details_json)

@@ -41,30 +41,30 @@
 			<br>
 			<table>
 				<label for="cpos">Camas Pré Operação:</label> {{get_hospital_values()['NumCPrO']}}
-				<form action="/set_hospital/NumCPrO/+">
+				<form action="/nova_cama/CPrO">
 					<button type="submit">+</button>
 				</form>
-				<form action="/set_hospital/NumCPrO/-">
+				<form action="/remover_cama/CPrO">
 					<button type="submit">-</button>
 				</form>
 			</table>
 			<br>
 			<table>
 				<label for="cpos">Camas Pós Operação:</label> {{get_hospital_values()['NumCPO']}}
-				<form action="/set_hospital/NumCPO/+">
+				<form action="/nova_cama/CPO">
 					<button type="submit">+</button>
 				</form>
-				<form action="/set_hospital/NumCPO/-">
+				<form action="/remover_cama/CPO">
 					<button type="submit">-</button>
 				</form>
 			</table>
 			<br>
 			<table>
 				<label for="cres">Camas Repouso:</label> {{get_hospital_values()['NumCR']}}
-				<form action="/set_hospital/NumCR/+">
+				<form action="/nova_cama/CR">
 					<button type="submit">+</button>
 				</form>
-				<form action="/set_hospital/NumCR/-">
+				<form action="/remover_cama/CR">
 					<button type="submit">-</button>
 				</form>
 			</table>
@@ -72,10 +72,10 @@
 			<br>
 			<table>
 				<label for="salas">Salas:</label> {{get_hospital_values()['NumSalOp']}}
-				<form action="/set_hospital/NumSalOp/+">
+				<form action="/nova_cama/SalOp">
 					<button type="submit">+</button>
 				</form>
-				<form action="/set_hospital/NumSalOp/-">
+				<form action="/remover_cama/SalOp">
 					<button type="submit">-</button>
 				</form>
 			</table>
