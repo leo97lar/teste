@@ -22,6 +22,13 @@ med_type_to_csv = {
     'anestesista': 'MAn.csv',
 }
 
+cama_type_to_csv = {
+    'pre': 'CPrO.csv',
+    'pos': 'CPO.csv',
+    'rep': 'CR.csv',
+    'sala': 'SalOp.csv',
+}
+
 dados_medico = {}
 
 @app.route('/fila')
@@ -86,8 +93,21 @@ def del_doc(doc_type, doc_id):
         time_df = time_df.drop(doc_id, axis=1)
         time_df.to_csv(csv_file)
 
-def button_click():
-    pass
+def add_cama(cama_type, cama_data):
+    csv_file = get_csv_folder('test') + cama_type_to_csv[cama_type]
+    cama_df = pd.read_csv(csv_file, index_col=0)
+
+    new_line = build_line(index=cama_data['cama_id'], data=cama_data, columns=get_header(csv_file))
+    cama_df = pd.concat([cama_df, new_line])
+
+    cama_df.to_csv(csv_file)
+
+def del_cama(cama_type, cama_id):
+    csv_file = get_csv_folder('test') + cama_type_to_csv[cama_type]
+    cama_df = pd.read_csv(csv_file, index_col=0)
+    cama_df = cama_df.drop(cama_id)
+    cama_df.to_csv(csv_file)
+
 
 @app.route('/set_hospital/<string:key>/<string:change>')
 def set_hospital_value(key, change):
@@ -145,19 +165,12 @@ def render_teste():
     html_file = 'teste.html'
     return render_template(html_file, get_hospital_values=get_hospital_values)
 
-@app.route('/alterar_dados_medico/<string:dados_json>/<string:page>')
-def alterar_dados_medico(dados_json, page):
-    global dados_medico
-    dados_medico = json.loads(dados_json)
-    return redirect('/' + page)
-
 def ask_info(tipo, med_id=False):
     global dados_medico
     html_file = 'novo medico.html'
     csv_file = get_csv_folder('test') + med_type_to_csv[tipo]
     return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, especialidades=get_header(csv_file), dados=dados_medico, med_id=med_id)
 
-# @app.route('/novo_medico/<string:tipo>/<string:dados>')
 @app.route('/novo_medico/<string:tipo>', methods=['GET', 'POST'])
 def render_novo_medico(tipo, dados=None):
     global dados_medico
@@ -182,6 +195,28 @@ def render_remover_medico(tipo):
         return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, medicos=get_index(csv_file))
     else:
         del_doc(tipo, request.form['medicos'])
+        return redirect('/teste')
+
+@app.route('/nova_cama/<string:tipo>', methods=['GET', 'POST'])
+def render_nova_cama(tipo, dados=None):
+    if request.method == 'GET':
+        html_file = 'nova cama.html'
+        csv_file = get_csv_folder('test') + cama_type_to_csv[tipo]
+        return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, especialidades=get_header(csv_file))
+    dados_cama = dict(request.form)
+    add_cama(tipo, dados_cama)
+    return redirect('/teste')
+
+
+
+@app.route('/remover_cama/<string:tipo>', methods=["POST","GET"])
+def render_remover_cama(tipo):
+    html_file = 'remover cama.html'
+    csv_file = get_csv_folder('test') + cama_type_to_csv[tipo]
+    if request.method == "GET":
+        return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, camas=get_index(csv_file))
+    else:
+        del_cama(tipo, request.form['camas'])
         return redirect('/teste')
 
 @app.route('/run_model/<string:page>')

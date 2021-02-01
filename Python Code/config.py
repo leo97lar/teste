@@ -27,16 +27,16 @@ generations = 2 #   Número de gerações
 headers = {
     'CP': {'header':True, 'index':None},
     'RO': {'header':True, 'index':None},
-    'CPO': {'header':False, 'index':None},
-    'CPrO': {'header':False, 'index':None},
-    'CR': {'header':False, 'index':None},
+    'CPO': {'header':True, 'index':0},
+    'CPrO': {'header':True, 'index':0},
+    'CR': {'header':True, 'index':0},
     'Data': {'header':True, 'index':None},
     'Dia': {'header':True, 'index':None},
     'DispMExD': {'header':True, 'index':0},
     'MA': {'header':True, 'index':0},
     'MAn': {'header':True, 'index':0},
     'ME': {'header':True, 'index':0},
-    'S': {'header':False, 'index':None},
+    'S': {'header':True, 'index':0},
 }
 
 keeppriority = False
