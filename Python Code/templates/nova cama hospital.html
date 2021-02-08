@@ -1,0 +1,23 @@
+{% extends 'hospital.html' %}
+
+{% block aside %}
+
+
+<div>
+	Configurações da Nova {{tipo.capitalize()}}:
+
+	<form action="/nova_cama/hospital/{{tipo}}", method="POST">
+	Identificador:
+	<input type="text" id="cama_id" name="cama_id">
+	Habilitada para:<br>
+	{% for esp in especialidades %}
+		{{esp + '\t'}}: <input type="checkbox" id="{{esp}}" name="{{esp}}"><br>
+	{% endfor %}
+		<button type="submit">Adicionar</button>
+	</form>
+
+</select>
+	
+</div>
+
+{% endblock %}

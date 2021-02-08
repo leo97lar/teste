@@ -3,6 +3,88 @@
 {% block content %}
 
 <section>
+	<strong> Valores das variáveis do hospital</strong>
+</section>
+<section id="pageContent">
+	<main role="main">
+		<article>
+			<table>
+				<label for="mesp">Médicos Especialistas:</label> {{get_hospital_values()['NumMedEsp']}}
+				<form action="/novo_medico/hospital/especialista">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_medico/hospital/especialista">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="mass">Médicos Assistentes:</label> {{get_hospital_values()['NumAsist']}}
+				<form action="/novo_medico/hospital/assistente">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_medico/hospital/assistente">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="mane">Médicos Anestesistas:</label> {{get_hospital_values()['NumAnest']}}
+				<form action="/novo_medico/hospital/anestesista">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_medico/hospital/anestesista">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<br>
+			<table>
+				<label for="cpos">Camas Pré Operação:</label> {{get_hospital_values()['NumCPrO']}}
+				<form action="/nova_cama/hospital/pre">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_cama/hospital/pre">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="cpos">Camas Pós Operação:</label> {{get_hospital_values()['NumCPO']}}
+				<form action="/nova_cama/hospital/pos">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_cama/hospital/pos">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="cres">Camas Repouso:</label> {{get_hospital_values()['NumCR']}}
+				<form action="/nova_cama/hospital/rep">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_cama/hospital/rep">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<br>
+			<table>
+				<label for="salas">Salas:</label> {{get_hospital_values()['NumSalOp']}}
+				<form action="/nova_cama/hospital/sala">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_cama/hospital/sala">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+		</article>
+	</main>
+	<aside>
+		{% block aside %}{% endblock %}
+	</aside>
 </section>
 
 {% endblock %}

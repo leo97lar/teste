@@ -59,18 +59,18 @@ int main(void)
 	   You do not need to do this more than one time. */
 	model_initialize();
 
-	CP = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/CP.csv");
-	RO = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/RO.csv");
-	CPO = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/CPO.csv");
-	CPrO = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/CPrO.csv");
-	CR = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/CR.csv");
-	Data = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/Data.csv");
-	Dia = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/Dia.csv");
-	DispMExD = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/DispMExD.csv");
-	MA = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/MA.csv");
-	MAn = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/MAn.csv");
-	ME = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/ME.csv");
-	S = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/S.csv");
+	CP = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/CP.csv");
+	RO = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/RO.csv");
+	CPO = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/CPO.csv");
+	CPrO = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/CPrO.csv");
+	CR = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/CR.csv");
+	Data = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/Data.csv");
+	Dia = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/Dia.csv");
+	DispMExD = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/DispMExD.csv");
+	MA = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/MA.csv");
+	MAn = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/MAn.csv");
+	ME = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/ME.csv");
+	S = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/S.csv");
 
 	// Variables de Interes
 
@@ -113,7 +113,7 @@ int main(void)
 		TipoOp, NumEsp, NumTOp, NumSalOp, NumCPO, NumCPrO, NumCR,
 		NumMedEsp, NumEspxE, NumAsist, NumAnest, k0, k1, k2, k3,
 		numIQ, numIC, taxC, taxE, taxEQ, ProbXEst, genToWidth,
-		generations, keeppriority);
+		generations, keeppriority, "C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/");
 
 	emxDestroyArray_int32_T(S);
 	emxDestroyArray_int32_T(ME);

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section id="pageContent">
+	<main role="main">
+		{% if save1 == '' or save2 == '' %}
+		<p>Por favor, indique quais pastas serão comparadas</p>
+		<form action="/comparar", method="POST">
+			<input type="text" id="save1" name="save1">
+			<input type="text" id="save2" name="save2">
+			<button type="submit">Abrir</button>
+		</form>
+		{% else %}
+		<form action="/teste", method="POST">
+			Rodar e Salvar Como: 
+			<input type="text" value="{{last_opened['no_hosp']}}" id="save" name="save">
+			<button type="submit">Salvar</button>
+		</form>
+		<article>
+			<form action="/teste", method="POST">
+				Abrir pasta: 
+				<input type="text" value="{{last_opened['with_hosp']}}" id="open" name="open">
+				<button type="submit">Abrir</button>
+			</form>
+		</article>
+		<article>
+			<table>
+				<label for="mesp">Médicos Especialistas:</label> {{get_hospital_values()['NumMedEsp']}}
+				<form action="/novo_medico/teste/especialista">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_medico/teste/especialista">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="mass">Médicos Assistentes:</label> {{get_hospital_values()['NumAsist']}}
+				<form action="/novo_medico/teste/assistente">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_medico/teste/assistente">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="mane">Médicos Anestesistas:</label> {{get_hospital_values()['NumAnest']}}
+				<form action="/novo_medico/teste/anestesista">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_medico/teste/anestesista">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<br>
+			<table>
+				<label for="cpos">Camas Pré Operação:</label> {{get_hospital_values()['NumCPrO']}}
+				<form action="/nova_cama/teste/pre">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_cama/teste/pre">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="cpos">Camas Pós Operação:</label> {{get_hospital_values()['NumCPO']}}
+				<form action="/nova_cama/teste/pos">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_cama/teste/pos">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<table>
+				<label for="cres">Camas Repouso:</label> {{get_hospital_values()['NumCR']}}
+				<form action="/nova_cama/teste/rep">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_cama/teste/rep">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+			<br>
+			<table>
+				<label for="salas">Salas:</label> {{get_hospital_values()['NumSalOp']}}
+				<form action="/nova_cama/teste/sala">
+					<button type="submit">+</button>
+				</form>
+				<form action="/remover_cama/teste/sala">
+					<button type="submit">-</button>
+				</form>
+			</table>
+			<br>
+		</article>
+		<article>
+			{% if running_thread and running_thread.is_alive() %}
+			<p>Modelo rodando, por favor espere</p>
+			{% else %}
+			<form action="/teste", method="POST">
+				Rodar e Salvar Como: 
+				<input type="text" value="{{last_opened['no_hosp']}}" id="save" name="save">
+				<button type="submit">Salvar</button>
+			</form>
+			{% endif %}
+		</article>
+		{% endif %}
+	</main>
+</section>
+
+{% endblock %}

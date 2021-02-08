@@ -9,23 +9,23 @@
 # gcc -shared -o model.so aevSPLap.c BDCreator_func.c casorandom.c cc.c combineVectorElements.c CreaPoQunniforme.c Edade.c eml_rand.c eml_rand_mcg16807_stateful.c eml_rand_mt19937ar_stateful.c eml_rand_shr3cong_stateful.c favalia.c funcionCPrO.c funcionDia.c getTime.c main.c main_UCI_func.c mean.c model_data.c model_emxAPI.c model_emxutil.c model_initialize.c model_rtwutil.c model_terminate.c nullAssignment.c obsIQ.c obsIQini.c rand.c randi.c randperm.c rdivide_helper.c rem.c repmat.c sch.c sort1.c sortIdx.c std.c sum.c tic.c timeKeeper.c toc.c
 #%% Load model
 import pandas as pd
-from ctypes import CDLL, c_void_p, c_int, c_double, c_uint8, POINTER, byref
+from ctypes import CDLL, c_void_p, c_int, c_double, c_uint8, c_char_p, POINTER, byref
 from time import time
-from config import dll, get_csv_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority, headers
+from config import dll, saves_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority, csv_index, url, c_schedule, schedule_csv
 import datetime
 import json
 
 
 def _get_shape(filename, csv_folder, shape=None):
-    df = pd.read_csv(csv_folder + filename + ".csv", header=None, skiprows=int(
-        headers[filename]['header']), index_col=headers[filename]['index'])
+    df = pd.read_csv(csv_folder + filename + ".csv", header=None, skiprows=1
+    , index_col=csv_index[filename])
     if shape is not None:
         return df.shape[shape]
     return df.shape
 
 
-def get_hospital_csv_values(folder_type):
-    csv_folder = get_csv_folder(folder_type)
+def get_hospital_csv_values(save_name):
+    csv_folder = saves_folder + save_name + '/'
     return {
         # Numero de Salones de operaciones
         'NumSalOp': _get_shape('S', csv_folder, 0),
@@ -45,12 +45,21 @@ def get_hospital_csv_values(folder_type):
         'NumAnest': _get_shape('MAn', csv_folder, 0),
     }
 
+def get_header(csv_file):
+    return list(pd.read_csv(csv_file, index_col=0).columns)
 
-def generate_calendar():
-    csv_folder = get_csv_folder('hosp')
+def generate_calendar(csv_folder):
     Data = pd.read_csv(csv_folder + "Data.csv", header=0)
     schedule = pd.read_csv(
-        csv_folder + "schedule_dirty.csv", header=0, index_col=0)
+        csv_folder + c_schedule, header=0, index_col=0)
+
+    #schedule data order as decided by the original codes author
+    data_order = ['CPrO', 'ME', 'S', 'MA', 'MAn', 'CPO', 'CR']
+
+    headers = map(lambda x: pd.read_csv(csv_folder + x + '.csv', index_col=csv_index[x]).index, data_order)
+    new_header = [item for sublist in headers for item in sublist]
+    schedule.columns = new_header
+    schedule.to_csv(csv_folder + schedule_csv)
 
     schedule.index = Data.apply(lambda row: datetime.datetime(
         year=row['Ano'], month=row['Mes'], hour=row['Hora']-1, day=row['Dia']), axis=1)
@@ -74,16 +83,20 @@ def generate_calendar():
     event_id = 0
     for event in events.columns:
         event_id += 1
-        events_json += event[:-1] + ',"id":'+str(
-            event_id)+',"url":"http://127.0.0.1:5000/calendar_details/' + str(event_id) + '"},'
+        events_json += event[:-1] + f',"id":{event_id},"url":"{url}/calendar_details/{event_id}' + '"},'
         equipments = events[event].dropna()
         calendar_details[event_id] = {'op_id':json.loads(event)['title'], 'equips':list(equipments.index)}
 
     events_json = events_json[:-1] + ']'
-    return events_json, json.dumps(calendar_details)
+    details_json = json.dumps(calendar_details)
+
+    with open(csv_folder + 'events.json', 'w') as f:
+        f.write(events_json)
+    with open(csv_folder + 'details.json', 'w') as f:
+        f.write(details_json)
 
 
-def initialize_model():
+def _initialize_model():
     model = CDLL(dll)
 
     model.emxCreate_int32_T.restype = c_void_p
@@ -98,58 +111,40 @@ def initialize_model():
         c_int, c_int, c_int, c_int, c_int, c_int, c_int,
         c_int, c_int, c_int, c_int, c_double, c_double, c_double, c_double,
         c_int, c_int, c_double, c_double, c_double, c_void_p, c_int,
-        c_int, c_uint8,
+        c_int, c_uint8, c_char_p,
     ]
     model.model_initialize()
 
     return model
 
+def _read_c_csv(model, filepath, index_col=None):
+    df = pd.read_csv(filepath, header=None,
+                        skiprows=1, index_col=index_col)
+    flat = df.values.flatten()
+    arr = (c_int * df.size)(*flat)
 
-def run_model(folder_type):
-    csv_folder = get_csv_folder(folder_type)
+    c_mat = model.emxCreate_int32_T(df.shape[0], df.shape[1])
+
+    model.int_array_to_emxArray(arr, c_mat, df.size)
+
+    return c_mat, df.shape
+
+def run_model(save_name):
+    csv_folder = saves_folder + save_name + '/'
 
     inicio = time()
-
-    model = CDLL(dll)
-
-    model.emxCreate_int32_T.restype = c_void_p
-    model.emxCreate_real_T.restype = c_void_p
-    model.int_array_to_emxArray.argtypes = [c_void_p, c_void_p, c_int]
-    model.real_array_to_emxArray.argtypes = [c_void_p, c_void_p, c_int]
-    model.emxDestroyArray_int32_T.argtypes = [c_void_p]
-    model.emxDestroyArray_real_T.argtypes = [c_void_p]
-    model.main_UCI_func.restype = POINTER(c_int)
-    model.main_UCI_func.argtypes = [
-        c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p, c_void_p,
-        c_int, c_int, c_int, c_int, c_int, c_int, c_int,
-        c_int, c_int, c_int, c_int, c_double, c_double, c_double, c_double,
-        c_int, c_int, c_double, c_double, c_double, c_void_p, c_int,
-        c_int, c_uint8,
-    ]
 
     #%% Load CSV
 
     #   Initialize the application.
     #   You do not need to do this more than one time.
-    model = initialize_model()
-
-    def read_c_csv(filepath, header, index_col=None):
-        df = pd.read_csv(filepath, header=None,
-                         skiprows=int(header), index_col=index_col)
-        flat = df.values.flatten()
-        arr = (c_int * df.size)(*flat)
-
-        c_mat = model.emxCreate_int32_T(df.shape[0], df.shape[1])
-
-        model.int_array_to_emxArray(arr, c_mat, df.size)
-
-        return c_mat, df.shape
+    model = _initialize_model()
 
     csvs = {}
 
-    for filename, header_dict in headers.items():
-        data, shape = read_c_csv(
-            csv_folder + filename + ".csv", header=header_dict['header'], index_col=header_dict['index'])
+    for filename, index_col in csv_index.items():
+        data, shape = _read_c_csv(model,
+            csv_folder + filename + ".csv", index_col=index_col)
         csvs[filename] = {'data': data, 'shape': shape}
 
     #%% Inicializar Variáveis
@@ -177,6 +172,8 @@ def run_model(folder_type):
     c_ProbXEst = (c_double * len(py_ProbXEst))(*py_ProbXEst)
     model.real_array_to_emxArray(c_ProbXEst, ProbXEst, len(py_ProbXEst))
 
+    schedule_path = (csv_folder + c_schedule).encode('utf-8')
+
     #%% Rodar Modelo
 
     # 	/* Call the entry-point 'main_UCI_func'. */
@@ -184,14 +181,10 @@ def run_model(folder_type):
                                   TipoOp, NumEsp, NumTOp, NumSalOp, NumCPO, NumCPrO, NumCR,
                                   NumMedEsp, NumEspxE, NumAsist, NumAnest, k0, k1, k2, k3,
                                   numIQ, numIC, taxC, taxE, taxEQ, ProbXEst, genToWidth,
-                                  generations, keeppriority)
+                                  generations, keeppriority, schedule_path)
 
     #%% Testar resultado
-    print('rodou: ' + str(c_queue))
-    a = time()
     queue = [c_queue[i] for i in range(NumTOp)]
-
-    print('conversão: ' + str(time()-a) + "\n" + str(queue))
 
     #%%Terminate model
 
@@ -207,7 +200,8 @@ def run_model(folder_type):
     model.emxDestroyArray_int32_T(csvs['CPO']['data'])
     model.emxDestroyArray_int32_T(csvs['RO']['data'])
     model.emxDestroyArray_int32_T(csvs['CP']['data'])
-    model.emxDestroyArray_int32_T(c_queue)
+    # print('destroying c_queue')
+    # model.emxDestroyArray_int32_T(c_queue)
 
     model.emxDestroyArray_real_T(ProbXEst)
 
@@ -217,13 +211,6 @@ def run_model(folder_type):
 
     print('Tempo total: ' + str(total_time) + ' segundos')
 
-    if folder_type == 'hosp':
-        events_json, details_json = generate_calendar()
+    generate_calendar(csv_folder)
 
-        with open(csv_folder + 'events.json', 'w') as f:
-            f.write(events_json)
-        with open(csv_folder + 'details.json', 'w') as f:
-            f.write(details_json)
-
-    return queue, total_time
-
+    # return queue, total_time

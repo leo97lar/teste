@@ -1,0 +1,21 @@
+{% extends 'hospital.html' %}
+
+{% block aside %}
+
+
+<div>
+	Qual {{tipo.lower()}} remover? :
+
+	<form action="#" method="post">
+		<select name="camas" id="camas">
+			{% for cama in camas %}
+			<option value="{{cama}}">{{cama}}</option>
+			{% endfor %}
+		</select>
+		<input type="submit" value="submit"/>
+	</form>
+
+	
+</div>
+
+{% endblock %}

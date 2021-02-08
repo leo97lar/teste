@@ -1,11 +1,13 @@
 dll = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/C Code/model.so'
-def get_csv_folder(folder_type):
-    aux = {
-        'hosp': 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs/',
-        'test': 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs_test/',
-        'last': 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/CSVs_last/',
-    }
-    return aux[folder_type]
+
+saves_folder = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/'
+
+main_save = 'hosp'
+
+weekdays = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']
+
+c_schedule = 'c_schedule.csv'
+schedule_csv = 'schedule.csv'
 
 #   Variables del model
 k0 = 0
@@ -24,19 +26,22 @@ py_ProbXEst = [10.0, 20.0, 40.0, 20.0, 10.0]
 genToWidth = 5 #    Número de gerações de espera antes de reduzir a largura dos indivíduos quânticos
 generations = 2 #   Número de gerações
 
-headers = {
-    'CP': {'header':True, 'index':None},
-    'RO': {'header':True, 'index':None},
-    'CPO': {'header':True, 'index':0},
-    'CPrO': {'header':True, 'index':0},
-    'CR': {'header':True, 'index':0},
-    'Data': {'header':True, 'index':None},
-    'Dia': {'header':True, 'index':None},
-    'DispMExD': {'header':True, 'index':0},
-    'MA': {'header':True, 'index':0},
-    'MAn': {'header':True, 'index':0},
-    'ME': {'header':True, 'index':0},
-    'S': {'header':True, 'index':0},
+csv_index = {
+    'CP': None,
+    'RO': None,
+    'CPO': 0,
+    'CPrO': 0,
+    'CR': 0,
+    'Data': None,
+    'Dia': None,
+    'DispMExD': 0,
+    'MA': 0,
+    'MAn': 0,
+    'ME': 0,
+    'S': 0,
 }
 
 keeppriority = False
+
+port = 5000
+url = 'http://127.0.0.1:' + str(port)

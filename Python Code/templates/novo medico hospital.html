@@ -1,0 +1,46 @@
+{% extends 'hospital.html' %}
+
+{% block aside %}
+
+
+<div>
+	Configurações do Novo {{tipo.capitalize()}}:
+
+	{% if tipo.lower() == 'especialista' %}
+		{% if med_id %}
+			<form action="/novo_medico/hospital/{{tipo}}", method="POST">
+			Médico "{{med_id}}":<br>
+			Disponibilidade:<br>
+			{% for dia in weekdays %}
+				{{dia + '\t'}}: <input type="checkbox" id="{{dia}}" name="{{dia}}"><br>
+			{% endfor %}
+				<button type="submit">Adicionar</button>
+			</form>
+		{% else %}
+			<form action="/novo_medico/hospital/{{tipo}}", method="POST">
+			Identificador:
+			<input type="text" id="med_id" name="med_id">
+			Habilidade (entre 0 e 3):<br>
+			{% for esp in especialidades %}
+				{{esp + '\t'}}: <input type="text" id="{{esp}}" name="{{esp}}"><br>
+			{% endfor %}
+				<button type="submit">Avançar</button>
+			</form>
+		{% endif %}
+	{% else %}
+		<form action="/novo_medico/hospital/{{tipo}}", method="POST">
+		Identificador:
+		<input type="text" id="med_id" name="med_id">
+		Habilidade (entre 1 e 3):<br>
+		{% for esp in especialidades %}
+			{{esp + '\t'}}: <input type="text" id="{{esp}}" name="{{esp}}"><br>
+		{% endfor %}
+			<button type="submit">Adicionar</button>
+		</form>
+	{% endif %}
+
+</select>
+	
+</div>
+
+{% endblock %}
