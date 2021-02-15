@@ -77,7 +77,7 @@ int* main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
                    int NumAnest, double k0, double k1, double k2, double k3, int
                    numIQ, int numIC, double taxC, double taxE, double taxEQ,
                    const emxArray_real_T *ProbXEst, int genToWidth, int
-                   generations, boolean_T keeppriority, char* schedule_path)
+                   generations, boolean_T keeppriority, char* folder_path)
 {
   int NumRec[7];
   double y;
@@ -1403,7 +1403,7 @@ int* main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO, const
   aevSPLap(NumTOp, numIC, numIQ, taxC, taxE, NumRec, NewPCPrO, NewPME, NewPMA,
            NewPMAn, NewPS, NewPCPO, NewPCR, Dia, Data, NewTimeUsoRec, ProbXEst,
            b_fitness, generations, genToWidth, DispMExD, NewEP, k0, k1, k2, k3,
-           keeppriority, bestexperimento, trace, schedule_path);
+           keeppriority, bestexperimento, trace, folder_path);
 
   /* 'main_UCI_func:116' toc; */
   toc();

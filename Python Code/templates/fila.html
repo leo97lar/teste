@@ -6,7 +6,7 @@
 	{% if running_thread and running_thread.is_alive() %}
 	<p>Modelo rodando, por favor espere</p>
 	{% else %}
-	<form action="/run_model/fila">
+	<form action="/run_model/hosp">
 		<button type="submit">Rodar Modelo</button>
 	</form>
 	{% endif %}

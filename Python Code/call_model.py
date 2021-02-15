@@ -11,7 +11,7 @@
 import pandas as pd
 from ctypes import CDLL, c_void_p, c_int, c_double, c_uint8, c_char_p, POINTER, byref
 from time import time
-from config import dll, saves_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority, csv_index, url, c_schedule, schedule_csv
+from global_config import dll, saves_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority, csv_index, url, schedule_csv, c_schedule, c_results
 import datetime
 import json
 
@@ -95,6 +95,9 @@ def generate_calendar(csv_folder):
     with open(csv_folder + 'details.json', 'w') as f:
         f.write(details_json)
 
+def generate_config(csv_folder):
+    with open(csv_folder + c_results, 'w') as f:
+        f.write('{"k0":%.2f,"k1":%.2f,"k2":%.2f,"k3":%.2f}'%(k0, k1, k2, k3))
 
 def _initialize_model():
     model = CDLL(dll)
@@ -172,7 +175,7 @@ def run_model(save_name):
     c_ProbXEst = (c_double * len(py_ProbXEst))(*py_ProbXEst)
     model.real_array_to_emxArray(c_ProbXEst, ProbXEst, len(py_ProbXEst))
 
-    schedule_path = (csv_folder + c_schedule).encode('utf-8')
+    folder_path = (csv_folder).encode('utf-8')
 
     #%% Rodar Modelo
 
@@ -181,7 +184,7 @@ def run_model(save_name):
                                   TipoOp, NumEsp, NumTOp, NumSalOp, NumCPO, NumCPrO, NumCR,
                                   NumMedEsp, NumEspxE, NumAsist, NumAnest, k0, k1, k2, k3,
                                   numIQ, numIC, taxC, taxE, taxEQ, ProbXEst, genToWidth,
-                                  generations, keeppriority, schedule_path)
+                                  generations, keeppriority, folder_path)
 
     #%% Testar resultado
     queue = [c_queue[i] for i in range(NumTOp)]
@@ -212,5 +215,6 @@ def run_model(save_name):
     print('Tempo total: ' + str(total_time) + ' segundos')
 
     generate_calendar(csv_folder)
+    generate_config(csv_folder)
 
     # return queue, total_time

@@ -76,7 +76,7 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
               const double fitnessB[6], int generations, int genToWidth, const
               emxArray_int32_T *DispMExD, const emxArray_int32_T *EP, double k0,
               double k1, double k2, double k3, boolean_T keeppriority,
-              emxArray_int32_T *bestexperimento, emxArray_real_T *trace, char* schedule_path)
+              emxArray_int32_T *bestexperimento, emxArray_real_T *trace, char* folder_path)
 {
   emxArray_real_T *IQ;
   int numObsIQ;
@@ -409,7 +409,7 @@ void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE, const
 
       sch(NumTOp, iidx, NumRec, b_PCPrO, b_PME, b_PMA, b_PMAn, b_PS, b_PCPO,
           b_PCR, Dia, Data, b_TimeUsoRec, DispMExD, b_EP, k0, k1, k2, k3, &d0,
-          &varargin_5, &d1, &d2, &d3, &d4, g==generations-1, schedule_path);
+          &varargin_5, &d1, &d2, &d3, &d4, g==generations-1, folder_path);
       fitness->data[6 * j] = d0;
       fitness->data[1 + 6 * j] = varargin_5;
       fitness->data[2 + 6 * j] = d1;

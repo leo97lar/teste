@@ -4,111 +4,32 @@
 
 <section id="pageContent">
 	<main role="main">
-		{% if save1 == '' or save2 == '' %}
-		<p>Por favor, indique quais pastas serão comparadas</p>
-		<form action="/comparar", method="POST">
-			<input type="text" id="save1" name="save1">
-			<input type="text" id="save2" name="save2">
-			<button type="submit">Abrir</button>
-		</form>
+		{% if not saves %}
+			<font color="red">{{error_message}}</font>
+			<p>Por favor, indique quais pastas serão comparadas</p>
+			<form action="/comparar", method="POST">
+				<input type="text" id="save1" name="save1">
+				<input type="text" id="save2" name="save2">
+				<button type="submit">Comparar</button>
+			</form>
+			<br>
 		{% else %}
-		<form action="/teste", method="POST">
-			Rodar e Salvar Como: 
-			<input type="text" value="{{last_opened['no_hosp']}}" id="save" name="save">
-			<button type="submit">Salvar</button>
-		</form>
+		{% for save in saves %}
 		<article>
-			<form action="/teste", method="POST">
-				Abrir pasta: 
-				<input type="text" value="{{last_opened['with_hosp']}}" id="open" name="open">
-				<button type="submit">Abrir</button>
-			</form>
-		</article>
-		<article>
-			<table>
-				<label for="mesp">Médicos Especialistas:</label> {{get_hospital_values()['NumMedEsp']}}
-				<form action="/novo_medico/teste/especialista">
-					<button type="submit">+</button>
-				</form>
-				<form action="/remover_medico/teste/especialista">
-					<button type="submit">-</button>
-				</form>
-			</table>
-			<br>
-			<table>
-				<label for="mass">Médicos Assistentes:</label> {{get_hospital_values()['NumAsist']}}
-				<form action="/novo_medico/teste/assistente">
-					<button type="submit">+</button>
-				</form>
-				<form action="/remover_medico/teste/assistente">
-					<button type="submit">-</button>
-				</form>
-			</table>
-			<br>
-			<table>
-				<label for="mane">Médicos Anestesistas:</label> {{get_hospital_values()['NumAnest']}}
-				<form action="/novo_medico/teste/anestesista">
-					<button type="submit">+</button>
-				</form>
-				<form action="/remover_medico/teste/anestesista">
-					<button type="submit">-</button>
-				</form>
-			</table>
-			<br>
-			<br>
-			<table>
-				<label for="cpos">Camas Pré Operação:</label> {{get_hospital_values()['NumCPrO']}}
-				<form action="/nova_cama/teste/pre">
-					<button type="submit">+</button>
-				</form>
-				<form action="/remover_cama/teste/pre">
-					<button type="submit">-</button>
-				</form>
-			</table>
-			<br>
-			<table>
-				<label for="cpos">Camas Pós Operação:</label> {{get_hospital_values()['NumCPO']}}
-				<form action="/nova_cama/teste/pos">
-					<button type="submit">+</button>
-				</form>
-				<form action="/remover_cama/teste/pos">
-					<button type="submit">-</button>
-				</form>
-			</table>
-			<br>
-			<table>
-				<label for="cres">Camas Repouso:</label> {{get_hospital_values()['NumCR']}}
-				<form action="/nova_cama/teste/rep">
-					<button type="submit">+</button>
-				</form>
-				<form action="/remover_cama/teste/rep">
-					<button type="submit">-</button>
-				</form>
-			</table>
-			<br>
-			<br>
-			<table>
-				<label for="salas">Salas:</label> {{get_hospital_values()['NumSalOp']}}
-				<form action="/nova_cama/teste/sala">
-					<button type="submit">+</button>
-				</form>
-				<form action="/remover_cama/teste/sala">
-					<button type="submit">-</button>
-				</form>
-			</table>
-			<br>
-		</article>
-		<article>
-			{% if running_thread and running_thread.is_alive() %}
-			<p>Modelo rodando, por favor espere</p>
-			{% else %}
-			<form action="/teste", method="POST">
-				Rodar e Salvar Como: 
-				<input type="text" value="{{last_opened['no_hosp']}}" id="save" name="save">
-				<button type="submit">Salvar</button>
-			</form>
-			{% endif %}
-		</article>
+			<p>Para o calendário definido por "{{save}}", temos as seguintes penalizações:<br></p><br>
+				<UL>
+					<LI>Tempo total necessário para as cirurgias : {{result[save]['a']}} (1x)<br>
+					<LI>Número de cirurgias feitas fora do prazo : {{result[save]['a0']}} ({{config[save]['k0']}}x)<br>
+					<LI>Tempo médio fora do prazo de tais cirurgias (caso existam) : {{result[save]['a1']}} ({{config[save]['k1']}}x)<br>
+					<LI>Número de cirurgias feitas por especialistas de segundo grau : {{result[save]['a2']}} ({{config[save]['k2']}}x)<br>
+					<LI>Número de cirurgias feitas por especialistas de terceiro grau : {{result[save]['a3']}} ({{config[save]['k3']}}x)<br>
+				</UL>
+			<p>Dando um score total de:</p><br>
+			({{result[save]['a']}} X 1)+({{result[save]['a0']}} X {{config[save]['k0']}})+({{result[save]['a1']}} X {{config[save]['k1']}})+({{result[save]['a2']}} X {{config[save]['k2']}})+({{result[save]['a3']}} X {{config[save]['k3']}})
+			<p>Ou seja: {{result[save]['a']*1+result[save]['a0']*config[save]['k0']+result[save]['a1']*config[save]['k1']+result[save]['a2']*config[save]['k2']+result[save]['a3']*config[save]['k3']}}</p>
+			Lembrando que quanto maior o score, pior a performance do hospital simulado.
+			<br><br>
+		{% endfor %}
 		{% endif %}
 	</main>
 </section>

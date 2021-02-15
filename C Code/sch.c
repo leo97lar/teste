@@ -9,6 +9,10 @@
  */
 
 /* Include Files */
+#define SCHEDULE_FILE_NAME "c_schedule.csv"
+#define RESULTS_FILE_NAME "results.json"
+#define BUFFER_SIZE 255
+
 #include "BDCreator_func.h"
 #include "main_UCI_func.h"
 #include "sch.h"
@@ -16,6 +20,7 @@
 #include "favalia.h"
 #include "funcionCPrO.h"
 #include "funcionDia.h"
+#include <string.h>
 
 /* Function Definitions */
 
@@ -53,10 +58,14 @@
  * Return Type  : void
  */
 
-void print_schedule(emxArray_int32_T* schedule, char* file_path, int numCPrO, int numMedEsp, int numSalOp, int numAsist, int numAnest, int numCPO, int numCR)
+void print_schedule(emxArray_int32_T* schedule, char* folder_path, int numCPrO, int numMedEsp, int numSalOp, int numAsist, int numAnest, int numCPO, int numCR)
 {
     int i, j, totrow = schedule->size[0], totcol = schedule->size[1];
     FILE* f;
+    int file_path_len = strlen(folder_path) + strlen(SCHEDULE_FILE_NAME);
+    char* file_path = (char*)malloc(sizeof(char) * (file_path_len + 1));
+    strcpy(file_path, folder_path);
+    strcat(file_path, SCHEDULE_FILE_NAME);
     fopen_s(&f, file_path, "w");
     //write header
     fprintf_s(f, "Horario");
@@ -84,6 +93,20 @@ void print_schedule(emxArray_int32_T* schedule, char* file_path, int numCPrO, in
 
 }
 
+void print_result(char* folder_path, double a, double a0, double a1, double a2, double a3)
+{
+    FILE* f;
+    int file_path_len = strlen(folder_path) + strlen(RESULTS_FILE_NAME);
+    char* file_path = (char*)malloc(sizeof(char) * (file_path_len + 1));
+    strcpy(file_path, folder_path);
+    strcat(file_path, RESULTS_FILE_NAME);
+
+    fopen_s(&f, file_path, "w");
+
+    fprintf_s(f, "{\"a\":%.2f,\"a0\":%.2f,\"a1\":%.2f,\"a2\":%.2f,\"a3\":%.2f}", a, a0, a1, a2, a3);
+
+}
+
 void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
          emxArray_int32_T *PCPrO, emxArray_int32_T *PME, emxArray_int32_T *PMA,
          emxArray_int32_T *PMAn, emxArray_int32_T *PS, emxArray_int32_T *PCPO,
@@ -91,7 +114,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
          emxArray_int32_T *Data, emxArray_int32_T *TimeUsoRec, const
          emxArray_int32_T *DispMExD, emxArray_int32_T *EP, double k0, double k1,
          double k2, double k3, double *fitness, double *Tt, double *NOFP, double
-         *TmNOFP, double *NOE2, double *NOE3, bool printSchedule, char* schedule_path)
+         *TmNOFP, double *NOE2, double *NOE3, bool printSchedule, char* folder_path)
 {
   double y;
   int k;
@@ -764,7 +787,7 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   emxFree_int32_T(&UltPosRecXDia);
 
   if (printSchedule)
-      print_schedule(H, schedule_path, NumRec[0], NumRec[1], NumRec[2], NumRec[3], NumRec[4], NumRec[5], NumRec[6]);
+      print_schedule(H, folder_path, NumRec[0], NumRec[1], NumRec[2], NumRec[3], NumRec[4], NumRec[5], NumRec[6]);
 
   /* 'sch:77' schedule=H; */
   /* 'sch:79' [ fitness,Tt,NOFP,TmNOFP,NOE2,NOE3] = favalia( schedule,DiaOp,int32(EP),EspMedOp,k0,k1,k2,k3 ); */
@@ -775,6 +798,8 @@ void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
   *NOFP = d7;
   *Tt = d6;
   *fitness = d5;
+  if (printSchedule)
+      print_result(folder_path, *Tt, *NOFP, *TmNOFP, *NOE2, *NOE3);
   emxFree_int32_T(&EspMedOp);
   emxFree_int32_T(&DiaOp);
   emxFree_int32_T(&H);
