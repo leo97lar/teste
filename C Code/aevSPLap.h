@@ -29,7 +29,7 @@ extern void aevSPLap(int NumTOp, int numIC, int numIQ, double taxC, double taxE,
                      genToWidth, const emxArray_int32_T *DispMExD, const
                      emxArray_int32_T *EP, double k0, double k1, double k2,
                      double k3, boolean_T keeppriority, emxArray_int32_T
-                     *bestexperimento, emxArray_real_T *trace, char* folder_path);
+                     *bestexperimento, emxArray_real_T *trace, char* schedule_path, char* results_path);
 
 #endif
 

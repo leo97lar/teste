@@ -59,18 +59,18 @@ int main(void)
 	   You do not need to do this more than one time. */
 	model_initialize();
 
-	CP = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/CP.csv");
-	RO = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/RO.csv");
-	CPO = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/CPO.csv");
-	CPrO = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/CPrO.csv");
-	CR = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/CR.csv");
-	Data = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/Data.csv");
-	Dia = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/Dia.csv");
-	DispMExD = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/DispMExD.csv");
-	MA = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/MA.csv");
-	MAn = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/MAn.csv");
-	ME = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/ME.csv");
-	S = read_csv("C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/hosp/S.csv");
+	CP = read_csv("D:/Dissertacao/Git/saves/c_hosp/CP.csv");
+	RO = read_csv("D:/Dissertacao/Git/saves/c_hosp/RO.csv");
+	CPO = read_csv("D:/Dissertacao/Git/saves/c_hosp/CPO.csv");
+	CPrO = read_csv("D:/Dissertacao/Git/saves/c_hosp/CPrO.csv");
+	CR = read_csv("D:/Dissertacao/Git/saves/c_hosp/CR.csv");
+	Data = read_csv("D:/Dissertacao/Git/saves/c_hosp/Data.csv");
+	Dia = read_csv("D:/Dissertacao/Git/saves/c_hosp/Dia.csv");
+	DispMExD = read_csv("D:/Dissertacao/Git/saves/c_hosp/DispMExD.csv");
+	MA = read_csv("D:/Dissertacao/Git/saves/c_hosp/MA.csv");
+	MAn = read_csv("D:/Dissertacao/Git/saves/c_hosp/MAn.csv");
+	ME = read_csv("D:/Dissertacao/Git/saves/c_hosp/ME.csv");
+	S = read_csv("D:/Dissertacao/Git/saves/c_hosp/S.csv");
 
 	// Variables de Interes
 
@@ -104,7 +104,7 @@ int main(void)
 	ProbXEst = emxCreate_real_T(5, 1);
 	ProbXEst->data[0] = 10.0; ProbXEst->data[1] = 20.0; ProbXEst->data[2] = 40.0; ProbXEst->data[3] = 20.0; ProbXEst->data[4] = 10.0;
 	genToWidth = 5;// Número de gerações de espera antes de reduzir a largura dos indivíduos quânticos
-	generations = 2;// Número de gerações
+	generations = 25;// Número de gerações
 
 	keeppriority = false;
 
@@ -113,7 +113,7 @@ int main(void)
 		TipoOp, NumEsp, NumTOp, NumSalOp, NumCPO, NumCPrO, NumCR,
 		NumMedEsp, NumEspxE, NumAsist, NumAnest, k0, k1, k2, k3,
 		numIQ, numIC, taxC, taxE, taxEQ, ProbXEst, genToWidth,
-		generations, keeppriority, "C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/");
+		generations, keeppriority, "D:/Dissertacao/Git/saves/c_hosp/c_schedule.csv", "D:/Dissertacao/Git/saves/c_hosp/results.json");
 
 	emxDestroyArray_int32_T(S);
 	emxDestroyArray_int32_T(ME);

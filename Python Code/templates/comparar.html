@@ -4,16 +4,15 @@
 
 <section id="pageContent">
 	<main role="main">
-		{% if not saves %}
-			<font color="red">{{error_message}}</font>
-			<p>Por favor, indique quais pastas serão comparadas</p>
-			<form action="/comparar", method="POST">
-				<input type="text" id="save1" name="save1">
-				<input type="text" id="save2" name="save2">
-				<button type="submit">Comparar</button>
-			</form>
-			<br>
-		{% else %}
+		<font color="red">{{error_message}}</font>
+		<p>Por favor, indique quais pastas serão comparadas</p>
+		<form action="/comparar", method="POST">
+			<input type="text" id="save1" name="save1">
+			<input type="text" id="save2" name="save2">
+			<button type="submit">Comparar</button>
+		</form>
+		<br>
+		{% if saves %}
 		{% for save in saves %}
 		<article>
 			<p>Para o calendário definido por "{{save}}", temos as seguintes penalizações:<br></p><br>
@@ -24,11 +23,12 @@
 					<LI>Número de cirurgias feitas por especialistas de segundo grau : {{result[save]['a2']}} ({{config[save]['k2']}}x)<br>
 					<LI>Número de cirurgias feitas por especialistas de terceiro grau : {{result[save]['a3']}} ({{config[save]['k3']}}x)<br>
 				</UL>
-			<p>Dando um score total de:</p><br>
-			({{result[save]['a']}} X 1)+({{result[save]['a0']}} X {{config[save]['k0']}})+({{result[save]['a1']}} X {{config[save]['k1']}})+({{result[save]['a2']}} X {{config[save]['k2']}})+({{result[save]['a3']}} X {{config[save]['k3']}})
-			<p>Ou seja: {{result[save]['a']*1+result[save]['a0']*config[save]['k0']+result[save]['a1']*config[save]['k1']+result[save]['a2']*config[save]['k2']+result[save]['a3']*config[save]['k3']}}</p>
+			<br><p>Dando um score total de:</p>
+			({{result[save]['a']}} X 1)+({{result[save]['a0']}} X {{config[save]['k0']}})+({{result[save]['a1']}} X {{config[save]['k1']}})+({{result[save]['a2']}} X {{config[save]['k2']}})+({{result[save]['a3']}} X {{config[save]['k3']}})<br>
+			<br><p>Ou seja: {{result[save]['a']*1+result[save]['a0']*config[save]['k0']+result[save]['a1']*config[save]['k1']+result[save]['a2']*config[save]['k2']+result[save]['a3']*config[save]['k3']}}</p><br>
 			Lembrando que quanto maior o score, pior a performance do hospital simulado.
 			<br><br>
+		</article>
 		{% endfor %}
 		{% endif %}
 	</main>

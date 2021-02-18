@@ -26,7 +26,7 @@ extern void sch(int NumTOp, const emxArray_int32_T *list, const int NumRec[7],
                 emxArray_int32_T *TimeUsoRec, const emxArray_int32_T *DispMExD,
                 emxArray_int32_T *EP, double k0, double k1, double k2, double k3,
                 double *fitness, double *Tt, double *NOFP, double *TmNOFP,
-                double *NOE2, double *NOE3, bool printSchedule, char* folder_path);
+                double *NOE2, double *NOE3, bool printSchedule, char* schedule_path, char* results_path);
 
 #endif
 

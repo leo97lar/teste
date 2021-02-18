@@ -27,7 +27,7 @@ extern int* main_UCI_func(const emxArray_int32_T *CP, const emxArray_int32_T *RO
   NumCR, int NumMedEsp, int NumEspxE, int NumAsist, int NumAnest, double k0,
   double k1, double k2, double k3, int numIQ, int numIC, double taxC, double
   taxE, double taxEQ, const emxArray_real_T *ProbXEst, int genToWidth, int
-  generations, boolean_T keeppriority, char* schedule_path);
+  generations, boolean_T keeppriority, char* schedule_path, char* results_path);
 
 #endif
 

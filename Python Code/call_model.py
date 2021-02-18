@@ -1,17 +1,17 @@
 #%%generating cmd command
 # from glob import glob
 
-# l = glob('C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/C Code/*.c')
+# l = glob('D:/Dissertacao/Git/C Code/*.c')
 # for a in l:
 #     print(a[64:])
 
-# cd C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Git\C Code
+# cd D:\Dissertacao\Git\C Code
 # gcc -shared -o model.so aevSPLap.c BDCreator_func.c casorandom.c cc.c combineVectorElements.c CreaPoQunniforme.c Edade.c eml_rand.c eml_rand_mcg16807_stateful.c eml_rand_mt19937ar_stateful.c eml_rand_shr3cong_stateful.c favalia.c funcionCPrO.c funcionDia.c getTime.c main.c main_UCI_func.c mean.c model_data.c model_emxAPI.c model_emxutil.c model_initialize.c model_rtwutil.c model_terminate.c nullAssignment.c obsIQ.c obsIQini.c rand.c randi.c randperm.c rdivide_helper.c rem.c repmat.c sch.c sort1.c sortIdx.c std.c sum.c tic.c timeKeeper.c toc.c
 #%% Load model
 import pandas as pd
 from ctypes import CDLL, c_void_p, c_int, c_double, c_uint8, c_char_p, POINTER, byref
 from time import time
-from global_config import dll, saves_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority, csv_index, url, schedule_csv, c_schedule, c_results
+from global_config import dll, saves_folder, k0, k1, k2, k3, numIQ, numIC, taxC, taxE, taxEQ, py_ProbXEst, genToWidth, generations, keeppriority, csv_index, url, schedule_csv, c_schedule, c_results, model_config
 import datetime
 import json
 
@@ -61,8 +61,8 @@ def generate_calendar(csv_folder):
     schedule.columns = new_header
     schedule.to_csv(csv_folder + schedule_csv)
 
-    schedule.index = Data.apply(lambda row: datetime.datetime(
-        year=row['Ano'], month=row['Mes'], hour=row['Hora']-1, day=row['Dia']), axis=1)
+    schedule.index = list(Data.apply(lambda row: datetime.datetime(
+        year=row['Ano'], month=row['Mes'], hour=row['Hora']-1, day=row['Dia']), axis=1))[:len(schedule.index)]
 
     def get_equipment_events(equipment_schedule):
         sched_gb = equipment_schedule.groupby(
@@ -96,7 +96,7 @@ def generate_calendar(csv_folder):
         f.write(details_json)
 
 def generate_config(csv_folder):
-    with open(csv_folder + c_results, 'w') as f:
+    with open(csv_folder + model_config, 'w') as f:
         f.write('{"k0":%.2f,"k1":%.2f,"k2":%.2f,"k3":%.2f}'%(k0, k1, k2, k3))
 
 def _initialize_model():
@@ -175,7 +175,8 @@ def run_model(save_name):
     c_ProbXEst = (c_double * len(py_ProbXEst))(*py_ProbXEst)
     model.real_array_to_emxArray(c_ProbXEst, ProbXEst, len(py_ProbXEst))
 
-    folder_path = (csv_folder).encode('utf-8')
+    schedule_path = (csv_folder + c_schedule).encode('utf-8')
+    result_path = (csv_folder + c_results).encode('utf-8')
 
     #%% Rodar Modelo
 
@@ -184,7 +185,7 @@ def run_model(save_name):
                                   TipoOp, NumEsp, NumTOp, NumSalOp, NumCPO, NumCPrO, NumCR,
                                   NumMedEsp, NumEspxE, NumAsist, NumAnest, k0, k1, k2, k3,
                                   numIQ, numIC, taxC, taxE, taxEQ, ProbXEst, genToWidth,
-                                  generations, keeppriority, folder_path)
+                                  generations, keeppriority, schedule_path, result_path)
 
     #%% Testar resultado
     queue = [c_queue[i] for i in range(NumTOp)]

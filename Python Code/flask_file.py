@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, jsonify
 from random import shuffle
 from call_model import run_model, get_hospital_csv_values
 from threading import Thread
-from global_config import saves_folder, port, main_save, weekdays
+from global_config import saves_folder, port, main_save, weekdays, c_schedule, c_results, model_config
 import pandas as pd
 from distutils.dir_util import copy_tree
 from shutil import rmtree
@@ -28,7 +28,7 @@ cama_type_to_csv = {
     'pre': 'CPrO.csv',
     'pos': 'CPO.csv',
     'rep': 'CR.csv',
-    'sala': 'SalOp.csv',
+    'sala': 'S.csv',
 }
 
 dados_medico = {}
@@ -154,16 +154,16 @@ def render_comparar():
     else:
         error_message = ''
         for save in saves:
-            if not os.path.isfile(saves_folder + save + '/schedule.csv'):
+            if not os.path.isfile(saves_folder + save + '/' + c_schedule):
                 error_message += f'A pasta "{save}" não é válida ou o modelo não terminou de rodar.\n'
             if error_message != '':
                 return render_template(html_file, saves=[], error_message=error_message)
         save_results = {}
         save_config = {}
         for save in saves:
-            with open(saves_folder + save + '/results.json') as f:
+            with open(saves_folder + save + '/' + c_results) as f:
                 save_results[save] = json.load(f)
-            with open(saves_folder + save + '/config.json') as f:
+            with open(saves_folder + save + '/' + model_config) as f:
                 save_config[save] = json.load(f)
 
         return render_template(html_file, saves=saves, result=save_results, config=save_config)
@@ -206,7 +206,7 @@ def render_teste(folder=None):
 
 def ask_info(html_file, csv_file, tipo, med_id=False):
     global dados_medico
-    return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, especialidades=get_header(csv_file), dados=dados_medico, med_id=med_id, weekdays=weekdays)
+    return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, especialidades=get_header(csv_file), dados=dados_medico, med_id=med_id, weekdays=weekdays, last_opened=last_opened)
 
 def fill_checkbox(data, keys):
     for key in keys:
@@ -243,7 +243,7 @@ def render_remover_medico(page, tipo):
     html_file, csv_type = page_dict[page]
     csv_file = saves_folder + csv_type + '/' + med_type_to_csv[tipo]
     if request.method == "GET":
-        return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, medicos=get_index(csv_file))
+        return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, medicos=get_index(csv_file), last_opened=last_opened)
     else:
         del_doc(tipo, request.form['medicos'], csv_file)
         return redirect('/' + page)
@@ -287,6 +287,9 @@ def render_run_model(page, redirect_page=None):
     }
     save_name = save_dict.get(page, page)
     redirect_page = redirect_page or redirect_dict.get(page, page)
+
+    if os.path.isfile(saves_folder + save_name + '/' + c_schedule):
+        os.remove(saves_folder + save_name + '/' + c_schedule)
 
     model_wrapper(save_name)
     return redirect('/' + redirect_page)

@@ -1,12 +1,13 @@
-dll = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/C Code/model.so'
+dll = 'D:/Dissertacao/Git/C Code/model.so'
 
-saves_folder = 'C:/Users/leo97/OneDrive/Área de Trabalho/Dissertação/Git/saves/'
+saves_folder = 'D:/Dissertacao/Git/saves/'
 
 main_save = 'hosp'
 
 weekdays = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab']
 
 schedule_csv = 'schedule.csv'
+model_config = 'config.json'
 
 # Variaveis definidas em sch.c
 c_schedule = 'c_schedule.csv'
@@ -27,7 +28,7 @@ taxEQ = 10
 py_ProbXEst = [10.0, 20.0, 40.0, 20.0, 10.0]
 
 genToWidth = 5 #    Número de gerações de espera antes de reduzir a largura dos indivíduos quânticos
-generations = 50 #   Número de gerações
+generations = 25 #   Número de gerações
 
 csv_index = {
     'CP': None,

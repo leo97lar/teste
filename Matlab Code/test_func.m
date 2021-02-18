@@ -45,7 +45,7 @@ coder.varsize('file.MAn',       [inf inf],  [1 1])
 coder.varsize('file.ME',        [inf inf],  [1 1])
 coder.varsize('file.S',         [inf inf],  [1 1])
 
-file=load('C:\Users\leo97\OneDrive\Área de Trabalho\Dissertação\Git\Matlab Code\BD_UCIFINAL.mat');
+file=load('D:\Dissertacao\Git\Matlab Code\BD_UCIFINAL.mat');
 CP = int32(file.CP);
 RO = int32(file.RO);
 CPO = int32(file.CPO);
