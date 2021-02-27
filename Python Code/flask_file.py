@@ -257,7 +257,7 @@ def render_nova_cama(page, tipo):
     html_file, csv_type = page_dict[page]
     csv_file = saves_folder + csv_type + '/' + cama_type_to_csv[tipo]
     if request.method == 'GET':
-        return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, especialidades=get_header(csv_file))
+        return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, especialidades=get_header(csv_file), last_opened=last_opened)
     else:
         dados_cama = dict(request.form)
         add_cama(tipo, dados_cama, csv_file)
@@ -272,7 +272,7 @@ def render_remover_cama(page, tipo):
     html_file, csv_type = page_dict[page]
     csv_file = saves_folder + csv_type + '/' + cama_type_to_csv[tipo]
     if request.method == "GET":
-        return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, camas=get_index(csv_file))
+        return render_template(html_file, get_hospital_values=get_hospital_values, tipo=tipo, camas=get_index(csv_file), last_opened=last_opened)
     else:
         del_cama(tipo, request.form['camas'], csv_file)
         return redirect('/' + page)
